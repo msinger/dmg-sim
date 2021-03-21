@@ -9,6 +9,8 @@ module test;
 	parameter T_OR   = 4;
 	parameter T_NOR  = 2;
 	parameter T_OA   = 6;
+	parameter T_MUX  = 6;
+	parameter T_TRI  = 2;
 
 	reg [31:0] cyc;
 
@@ -35,6 +37,8 @@ module test;
 		cyc++;
 		if (cyc == 10000) $finish;
 	end
+
+	wire [7:0] d;
 
 	wire arys, anos, avet;
 	assign #T_INV  arys = !clkin_b;
@@ -200,17 +204,58 @@ module test;
 	assign _262144hz = ufor;
 	assign _524288hz = ukup;
 
+	wire ulur, ugot, tulu, tugo, tofe, teru, sola, subu, teka, uket, upof;
+	wire umek, urek, utok, sapy, umer, rave, ryso, udor;
+	wire tagy, tawu, taku, temu, tuse, upug, sepu, sawa, tatu;
+	wire upyf, tubo, unut, taba, nff04_d0, nff04_d1;
+	dtff dtff_ugot(ulur,  nreset_div, !ugot, ugot);
+	dtff dtff_tulu(!ugot, nreset_div, !tulu, tulu);
+	dtff dtff_tugo(!tulu, nreset_div, !tugo, tugo);
+	dtff dtff_tofe(!tugo, nreset_div, !tofe, tofe);
+	dtff dtff_teru(!tofe, nreset_div, !teru, teru);
+	dtff dtff_sola(!teru, nreset_div, !sola, sola);
+	dtff dtff_subu(!sola, nreset_div, !subu, subu);
+	dtff dtff_teka(!subu, nreset_div, !teka, teka);
+	dtff dtff_uket(!teka, nreset_div, !uket, uket);
+	dtff dtff_upof(!uket, nreset_div, !upof, upof);
+	assign #T_MUX  ulur = ff60_d1 ? boga1mhz : tama16384;
+	assign #T_INV  umek = !ugot;
+	assign #T_INV  urek = !tulu;
+	assign #T_INV  utok = !tugo;
+	assign #T_INV  sapy = !tofe;
+	assign #T_INV  umer = !teru;
+	assign #T_INV  rave = !sola;
+	assign #T_INV  ryso = !subu;
+	assign #T_INV  udor = !teka;
+	assign #T_AND  tagy = ff04_ff07 && cpu_rd && tola_na1 && tovy_na0;
+	assign #T_OR   upyf = reset || nclkin_a;
+	assign #T_OR   tubo = clk_from_cpu || upyf;
+	assign #T_AND  unut = upof && tubo;
+	assign #T_OR   taba = nt1_t2 || t1_nt2 || unut;
+	assign #T_TRI  tawu = tagy ? !umek : 1'bz;
+	assign #T_TRI  taku = tagy ? !urek : 1'bz;
+	assign #T_TRI  temu = tagy ? !utok : 1'bz;
+	assign #T_TRI  tuse = tagy ? !sapy : 1'bz;
+	assign #T_TRI  upug = tagy ? !umer : 1'bz;
+	assign #T_TRI  sepu = tagy ? !rave : 1'bz;
+	assign #T_TRI  sawa = tagy ? !ryso : 1'bz;
+	assign #T_TRI  tatu = tagy ? !udor : 1'bz;
+	assign nff04_d0 = umek;
+	assign nff04_d1 = urek;
+	assign d = { tatu, sawa, sepu, upug, tuse, temu, taku, tawu };
+
 	/* not yet generated signals */
 	wire apu_reset = 0;
 	wire ff40_d7 = 0;
 	wire from_cpu3 = 1;
 	wire from_cpu4 = 0;
 	wire clk_from_cpu = 1;
-	wire taba = 0;
 	wire ff04_ff07 = 0;
 	wire cpu_wr = 0;
-	wire tola_na1 = 0;
-	wire tovy_na0 = 0;
+	wire cpu_rd = 0;
+	wire tola_na1 = 1;
+	wire tovy_na0 = 1;
+	wire ff60_d1 = 0;
 
 endmodule
 
