@@ -3,12 +3,12 @@
 
 module test;
 
-	parameter T_INV  = 10;
-	parameter T_AND  = 10;
-	parameter T_NAND = 10;
-	parameter T_OR   = 10;
-	parameter T_NOR  = 10;
-	parameter T_OA   = 10;
+	parameter T_INV  = 2;
+	parameter T_AND  = 4;
+	parameter T_NAND = 2;
+	parameter T_OR   = 4;
+	parameter T_NOR  = 2;
+	parameter T_OA   = 6;
 
 	reg [31:0] cyc;
 
@@ -217,7 +217,7 @@ endmodule
 module dtff(clk, nreset, d, q);
 
 	parameter INITIAL_Q = 2;
-	parameter T_DTFF    = 10;
+	parameter T_DTFF    = 8;
 
 	input  wire clk, nreset, d;
 	output wire q;
@@ -228,7 +228,7 @@ module dtff(clk, nreset, d, q);
 
 	always @(posedge clk or negedge nreset) begin
 		if (nreset)
-			ff <= d;
+			ff <= (d === 1'bx) ? $random : d;
 		else
 			ff <= 0;
 	end
