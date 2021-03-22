@@ -41,6 +41,30 @@ module dmg;
 
 	wire [7:0] d;
 
+	wire apuv_4mhz;
+	wire ajer_2mhz;
+
+	clk      p1_clk(.*);
+	apu_ctrl p9_apu_ctrl(.*);
+
+endmodule
+
+module clk(
+		clkin_a, clkin_b, reset, t1, t2,
+		d,
+		apuv_4mhz,
+		ajer_2mhz
+	);
+
+	input wire clkin_a, clkin_b;
+	input wire reset;
+	input wire t1, t2;
+
+	inout wire [7:0] d;
+
+	output wire apuv_4mhz;
+	input  wire ajer_2mhz;
+
 	wire arys, anos, avet;
 	assign #T_INV  arys = !clkin_b;
 	assign #T_NAND anos = !(clkin_b && avet);
@@ -65,7 +89,7 @@ module dmg;
 	assign clk5 = tava;
 	assign amuk_4mhz = amuk;
 
-	wire aryf, apuv, cybo, bela, cery, aryf_4mhz, apuv_4mhz, cery_2mhz;
+	wire aryf, apuv, cybo, bela, cery, aryf_4mhz, cery_2mhz;
 	assign #T_INV  aryf = !amuk;
 	assign #T_INV  apuv = !amuk;
 	assign #T_INV  cybo = !amuk;
@@ -259,6 +283,23 @@ module dmg;
 	wire tola_na1 = 1;
 	wire tovy_na0 = 1;
 	wire ff60_d1 = 0;
+
+endmodule
+
+module apu_ctrl(
+		apuv_4mhz,
+		ajer_2mhz
+	);
+
+	input  wire apuv_4mhz;
+	output wire ajer_2mhz;
+
+	wire ajer;
+	dtff dtff_ajer(apuv_4mhz, napu_reset3, !ajer, ajer); // check edge
+	assign ajer_2mhz = ajer;
+
+	/* not yet generated signals */
+	wire napu_reset3 = 1;
 
 endmodule
 
