@@ -41,6 +41,19 @@ module dmg;
 
 	wire [7:0] d;
 
+	/* not yet generated signals */
+	wire ff40_d7 = 0;
+	wire from_cpu3 = 1;
+	wire from_cpu4 = 0;
+	wire clk_from_cpu = 1;
+	wire ff04_ff07 = 0;
+	wire cpu_wr = 0;
+	wire cpu_rd = 0;
+	wire tola_na1 = 1;
+	wire tovy_na0 = 1;
+	wire ff60_d1 = 0;
+
+	wire apu_reset;
 	wire apuv_4mhz;
 	wire ajer_2mhz;
 
@@ -52,8 +65,9 @@ endmodule
 module clk(
 		clkin_a, clkin_b, reset, t1, t2,
 		d,
-		apuv_4mhz,
-		ajer_2mhz
+		from_cpu3, from_cpu4, clk_from_cpu, cpu_wr, cpu_rd,
+		ff04_ff07, ff40_d7, ff60_d1, tovy_na0, tola_na1,
+		apu_reset, apuv_4mhz, ajer_2mhz
 	);
 
 	input wire clkin_a, clkin_b;
@@ -62,6 +76,19 @@ module clk(
 
 	inout wire [7:0] d;
 
+	input wire from_cpu3;
+	input wire from_cpu4;
+	input wire clk_from_cpu;
+	input wire cpu_wr;
+	input wire cpu_rd;
+
+	input wire ff04_ff07;
+	input wire ff40_d7;
+	input wire ff60_d1;
+	input wire tovy_na0;
+	input wire tola_na1;
+
+	input  wire apu_reset;
 	output wire apuv_4mhz;
 	input  wire ajer_2mhz;
 
@@ -271,26 +298,15 @@ module clk(
 	assign nff04_d1 = urek;
 	assign d = { tatu, sawa, sepu, upug, tuse, temu, taku, tawu };
 
-	/* not yet generated signals */
-	wire apu_reset = 0;
-	wire ff40_d7 = 0;
-	wire from_cpu3 = 1;
-	wire from_cpu4 = 0;
-	wire clk_from_cpu = 1;
-	wire ff04_ff07 = 0;
-	wire cpu_wr = 0;
-	wire cpu_rd = 0;
-	wire tola_na1 = 1;
-	wire tovy_na0 = 1;
-	wire ff60_d1 = 0;
-
 endmodule
 
 module apu_ctrl(
+		apu_reset,
 		apuv_4mhz,
 		ajer_2mhz
 	);
 
+	output wire apu_reset;
 	input  wire apuv_4mhz;
 	output wire ajer_2mhz;
 
@@ -299,6 +315,7 @@ module apu_ctrl(
 	assign ajer_2mhz = ajer;
 
 	/* not yet generated signals */
+	assign apu_reset = 0;
 	wire napu_reset3 = 1;
 
 endmodule
