@@ -1,7 +1,7 @@
 `default_nettype none
 `timescale 1ns/100ps
 
-module test;
+module dff_test;
 
 	parameter T = 100;
 
@@ -9,8 +9,8 @@ module test;
 	wire q;
 
 	initial begin
-		$dumpfile("dff.vcd");
-		$dumpvars(0, test);
+		$dumpfile("dff_test.vcd");
+		$dumpvars(0, dff_test);
 
 		d = 0;
 		c = 0;

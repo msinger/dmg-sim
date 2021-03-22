@@ -1,7 +1,7 @@
 `default_nettype none
 `timescale 1ns/100ps
 
-module test;
+module dmg;
 
 	parameter T_INV  = 2;
 	parameter T_AND  = 4;
@@ -15,7 +15,7 @@ module test;
 	reg [31:0] cyc;
 
 	reg xi;
-	wire clkin_a, clkin_b; /* A = XI pin; B = inverted XI pin */
+	wire clkin_a, clkin_b;
 	wire reset; /* inverted !RST pin */
 	wire t1 = 0;
 	wire t2 = 0;
@@ -24,8 +24,8 @@ module test;
 	assign reset = cyc >= 40 && cyc <= 80;
 
 	initial begin
-		$dumpfile("clk.vcd");
-		$dumpvars(0, test);
+		$dumpfile("dmg.vcd");
+		$dumpvars(0, dmg);
 
 		cyc = 0;
 		xi  = 0;

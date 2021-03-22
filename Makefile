@@ -1,4 +1,4 @@
-all: clk.vcd
+all: dmg.vcd
 
 .PHONY: all
 
@@ -7,3 +7,6 @@ all: clk.vcd
 
 %.vcd: %
 	./$<
+
+dmg.vcd: dmg
+dff_test.vcd: dff_test
