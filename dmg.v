@@ -65,12 +65,14 @@ module dmg;
 	assign clk5 = tava;
 	assign amuk_4mhz = amuk;
 
-	wire aryf, apuv, cybo, bela, cery, cery_2mhz;
+	wire aryf, apuv, cybo, bela, cery, aryf_4mhz, apuv_4mhz, cery_2mhz;
 	assign #T_INV  aryf = !amuk;
 	assign #T_INV  apuv = !amuk;
 	assign #T_INV  cybo = !amuk;
 	assign #T_INV  bela = !apu_reset;
 	dtff dtff_cery(cybo, bela, !cery, cery);
+	assign aryf_4mhz = aryf;
+	assign apuv_4mhz = apuv;
 	assign cery_2mhz = cery;
 
 	wire dula, cunu, xore, walu, wesy, xebe, nreset6, reset7, nreset7, nreset8, nreset9;
