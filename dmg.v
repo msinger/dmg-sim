@@ -1,16 +1,17 @@
 `default_nettype none
 `timescale 1ns/100ps
 
-module dmg;
+parameter T_INV  = 2;
+parameter T_AND  = 4;
+parameter T_NAND = 2;
+parameter T_OR   = 4;
+parameter T_NOR  = 2;
+parameter T_OA   = 6;
+parameter T_MUX  = 6;
+parameter T_TRI  = 2;
+parameter T_DTFF = 8;
 
-	parameter T_INV  = 2;
-	parameter T_AND  = 4;
-	parameter T_NAND = 2;
-	parameter T_OR   = 4;
-	parameter T_NOR  = 2;
-	parameter T_OA   = 6;
-	parameter T_MUX  = 6;
-	parameter T_TRI  = 2;
+module dmg;
 
 	reg [31:0] cyc;
 
@@ -262,7 +263,6 @@ endmodule
 module dtff(clk, nreset, d, q);
 
 	parameter INITIAL_Q = 2;
-	parameter T_DTFF    = 8;
 
 	input  wire clk, nreset, d;
 	output wire q;

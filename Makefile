@@ -3,7 +3,7 @@ all: dmg.vcd
 .PHONY: all
 
 %: %.v
-	iverilog -o $@ $^
+	iverilog -g2012 -o $@ $^
 
 %.vcd: %
 	./$<
