@@ -43,6 +43,7 @@ module dmg;
 
 	/* not yet generated signals */
 	wire ff40_d7 = 0;
+	wire from_cpu = 0;
 	wire from_cpu3 = 1;
 	wire from_cpu4 = 0;
 	wire clk_from_cpu = 1;
@@ -52,6 +53,11 @@ module dmg;
 	wire tola_na1 = 1;
 	wire tovy_na0 = 1;
 	wire ff60_d1 = 0;
+	wire apu_wr = 0;
+	wire ff26 = 0;
+	wire byfe_128hz = 0;
+
+	wire nreset2;
 
 	wire apu_reset;
 	wire apuv_4mhz;
@@ -64,6 +70,7 @@ endmodule
 
 module clk(
 		clkin_a, clkin_b, reset, t1, t2,
+		nreset2,
 		d,
 		from_cpu3, from_cpu4, clk_from_cpu, cpu_wr, cpu_rd,
 		ff04_ff07, ff40_d7, ff60_d1, tovy_na0, tola_na1,
@@ -73,6 +80,8 @@ module clk(
 	input wire clkin_a, clkin_b;
 	input wire reset;
 	input wire t1, t2;
+
+	output wire nreset2;
 
 	inout wire [7:0] d;
 
@@ -214,7 +223,7 @@ module clk(
 	assign nphi    = dova;
 
 	wire bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, boma, byxo, bedo, bowa, afer, avor, alur;
-	wire boga1mhz, to_cpu, nreset2;
+	wire boga1mhz, to_cpu;
 	dtff dtff_afer(boma, nt1_nt2, asol, afer); // check clk edge
 	assign #T_INV  bele = !buto;
 	assign #T_INV  atez = !clkin_a;
@@ -301,22 +310,88 @@ module clk(
 endmodule
 
 module apu_ctrl(
+		cpu_rd,
+		nreset2,
+		d,
+		from_cpu,
+		ff26,
+		apu_wr,
 		apu_reset,
 		apuv_4mhz,
-		ajer_2mhz
+		ajer_2mhz,
+		byfe_128hz
 	);
 
+	input wire cpu_rd;
+	input wire nreset2;
+
+	inout wire [7:0] d;
+
+	input wire from_cpu;
+
+	input wire ff26;
+
+	input  wire apu_wr;
 	output wire apu_reset;
 	input  wire apuv_4mhz;
 	output wire ajer_2mhz;
+	input  wire byfe_128hz;
 
-	wire ajer;
+	wire ajer, bata, calo, dyfa, dyfa_1mhz;
 	dtff dtff_ajer(apuv_4mhz, napu_reset3, !ajer, ajer); // check edge
+	dtff dtff_calo(bata,      napu_reset,  !calo, calo); // check edge
+	assign #T_INV  bata = !ajer_2mhz;
+	assign #T_INV  dyfa = calo; /* takes !q output of dtff */
 	assign ajer_2mhz = ajer;
+	assign dyfa_1mhz = dyfa;
 
-	/* not yet generated signals */
-	assign apu_reset = 0;
-	wire napu_reset3 = 1;
+	wire dapa, afat, agur, atyv, kame, cepo;
+	wire napu_reset, napu_reset2, napu_reset3, napu_reset4, napu_reset5, napu_reset6;
+	assign #T_INV  dapa = !apu_reset;
+	assign #T_INV  afat = !apu_reset;
+	assign #T_INV  agur = !apu_reset;
+	assign #T_INV  atyv = !apu_reset;
+	assign #T_INV  kame = !apu_reset;
+	assign #T_INV  cepo = !apu_reset;
+	assign napu_reset4 = dapa;
+	assign napu_reset2 = afat;
+	assign napu_reset  = agur;
+	assign napu_reset3 = atyv;
+	assign napu_reset5 = kame;
+	assign napu_reset6 = cepo;
+
+	wire kydu, jure, hapo, gufo, jyro, kuby, keba, hawu, hada, hope, bopy, bowy, baza, cely, cone, cate;
+	wire kepy, etuc, foku, efop, fero, edek, fero_q, net03;
+	dtff dtff_hada(hawu,       gufo,        d[7], hada); // check edge
+	dtff dtff_bowy(bopy,       kepy,        d[5], bowy); // check edge
+	dtff dtff_baza(!ajer_2mhz, napu_reset3, bowy, baza); // check edge
+	dtff dtff_fero(foku,       kepy,        efop, fero); // check edge
+	assign #T_INV  kydu = !ncpu_rd;
+	assign #T_NAND jure = !(kydu && ff26);
+	assign #T_NAND hawu = !(ff26 && apu_wr);
+	assign #T_NAND bopy = !(apu_wr && ff26);
+	assign #T_INV  kepy = !jyro;
+	assign #T_INV  hapo = !nreset2;
+	assign #T_INV  gufo = !hapo;
+	assign #T_OR   jyro = hapo || !hada;
+	assign #T_TRI  hope = jure ? !hada : 1'bz;
+	assign #T_INV  kuby = !jyro;
+	assign #T_INV  keba = !kuby;
+	assign #T_MUX  cely = net03 ? baza : byfe_128hz;
+	assign #T_INV  cone = !cely;
+	assign #T_INV  cate = !cone;
+	assign #T_AND  etuc = apu_wr && ff26;
+	assign #T_AND  efop = d[4] && from_cpu;
+	assign #T_INV  foku = !etuc;
+	assign #T_INV  edek = fero; /* takes !q output of dtff */
+	assign apu_reset = keba;
+	assign fero_q    = fero;
+	assign net03     = edek;
+	assign d[7]      = hope;
+
+	wire aguz, ncpu_rd;
+	assign #T_INV  aguz = !cpu_rd;
+	assign ncpu_rd = aguz;
 
 endmodule
 
