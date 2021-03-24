@@ -55,13 +55,15 @@ module dmg;
 	wire ff60_d1 = 0;
 	wire apu_wr = 0;
 	wire ff26 = 0;
-	wire byfe_128hz = 0;
 
 	wire nreset2;
 
 	wire apu_reset;
+	wire napu_reset5;
 	wire apuv_4mhz;
 	wire ajer_2mhz;
+	wire byfe_128hz;
+	wire fero_q;
 
 	clk      p1_clk(.*);
 	apu_ctrl p9_apu_ctrl(.*);
@@ -74,7 +76,9 @@ module clk(
 		d,
 		from_cpu3, from_cpu4, clk_from_cpu, cpu_wr, cpu_rd,
 		ff04_ff07, ff40_d7, ff60_d1, tovy_na0, tola_na1,
-		apu_reset, apuv_4mhz, ajer_2mhz
+		apu_reset, napu_reset5,
+		apuv_4mhz, ajer_2mhz, byfe_128hz,
+		fero_q
 	);
 
 	input wire clkin_a, clkin_b;
@@ -98,8 +102,11 @@ module clk(
 	input wire tola_na1;
 
 	input  wire apu_reset;
+	input  wire napu_reset5;
 	output wire apuv_4mhz;
 	input  wire ajer_2mhz;
+	output wire byfe_128hz;
+	input  wire fero_q;
 
 	wire arys, anos, avet;
 	assign #T_INV  arys = !clkin_b;
@@ -307,6 +314,45 @@ module clk(
 	assign nff04_d1 = urek;
 	assign d = { tatu, sawa, sepu, upug, tuse, temu, taku, tawu };
 
+	wire atus, coke, bara, caru, bylu, bure, fyne, culo, apef, gale, beze, bule, gexy, cofu, baru, horu, bufy, byfe;
+	wire _512hz, _256hz, _128hz, horu_512hz, bufy_256hz;
+	dtff dtff_bara(coke,  atus, umer,  bara); // check edge
+	dtff dtff_caru(bure,  atus, !caru, caru); // check edge
+	dtff dtff_bylu(!caru, atus, !bylu, bylu); // check edge
+	assign #T_INV  atus = !apu_reset;
+	assign #T_INV  coke = !ajer_2mhz;
+	assign #T_INV  bure = bara; /* takes !q output of dtff */
+	assign #T_INV  fyne = !bure;
+	assign #T_INV  culo = caru; /* takes !q output of dtff */
+	assign #T_INV  apef = bylu; /* takes !q output of dtff */
+	assign #T_MUX  gale = fero_q ? hama_512k : fyne;
+	assign #T_MUX  beze = fero_q ? hama_512k : culo;
+	assign #T_MUX  bule = fero_q ? hama_512k : apef;
+	assign #T_INV  gexy = !gale;
+	assign #T_INV  horu = !gexy;
+	assign #T_INV  cofu = !beze;
+	assign #T_INV  bufy = !cofu;
+	assign #T_INV  baru = !bule;
+	assign #T_INV  byfe = !baru;
+	assign _512hz = bara;
+	assign _256hz = caru;
+	assign _128hz = bylu;
+	assign horu_512hz = horu;
+	assign bufy_256hz = bufy;
+	assign byfe_128hz = byfe;
+
+	wire bopo, atyk, avok, bavu, jeso, hama, bavu_1mhz, _2097152hz, _1048576hz, jeso_512k, hama_512k;
+	dtff dtff_atyk(aryf_4mhz, bopo,        !atyk, atyk); // check edge
+	dtff dtff_avok(atyk,      bopo,        !avok, avok); // check edge
+	dtff dtff_jeso(bavu,      napu_reset5, !jeso, jeso); // check edge
+	assign #T_INV  bopo = !apu_reset;
+	assign #T_INV  bavu = !avok;
+	assign #T_INV  hama = jeso; /* takes !q output of dtff */
+	assign _2097152hz = atyk;
+	assign _1048576hz = avok;
+	assign jeso_512k = jeso;
+	assign hama_512k = hama;
+
 endmodule
 
 module apu_ctrl(
@@ -317,9 +363,11 @@ module apu_ctrl(
 		ff26,
 		apu_wr,
 		apu_reset,
+		napu_reset5,
 		apuv_4mhz,
 		ajer_2mhz,
-		byfe_128hz
+		byfe_128hz,
+		fero_q
 	);
 
 	input wire cpu_rd;
@@ -333,9 +381,11 @@ module apu_ctrl(
 
 	input  wire apu_wr;
 	output wire apu_reset;
+	output wire napu_reset5;
 	input  wire apuv_4mhz;
 	output wire ajer_2mhz;
 	input  wire byfe_128hz;
+	output wire fero_q;
 
 	wire ajer, bata, calo, dyfa, dyfa_1mhz;
 	dtff dtff_ajer(apuv_4mhz, napu_reset3, !ajer, ajer); // check edge
@@ -346,7 +396,7 @@ module apu_ctrl(
 	assign dyfa_1mhz = dyfa;
 
 	wire dapa, afat, agur, atyv, kame, cepo;
-	wire napu_reset, napu_reset2, napu_reset3, napu_reset4, napu_reset5, napu_reset6;
+	wire napu_reset, napu_reset2, napu_reset3, napu_reset4, napu_reset6;
 	assign #T_INV  dapa = !apu_reset;
 	assign #T_INV  afat = !apu_reset;
 	assign #T_INV  agur = !apu_reset;
@@ -361,7 +411,7 @@ module apu_ctrl(
 	assign napu_reset6 = cepo;
 
 	wire kydu, jure, hapo, gufo, jyro, kuby, keba, hawu, hada, hope, bopy, bowy, baza, cely, cone, cate;
-	wire kepy, etuc, foku, efop, fero, edek, fero_q, net03;
+	wire kepy, etuc, foku, efop, fero, edek, net03;
 	dtff dtff_hada(hawu,       gufo,        d[7], hada); // check edge
 	dtff dtff_bowy(bopy,       kepy,        d[5], bowy); // check edge
 	dtff dtff_baza(!ajer_2mhz, napu_reset3, bowy, baza); // check edge
