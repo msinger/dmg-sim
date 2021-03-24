@@ -42,19 +42,26 @@ module dmg;
 	wire [7:0] d;
 
 	/* not yet generated signals */
+	wire wr_in = 0;
+	wire rd_b = 0;
+	wire cpu_raw_rd = 0;
 	wire ff40_d7 = 0;
 	wire from_cpu = 0;
 	wire from_cpu3 = 1;
 	wire from_cpu4 = 0;
+	wire from_cpu6 = 0;
 	wire clk_from_cpu = 1;
 	wire ff04_ff07 = 0;
-	wire cpu_wr = 0;
-	wire cpu_rd = 0;
 	wire tola_na1 = 1;
 	wire tovy_na0 = 1;
 	wire ff60_d1 = 0;
 	wire apu_wr = 0;
 	wire ff26 = 0;
+
+	wire cpu_wr, cpu_wr2;
+	wire cpu_rd, cpu_rd2;
+	wire cpu_rd_sync;
+	wire nt1_nt2, nt1_t2, t1_nt2;
 
 	wire nreset2;
 
@@ -65,16 +72,20 @@ module dmg;
 	wire byfe_128hz;
 	wire fero_q;
 
-	clk      p1_clk(.*);
-	apu_ctrl p9_apu_ctrl(.*);
+	clk        p1_clk(.*);
+	sys_decode p7_sys_decode(.*);
+	apu_ctrl   p9_apu_ctrl(.*);
 
 endmodule
 
 module clk(
-		clkin_a, clkin_b, reset, t1, t2,
+		clkin_a, clkin_b, reset,
 		nreset2,
 		d,
-		from_cpu3, from_cpu4, clk_from_cpu, cpu_wr, cpu_rd,
+		cpu_rd_sync,
+		cpu_wr, cpu_rd,
+		nt1_nt2, nt1_t2, t1_nt2,
+		from_cpu3, from_cpu4, clk_from_cpu,
 		ff04_ff07, ff40_d7, ff60_d1, tovy_na0, tola_na1,
 		apu_reset, napu_reset5,
 		apuv_4mhz, ajer_2mhz, byfe_128hz,
@@ -83,17 +94,18 @@ module clk(
 
 	input wire clkin_a, clkin_b;
 	input wire reset;
-	input wire t1, t2;
 
 	output wire nreset2;
 
 	inout wire [7:0] d;
 
+	output wire cpu_rd_sync;
+	input  wire cpu_wr, cpu_rd;
+	input  wire nt1_nt2, nt1_t2, t1_nt2;
+
 	input wire from_cpu3;
 	input wire from_cpu4;
 	input wire clk_from_cpu;
-	input wire cpu_wr;
-	input wire cpu_rd;
 
 	input wire ff04_ff07;
 	input wire ff40_d7;
@@ -169,7 +181,7 @@ module clk(
 	assign reset_video3  = lyha;
 
 	wire adyk, afur, alef, apuk, abol, ucob, uvyt, nclkin_a, nphi_out;
-	wire adar, atyp, afep, arov, afas, ajax, bugo, arev, apov, agut, awod, abuz, bate, basu, buke, cpu_rd_sync;
+	wire adar, atyp, afep, arov, afas, ajax, bugo, arev, apov, agut, awod, abuz, bate, basu, buke;
 	dtff dtff_adyk(atal_4mhz,  nt1_nt2, apuk,  adyk);
 	dtff dtff_afur(!atal_4mhz, nt1_nt2, !adyk, afur);
 	dtff dtff_alef(atal_4mhz,  nt1_nt2, afur,  alef);
@@ -195,16 +207,6 @@ module clk(
 	assign nclkin_a = ucob;
 	assign nphi_out = uvyt;
 	assign cpu_rd_sync = apov;
-
-	wire ubet, uvar, upoj, unor, umut, nt1_nt2, nt1_t2, t1_nt2;
-	assign #T_INV  ubet = !t1;
-	assign #T_INV  uvar = !t2;
-	assign #T_NAND upoj = !(ubet && uvar && reset);
-	assign #T_AND  unor = t2 && ubet;
-	assign #T_AND  umut = uvar && t1;
-	assign nt1_nt2 = upoj;
-	assign nt1_t2  = unor;
-	assign t1_nt2  = umut;
 
 	wire bapy, belu, beru, byry, bufa, byly, bude, beva, bolo, byda, beko, bavy, beja, dova, phi_out, nphi;
 	wire bane, belo, baze, buto;
@@ -352,6 +354,48 @@ module clk(
 	assign _1048576hz = avok;
 	assign jeso_512k = jeso;
 	assign hama_512k = hama;
+
+endmodule
+
+module sys_decode(
+		reset, t1, t2, wr_in, rd_b,
+		cpu_rd_sync, cpu_raw_rd,
+		from_cpu6,
+		cpu_wr, cpu_wr2, cpu_rd, cpu_rd2,
+		nt1_nt2, nt1_t2, t1_nt2
+	);
+
+	input  wire reset, t1, t2, wr_in, rd_b;
+	input  wire cpu_rd_sync, cpu_raw_rd;
+	input  wire from_cpu6;
+	output wire cpu_wr, cpu_wr2, cpu_rd, cpu_rd2;
+	output wire nt1_nt2, nt1_t2, t1_nt2;
+
+	wire ubet, uvar, upoj, unor, umut;
+	assign #T_INV  ubet = !t1;
+	assign #T_INV  uvar = !t2;
+	assign #T_NAND upoj = !(ubet && uvar && reset);
+	assign #T_AND  unor = t2 && ubet;
+	assign #T_AND  umut = uvar && t1;
+	assign nt1_nt2 = upoj;
+	assign nt1_t2  = unor;
+	assign t1_nt2  = umut;
+
+	wire ubal, ujyv, lexy, tapu, tedo, dyky, ajas, cupa, asot, pin_nc;
+	assign #T_MUX  ubal = !(nt1_t2 ? wr_in : cpu_rd_sync);
+	assign #T_MUX  ujyv = !(nt1_t2 ? rd_b  : cpu_raw_rd);
+	assign #T_INV  lexy = !from_cpu6;
+	assign #T_INV  tapu = !ubal;
+	assign #T_INV  tedo = !ujyv;
+	assign #T_INV  dyky = !tapu;
+	assign #T_INV  ajas = !tedo;
+	assign #T_INV  cupa = !dyky;
+	assign #T_INV  asot = !ajas;
+	assign pin_nc  = lexy;
+	assign cpu_wr  = tapu;
+	assign cpu_wr2 = cupa;
+	assign cpu_rd  = tedo;
+	assign cpu_rd2 = asot;
 
 endmodule
 
