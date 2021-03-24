@@ -42,35 +42,44 @@ module dmg;
 	wire [7:0] d;
 
 	/* not yet generated signals */
+	wire [15:0] a = 0;
 	wire wr_in = 0;
 	wire rd_b = 0;
 	wire cpu_raw_rd = 0;
+	wire cpu_wr_raw = 0;
 	wire ff40_d7 = 0;
 	wire from_cpu = 0;
 	wire from_cpu3 = 1;
 	wire from_cpu4 = 0;
 	wire from_cpu6 = 0;
 	wire clk_from_cpu = 1;
-	wire ff04_ff07 = 0;
 	wire tola_na1 = 1;
 	wire tovy_na0 = 1;
-	wire ff60_d1 = 0;
 	wire apu_wr = 0;
 	wire ff26 = 0;
+	wire a00_07 = 0;
+	wire p10_b = 0;
+	wire anap = 0;
 
 	wire cpu_wr, cpu_wr2;
 	wire cpu_rd, cpu_rd2;
 	wire cpu_rd_sync;
 	wire nt1_nt2, nt1_t2, t1_nt2;
+	wire ff04_ff07, ff0f_rd, ff0f_wr;
+	wire hram_cs;
 
 	wire nreset2;
+
+	wire ff60_d1, ff60_d0;
 
 	wire apu_reset;
 	wire napu_reset5;
 	wire apuv_4mhz;
 	wire ajer_2mhz;
 	wire byfe_128hz;
-	wire fero_q;
+	wire fero_q, bedo;
+
+	wire ffxx, nffxx, nfexxffxx, saro;
 
 	clk        p1_clk(.*);
 	sys_decode p7_sys_decode(.*);
@@ -89,7 +98,7 @@ module clk(
 		ff04_ff07, ff40_d7, ff60_d1, tovy_na0, tola_na1,
 		apu_reset, napu_reset5,
 		apuv_4mhz, ajer_2mhz, byfe_128hz,
-		fero_q
+		fero_q, bedo
 	);
 
 	input wire clkin_a, clkin_b;
@@ -119,6 +128,7 @@ module clk(
 	input  wire ajer_2mhz;
 	output wire byfe_128hz;
 	input  wire fero_q;
+	output wire bedo;
 
 	wire arys, anos, avet;
 	assign #T_INV  arys = !clkin_b;
@@ -231,7 +241,7 @@ module clk(
 	assign phi_out = bude;
 	assign nphi    = dova;
 
-	wire bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, boma, byxo, bedo, bowa, afer, avor, alur;
+	wire bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, boma, byxo, bowa, afer, avor, alur;
 	wire boga1mhz, to_cpu;
 	dtff dtff_afer(boma, nt1_nt2, asol, afer); // check clk edge
 	assign #T_INV  bele = !buto;
@@ -358,18 +368,33 @@ module clk(
 endmodule
 
 module sys_decode(
-		reset, t1, t2, wr_in, rd_b,
-		cpu_rd_sync, cpu_raw_rd,
+		reset, nreset2, t1, t2, wr_in, rd_b, a, d,
+		cpu_rd_sync, cpu_raw_rd, cpu_wr_raw,
 		from_cpu6,
 		cpu_wr, cpu_wr2, cpu_rd, cpu_rd2,
-		nt1_nt2, nt1_t2, t1_nt2
+		nt1_nt2, nt1_t2, t1_nt2,
+		ff04_ff07, ff0f_rd, ff0f_wr,
+		hram_cs,
+		anap, bedo, p10_b,
+		a00_07, ffxx, nffxx, nfexxffxx, saro,
+		ff60_d1, ff60_d0
 	);
 
-	input  wire reset, t1, t2, wr_in, rd_b;
-	input  wire cpu_rd_sync, cpu_raw_rd;
+	input  wire reset, nreset2, t1, t2, wr_in, rd_b;
+	input  wire [15:0] a;
+	inout  wire [7:0] d;
+	input  wire cpu_rd_sync, cpu_raw_rd, cpu_wr_raw;
 	input  wire from_cpu6;
 	output wire cpu_wr, cpu_wr2, cpu_rd, cpu_rd2;
 	output wire nt1_nt2, nt1_t2, t1_nt2;
+
+	output wire ff04_ff07, ff0f_rd, ff0f_wr;
+	output wire hram_cs;
+
+	input  wire anap, bedo, p10_b;
+	input  wire a00_07;
+	output wire ffxx, nffxx, nfexxffxx, saro;
+	output wire ff60_d1, ff60_d0;
 
 	wire ubet, uvar, upoj, unor, umut;
 	assign #T_INV  ubet = !t1;
@@ -396,6 +421,99 @@ module sys_decode(
 	assign cpu_wr2 = cupa;
 	assign cpu_rd  = tedo;
 	assign cpu_rd2 = asot;
+
+	wire ryfo, semy, sapa, rolo, refa;
+	assign #T_AND  ryfo = a[2] && a00_07 && ffxx;
+	assign #T_NOR  semy = !(a[7] || a[6] || a[5] || a[4]);
+	assign #T_AND  sapa = a[0] && a[1] && a[2] && a[3];
+	assign #T_NAND rolo = !(semy && sapa && ffxx && cpu_rd);
+	assign #T_NAND refa = !(semy && sapa && ffxx && cpu_wr_raw);
+	assign ff04_ff07 = ryfo;
+	assign ff0f_rd   = rolo;
+	assign ff0f_wr   = refa;
+
+	wire zyra, zage, zabu, zoke, zera, zufy, zyky, zyga, zovy, zuko, zuvy, zyba, zole, zaje, zubu, zapy;
+	wire zete, zefu, zyro, zapa, bootrom_na7, bootrom_na6, bootrom_na3, bootrom_na2;
+	wire bootrom_na5_na4, bootrom_na5_a4, bootrom_a5_na4, bootrom_a5_a4;
+	wire bootrom_na1_na0, bootrom_na1_a0, bootrom_a1_na0, bootrom_a1_a0;
+	assign #T_INV  zyra = !a[7];
+	assign #T_INV  zage = !a[6];
+	assign #T_INV  zabu = !a[3];
+	assign #T_INV  zoke = !a[2];
+	assign #T_INV  zera = !a[5];
+	assign #T_INV  zufy = !a[4];
+	assign #T_AND  zyky = zera && zufy;
+	assign #T_AND  zyga = zera && a[4];
+	assign #T_AND  zovy = a[5] && zufy;
+	assign #T_AND  zuko = a[5] && a[4];
+	assign #T_INV  zuvy = !a[1];
+	assign #T_INV  zyba = !a[0];
+	assign #T_AND  zole = zuvy && zyba;
+	assign #T_AND  zaje = zuvy && a[0];
+	assign #T_AND  zubu = zyba && a[1];
+	assign #T_AND  zapy = a[1] && a[0];
+	assign #T_INV  zete = !zole;
+	assign #T_INV  zefu = !zaje;
+	assign #T_INV  zyro = !zubu;
+	assign #T_INV  zapa = !zapy;
+	assign bootrom_na7     = zyra;
+	assign bootrom_na6     = zage;
+	assign bootrom_na3     = zabu;
+	assign bootrom_na2     = zoke;
+	assign bootrom_na5_na4 = zyky;
+	assign bootrom_na5_a4  = zyga;
+	assign bootrom_a5_na4  = zovy;
+	assign bootrom_a5_a4   = zuko;
+	assign bootrom_na1_na0 = zete;
+	assign bootrom_na1_a0  = zefu;
+	assign bootrom_a1_na0  = zyro;
+	assign bootrom_a1_a0   = zapa;
+
+	wire apet, aper, amut, buro;
+	assign #T_OR   apet = nt1_t2 || t1_nt2;
+	assign #T_NAND aper = !(apet && a[5] && a[6] && cpu_wr && anap);
+	dtff dtff_amut(aper, nreset2, d[1], amut); // check edge
+	dtff dtff_buro(aper, nreset2, d[0], buro); // check edge
+	assign ff60_d1 = amut;
+	assign ff60_d0 = buro;
+
+	wire leco, raru, rowe, ryke, ryne, rase, rejy, reka, romy;
+	assign #T_NOR  leco = !(bedo || nt1_t2);
+	assign #T_TRI  raru = leco ? !p10_b : 1'bz;
+	assign #T_TRI  rowe = leco ? !p10_b : 1'bz;
+	assign #T_TRI  ryke = leco ? !p10_b : 1'bz;
+	assign #T_TRI  ryne = leco ? !p10_b : 1'bz;
+	assign #T_TRI  rase = leco ? !p10_b : 1'bz;
+	assign #T_TRI  rejy = leco ? !p10_b : 1'bz;
+	assign #T_TRI  reka = leco ? !p10_b : 1'bz;
+	assign #T_TRI  romy = leco ? !p10_b : 1'bz;
+	assign d[7] = raru;
+	assign d[5] = rowe;
+	assign d[6] = ryke;
+	assign d[1] = ryne;
+	assign d[3] = rase;
+	assign d[2] = rejy;
+	assign d[4] = reka;
+	assign d[0] = romy;
+
+	wire wale, woly, wuta;
+	assign #T_NAND wale = !(a[0] && a[1] && a[2] && a[3] && a[4] && a[5] && a[6]);
+	assign #T_NAND woly = !(wale && a[7] && ffxx);
+	assign #T_INV  wuta = !woly;
+	assign hram_cs = woly;
+
+	wire tona, syke, bako, tuna, rycu, rope, soha;
+	assign #T_INV  tona = !a[8];
+	assign #T_NAND tuna = !(a[15] && a[14] && a[13] && a[12] && a[11] && a[10] && a[9]);
+	assign #T_NOR  syke = !(tona || tuna);
+	assign #T_INV  bako = !syke;
+	assign #T_INV  rycu = !tuna;
+	assign #T_INV  soha = !ffxx;
+	assign #T_NAND rope = !(rycu && soha);
+	assign #T_INV  saro = !rope;
+	assign ffxx      = syke;
+	assign nffxx     = bako;
+	assign nfexxffxx = tuna;
 
 endmodule
 
