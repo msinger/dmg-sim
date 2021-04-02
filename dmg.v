@@ -104,6 +104,7 @@ module dmg;
 	sys_decode     p7_sys_decode(.*);
 	ext_cpu_busses p8_ext_cpu_busses(.*);
 	apu_ctrl       p9_apu_ctrl(.*);
+	vram_ifc       p25_vram_ifc(.*);
 
 endmodule
 
@@ -1072,6 +1073,88 @@ module apu_ctrl(
 	wire aguz, ncpu_rd;
 	assign #T_INV  aguz = !cpu_rd;
 	assign ncpu_rd = aguz;
+
+endmodule
+
+module vram_ifc(
+		d, d_in, d_a,
+		nt1_t2, p10_b,
+		roru, lula, bedo
+	);
+
+	inout  wire [7:0] d;
+	input  wire [7:0] d_in;
+	output wire [7:0] d_a;
+
+	input wire nt1_t2, p10_b;
+	input wire roru, lula, bedo;
+
+	wire ryvo, rera, raby, rory, ruja, ravu, rafy, ruxa;
+	assign #T_NAND ryvo = !(d[5] && lula);
+	assign #T_NAND rera = !(d[3] && lula);
+	assign #T_NAND raby = !(d[2] && lula);
+	assign #T_NAND rory = !(d[4] && lula);
+	assign #T_NAND ruja = !(d[1] && lula);
+	assign #T_NAND ravu = !(d[7] && lula);
+	assign #T_NAND rafy = !(d[6] && lula);
+	assign #T_NAND ruxa = !(d[0] && lula);
+	assign d_a[5] = ryvo;
+	assign d_a[3] = rera;
+	assign d_a[2] = raby;
+	assign d_a[4] = rory;
+	assign d_a[1] = ruja;
+	assign d_a[7] = ravu;
+	assign d_a[6] = rafy;
+	assign d_a[0] = ruxa;
+
+	wire runy, tuso, sole, tahy, tesu, taxo, tovu, tazu, tewa, sosa, sedu;
+	assign #T_INV  runy = !p10_b; // check if inverter or just buffer
+	assign #T_NOR  tuso = !(nt1_t2 || bedo);
+	assign #T_INV  sole = !tuso;
+	assign #T_TRI  tahy = runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  tesu = runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  taxo = runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  tovu = runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  tazu = runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  tewa = runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  sosa = runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  sedu = runy ? !sole : 1'bz; // check enable input polarity
+	assign d[4] = tahy;
+	assign d[5] = tesu;
+	assign d[3] = taxo;
+	assign d[0] = tovu;
+	assign d[6] = tazu;
+	assign d[7] = tewa;
+	assign d[1] = sosa;
+	assign d[2] = sedu;
+
+	wire lyra, ryba, ruzy, rome, tehe, soca, ratu, tovo, saza;
+	wire ropa, sywa, sugu, tute, temy, sajo, tuty, tawo;
+	assign #T_NAND lyra = !(nt1_t2 && roru);
+	assign #T_INV  ryba = !d_in[7];
+	assign #T_INV  ruzy = !d_in[1];
+	assign #T_INV  rome = !d_in[2];
+	assign #T_INV  tehe = !d_in[4];
+	assign #T_INV  soca = !d_in[6];
+	assign #T_INV  ratu = !d_in[5];
+	assign #T_INV  tovo = !d_in[0];
+	assign #T_INV  saza = !d_in[3];
+	assign #T_TRI  ropa = lyra ? !ryba : 1'bz; // check enable input polarity
+	assign #T_TRI  sywa = lyra ? !ruzy : 1'bz; // check enable input polarity
+	assign #T_TRI  sugu = lyra ? !rome : 1'bz; // check enable input polarity
+	assign #T_TRI  tute = lyra ? !tehe : 1'bz; // check enable input polarity
+	assign #T_TRI  temy = lyra ? !soca : 1'bz; // check enable input polarity
+	assign #T_TRI  sajo = lyra ? !ratu : 1'bz; // check enable input polarity
+	assign #T_TRI  tuty = lyra ? !tovo : 1'bz; // check enable input polarity
+	assign #T_TRI  tawo = lyra ? !saza : 1'bz; // check enable input polarity
+	assign d[7] = ropa;
+	assign d[1] = sywa;
+	assign d[2] = sugu;
+	assign d[4] = tute;
+	assign d[6] = temy;
+	assign d[5] = sajo;
+	assign d[0] = tuty;
+	assign d[3] = tawo;
 
 endmodule
 
