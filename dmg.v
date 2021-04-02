@@ -1,17 +1,18 @@
 `default_nettype none
 `timescale 1ns/100ps
 
-parameter T_INV  = 2;
-parameter T_AND  = 4;
-parameter T_NAND = 2;
-parameter T_OR   = 4;
-parameter T_NOR  = 2;
-parameter T_OA   = 6;
-parameter T_AO   = 6;
-parameter T_MUX  = 6;
-parameter T_TRI  = 2;
-parameter T_DFFR = 8;
-parameter T_DFF  = 8;
+parameter T_INV   = 2;
+parameter T_AND   = 4;
+parameter T_NAND  = 2;
+parameter T_OR    = 4;
+parameter T_NOR   = 2;
+parameter T_OA    = 6;
+parameter T_AO    = 6;
+parameter T_MUX   = 6;
+parameter T_TRI   = 2;
+parameter T_DFFR  = 8;
+parameter T_DFF   = 8;
+parameter T_LATCH = 4;
 
 module dmg;
 
@@ -41,12 +42,15 @@ module dmg;
 		if (cyc == 10000) $finish;
 	end
 
-	wire [7:0]  d;
+	wire [7:0]  d, d_a, d_d;
 	wire [12:0] ma;
-	wire [15:0] dma_a;
+	wire [15:0] a, a_a, a_d, dma_a;
+
+	wire wr_a, wr_c, rd_a, rd_c;
 
 	/* not yet generated signals */
-	wire [15:0] a = 0;
+	wire [7:0] d_in = 'hff;
+	wire [15:0] a_c = 0;
 	wire wr_in = 0;
 	wire rd_b = 0;
 	wire cpu_raw_rd = 0;
@@ -58,7 +62,6 @@ module dmg;
 	wire from_cpu5 = 0;
 	wire from_cpu6 = 0;
 	wire clk_from_cpu = 1;
-	wire tola_na1 = 1;
 	wire tovy_na0 = 1;
 	wire apu_wr = 0;
 	wire ff26 = 0;
@@ -75,13 +78,15 @@ module dmg;
 	wire cpu_rd_sync;
 	wire nt1_nt2, nt1_t2, t1_nt2;
 	wire ff04_ff07, ff0f_rd, ff0f_wr;
-	wire hram_cs;
+	wire hram_cs, boot_cs, ncs_out;
+	wire to_cpu, to_cpu_tutu;
 
 	wire nreset2, nreset6;
 	wire nphi_out;
 
 	wire dma_run, vram_to_oam, dma_addr_ext, oam_addr_dma;
 	wire caty, wyja, mopa_phi;
+	wire tola_na1;
 
 	wire ff60_d1, ff60_d0;
 
@@ -90,14 +95,15 @@ module dmg;
 	wire apuv_4mhz;
 	wire ajer_2mhz;
 	wire byfe_128hz;
-	wire fero_q, bedo;
+	wire fero_q, bedo, abuz, tutu, texo, roru, lula;
 
 	wire ffxx, nffxx, nfexxffxx, saro;
 
-	clk        p1_clk(.*);
-	dma        p4_dma(.*);
-	sys_decode p7_sys_decode(.*);
-	apu_ctrl   p9_apu_ctrl(.*);
+	clk            p1_clk(.*);
+	dma            p4_dma(.*);
+	sys_decode     p7_sys_decode(.*);
+	ext_cpu_busses p8_ext_cpu_busses(.*);
+	apu_ctrl       p9_apu_ctrl(.*);
 
 endmodule
 
@@ -109,11 +115,11 @@ module clk(
 		cpu_rd_sync,
 		cpu_wr, cpu_rd,
 		nt1_nt2, nt1_t2, t1_nt2,
-		from_cpu3, from_cpu4, clk_from_cpu,
+		from_cpu3, from_cpu4, clk_from_cpu, to_cpu,
 		ff04_ff07, ff40_d7, ff60_d1, tovy_na0, tola_na1,
 		apu_reset, napu_reset5,
 		apuv_4mhz, ajer_2mhz, byfe_128hz,
-		fero_q, bedo
+		fero_q, bedo, abuz
 	);
 
 	input wire clkin_a, clkin_b;
@@ -129,9 +135,10 @@ module clk(
 	input  wire cpu_wr, cpu_rd;
 	input  wire nt1_nt2, nt1_t2, t1_nt2;
 
-	input wire from_cpu3;
-	input wire from_cpu4;
-	input wire clk_from_cpu;
+	input  wire from_cpu3;
+	input  wire from_cpu4;
+	input  wire clk_from_cpu;
+	output wire to_cpu;
 
 	input wire ff04_ff07;
 	input wire ff40_d7;
@@ -145,7 +152,7 @@ module clk(
 	input  wire ajer_2mhz;
 	output wire byfe_128hz;
 	input  wire fero_q;
-	output wire bedo;
+	output wire bedo, abuz;
 
 	wire arys, anos, avet;
 	assign #T_INV  arys = !clkin_b;
@@ -208,7 +215,7 @@ module clk(
 	assign reset_video3  = lyha;
 
 	wire adyk, afur, alef, apuk, abol, ucob, uvyt, nclkin_a;
-	wire adar, atyp, afep, arov, afas, ajax, bugo, arev, apov, agut, awod, abuz, bate, basu, buke;
+	wire adar, atyp, afep, arov, afas, ajax, bugo, arev, apov, agut, awod, bate, basu, buke;
 	dffr dffr_adyk(atal_4mhz,  nt1_nt2, apuk,  adyk);
 	dffr dffr_afur(!atal_4mhz, nt1_nt2, !adyk, afur);
 	dffr dffr_alef(atal_4mhz,  nt1_nt2, afur,  alef);
@@ -259,7 +266,7 @@ module clk(
 	assign nphi    = dova;
 
 	wire bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, boma, byxo, bowa, afer, avor, alur;
-	wire boga1mhz, to_cpu;
+	wire boga1mhz;
 	dffr dffr_afer(boma, nt1_nt2, asol, afer); // check clk edge
 	assign #T_INV  bele = !buto;
 	assign #T_INV  atez = !clkin_a;
@@ -531,14 +538,14 @@ endmodule
 module sys_decode(
 		reset, nreset2, t1, t2, wr_in, rd_b, a, d,
 		cpu_rd_sync, cpu_raw_rd, cpu_wr_raw,
-		from_cpu6,
+		from_cpu6, to_cpu_tutu,
 		cpu_wr, cpu_wr2, cpu_rd, cpu_rd2,
 		nt1_nt2, nt1_t2, t1_nt2,
 		ff04_ff07, ff0f_rd, ff0f_wr,
 		hram_cs,
-		anap, bedo, p10_b,
+		anap, bedo, tutu, p10_b,
 		a00_07, ffxx, nffxx, nfexxffxx, saro,
-		ff60_d1, ff60_d0
+		ff60_d1, ff60_d0, boot_cs
 	);
 
 	input  wire reset, nreset2, t1, t2, wr_in, rd_b;
@@ -546,6 +553,7 @@ module sys_decode(
 	inout  wire [7:0] d;
 	input  wire cpu_rd_sync, cpu_raw_rd, cpu_wr_raw;
 	input  wire from_cpu6;
+	output wire to_cpu_tutu;
 	output wire cpu_wr, cpu_wr2, cpu_rd, cpu_rd2;
 	output wire nt1_nt2, nt1_t2, t1_nt2;
 
@@ -553,9 +561,11 @@ module sys_decode(
 	output wire hram_cs;
 
 	input  wire anap, bedo, p10_b;
+	output wire tutu;
 	input  wire a00_07;
 	output wire ffxx, nffxx, nfexxffxx, saro;
 	output wire ff60_d1, ff60_d0;
+	output wire boot_cs;
 
 	wire ubet, uvar, upoj, unor, umut;
 	assign #T_INV  ubet = !t1;
@@ -675,6 +685,303 @@ module sys_decode(
 	assign ffxx      = syke;
 	assign nffxx     = bako;
 	assign nfexxffxx = tuna;
+
+	wire tyro, tufa, texe, sato, tuge, tepu, sypu, tera, yaza, yula, tulo, zoro, zadu, zufa, zado, zery;
+	dffr dffr_tepu(tuge, nreset2, sato, tepu); // check edge
+	assign #T_NOR  tyro = !(a[7] || a[5] || a[3] || a[2] || a[1] || a[0]);
+	assign #T_AND  tufa = a[4] && a[6];
+	assign #T_AND  texe = cpu_rd && ffxx && tufa && tyro;
+	assign #T_OR   sato = d[0] || tepu;
+	assign #T_NAND tuge = !(tyro && tufa && ffxx && cpu_wr);
+	assign #T_TRI  sypu = texe ? tepu : 1'bz; /* takes !q output of dff */
+	assign #T_INV  tera = !tepu;
+	assign #T_INV  yaza = t1_nt2;
+	assign #T_AND  tutu = tera && tulo;
+	assign #T_AND  yula = yaza && tutu && cpu_rd;
+	assign #T_NOR  tulo = !(a[15] || a[14] || a[13] || a[12] || a[11] || a[10] || a[9] || a[8]);
+	assign #T_NOR  zoro = !(a[15] || a[14] || a[13] || a[12]);
+	assign #T_NOR  zadu = !(a[11] || a[10] || a[9] || a[8]);
+	assign #T_AND  zufa = zoro && zadu;
+	assign #T_NAND zado = !(yula && zufa);
+	assign #T_INV  zery = !zado;
+	assign to_cpu_tutu = tutu;
+	assign boot_cs     = zery;
+
+endmodule
+
+module ext_cpu_busses(
+		d, d_in, d_d,
+		a, a_c, a_a, a_d, dma_a,
+		wr_a, wr_c, rd_a, rd_c,
+		from_cpu3, from_cpu4, from_cpu5,
+		cpu_raw_rd, cpu_rd_sync,
+		cpu_rd, t1_nt2, nt1_t2, dma_addr_ext,
+		abuz, tutu, texo, roru, lula, nfexxffxx,
+		ncs_out, tola_na1
+	);
+
+	inout  wire [7:0]  d;
+	input  wire [7:0]  d_in;
+	output wire [7:0]  d_d;
+	inout  wire [15:0] a;
+	input  wire [15:0] a_c, dma_a;
+	output wire [15:0] a_a, a_d;
+
+	output wire wr_a, wr_c, rd_a, rd_c;
+
+	input wire from_cpu3, from_cpu4, from_cpu5;
+	input wire cpu_raw_rd, cpu_rd_sync;
+	input wire cpu_rd, t1_nt2, nt1_t2, dma_addr_ext;
+
+	input  wire abuz, tutu, nfexxffxx;
+	output wire texo, roru, lula;
+
+	output wire ncs_out, tola_na1;
+
+	wire sogy, tuma, tynu, toza, soby, sepy, ryca, raza, syzu, tyho, tazy, rulo, suze;
+	assign #T_INV  sogy = !a[14];
+	assign #T_AND  tuma = a[13] && sogy && a[15];
+	assign #T_AO   tynu = (a[15] && a[14]) || tuma;
+	assign #T_AND  toza = tynu && abuz && nfexxffxx;
+	assign #T_NOR  soby = !(a[15] || tutu);
+	assign #T_NAND sepy = !(abuz && soby);
+	assign #T_INV  ryca = nt1_t2;
+	assign #T_INV  raza = a_c[15];
+	assign #T_TRI  syzu = !ryca ? !raza : 1'bz;
+	assign #T_MUX  tyho = dma_addr_ext ? dma_a[15] : toza;
+	assign #T_MUX  tazy = dma_addr_ext ? dma_a[15] : sepy;
+	assign #T_NOR  rulo = !(nt1_t2 || tazy);
+	assign #T_NAND suze = !(tazy && ryca);
+	assign ncs_out = tyho;
+	assign a_d[15] = rulo;
+	assign a_a[15] = suze;
+	assign a[15]   = syzu;
+
+	wire tova, nyre, lonu, lobu, lumy, pate, lysa, luno, pege, muce, mojy, male, pamy, masu, mano;
+	wire pahy, puhe, leva, labe, loso, luce, lyny, lepy, rore, roxu, meny, mune, mego, myny, net01;
+	latch latch_nyre(mate, a[14], nyre);
+	latch latch_lonu(mate, a[13], lonu);
+	latch latch_lobu(mate, a[12], lobu);
+	latch latch_lumy(mate, a[11], lumy);
+	latch latch_pate(mate, a[10], pate);
+	latch latch_lysa(mate, a[9],  lysa);
+	latch latch_luno(mate, a[8],  luno);
+	assign #T_INV  tova = !nt1_t2;
+	assign #T_MUX  pege = dma_addr_ext ? dma_a[14] : nyre;
+	assign #T_MUX  muce = dma_addr_ext ? dma_a[13] : lonu;
+	assign #T_MUX  mojy = dma_addr_ext ? dma_a[12] : lobu;
+	assign #T_MUX  male = dma_addr_ext ? dma_a[11] : lumy;
+	assign #T_MUX  pamy = dma_addr_ext ? dma_a[10] : pate;
+	assign #T_MUX  masu = dma_addr_ext ? dma_a[9]  : lysa;
+	assign #T_MUX  mano = dma_addr_ext ? dma_a[8]  : luno;
+	assign #T_NOR  pahy = !(nt1_t2 || pege);
+	assign #T_NAND puhe = !(pege && tova);
+	assign #T_NOR  leva = !(nt1_t2 || muce);
+	assign #T_NAND labe = !(muce && tova);
+	assign #T_NOR  loso = !(nt1_t2 || mojy);
+	assign #T_NAND luce = !(mojy && tova);
+	assign #T_NOR  lyny = !(nt1_t2 || male);
+	assign #T_NAND lepy = !(male && tova);
+	assign #T_NOR  rore = !(nt1_t2 || pamy);
+	assign #T_NAND roxu = !(pamy && tova);
+	assign #T_NOR  meny = !(nt1_t2 || masu);
+	assign #T_NAND mune = !(masu && tova);
+	assign #T_NOR  mego = !(nt1_t2 || mano);
+	assign #T_NAND myny = !(mano && tova);
+	assign net01   = tova;
+	assign a_d[14] = pahy;
+	assign a_a[14] = puhe;
+	assign a_d[13] = leva;
+	assign a_a[13] = labe;
+	assign a_d[12] = loso;
+	assign a_a[12] = luce;
+	assign a_d[11] = lyny;
+	assign a_a[11] = lepy;
+	assign a_d[10] = rore;
+	assign a_a[10] = roxu;
+	assign a_d[9]  = meny;
+	assign a_a[9]  = mune;
+	assign a_d[8]  = mego;
+	assign a_a[8]  = myny;
+
+	wire arym, aros, atev, avys, aret, alyr, apur, alor, asur, atyr, atov, atem, amer, apok, atol, amet;
+	wire colo, defy, cyka, cepu, ajav, badu, bevo, byla, bola, boty, bajo, boku, cotu, caba, koty, kupo;
+	latch latch_arym(mate, a[7], arym);
+	latch latch_aros(mate, a[6], aros);
+	latch latch_atev(mate, a[5], atev);
+	latch latch_avys(mate, a[4], avys);
+	latch latch_aret(mate, a[3], aret);
+	latch latch_alyr(mate, a[2], alyr);
+	latch latch_apur(mate, a[1], apur);
+	latch latch_alor(mate, a[0], alor);
+	assign #T_MUX  asur = dma_addr_ext ? dma_a[7] : arym;
+	assign #T_MUX  atyr = dma_addr_ext ? dma_a[6] : aros;
+	assign #T_MUX  atov = dma_addr_ext ? dma_a[5] : atev;
+	assign #T_MUX  atem = dma_addr_ext ? dma_a[4] : avys;
+	assign #T_MUX  amer = dma_addr_ext ? dma_a[3] : aret;
+	assign #T_MUX  apok = dma_addr_ext ? dma_a[2] : alyr;
+	assign #T_MUX  atol = dma_addr_ext ? dma_a[1] : apur;
+	assign #T_MUX  amet = dma_addr_ext ? dma_a[0] : alor;
+	assign #T_NOR  colo = !(nt1_t2 || asur);
+	assign #T_NAND defy = !(net01 && asur);
+	assign #T_NOR  cyka = !(nt1_t2 || atyr);
+	assign #T_NAND cepu = !(net01 && atyr);
+	assign #T_NOR  ajav = !(nt1_t2 || atov);
+	assign #T_NAND badu = !(net01 && atov);
+	assign #T_NOR  bevo = !(nt1_t2 || atem);
+	assign #T_NAND byla = !(net01 && atem);
+	assign #T_NOR  bola = !(nt1_t2 || amer);
+	assign #T_NAND boty = !(net01 && amer);
+	assign #T_NOR  bajo = !(nt1_t2 || apok);
+	assign #T_NAND boku = !(net01 && apok);
+	assign #T_NOR  cotu = !(nt1_t2 || atol);
+	assign #T_NAND caba = !(net01 && atol);
+	assign #T_NOR  koty = !(nt1_t2 || amet);
+	assign #T_NAND kupo = !(net01 && amet);
+	assign a_d[7] = colo;
+	assign a_a[7] = defy;
+	assign a_d[6] = cyka;
+	assign a_a[6] = cepu;
+	assign a_d[5] = ajav;
+	assign a_a[5] = badu;
+	assign a_d[4] = bevo;
+	assign a_a[4] = byla;
+	assign a_d[3] = bola;
+	assign a_a[3] = boty;
+	assign a_d[2] = bajo;
+	assign a_a[2] = boku;
+	assign a_d[1] = cotu;
+	assign a_a[1] = caba;
+	assign a_d[0] = koty;
+	assign a_a[0] = kupo;
+
+	wire tola, mule, loxo, lasy, mate, sore, tevy, levo, lagu;
+	assign #T_INV  tola = !a[1];
+	assign #T_INV  mule = !t1_nt2;
+	assign #T_AO   loxo = (mule && texo) || t1_nt2;
+	assign #T_INV  lasy = !loxo;
+	assign #T_INV  mate = !lasy;
+	assign #T_INV  sore = !a[15];
+	assign #T_OR   tevy = a[13] || a[14] || sore;
+	assign #T_AND  texo = from_cpu4 && tevy;
+	assign #T_INV  levo = !texo;
+	assign #T_AO   lagu = (cpu_raw_rd && levo) || from_cpu3;
+	assign tola_na1 = tola;
+
+	wire moca, mexo, lywe, nevy, moty, puva, tymu, usuf, uver, ugac, urun;
+	assign #T_NOR  moca = !(texo || t1_nt2);
+	assign #T_INV  mexo = !cpu_rd_sync;
+	assign #T_INV  lywe = !lagu;
+	assign #T_OR   nevy = mexo || moca;
+	assign #T_OR   moty = moca || lywe;
+	assign #T_OR   puva = nevy || dma_addr_ext;
+	assign #T_NOR  tymu = !(dma_addr_ext || moty);
+	assign #T_NOR  usuf = !(nt1_t2 || puva);
+	assign #T_NAND uver = !(puva && net01);
+	assign #T_NAND ugac = !(net01 && tymu);
+	assign #T_NOR  urun = !(tymu || nt1_t2);
+	assign wr_c = usuf;
+	assign wr_a = uver;
+	assign rd_a = ugac;
+	assign rd_c = urun;
+
+	wire base, afec, buxu, camu, cygu, cogo, kova, anar, azuv, akan, byxe, byne, byna, kejo;
+	assign #T_INV  base = !a_c[3];
+	assign #T_INV  afec = !a_c[4];
+	assign #T_INV  buxu = !a_c[2];
+	assign #T_INV  camu = !a_c[1];
+	assign #T_INV  cygu = !a_c[6];
+	assign #T_INV  cogo = !a_c[7];
+	assign #T_INV  kova = !a_c[0];
+	assign #T_TRI  anar = !net01 ? !base : 1'bz;
+	assign #T_TRI  azuv = !net01 ? !afec : 1'bz;
+	assign #T_TRI  akan = !net01 ? !buxu : 1'bz;
+	assign #T_TRI  byxe = !net01 ? !camu : 1'bz;
+	assign #T_TRI  byne = !net01 ? !cygu : 1'bz;
+	assign #T_TRI  byna = !net01 ? !cogo : 1'bz;
+	assign #T_TRI  kejo = !net01 ? !kova : 1'bz;
+	assign a[3] = anar;
+	assign a[4] = azuv;
+	assign a[2] = akan;
+	assign a[1] = byxe;
+	assign a[6] = byne;
+	assign a[7] = byna;
+	assign a[0] = kejo;
+
+	wire lahe, lura, mujy, pevo, mady, nena, sura, abup, lyna, lefy, lofa, nefe, lora, mapu, rala, ajov;
+	assign #T_INV  lahe = !a_c[12];
+	assign #T_INV  lura = !a_c[13];
+	assign #T_INV  mujy = !a_c[8];
+	assign #T_INV  pevo = !a_c[14];
+	assign #T_INV  mady = !a_c[11];
+	assign #T_INV  nena = !a_c[9];
+	assign #T_INV  sura = !a_c[10];
+	assign #T_INV  abup = !a_c[5];
+	assign #T_TRI  lyna = !net01 ? !lahe : 1'bz;
+	assign #T_TRI  lefy = !net01 ? !lura : 1'bz;
+	assign #T_TRI  lofa = !net01 ? !mujy : 1'bz;
+	assign #T_TRI  nefe = !net01 ? !pevo : 1'bz;
+	assign #T_TRI  lora = !net01 ? !mady : 1'bz;
+	assign #T_TRI  mapu = !net01 ? !nena : 1'bz;
+	assign #T_TRI  rala = !net01 ? !sura : 1'bz;
+	assign #T_TRI  ajov = !net01 ? !abup : 1'bz;
+	assign a[12] = lyna;
+	assign a[13] = lefy;
+	assign a[8]  = lofa;
+	assign a[14] = nefe;
+	assign a[11] = lora;
+	assign a[9]  = mapu;
+	assign a[10] = rala;
+	assign a[5]  = ajov;
+
+	wire redu, rogy, ryda, rune, resy, rypu, suly, seze, tamu;
+	assign #T_INV  redu = !cpu_rd;
+	assign #T_MUX  roru = nt1_t2 ? redu : moty;
+	assign #T_INV  lula = !roru;
+	assign #T_NOR  rogy = !(roru || d[6]);
+	assign #T_NOR  ryda = !(roru || d[7]);
+	assign #T_NOR  rune = !(roru || d[0]);
+	assign #T_NOR  resy = !(roru || d[4]);
+	assign #T_NOR  rypu = !(roru || d[1]);
+	assign #T_NOR  suly = !(roru || d[2]);
+	assign #T_NOR  seze = !(roru || d[3]);
+	assign #T_NOR  tamu = !(roru || d[5]);
+	assign d_d[6] = rogy;
+	assign d_d[7] = ryda;
+	assign d_d[0] = rune;
+	assign d_d[4] = resy;
+	assign d_d[1] = rypu;
+	assign d_d[2] = suly;
+	assign d_d[3] = seze;
+	assign d_d[5] = tamu;
+
+	wire lavo, sody, selo, rony, soma, raxy, rupa, sago, sazy;
+	wire tepe, tavo, ruvo, ryma, ryko, sevu, safo, taju;
+	latch latch_sody(lavo, d_in[4], sody);
+	latch latch_selo(lavo, d_in[3], selo);
+	latch latch_rony(lavo, d_in[1], rony);
+	latch latch_soma(lavo, d_in[0], soma);
+	latch latch_raxy(lavo, d_in[2], raxy);
+	latch latch_rupa(lavo, d_in[6], rupa);
+	latch latch_sago(lavo, d_in[5], sago);
+	latch latch_sazy(lavo, d_in[7], sazy);
+	assign #T_NAND lavo = !(cpu_raw_rd && texo && from_cpu5);
+	assign #T_TRI  tepe = !lavo ? !sody : 1'bz;
+	assign #T_TRI  tavo = !lavo ? !selo : 1'bz;
+	assign #T_TRI  ruvo = !lavo ? !rony : 1'bz;
+	assign #T_TRI  ryma = !lavo ? !soma : 1'bz;
+	assign #T_TRI  ryko = !lavo ? !raxy : 1'bz;
+	assign #T_TRI  sevu = !lavo ? !rupa : 1'bz;
+	assign #T_TRI  safo = !lavo ? !sago : 1'bz;
+	assign #T_TRI  taju = !lavo ? !sazy : 1'bz;
+	assign d[4] = tepe;
+	assign d[3] = tavo;
+	assign d[1] = ruvo;
+	assign d[0] = ryma;
+	assign d[2] = ryko;
+	assign d[6] = sevu;
+	assign d[5] = safo;
+	assign d[7] = taju;
 
 endmodule
 
@@ -806,5 +1113,14 @@ module dff(clk, d, q);
 	end
 
 	assign #T_DFF q = ff;
+
+endmodule
+
+module latch(c, d, q);
+
+	input  wire c, d;
+	output wire q;
+
+	assign #T_LATCH q = c ? d : q;
 
 endmodule
