@@ -745,7 +745,7 @@ module ext_cpu_busses(
 	assign #T_AND  toza = tynu && abuz && nfexxffxx;
 	assign #T_NOR  soby = !(a[15] || tutu);
 	assign #T_NAND sepy = !(abuz && soby);
-	assign #T_INV  ryca = nt1_t2;
+	assign #T_INV  ryca = !nt1_t2;
 	assign #T_INV  raza = a_c[15];
 	assign #T_TRI  syzu = !ryca ? !raza : 1'bz;
 	assign #T_MUX  tyho = dma_addr_ext ? dma_a[15] : toza;
