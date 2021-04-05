@@ -66,7 +66,6 @@ module dmg;
 	wire apu_wr = 0;
 	wire ff26 = 0;
 	wire a00_07 = 0;
-	wire p10_b = 0;
 	wire anap = 0;
 	wire ff46 = 0;
 	wire amab = 0;
@@ -544,7 +543,7 @@ module sys_decode(
 		nt1_nt2, nt1_t2, t1_nt2,
 		ff04_ff07, ff0f_rd, ff0f_wr,
 		hram_cs,
-		anap, bedo, tutu, p10_b,
+		anap, bedo, tutu,
 		a00_07, ffxx, nffxx, nfexxffxx, saro,
 		ff60_d1, ff60_d0, boot_cs
 	);
@@ -561,7 +560,7 @@ module sys_decode(
 	output wire ff04_ff07, ff0f_rd, ff0f_wr;
 	output wire hram_cs;
 
-	input  wire anap, bedo, p10_b;
+	input  wire anap, bedo;
 	output wire tutu;
 	input  wire a00_07;
 	output wire ffxx, nffxx, nfexxffxx, saro;
@@ -651,14 +650,14 @@ module sys_decode(
 
 	wire leco, raru, rowe, ryke, ryne, rase, rejy, reka, romy;
 	assign #T_NOR  leco = !(bedo || nt1_t2);
-	assign #T_TRI  raru = leco ? !p10_b : 1'bz;
-	assign #T_TRI  rowe = leco ? !p10_b : 1'bz;
-	assign #T_TRI  ryke = leco ? !p10_b : 1'bz;
-	assign #T_TRI  ryne = leco ? !p10_b : 1'bz;
-	assign #T_TRI  rase = leco ? !p10_b : 1'bz;
-	assign #T_TRI  rejy = leco ? !p10_b : 1'bz;
-	assign #T_TRI  reka = leco ? !p10_b : 1'bz;
-	assign #T_TRI  romy = leco ? !p10_b : 1'bz;
+	assign #T_TRI  raru = leco ? 1'b1 : 1'bz;
+	assign #T_TRI  rowe = leco ? 1'b1 : 1'bz;
+	assign #T_TRI  ryke = leco ? 1'b1 : 1'bz;
+	assign #T_TRI  ryne = leco ? 1'b1 : 1'bz;
+	assign #T_TRI  rase = leco ? 1'b1 : 1'bz;
+	assign #T_TRI  rejy = leco ? 1'b1 : 1'bz;
+	assign #T_TRI  reka = leco ? 1'b1 : 1'bz;
+	assign #T_TRI  romy = leco ? 1'b1 : 1'bz;
 	assign d[7] = raru;
 	assign d[5] = rowe;
 	assign d[6] = ryke;
@@ -1078,7 +1077,7 @@ endmodule
 
 module vram_ifc(
 		d, d_in, d_a,
-		nt1_t2, p10_b,
+		nt1_t2,
 		roru, lula, bedo
 	);
 
@@ -1086,7 +1085,7 @@ module vram_ifc(
 	input  wire [7:0] d_in;
 	output wire [7:0] d_a;
 
-	input wire nt1_t2, p10_b;
+	input wire nt1_t2;
 	input wire roru, lula, bedo;
 
 	wire ryvo, rera, raby, rory, ruja, ravu, rafy, ruxa;
@@ -1108,17 +1107,17 @@ module vram_ifc(
 	assign d_a[0] = ruxa;
 
 	wire runy, tuso, sole, tahy, tesu, taxo, tovu, tazu, tewa, sosa, sedu;
-	assign #T_INV  runy = !p10_b; // check if inverter or just buffer
+	assign         runy = 1'b1;
 	assign #T_NOR  tuso = !(nt1_t2 || bedo);
 	assign #T_INV  sole = !tuso;
-	assign #T_TRI  tahy = runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  tesu = runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  taxo = runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  tovu = runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  tazu = runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  tewa = runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  sosa = runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  sedu = runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  tahy = !runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  tesu = !runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  taxo = !runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  tovu = !runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  tazu = !runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  tewa = !runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  sosa = !runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  sedu = !runy ? !sole : 1'bz; // check enable input polarity
 	assign d[4] = tahy;
 	assign d[5] = tesu;
 	assign d[3] = taxo;
@@ -1139,14 +1138,14 @@ module vram_ifc(
 	assign #T_INV  ratu = !d_in[5];
 	assign #T_INV  tovo = !d_in[0];
 	assign #T_INV  saza = !d_in[3];
-	assign #T_TRI  ropa = lyra ? !ryba : 1'bz; // check enable input polarity
-	assign #T_TRI  sywa = lyra ? !ruzy : 1'bz; // check enable input polarity
-	assign #T_TRI  sugu = lyra ? !rome : 1'bz; // check enable input polarity
-	assign #T_TRI  tute = lyra ? !tehe : 1'bz; // check enable input polarity
-	assign #T_TRI  temy = lyra ? !soca : 1'bz; // check enable input polarity
-	assign #T_TRI  sajo = lyra ? !ratu : 1'bz; // check enable input polarity
-	assign #T_TRI  tuty = lyra ? !tovo : 1'bz; // check enable input polarity
-	assign #T_TRI  tawo = lyra ? !saza : 1'bz; // check enable input polarity
+	assign #T_TRI  ropa = !lyra ? !ryba : 1'bz; // check enable input polarity
+	assign #T_TRI  sywa = !lyra ? !ruzy : 1'bz; // check enable input polarity
+	assign #T_TRI  sugu = !lyra ? !rome : 1'bz; // check enable input polarity
+	assign #T_TRI  tute = !lyra ? !tehe : 1'bz; // check enable input polarity
+	assign #T_TRI  temy = !lyra ? !soca : 1'bz; // check enable input polarity
+	assign #T_TRI  sajo = !lyra ? !ratu : 1'bz; // check enable input polarity
+	assign #T_TRI  tuty = !lyra ? !tovo : 1'bz; // check enable input polarity
+	assign #T_TRI  tawo = !lyra ? !saza : 1'bz; // check enable input polarity
 	assign d[7] = ropa;
 	assign d[1] = sywa;
 	assign d[2] = sugu;
