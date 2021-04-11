@@ -8,6 +8,7 @@ parameter T_OR    = 4;
 parameter T_NOR   = 2;
 parameter T_OA    = 6;
 parameter T_AO    = 6;
+parameter T_NAO   = 5;
 parameter T_MUX   = 6;
 parameter T_TRI   = 2;
 parameter T_DFFR  = 8;
@@ -42,19 +43,24 @@ module dmg;
 		if (cyc == 10000) $finish;
 	end
 
-	wire [7:0]  d, d_a, d_d;
-	wire [12:0] ma;
+	wire [7:0]  d, d_a, d_d, md, md_out, md_a, oam_a_d, oam_b_d;
 	wire [15:0] a, a_a, a_d, dma_a;
+	wire [12:0] ma, ma_out;
 
 	wire wr_a, wr_c, rd_a, rd_c;
+	wire moe_a, moe_d, mwr_a, mwr_d, mcs_a, mcs_d, md_b;
 
 	assign a = 0;
 
 	/* not yet generated signals */
 	wire [7:0] d_in = 'hff;
+	wire [7:0] md_in = 'hff;
 	wire [15:0] a_c = 0;
 	wire wr_in = 0;
 	wire rd_b = 0;
+	wire moe_in = 0;
+	wire mwr_in = 0;
+	wire mcs_in = 0;
 	wire cpu_raw_rd = 0;
 	wire cpu_wr_raw = 0;
 	wire ff40_d7 = 0;
@@ -67,6 +73,7 @@ module dmg;
 	wire tovy_na0 = 1;
 	wire a00_07 = 0;
 	wire ff46 = 0;
+	wire ff40_d4 = 0;
 	wire amab = 0;
 	wire nff1a_d7 = 1;
 	wire nch1_amp_en = 1;
@@ -76,6 +83,30 @@ module dmg;
 	wire nch2_active = 1;
 	wire nch3_active = 1;
 	wire nch4_active = 1;
+	wire tacu = 0;
+	wire tuvo = 0;
+	wire acyl = 0;
+	wire xyso = 0;
+	wire texy = 0;
+	wire myma = 0;
+	wire lena = 0;
+	wire xymu = 0;
+	wire leko = 0;
+	wire xuha = 0;
+	wire vyno = 0;
+	wire vujo = 0;
+	wire vymu = 0;
+	wire neta = 0;
+	wire pore = 0;
+	wire potu = 0;
+	wire npyju = 1;
+	wire npowy = 1;
+	wire npoju = 1;
+	wire npulo = 1;
+	wire npoxa = 1;
+	wire npyzo = 1;
+	wire npozo = 1;
+	wire nrawu = 1;
 
 	wire clk1;
 
@@ -104,7 +135,7 @@ module dmg;
 	wire ajer_2mhz;
 	wire byfe_128hz;
 	wire dyfa_1mhz;
-	wire fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce;
+	wire afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko;
 
 	wire ffxx, nffxx, nfexxffxx, saro;
 	wire ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a;
@@ -134,7 +165,7 @@ module clk(
 		ff04_ff07, ff40_d7, ff60_d1, tovy_na0, tola_na1,
 		apu_reset, napu_reset5,
 		apuv_4mhz, ajer_2mhz, byfe_128hz,
-		fero_q, bedo, abuz
+		fero_q, bedo, abuz, afas
 	);
 
 	input wire clkin_a, clkin_b;
@@ -167,7 +198,7 @@ module clk(
 	input  wire ajer_2mhz;
 	output wire byfe_128hz;
 	input  wire fero_q;
-	output wire bedo, abuz;
+	output wire bedo, abuz, afas;
 
 	wire arys, anos, avet;
 	assign #T_INV  arys = !clkin_b;
@@ -230,7 +261,7 @@ module clk(
 	assign reset_video3  = lyha;
 
 	wire adyk, afur, alef, apuk, abol, ucob, uvyt, nclkin_a;
-	wire adar, atyp, afep, arov, afas, ajax, bugo, arev, apov, agut, awod, bate, basu, buke;
+	wire adar, atyp, afep, arov, ajax, bugo, arev, apov, agut, awod, bate, basu, buke;
 	dffr dffr_adyk(atal_4mhz,  nt1_nt2, apuk,  adyk);
 	dffr dffr_afur(!atal_4mhz, nt1_nt2, !adyk, afur);
 	dffr dffr_alef(atal_4mhz,  nt1_nt2, afur,  alef);
@@ -1325,17 +1356,82 @@ module apu_decode(
 endmodule
 
 module vram_ifc(
+		a, ma, ma_out,
+		md, md_in, md_out, md_a,
 		d, d_in, d_a,
-		nt1_t2,
-		roru, lula, bedo
+		oam_a_d, oam_b_d,
+		moe_in, mwr_in, mcs_in, moe_a, moe_d, mwr_a, mwr_d, mcs_a, mcs_d, md_b,
+		nt1_t2, dma_run, mopa_phi, nfexxffxx, nreset6, cpu_rd_sync, vram_to_oam, dma_addr_ext, ff40_d4,
+		roru, lula, bedo, saro, tacu, tuvo, acyl, xyso, texo, abuz, afas, texy, myma, lena, xymu, leko,
+		xuha, vyno, vujo, vymu, neta, pore, potu, npyju, npowy, npoju, npulo, npoxa, npyzo, npozo, nrawu,
+		cota, wuko
 	);
+
+	input wire [15:0] a;
+
+	inout  wire [12:0] ma;
+	output wire [12:0] ma_out;
 
 	inout  wire [7:0] d;
 	input  wire [7:0] d_in;
 	output wire [7:0] d_a;
 
-	input wire nt1_t2;
-	input wire roru, lula, bedo;
+	inout  wire [7:0] md;
+	input  wire [7:0] md_in;
+	output wire [7:0] md_out, md_a;
+
+	output wire [7:0] oam_a_d, oam_b_d;
+
+	input  wire moe_in, mwr_in, mcs_in;
+	output wire moe_a, moe_d, mwr_a, mwr_d, mcs_a, mcs_d, md_b;
+
+	input wire nt1_t2, dma_run, mopa_phi, nfexxffxx, nreset6, cpu_rd_sync, vram_to_oam, dma_addr_ext, ff40_d4;
+
+	input  wire roru, lula, bedo, saro, tacu, tuvo, acyl, xyso, texo, abuz, afas, texy, myma, lena, xymu, leko;
+	input  wire xuha, vyno, vujo, vymu, neta, pore, potu, npyju, npowy, npoju, npulo, npoxa, npyzo, npozo, nrawu;
+	output wire cota, wuko;
+
+	wire reho, pony, ruma, pedu, ruky, nuva, vode, tago, vova, tujy, mume, luby, mewy;
+	wire lefa, mysa, lalo, mepa, loly, mavu, luvo, myre, laca, masa, lozu, myfu, lexe;
+	assign #T_INV  reho = !ma[12];
+	assign #T_INV  ruma = !ma[11];
+	assign #T_INV  ruky = !ma[10];
+	assign #T_INV  vode = !ma[9];
+	assign #T_INV  vova = !ma[8];
+	assign #T_INV  mume = !ma[7];
+	assign #T_INV  mewy = !ma[6];
+	assign #T_INV  mysa = !ma[5];
+	assign #T_INV  mepa = !ma[4];
+	assign #T_INV  mavu = !ma[3];
+	assign #T_INV  myre = !ma[2];
+	assign #T_INV  masa = !ma[1];
+	assign #T_INV  myfu = !ma[0];
+	assign #T_INV  pony = !reho;
+	assign #T_INV  pedu = !ruma;
+	assign #T_INV  nuva = !ruky;
+	assign #T_INV  tago = !vode;
+	assign #T_INV  tujy = !vova;
+	assign #T_INV  luby = !mume;
+	assign #T_INV  lefa = !mewy;
+	assign #T_INV  lalo = !mysa;
+	assign #T_INV  loly = !mepa;
+	assign #T_INV  luvo = !mavu;
+	assign #T_INV  laca = !myre;
+	assign #T_INV  lozu = !masa;
+	assign #T_INV  lexe = !myfu;
+	assign ma_out[12] = pony;
+	assign ma_out[11] = pedu;
+	assign ma_out[10] = nuva;
+	assign ma_out[9]  = tago;
+	assign ma_out[8]  = tujy;
+	assign ma_out[7]  = luby;
+	assign ma_out[6]  = lefa;
+	assign ma_out[5]  = lalo;
+	assign ma_out[4]  = loly;
+	assign ma_out[3]  = luvo;
+	assign ma_out[2]  = laca;
+	assign ma_out[1]  = lozu;
+	assign ma_out[0]  = lexe;
 
 	wire ryvo, rera, raby, rory, ruja, ravu, rafy, ruxa;
 	assign #T_NAND ryvo = !(d[5] && lula);
@@ -1354,6 +1450,90 @@ module vram_ifc(
 	assign d_a[7] = ravu;
 	assign d_a[6] = rafy;
 	assign d_a[0] = ruxa;
+
+	wire cufe, vape, aver, xujy, bycu;
+	assign #T_NAO  cufe = !((saro && dma_run) || mopa_phi);
+	assign #T_AND  vape = tacu && tuvo;
+	assign #T_AND  aver = acyl && xyso;
+	assign #T_INV  xujy = !vape;
+	assign #T_NOR  bycu = !(cufe || xujy || aver);
+	assign #T_INV  cota = !bycu;
+
+	wire syro, tefa, sose, tuca, tuja, tegu, tavy, sycy, soto, tuto, sudo, tefy, sale, tyjy, tole;
+	dffr dffr_soto(sycy, nreset6, !soto, soto); // check edge
+	assign #T_INV  syro = !nfexxffxx;
+	assign #T_NOR  tefa = !(syro || texo);
+	assign #T_AND  sose = a[15] && tefa;
+	assign #T_AND  tuca = sose && abuz;
+	assign #T_AND  tuja = sose && cpu_rd_sync;
+	assign #T_NAND tegu = !(sose && afas);
+	assign #T_INV  tavy = !moe_in;
+	assign #T_INV  sycy = !nt1_t2;
+	assign #T_AND  tuto = nt1_t2 && !soto;
+	assign #T_INV  sudo = !mwr_in;
+	assign #T_INV  tefy = !mcs_in;
+	assign #T_MUX  sale = tuto ? tavy : tegu;
+	assign #T_MUX  tyjy = tuto ? sudo : tuja;
+	assign #T_MUX  tole = tuto ? tefy : tuca;
+
+	wire soho, rawa, raco, rylu, racu, apam, ruvy, sohy, sutu, sere, sazo, ropy, ryje, revo, rela, rocy;
+	wire rena, rahu, rofa, rute, sema, sofy, taxy, sewo, tode, saha, refo, ragu, sysy, sety, soky;
+	assign #T_AND  soho = tacu && texy;
+	assign #T_INV  rawa = !soho;
+	assign #T_NAND rylu = !(sale && ropy);
+	assign #T_INV  apam = !vram_to_oam;
+	assign #T_AND  racu = rylu && rawa && myma && apam;
+	assign #T_INV  raco = !tuto;
+	assign #T_INV  ruvy = !sale;
+	assign #T_NOR  sutu = !(lena || vram_to_oam || texy || sere);
+	assign #T_NAND sohy = !(tyjy && sere);
+	assign #T_INV  ropy = !xymu;
+	assign #T_AND  sere = tole && ropy;
+	assign #T_AND  sazo = ruvy && sere;
+	assign #T_INV  ryje = !sazo;
+	assign #T_INV  revo = !ryje;
+	assign #T_OR   rela = revo || sazo;
+	assign #T_INV  rena = !rela;
+	assign #T_INV  rofa = !rena;
+	assign #T_AND  rocy = sazo && revo;
+	assign #T_INV  rahu = !rocy;
+	assign #T_OR   rute = tuto || raco;
+	assign #T_AND  sema = racu && raco;
+	assign #T_OR   sofy = tuto || sohy;
+	assign #T_AND  taxy = sohy && raco;
+	assign #T_OR   sewo = tuto || sutu;
+	assign #T_AND  tode = sutu && raco;
+	assign #T_INV  saha = !rute;
+	assign #T_INV  refo = !sema;
+	assign #T_INV  ragu = !sofy;
+	assign #T_INV  sysy = !taxy;
+	assign #T_INV  sety = !sewo;
+	assign #T_INV  soky = !tode;
+	assign moe_d = saha;
+	assign moe_a = refo;
+	assign mwr_d = ragu;
+	assign mwr_a = sysy;
+	assign mcs_d = sety;
+	assign mcs_a = soky;
+	assign md_b = rofa;
+
+	wire raku, roce, remo, ropu, reta, rydo, rody, reba;
+	assign #T_TRI  raku = rena ? !md_in[7] : 1'bz;
+	assign #T_TRI  roce = rena ? !md_in[4] : 1'bz;
+	assign #T_TRI  remo = rena ? !md_in[3] : 1'bz;
+	assign #T_TRI  ropu = rena ? !md_in[5] : 1'bz;
+	assign #T_TRI  reta = rena ? !md_in[6] : 1'bz;
+	assign #T_TRI  rydo = rena ? !md_in[2] : 1'bz;
+	assign #T_TRI  rody = rena ? !md_in[0] : 1'bz;
+	assign #T_TRI  reba = rena ? !md_in[1] : 1'bz;
+	assign md[7] = raku;
+	assign md[4] = roce;
+	assign md[3] = remo;
+	assign md[5] = ropu;
+	assign md[6] = reta;
+	assign md[2] = rydo;
+	assign md[0] = rody;
+	assign md[1] = reba;
 
 	wire runy, tuso, sole, tahy, tesu, taxo, tovu, tazu, tewa, sosa, sedu;
 	assign         runy = 1'b1;
@@ -1375,6 +1555,36 @@ module vram_ifc(
 	assign d[7] = tewa;
 	assign d[1] = sosa;
 	assign d[2] = sedu;
+
+	wire xane, xedu, xeca, xybo, rysu, ruse, rumo, xyne, xoba, xody, ryna, rese, xaky, xopo, xuxu;
+	assign #T_NOR  xane = !(vram_to_oam || xymu);
+	assign #T_INV  xedu = !xane;
+	assign #T_TRI  xeca = !xedu ? !a[4]  : 1'bz;
+	assign #T_TRI  xybo = !xedu ? !a[7]  : 1'bz;
+	assign #T_TRI  rysu = !xedu ? !a[8]  : 1'bz;
+	assign #T_TRI  ruse = !xedu ? !a[10] : 1'bz;
+	assign #T_TRI  rumo = !xedu ? !a[12] : 1'bz;
+	assign #T_TRI  xyne = !xedu ? !a[2]  : 1'bz;
+	assign #T_TRI  xoba = !xedu ? !a[5]  : 1'bz;
+	assign #T_TRI  xody = !xedu ? !a[3]  : 1'bz;
+	assign #T_TRI  ryna = !xedu ? !a[11] : 1'bz;
+	assign #T_TRI  rese = !xedu ? !a[9]  : 1'bz;
+	assign #T_TRI  xaky = !xedu ? !a[0]  : 1'bz;
+	assign #T_TRI  xopo = !xedu ? !a[6]  : 1'bz;
+	assign #T_TRI  xuxu = !xedu ? !a[1]  : 1'bz;
+	assign ma[4]  = xeca;
+	assign ma[7]  = xybo;
+	assign ma[8]  = rysu;
+	assign ma[10] = ruse;
+	assign ma[12] = rumo;
+	assign ma[2]  = xyne;
+	assign ma[5]  = xoba;
+	assign ma[3]  = xody;
+	assign ma[11] = ryna;
+	assign ma[9]  = rese;
+	assign ma[0]  = xaky;
+	assign ma[6]  = xopo;
+	assign ma[1]  = xuxu;
 
 	wire lyra, ryba, ruzy, rome, tehe, soca, ratu, tovo, saza;
 	wire ropa, sywa, sugu, tute, temy, sajo, tuty, tawo;
@@ -1403,6 +1613,179 @@ module vram_ifc(
 	assign d[5] = sajo;
 	assign d[0] = tuty;
 	assign d[3] = tawo;
+
+	wire rove, sefa, suna, sumo, suke, samo, sogo, sazu, sefu, rege, rada, ryro, ryze, reku, ryky, revu, razo;
+	assign #T_INV  rove = !rahu;
+	assign #T_AND  sefa = md[0] && rove;
+	assign #T_AND  suna = md[3] && rove;
+	assign #T_AND  sumo = md[4] && rove;
+	assign #T_AND  suke = md[7] && rove;
+	assign #T_AND  samo = md[6] && rove;
+	assign #T_AND  sogo = md[1] && rove;
+	assign #T_AND  sazu = md[5] && rove;
+	assign #T_AND  sefu = md[2] && rove;
+	assign #T_INV  rege = !sefa;
+	assign #T_INV  rada = !suna;
+	assign #T_INV  ryro = !sumo;
+	assign #T_INV  ryze = !suke;
+	assign #T_INV  reku = !samo;
+	assign #T_INV  ryky = !sogo;
+	assign #T_INV  revu = !sazu;
+	assign #T_INV  razo = !sefu;
+	assign md_a[0] = rege;
+	assign md_a[3] = rada;
+	assign md_a[4] = ryro;
+	assign md_a[7] = ryze;
+	assign md_a[6] = reku;
+	assign md_a[1] = ryky;
+	assign md_a[5] = revu;
+	assign md_a[2] = razo;
+
+	wire cede, syzo, tune, sera, sysa, tube, sugy, ralo, tenu;
+	wire bape, bypy, bomo, bubo, basa, betu, buma, baxu, basy, byny, bupy, buhu, wasa, wejo, cako, cyme;
+	assign #T_INV  cede = !dma_addr_ext;
+	assign #T_INV  syzo = !d_in[7];
+	assign #T_INV  tune = !d_in[1];
+	assign #T_INV  sera = !d_in[2];
+	assign #T_INV  sysa = !d_in[4];
+	assign #T_INV  tube = !d_in[6];
+	assign #T_INV  sugy = !d_in[5];
+	assign #T_INV  ralo = !d_in[0];
+	assign #T_INV  tenu = !d_in[3];
+	assign #T_TRI  bape = !cede ? !syzo : 1'bz;
+	assign #T_TRI  bypy = !cede ? !syzo : 1'bz;
+	assign #T_TRI  bomo = !cede ? !tune : 1'bz;
+	assign #T_TRI  bubo = !cede ? !tune : 1'bz;
+	assign #T_TRI  basa = !cede ? !sera : 1'bz;
+	assign #T_TRI  betu = !cede ? !sera : 1'bz;
+	assign #T_TRI  buma = !cede ? !sysa : 1'bz;
+	assign #T_TRI  baxu = !cede ? !sysa : 1'bz;
+	assign #T_TRI  basy = !cede ? !tube : 1'bz;
+	assign #T_TRI  byny = !cede ? !tube : 1'bz;
+	assign #T_TRI  bupy = !cede ? !sugy : 1'bz;
+	assign #T_TRI  buhu = !cede ? !sugy : 1'bz;
+	assign #T_TRI  wasa = !cede ? !ralo : 1'bz;
+	assign #T_TRI  wejo = !cede ? !ralo : 1'bz;
+	assign #T_TRI  cako = !cede ? !tenu : 1'bz;
+	assign #T_TRI  cyme = !cede ? !tenu : 1'bz;
+	assign oam_b_d[7] = bape;
+	assign oam_a_d[7] = bypy;
+	assign oam_b_d[1] = bomo;
+	assign oam_a_d[1] = bubo;
+	assign oam_a_d[2] = basa;
+	assign oam_b_d[2] = betu;
+	assign oam_b_d[4] = buma;
+	assign oam_a_d[4] = baxu;
+	assign oam_b_d[6] = basy;
+	assign oam_a_d[6] = byny;
+	assign oam_a_d[5] = bupy;
+	assign oam_b_d[5] = buhu;
+	assign oam_a_d[0] = wasa;
+	assign oam_b_d[0] = wejo;
+	assign oam_b_d[3] = cako;
+	assign oam_a_d[3] = cyme;
+
+	wire tyvy, seby, roro, rery, rona, runa, runo, same, sana, rabo, rexu, ruga, rybu, rota, raju, toku, tyja, rupy;
+	assign #T_NAND tyvy = !(sere && leko);
+	assign #T_INV  seby = !tyvy;
+	assign #T_INV  roro = !md[5];
+	assign #T_INV  rery = !md[0];
+	assign #T_INV  rona = !md[2];
+	assign #T_INV  runa = !md[1];
+	assign #T_INV  runo = !md[3];
+	assign #T_INV  same = !md[7];
+	assign #T_INV  sana = !md[4];
+	assign #T_INV  rabo = !md[6];
+	assign #T_TRI  rexu = seby ? !roro : 1'bz;
+	assign #T_TRI  ruga = seby ? !rery : 1'bz;
+	assign #T_TRI  rybu = seby ? !rona : 1'bz;
+	assign #T_TRI  rota = seby ? !runa : 1'bz;
+	assign #T_TRI  raju = seby ? !runo : 1'bz;
+	assign #T_TRI  toku = seby ? !same : 1'bz;
+	assign #T_TRI  tyja = seby ? !sana : 1'bz;
+	assign #T_TRI  rupy = seby ? !rabo : 1'bz;
+	assign d[5] = rexu;
+	assign d[0] = ruga;
+	assign d[2] = rybu;
+	assign d[1] = rota;
+	assign d[3] = raju;
+	assign d[7] = toku;
+	assign d[4] = tyja;
+	assign d[6] = rupy;
+
+	wire xonu, wudo, wawe, wolu, xucy, xeze;
+	assign #T_TRI  xonu = !xucy ? !xuha : 1'bz;
+	assign #T_TRI  wudo = !xucy ? !vyno : 1'bz;
+	assign #T_TRI  wawe = !xucy ? !vujo : 1'bz;
+	assign #T_TRI  wolu = !xucy ? !vymu : 1'bz;
+	assign #T_NAND xucy = !(neta && pore);
+	assign #T_AND  xeze = potu && pore;
+	assign #T_INV  wuko = !xeze;
+
+	wire teme, tewu, tygo, sote, seke, rujo, tofa, suza;
+	wire synu, syma, roko, sybu, sako, sejy, sedo, sawu;
+	wire rura, ruly, rare, rodu, rube, rumu, ryty, rady;
+	assign #T_TRI  teme = !rahu ? !d[0] : 1'bz; // check enable input polarity
+	assign #T_TRI  tewu = !rahu ? !d[1] : 1'bz; // check enable input polarity
+	assign #T_TRI  tygo = !rahu ? !d[2] : 1'bz; // check enable input polarity
+	assign #T_TRI  sote = !rahu ? !d[3] : 1'bz; // check enable input polarity
+	assign #T_TRI  seke = !rahu ? !d[4] : 1'bz; // check enable input polarity
+	assign #T_TRI  rujo = !rahu ? !d[5] : 1'bz; // check enable input polarity
+	assign #T_TRI  tofa = !rahu ? !d[6] : 1'bz; // check enable input polarity
+	assign #T_TRI  suza = !rahu ? !d[7] : 1'bz; // check enable input polarity
+	assign #T_OR   synu = rahu || md[0];
+	assign #T_OR   syma = rahu || md[1];
+	assign #T_OR   roko = rahu || md[2];
+	assign #T_OR   sybu = rahu || md[3];
+	assign #T_OR   sako = rahu || md[4];
+	assign #T_OR   sejy = rahu || md[5];
+	assign #T_OR   sedo = rahu || md[6];
+	assign #T_OR   sawu = rahu || md[7];
+	assign #T_INV  rura = !synu;
+	assign #T_INV  ruly = !syma;
+	assign #T_INV  rare = !roko;
+	assign #T_INV  rodu = !sybu;
+	assign #T_INV  rube = !sako;
+	assign #T_INV  rumu = !sejy;
+	assign #T_INV  ryty = !sedo;
+	assign #T_INV  rady = !sawu;
+	assign md[0] = teme;
+	assign md[1] = tewu;
+	assign md[2] = tygo;
+	assign md[3] = sote;
+	assign md[4] = seke;
+	assign md[5] = rujo;
+	assign md[6] = tofa;
+	assign md[7] = suza;
+	assign md_out[0] = rura;
+	assign md_out[1] = ruly;
+	assign md_out[2] = rare;
+	assign md_out[3] = rodu;
+	assign md_out[4] = rube;
+	assign md_out[5] = rumu;
+	assign md_out[6] = ryty;
+	assign md_out[7] = rady;
+
+	wire vuza, vury, tobo, suvo, reso, roha, rusa, vejy, sezu, vapy;
+	assign #T_NOR  vuza = !(ff40_d4 || npyju);
+	assign #T_TRI  vury = neta ? !vuza  : 1'bz;
+	assign #T_TRI  tobo = neta ? !npyju : 1'bz;
+	assign #T_TRI  suvo = neta ? !npowy : 1'bz;
+	assign #T_TRI  reso = neta ? !npoju : 1'bz;
+	assign #T_TRI  roha = neta ? !npulo : 1'bz;
+	assign #T_TRI  rusa = neta ? !npoxa : 1'bz;
+	assign #T_TRI  vejy = neta ? !npyzo : 1'bz;
+	assign #T_TRI  sezu = neta ? !npozo : 1'bz;
+	assign #T_TRI  vapy = neta ? !nrawu : 1'bz;
+	assign ma[12] = vury;
+	assign ma[11] = tobo;
+	assign ma[10] = suvo;
+	assign ma[9]  = reso;
+	assign ma[8]  = roha;
+	assign ma[7]  = rusa;
+	assign ma[6]  = vejy;
+	assign ma[5]  = sezu;
+	assign ma[4]  = vapy;
 
 endmodule
 
