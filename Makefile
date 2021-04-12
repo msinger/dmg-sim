@@ -9,4 +9,3 @@ all: dmg.vcd
 	./$<
 
 dmg.vcd: dmg
-dff_test.vcd: dff_test
