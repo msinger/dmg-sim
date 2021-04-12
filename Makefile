@@ -1,3 +1,19 @@
+DMG_SCH_PAGES = \
+p1_clocks_reset.v \
+p4_dma.v \
+p7_sys_decode.v \
+p8_ext_cpu_busses.v \
+p9_apu_control.v \
+p10_apu_decode.v \
+p25_vram_interface.v
+
+DMG_DEPENDENCIES = \
+timing_param.v \
+dffr.v \
+dff.v \
+latch.v \
+$(DMG_SCH_PAGES)
+
 all: dmg.vcd
 
 .PHONY: all
@@ -9,3 +25,5 @@ all: dmg.vcd
 	./$<
 
 dmg.vcd: dmg
+
+dmg: $(DMG_DEPENDENCIES)
