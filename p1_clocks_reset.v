@@ -11,7 +11,7 @@ module clocks_reset(
 		nt1_nt2, nt1_t2, t1_nt2,
 		from_cpu3, from_cpu4, clk_from_cpu, to_cpu,
 		ff04_ff07, ff40_d7, ff60_d1, tovy_na0, tola_na1,
-		apu_reset, napu_reset5,
+		apu_reset, napu_reset5, boga1mhz,
 		apuv_4mhz, ajer_2mhz, byfe_128hz,
 		fero_q, bedo, abuz, afas
 	);
@@ -44,6 +44,7 @@ module clocks_reset(
 	input  wire napu_reset5;
 	output wire apuv_4mhz;
 	input  wire ajer_2mhz;
+	output wire boga1mhz;
 	output wire byfe_128hz;
 	input  wire fero_q;
 	output wire bedo, abuz, afas;
@@ -160,7 +161,6 @@ module clocks_reset(
 	assign nphi    = dova;
 
 	wire bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, boma, byxo, bowa, afer, avor, alur;
-	wire boga1mhz;
 	dffr dffr_afer(boma, nt1_nt2, asol, afer); // check clk edge
 	assign #T_INV  bele = !buto;
 	assign #T_INV  atez = !clkin_a;

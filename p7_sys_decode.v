@@ -7,7 +7,7 @@ module sys_decode(
 		from_cpu6, to_cpu_tutu,
 		cpu_wr, cpu_wr2, cpu_rd, cpu_rd2,
 		nt1_nt2, nt1_t2, t1_nt2,
-		ff04_ff07, ff0f_rd, ff0f_wr,
+		ff04_ff07, nff0f_rd, nff0f_wr,
 		hram_cs,
 		anap, bedo, tutu,
 		a00_07, ffxx, nffxx, nfexxffxx, saro,
@@ -23,7 +23,7 @@ module sys_decode(
 	output wire cpu_wr, cpu_wr2, cpu_rd, cpu_rd2;
 	output wire nt1_nt2, nt1_t2, t1_nt2;
 
-	output wire ff04_ff07, ff0f_rd, ff0f_wr;
+	output wire ff04_ff07, nff0f_rd, nff0f_wr;
 	output wire hram_cs;
 
 	input  wire anap, bedo;
@@ -66,8 +66,8 @@ module sys_decode(
 	assign #T_NAND rolo = !(semy && sapa && ffxx && cpu_rd);
 	assign #T_NAND refa = !(semy && sapa && ffxx && cpu_wr_raw);
 	assign ff04_ff07 = ryfo;
-	assign ff0f_rd   = rolo;
-	assign ff0f_wr   = refa;
+	assign nff0f_rd  = rolo;
+	assign nff0f_wr  = refa;
 
 	wire zyra, zage, zabu, zoke, zera, zufy, zyky, zyga, zovy, zuko, zuvy, zyba, zole, zaje, zubu, zapy;
 	wire zete, zefu, zyro, zapa, bootrom_na7, bootrom_na6, bootrom_na3, bootrom_na2;

@@ -11,6 +11,7 @@ parameter T_AO    = 6;
 parameter T_NAO   = 5;
 parameter T_MUX   = 6;
 parameter T_TRI   = 2;
+parameter T_DFFSR = 8;
 parameter T_DFFR  = 8;
 parameter T_DFF   = 8;
 parameter T_LATCH = 4;
