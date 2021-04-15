@@ -13,7 +13,9 @@ module clocks_reset(
 		ff04_ff07, ff40_d7, ff60_d1, tovy_na0, tola_na1,
 		apu_reset, napu_reset5, boga1mhz,
 		apuv_4mhz, ajer_2mhz, byfe_128hz,
-		fero_q, bedo, abuz, afas
+		fero_q, bedo, abuz, afas,
+		nff04_d0, nff04_d1,
+		_65536hz, _262144hz
 	);
 
 	input wire clkin_a, clkin_b;
@@ -48,6 +50,8 @@ module clocks_reset(
 	output wire byfe_128hz;
 	input  wire fero_q;
 	output wire bedo, abuz, afas;
+	output wire nff04_d0, nff04_d1;
+	output wire _16384hz, _65536hz, _262144hz;
 
 	wire arys, anos, avet;
 	assign #T_INV  arys = !clkin_b;
@@ -188,7 +192,7 @@ module clocks_reset(
 	assign nreset_div = ufol;
 
 	wire tama, unyk, tero, uner, ufor, ukup, uvyn, tama16384;
-	wire _16384hz, _32768hz, _65536hz, _131072hz, _262144hz, _524288hz;
+	wire _32768hz, _131072hz, _524288hz;
 	dffr dffr_tama(!unyk,    nreset_div, !tama, tama);
 	dffr dffr_unyk(!tero,    nreset_div, !unyk, unyk);
 	dffr dffr_tero(!uner,    nreset_div, !tero, tero);
@@ -207,7 +211,7 @@ module clocks_reset(
 	wire ulur, ugot, tulu, tugo, tofe, teru, sola, subu, teka, uket, upof;
 	wire umek, urek, utok, sapy, umer, rave, ryso, udor;
 	wire tagy, tawu, taku, temu, tuse, upug, sepu, sawa, tatu;
-	wire upyf, tubo, unut, taba, nff04_d0, nff04_d1;
+	wire upyf, tubo, unut, taba;
 	dffr dffr_ugot(ulur,  nreset_div, !ugot, ugot);
 	dffr dffr_tulu(!ugot, nreset_div, !tulu, tulu);
 	dffr dffr_tugo(!tulu, nreset_div, !tugo, tugo);

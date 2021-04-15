@@ -60,7 +60,6 @@ module dmg;
 	wire from_cpu5 = 0;
 	wire from_cpu6 = 0;
 	wire clk_from_cpu = 1;
-	wire tovy_na0 = 1;
 	wire a00_07 = 0;
 	wire ff46 = 0;
 	wire ff40_d4 = 0;
@@ -114,6 +113,7 @@ module dmg;
 	wire cpu_rd_sync;
 	wire nt1_nt2, nt1_t2, t1_nt2;
 	wire ff04_ff07, nff0f_rd, nff0f_wr, ff00wr, ff00rd;
+	wire nff04_d0, nff04_d1;
 	wire apu_wr, ncpu_rd;
 	wire hram_cs, boot_cs, ncs_out;
 	wire to_cpu, to_cpu2, to_cpu_tutu;
@@ -124,7 +124,7 @@ module dmg;
 
 	wire dma_run, vram_to_oam, dma_addr_ext, oam_addr_dma;
 	wire caty, wyja, mopa_phi;
-	wire tola_na1;
+	wire tovy_na0, tola_na1;
 
 	wire ff60_d1, ff60_d0;
 	wire ff26, ff3x, namp_en;
@@ -137,6 +137,7 @@ module dmg;
 	wire byfe_128hz;
 	wire dyfa_1mhz;
 	wire afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko;
+	wire _16384hz, _65536hz, _262144hz;
 
 	wire ffxx, nffxx, nfexxffxx, saro;
 	wire ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a;
@@ -146,6 +147,7 @@ module dmg;
 
 	clocks_reset   p1_clocks_reset(.*);
 	interrupts     p2_interrupts(.*);
+	timer          p3_timer(.*);
 	dma            p4_dma(.*);
 	sys_decode     p7_sys_decode(.*);
 	ext_cpu_busses p8_ext_cpu_busses(.*);

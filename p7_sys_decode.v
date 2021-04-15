@@ -44,8 +44,8 @@ module sys_decode(
 	assign t1_nt2  = umut;
 
 	wire ubal, ujyv, lexy, tapu, tedo, dyky, ajas, cupa, asot, pin_nc;
-	assign #T_MUX  ubal = !(nt1_t2 ? wr_in : cpu_rd_sync);
-	assign #T_MUX  ujyv = !(nt1_t2 ? rd_b  : cpu_raw_rd);
+	assign #T_MUXI ubal = !(nt1_t2 ? wr_in : cpu_rd_sync);
+	assign #T_MUXI ujyv = !(nt1_t2 ? rd_b  : cpu_raw_rd);
 	assign #T_INV  lexy = !from_cpu6;
 	assign #T_INV  tapu = !ubal;
 	assign #T_INV  tedo = !ujyv;

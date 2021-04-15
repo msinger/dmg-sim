@@ -1,6 +1,7 @@
 DMG_SCH_PAGES = \
 p1_clocks_reset.v \
 p2_interrupts.v \
+p3_timer.v \
 p4_dma.v \
 p7_sys_decode.v \
 p8_ext_cpu_busses.v \
@@ -14,6 +15,7 @@ dffsr.v \
 dffr.v \
 dff.v \
 latch.v \
+count.v \
 $(DMG_SCH_PAGES)
 
 all: dmg.vcd
