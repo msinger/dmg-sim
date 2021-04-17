@@ -62,7 +62,6 @@ module dmg;
 	wire from_cpu5 = 0;
 	wire from_cpu6 = 0;
 	wire clk_from_cpu = 1;
-	wire a00_07 = 0;
 	wire ff46 = 0;
 	wire ff40_d4 = 0;
 	wire amab = 0;
@@ -146,7 +145,7 @@ module dmg;
 	wire afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko;
 	wire _16384hz, _65536hz, _262144hz;
 
-	wire ffxx, nffxx, nfexxffxx, saro;
+	wire ffxx, nffxx, nfexxffxx, a00_07, saro;
 	wire ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a;
 	wire ff1b, ff1c, ff1d, ff1e, ff20, ff21, ff22, ff23, ff24, ff25;
 
@@ -157,6 +156,7 @@ module dmg;
 	timer          p3_timer(.*);
 	dma            p4_dma(.*);
 	joypad_io      p5_joypad_io(.*);
+	serial_link    p6_serial_link(.*);
 	sys_decode     p7_sys_decode(.*);
 	ext_cpu_busses p8_ext_cpu_busses(.*);
 	apu_control    p9_apu_control(.*);
