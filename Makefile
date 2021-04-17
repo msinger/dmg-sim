@@ -3,6 +3,7 @@ p1_clocks_reset.v \
 p2_interrupts.v \
 p3_timer.v \
 p4_dma.v \
+p5_joypad_io.v \
 p7_sys_decode.v \
 p8_ext_cpu_busses.v \
 p9_apu_control.v \

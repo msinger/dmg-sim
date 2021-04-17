@@ -53,6 +53,8 @@ module dmg;
 	wire p11_c = 0;
 	wire p12_c = 0;
 	wire p13_c = 0;
+	wire sin_in = 0;
+	wire sck_in = 0;
 	wire ff40_d7 = 0;
 	wire from_cpu = 0;
 	wire from_cpu3 = 1;
@@ -105,6 +107,7 @@ module dmg;
 	wire cpu_irq2_ack = 0;
 	wire cpu_irq3_ack = 0;
 	wire cpu_irq4_ack = 0;
+	wire ser_out = 0;
 
 	wire clk1;
 
@@ -121,6 +124,10 @@ module dmg;
 
 	wire nreset2, nreset6;
 	wire nphi_out;
+
+	wire sout, sin_a, sin_b, sin_d, sck_a, sck_dir, sck_d;
+	wire p10_a, p10_b, p10_d, p11_a, p11_b, p11_d, p12_a, p12_b, p12_d, p13_a, p13_b, p13_d;
+	wire p14_a, p14_b, p15_a, p15_b;
 
 	wire dma_run, vram_to_oam, dma_addr_ext, oam_addr_dma;
 	wire caty, wyja, mopa_phi;
@@ -149,6 +156,7 @@ module dmg;
 	interrupts     p2_interrupts(.*);
 	timer          p3_timer(.*);
 	dma            p4_dma(.*);
+	joypad_io      p5_joypad_io(.*);
 	sys_decode     p7_sys_decode(.*);
 	ext_cpu_busses p8_ext_cpu_busses(.*);
 	apu_control    p9_apu_control(.*);
