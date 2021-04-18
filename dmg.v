@@ -107,11 +107,16 @@ module dmg;
 	wire cpu_irq3_ack = 0;
 	wire cpu_irq4_ack = 0;
 	wire ser_out = 0;
-	wire [10:0] acc_d = 0;
 	wire ch1_restart = 0;
+	wire ch1_ld_shift = 0;
+	wire ch1_shift_clk = 0;
+	wire ch1_freq_upd1 = 0;
+	wire ch1_freq_upd2 = 0;
 	wire anuj = 0;
 	wire cope = 0;
 	wire gexu = 0;
+	wire adad = 0;
+	wire kyly = 0;
 
 	wire clk1;
 
@@ -147,7 +152,7 @@ module dmg;
 	wire boga1mhz;
 	wire byfe_128hz;
 	wire dyfa_1mhz;
-	wire afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko, copu;
+	wire afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko, copu, atys;
 	wire _16384hz, _65536hz, _262144hz;
 
 	wire ffxx, nffxx, nfexxffxx, a00_07, saro;
@@ -159,7 +164,8 @@ module dmg;
 	wire nff12_d0, nff12_d1, nff12_d2, nff12_d3;
 	wire ff14_d6, nff14_d6;
 
-	wire [3:0] lmixer, rmixer;
+	wire [10:0] acc_d;
+	wire [3:0]  lmixer, rmixer;
 
 	clocks_reset   p1_clocks_reset(.*);
 	interrupts     p2_interrupts(.*);
@@ -172,6 +178,7 @@ module dmg;
 	apu_control    p9_apu_control(.*);
 	apu_decode     p10_apu_decode(.*);
 	ch1_regs       p11_ch1_regs(.*);
+	ch1_sweep      p12_ch1_sweep(.*);
 	vram_interface p25_vram_interface(.*);
 
 endmodule
