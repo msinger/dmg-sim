@@ -15,7 +15,7 @@ module clocks_reset(
 		apuv_4mhz, ajer_2mhz, byfe_128hz,
 		fero_q, bedo, abuz, afas,
 		nff04_d0, nff04_d1,
-		_65536hz, _262144hz
+		_16384hz, _65536hz, _262144hz
 	);
 
 	input wire clkin_a, clkin_b;
