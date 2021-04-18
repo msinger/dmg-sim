@@ -9,6 +9,7 @@ p7_sys_decode.v \
 p8_ext_cpu_busses.v \
 p9_apu_control.v \
 p10_apu_decode.v \
+p11_ch1_regs.v \
 p25_vram_interface.v
 
 DMG_DEPENDENCIES = \

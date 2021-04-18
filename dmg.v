@@ -107,6 +107,11 @@ module dmg;
 	wire cpu_irq3_ack = 0;
 	wire cpu_irq4_ack = 0;
 	wire ser_out = 0;
+	wire [10:0] acc_d = 0;
+	wire ch1_restart = 0;
+	wire anuj = 0;
+	wire cope = 0;
+	wire gexu = 0;
 
 	wire clk1;
 
@@ -142,12 +147,17 @@ module dmg;
 	wire boga1mhz;
 	wire byfe_128hz;
 	wire dyfa_1mhz;
-	wire afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko;
+	wire afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko, copu;
 	wire _16384hz, _65536hz, _262144hz;
 
 	wire ffxx, nffxx, nfexxffxx, a00_07, saro;
 	wire ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a;
 	wire ff1b, ff1c, ff1d, ff1e, ff20, ff21, ff22, ff23, ff24, ff25;
+	wire nff10_d0, nff10_d1, nff10_d2, nff10_d3, nff10_d4, nff10_d5, nff10_d6;
+	wire ff11_d6, ff11_d7, nff11_d6, nff11_d7;
+	wire ff12_d0, ff12_d1, ff12_d2, ff12_d3, ff12_d4, ff12_d5, ff12_d6, ff12_d7;
+	wire nff12_d0, nff12_d1, nff12_d2, nff12_d3;
+	wire ff14_d6, nff14_d6;
 
 	wire [3:0] lmixer, rmixer;
 
@@ -161,6 +171,7 @@ module dmg;
 	ext_cpu_busses p8_ext_cpu_busses(.*);
 	apu_control    p9_apu_control(.*);
 	apu_decode     p10_apu_decode(.*);
+	ch1_regs       p11_ch1_regs(.*);
 	vram_interface p25_vram_interface(.*);
 
 endmodule
