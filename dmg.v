@@ -66,10 +66,8 @@ module dmg;
 	wire ff40_d4 = 0;
 	wire amab = 0;
 	wire nff1a_d7 = 1;
-	wire nch1_amp_en = 1;
 	wire nch2_amp_en = 1;
 	wire nch4_amp_en = 1;
-	wire nch1_active = 1;
 	wire nch2_active = 1;
 	wire nch3_active = 1;
 	wire nch4_active = 1;
@@ -107,16 +105,7 @@ module dmg;
 	wire cpu_irq3_ack = 0;
 	wire cpu_irq4_ack = 0;
 	wire ser_out = 0;
-	wire ch1_restart = 0;
-	wire ch1_ld_shift = 0;
-	wire ch1_shift_clk = 0;
-	wire ch1_freq_upd1 = 0;
-	wire ch1_freq_upd2 = 0;
 	wire anuj = 0;
-	wire cope = 0;
-	wire gexu = 0;
-	wire adad = 0;
-	wire kyly = 0;
 
 	wire clk1;
 
@@ -132,7 +121,7 @@ module dmg;
 	wire cpu_irq0_trig, cpu_irq1_trig, cpu_irq2_trig, cpu_irq3_trig, cpu_irq4_trig;
 
 	wire nreset2, nreset6;
-	wire nphi_out;
+	wire nphi_out, nphi;
 
 	wire sout, sin_a, sin_b, sin_d, sck_a, sck_dir, sck_d;
 	wire p10_a, p10_b, p10_d, p11_a, p11_b, p11_d, p12_a, p12_b, p12_d, p13_a, p13_b, p13_d;
@@ -150,9 +139,11 @@ module dmg;
 	wire apuv_4mhz;
 	wire ajer_2mhz;
 	wire boga1mhz;
-	wire byfe_128hz;
-	wire dyfa_1mhz;
+	wire byfe_128hz, bufy_256hz, horu_512hz, dyfa_1mhz;
 	wire afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko, copu, atys;
+	wire abol, gexu, cope, kyly, adad;
+	wire ch1_restart, ch1_shift_clk, ch1_ld_shift, ch1_freq_upd1, ch1_freq_upd2;
+	wire nch1_active, nch1_amp_en;
 	wire _16384hz, _65536hz, _262144hz;
 
 	wire ffxx, nffxx, nfexxffxx, a00_07, saro;
@@ -166,6 +157,7 @@ module dmg;
 
 	wire [10:0] acc_d;
 	wire [3:0]  lmixer, rmixer;
+	wire [3:0]  ch1_out;
 
 	clocks_reset   p1_clocks_reset(.*);
 	interrupts     p2_interrupts(.*);
@@ -179,6 +171,7 @@ module dmg;
 	apu_decode     p10_apu_decode(.*);
 	ch1_regs       p11_ch1_regs(.*);
 	ch1_sweep      p12_ch1_sweep(.*);
+	channel1       p13_channel1(.*);
 	vram_interface p25_vram_interface(.*);
 
 endmodule

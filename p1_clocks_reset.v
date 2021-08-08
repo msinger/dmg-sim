@@ -4,7 +4,7 @@
 module clocks_reset(
 		clkin_a, clkin_b, reset,
 		nreset2, nreset6,
-		clk1, nphi_out,
+		clk1, nphi_out, nphi,
 		d,
 		cpu_rd_sync,
 		cpu_wr, cpu_rd,
@@ -12,8 +12,8 @@ module clocks_reset(
 		from_cpu3, from_cpu4, clk_from_cpu, to_cpu,
 		ff04_ff07, ff40_d7, ff60_d1, tovy_na0, tola_na1,
 		apu_reset, napu_reset5, boga1mhz,
-		apuv_4mhz, ajer_2mhz, byfe_128hz,
-		fero_q, bedo, abuz, afas,
+		apuv_4mhz, ajer_2mhz, byfe_128hz, bufy_256hz, horu_512hz,
+		fero_q, bedo, abuz, afas, abol,
 		nff04_d0, nff04_d1,
 		_16384hz, _65536hz, _262144hz
 	);
@@ -23,7 +23,7 @@ module clocks_reset(
 
 	output wire nreset2, nreset6;
 	output wire clk1;
-	output wire nphi_out;
+	output wire nphi_out, nphi;
 
 	inout wire [7:0] d;
 
@@ -48,8 +48,10 @@ module clocks_reset(
 	input  wire ajer_2mhz;
 	output wire boga1mhz;
 	output wire byfe_128hz;
+	output wire bufy_256hz;
+	output wire horu_512hz;
 	input  wire fero_q;
-	output wire bedo, abuz, afas;
+	output wire bedo, abuz, afas, abol;
 	output wire nff04_d0, nff04_d1;
 	output wire _16384hz, _65536hz, _262144hz;
 
@@ -113,7 +115,7 @@ module clocks_reset(
 	assign nreset_video2 = lyfe;
 	assign reset_video3  = lyha;
 
-	wire adyk, afur, alef, apuk, abol, ucob, uvyt, nclkin_a;
+	wire adyk, afur, alef, apuk, ucob, uvyt, nclkin_a;
 	wire adar, atyp, afep, arov, ajax, bugo, arev, apov, agut, awod, bate, basu, buke;
 	dffr dffr_adyk(atal_4mhz,  nt1_nt2, apuk,  adyk);
 	dffr dffr_afur(!atal_4mhz, nt1_nt2, !adyk, afur);
@@ -141,7 +143,7 @@ module clocks_reset(
 	assign nphi_out = uvyt;
 	assign cpu_rd_sync = apov;
 
-	wire bapy, belu, beru, byry, bufa, byly, bude, beva, bolo, byda, beko, bavy, beja, dova, phi_out, nphi;
+	wire bapy, belu, beru, byry, bufa, byly, bude, beva, bolo, byda, beko, bavy, beja, dova, phi_out;
 	wire bane, belo, baze, buto;
 	assign #T_NOR  bapy = !(abol || arov || atyp);
 	assign #T_NOR  belu = !(atyp || abol);
@@ -249,7 +251,7 @@ module clocks_reset(
 	assign d = { tatu, sawa, sepu, upug, tuse, temu, taku, tawu };
 
 	wire atus, coke, bara, caru, bylu, bure, fyne, culo, apef, gale, beze, bule, gexy, cofu, baru, horu, bufy, byfe;
-	wire _512hz, _256hz, _128hz, horu_512hz, bufy_256hz;
+	wire _512hz, _256hz, _128hz;
 	dffr dffr_bara(coke,  atus, umer,  bara); // check edge
 	dffr dffr_caru(bure,  atus, !caru, caru); // check edge
 	dffr dffr_bylu(!caru, atus, !bylu, bylu); // check edge

@@ -11,6 +11,7 @@ parameter T_AO    = 6;
 parameter T_NAO   = 5;
 parameter T_MUX   = 6;
 parameter T_MUXI  = 6;
+parameter T_AOI   = 5;
 parameter T_XOR   = 5;
 parameter T_ADD   = 6;
 parameter T_TRI   = 2;

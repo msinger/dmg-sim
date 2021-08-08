@@ -11,6 +11,7 @@ p9_apu_control.v \
 p10_apu_decode.v \
 p11_ch1_regs.v \
 p12_ch1_sweep.v \
+p13_channel1.v \
 p25_vram_interface.v
 
 DMG_DEPENDENCIES = \
