@@ -1,39 +1,33 @@
 `default_nettype none
-`timescale 1ns/100ps
 
 module ch1_sweep(
-		d, apu_wr, apu_reset,
-		ff13, ff14, nff10_d3,
-		acc_d, ch1_ld_shift, ch1_shift_clk, ch1_freq_upd1, ch1_freq_upd2,
-		adad, kyly, atys
+		input logic [7:0] d,
+
+		input logic apu_wr, apu_reset,
+		input logic ff13, ff14, nff10_d3,
+
+		output logic [10:0] acc_d,
+		input  logic ch1_ld_shift, ch1_shift_clk, ch1_freq_upd1, ch1_freq_upd2,
+		input  logic adad, kyly,
+		output logic atys
 	);
 
-	input wire [7:0] d;
-
-	input wire apu_wr, apu_reset;
-	input wire ff13, ff14, nff10_d3;
-
-	output wire [10:0] acc_d;
-	input  wire ch1_ld_shift, ch1_shift_clk, ch1_freq_upd1, ch1_freq_upd2;
-	input  wire adad, kyly;
-	output wire atys;
-
-	wire deby, depu, dyla, aryl, byle, kedo, juju, kape, cybe, becy, faja, ejyb;
-	wire byfu, bofu, bysu, dulo, dylu, julo, kopu, etuv, fule, gulu, deke;
-	wire afeg, ajux, budo, amac, bugu, baso, etol, emar, eler, etok, kypa;
-	wire kyfu, kovu, kavo, gope, fega, golo, foke, geta, fopu, gylu, ejyf;
-	wire apaj, bovu, boxu, esel, eluf, kaju, kapo, gamo, gyfu, gato, efor;
-	wire axan, evab, dygy, hopo, hyxu, holu, fely, edul, havo, jyka, hyka;
-	wire doly, dofy, dexe, dele, exap, faxo, gyme, jyme, kare, jode, galo;
-	wire coru, dule, dyxe, etek, fego, geva, hexo, jory, jule, halu, guxa;
-	wire coru_c, dule_c, dyxe_c, etek_c, fego_c, geva_c, hexo_c, jory_c, jule_c, halu_c, guxa_c;
-	wire bojo, apat, byru, cyky, debo, fohy, kovo, keke, huny, hoxe, juta;
-	wire afyr, beju, buvo, beso, afug, bege, bapu, dace, ereg, ekem, evof;
-	wire govo, kevy, kola, kaxy, kyry, jehy, hawy, jocy, hola, koko, hozu;
-	wire avuf, afux, agor, bewo, enok, ezuk, kybo, keto, hyvu, hobu, jado;
-	wire beku, agez, elux, exac, fedo, fude, jota, jolu, goga, jefa, fabu;
-	wire culu, dozy, cale, dyme, fure, goly, kefe, hefy, gopo, gela, gylo;
-	wire deva, eter, defa, edok, epyr, gele, jete, jape, hele, hopa, hora;
+	logic deby, depu, dyla, aryl, byle, kedo, juju, kape, cybe, becy, faja, ejyb;
+	logic byfu, bofu, bysu, dulo, dylu, julo, kopu, etuv, fule, gulu, deke;
+	logic afeg, ajux, budo, amac, bugu, baso, etol, emar, eler, etok, kypa;
+	logic kyfu, kovu, kavo, gope, fega, golo, foke, geta, fopu, gylu, ejyf;
+	logic apaj, bovu, boxu, esel, eluf, kaju, kapo, gamo, gyfu, gato, efor;
+	logic axan, evab, dygy, hopo, hyxu, holu, fely, edul, havo, jyka, hyka;
+	logic doly, dofy, dexe, dele, exap, faxo, gyme, jyme, kare, jode, galo;
+	logic coru, dule, dyxe, etek, fego, geva, hexo, jory, jule, halu, guxa;
+	logic coru_c, dule_c, dyxe_c, etek_c, fego_c, geva_c, hexo_c, jory_c, jule_c, halu_c, guxa_c;
+	logic bojo, apat, byru, cyky, debo, fohy, kovo, keke, huny, hoxe, juta;
+	logic afyr, beju, buvo, beso, afug, bege, bapu, dace, ereg, ekem, evof;
+	logic govo, kevy, kola, kaxy, kyry, jehy, hawy, jocy, hola, koko, hozu;
+	logic avuf, afux, agor, bewo, enok, ezuk, kybo, keto, hyvu, hobu, jado;
+	logic beku, agez, elux, exac, fedo, fude, jota, jolu, goga, jefa, fabu;
+	logic culu, dozy, cale, dyme, fure, goly, kefe, hefy, gopo, gela, gylo;
+	logic deva, eter, defa, edok, epyr, gele, jete, jape, hele, hopa, hora;
 	dffsr dffsr_axan(ch1_freq_upd1, afeg, apaj, coru, axan); // check clk edge
 	dffsr dffsr_evab(ch1_freq_upd1, budo, bovu, dule, evab); // check clk edge
 	dffsr dffsr_dygy(ch1_freq_upd1, bugu, boxu, dyxe, dygy); // check clk edge
@@ -45,7 +39,7 @@ module ch1_sweep(
 	dffsr dffsr_havo(ch1_freq_upd2, golo, gyfu, jule, havo); // check clk edge
 	dffsr dffsr_jyka(ch1_freq_upd2, geta, gato, halu, jyka); // check clk edge
 	dffsr dffsr_hyka(ch1_freq_upd2, gylu, efor, guxa, hyka); // check clk edge
-	dffsr dffsr_beku(becy,          beju, avuf, 1'b0, beku); // check clk edge
+	dffsr dffsr_beku(becy,          beju, avuf,   '0, beku); // check clk edge
 	dffsr dffsr_agez(becy,          beso, afux, beku, agez); // check clk edge
 	dffsr dffsr_elux(becy,          bege, agor, agez, elux); // check clk edge
 	dffsr dffsr_exac(becy,          dace, bewo, elux, exac); // check clk edge

@@ -1,27 +1,19 @@
 `default_nettype none
-`timescale 1ns/100ps
 
 module interrupts(
-		d, nreset2, boga1mhz, p10_c, p11_c, p12_c, p13_c,
-		nff0f_wr, nff0f_rd,
-		int_vbl_buf, int_serial, int_stat, int_timer,
-		cpu_irq0_ack, cpu_irq1_ack, cpu_irq2_ack, cpu_irq3_ack, cpu_irq4_ack,
-		cpu_irq0_trig, cpu_irq1_trig, cpu_irq2_trig, cpu_irq3_trig, cpu_irq4_trig,
-		to_cpu2
+		inout tri logic [7:0] d,
+
+		input logic nreset2, boga1mhz, p10_c, p11_c, p12_c, p13_c,
+		input logic nff0f_wr, nff0f_rd,
+
+		input logic int_vbl_buf, int_serial, int_stat, int_timer,
+
+		input  logic cpu_irq0_ack, cpu_irq1_ack, cpu_irq2_ack, cpu_irq3_ack, cpu_irq4_ack,
+		output logic cpu_irq0_trig, cpu_irq1_trig, cpu_irq2_trig, cpu_irq3_trig, cpu_irq4_trig,
+		output logic to_cpu2
 	);
 
-	inout wire [7:0] d;
-
-	input wire nreset2, boga1mhz, p10_c, p11_c, p12_c, p13_c;
-	input wire nff0f_wr, nff0f_rd;
-
-	input wire int_vbl_buf, int_serial, int_stat, int_timer;
-
-	input  wire cpu_irq0_ack, cpu_irq1_ack, cpu_irq2_ack, cpu_irq3_ack, cpu_irq4_ack;
-	output wire cpu_irq0_trig, cpu_irq1_trig, cpu_irq2_trig, cpu_irq3_trig, cpu_irq4_trig;
-	output wire to_cpu2;
-
-	wire kery, batu, awob, acef, agem, apug, asok, int_jp;
+	logic kery, batu, awob, acef, agem, apug, asok, int_jp;
 	dffr dffr_batu(boga1mhz, nreset2, kery, batu); // check clk edge
 	dffr dffr_acef(boga1mhz, nreset2, batu, acef); // check clk edge
 	dffr dffr_agem(boga1mhz, nreset2, acef, agem); // check clk edge
@@ -32,15 +24,15 @@ module interrupts(
 	assign to_cpu2 = awob;
 	assign int_jp  = asok;
 
-	wire rotu, lety, muxe, lufe, sulo, lamo, seme, leja, nabe, lesa, rake;
-	wire myzu, lyta, tome, tuny, toga, tyme, mody, movu, pyhu, pyga;
-	wire pesu, lope, ubul, ulak, lalu, nybo;
-	wire pola, maty, nejy, nuty, mopo, pavy, nela, pado, pegy, nabo, rova;
-	dffsr dffsr_lope(int_vbl_buf, myzu, lyta, 1'b1, lope);
-	dffsr dffsr_ubul(int_serial,  tome, tuny, 1'b1, ubul);
-	dffsr dffsr_ulak(int_jp,      toga, tyme, 1'b1, ulak);
-	dffsr dffsr_lalu(int_stat,    mody, movu, 1'b1, lalu);
-	dffsr dffsr_nybo(int_timer,   pyhu, pyga, 1'b1, nybo);
+	logic rotu, lety, muxe, lufe, sulo, lamo, seme, leja, nabe, lesa, rake;
+	logic myzu, lyta, tome, tuny, toga, tyme, mody, movu, pyhu, pyga;
+	logic pesu, lope, ubul, ulak, lalu, nybo;
+	logic pola, maty, nejy, nuty, mopo, pavy, nela, pado, pegy, nabo, rova;
+	dffsr dffsr_lope(int_vbl_buf, myzu, lyta, '1, lope);
+	dffsr dffsr_ubul(int_serial,  tome, tuny, '1, ubul);
+	dffsr dffsr_ulak(int_jp,      toga, tyme, '1, ulak);
+	dffsr dffsr_lalu(int_stat,    mody, movu, '1, lalu);
+	dffsr dffsr_nybo(int_timer,   pyhu, pyga, '1, nybo);
 	latch latch_maty(nff0f_rd, lope, maty);
 	latch latch_nejy(nff0f_rd, ubul, nejy);
 	latch latch_nuty(nff0f_rd, ulak, nuty);
@@ -68,11 +60,11 @@ module interrupts(
 	assign #T_NAND pyhu = !(rotu && lesa && d[2]);
 	assign #T_AND  pyga = rake && lesa && nreset2;
 	assign #T_INV  pola = !nff0f_rd;
-	assign #T_TRI  nela = pola ? maty : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  pado = pola ? nejy : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  pegy = pola ? nuty : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  nabo = pola ? mopo : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  rova = pola ? pavy : 1'bz; /* takes !q output of dff */
+	assign #T_TRI  nela = pola ? maty : 'z; /* takes !q output of dff */
+	assign #T_TRI  pado = pola ? nejy : 'z; /* takes !q output of dff */
+	assign #T_TRI  pegy = pola ? nuty : 'z; /* takes !q output of dff */
+	assign #T_TRI  nabo = pola ? mopo : 'z; /* takes !q output of dff */
+	assign #T_TRI  rova = pola ? pavy : 'z; /* takes !q output of dff */
 	assign cpu_irq0_trig = lope;
 	assign cpu_irq3_trig = ubul;
 	assign cpu_irq4_trig = ulak;

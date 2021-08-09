@@ -1,34 +1,34 @@
 DMG_SCH_PAGES = \
-p1_clocks_reset.v \
-p2_interrupts.v \
-p3_timer.v \
-p4_dma.v \
-p5_joypad_io.v \
-p6_serial_link.v \
-p7_sys_decode.v \
-p8_ext_cpu_busses.v \
-p9_apu_control.v \
-p10_apu_decode.v \
-p11_ch1_regs.v \
-p12_ch1_sweep.v \
-p13_channel1.v \
-p25_vram_interface.v
+p1_clocks_reset.sv \
+p2_interrupts.sv \
+p3_timer.sv \
+p4_dma.sv \
+p5_joypad_io.sv \
+p6_serial_link.sv \
+p7_sys_decode.sv \
+p8_ext_cpu_busses.sv \
+p9_apu_control.sv \
+p10_apu_decode.sv \
+p11_ch1_regs.sv \
+p12_ch1_sweep.sv \
+p13_channel1.sv \
+p25_vram_interface.sv
 
 DMG_DEPENDENCIES = \
-timing_param.v \
-dffsr.v \
-dffr.v \
-dff.v \
-latch.v \
-count.v \
+timing_param.sv \
+dffsr.sv \
+dffr.sv \
+dff.sv \
+latch.sv \
+count.sv \
 $(DMG_SCH_PAGES)
 
 all: dmg.vcd
 
 .PHONY: all
 
-%: %.v
-	iverilog -g2012 -o $@ $^
+%: %.f %.sv
+	iverilog -g2012 -o $@ -f $^
 
 %.vcd: %
 	./$<

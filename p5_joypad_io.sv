@@ -1,31 +1,21 @@
 `default_nettype none
-`timescale 1ns/100ps
 
 module joypad_io(
-		d, nreset2, bedo,
-		ff00wr, ff00rd, ff60_d0, from_cpu,
-		ser_out, sout, sin_a, sin_b, sin_d,
-		p10_a, p10_b, p10_c, p10_d,
-		p11_a, p11_b, p11_c, p11_d,
-		p12_a, p12_b, p12_c, p12_d,
-		p13_a, p13_b, p13_c, p13_d,
-		p14_a, p14_b, p15_a, p15_b
+		inout tri logic [7:0] d,
+
+		input logic nreset2, bedo,
+		input logic ff00wr, ff00rd, ff60_d0, from_cpu,
+
+		input  logic ser_out,
+		output logic sout, sin_a, sin_b, sin_d,
+
+		input  logic p10_c, p11_c, p12_c, p13_c,
+		output logic p10_a, p10_b, p10_d,
+		output logic p11_a, p11_b, p11_d,
+		output logic p12_a, p12_b, p12_d,
+		output logic p13_a, p13_b, p13_d,
+		output logic p14_a, p14_b, p15_a, p15_b
 	);
-
-	inout wire [7:0] d;
-
-	input wire nreset2, bedo;
-	input wire ff00wr, ff00rd, ff60_d0, from_cpu;
-
-	input  wire ser_out;
-	output wire sout, sin_a, sin_b, sin_d;
-
-	input  wire p10_c, p11_c, p12_c, p13_c;
-	output wire p10_a, p10_b, p10_d;
-	output wire p11_a, p11_b, p11_d;
-	output wire p12_a, p12_b, p12_d;
-	output wire p13_a, p13_b, p13_d;
-	output wire p14_a, p14_b, p15_a, p15_b;
 
 	assign sin_b = ff60_d0;
 	assign p10_b = 0;
@@ -33,9 +23,9 @@ module joypad_io(
 	assign p12_b = 0;
 	assign p13_b = 0;
 
-	wire kyme, kuko, keru, jale, kore, jeva, kywe, kena, kory, kale, kyhu, kasy;
-	wire byzo, kolo, keja, kevu, kapa, jeku, kuve, kema, kuro, kely, cofy, karu, koce, cudy;
-	wire kura, cela, jute, kecy, kole, kybu, kyto, kabu;
+	logic kyme, kuko, keru, jale, kore, jeva, kywe, kena, kory, kale, kyhu, kasy;
+	logic byzo, kolo, keja, kevu, kapa, jeku, kuve, kema, kuro, kely, cofy, karu, koce, cudy;
+	logic kura, cela, jute, kecy, kole, kybu, kyto, kabu;
 	dffr dffr_kyme(ff00wr, nreset2, d[3], kyme); // check clk edge
 	dffr dffr_kuko(ff00wr, nreset2, d[6], kuko); // check clk edge
 	dffr dffr_keru(ff00wr, nreset2, d[7], keru); // check clk edge
@@ -57,13 +47,13 @@ module joypad_io(
 	assign #T_NAND kyhu = !(ff60_d0 && jale);
 	assign #T_NOR  kasy = !(jale || kura);
 	assign #T_INV  byzo = !ff00rd;
-	assign #T_TRI  jeku = !byzo ? !kolo : 1'bz;
-	assign #T_TRI  kuve = !byzo ? !keja : 1'bz;
-	assign #T_TRI  kema = !byzo ? !kevu : 1'bz;
-	assign #T_TRI  kuro = !byzo ? !kapa : 1'bz;
+	assign #T_TRI  jeku = !byzo ? !kolo : 'z;
+	assign #T_TRI  kuve = !byzo ? !keja : 'z;
+	assign #T_TRI  kema = !byzo ? !kevu : 'z;
+	assign #T_TRI  kuro = !byzo ? !kapa : 'z;
 	assign #T_OR   karu = kura || !kely; /* takes !q output of dff */
-	assign #T_TRI  koce = !byzo ? kely : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  cudy = !byzo ? cofy : 1'bz; /* takes !q output of dff */
+	assign #T_TRI  koce = !byzo ? kely : 'z; /* takes !q output of dff */
+	assign #T_TRI  cudy = !byzo ? cofy : 'z; /* takes !q output of dff */
 	assign #T_OR   cela = !cofy || kura; /* takes !q output of dff */
 	assign #T_INV  kura = !ff60_d0;
 	assign #T_NAND kole = !(jute && ff60_d0);
@@ -90,19 +80,19 @@ module joypad_io(
 	assign p11_a = kyto;
 	assign p11_d = kabu;
 
-	wire axyn, adyr, apys, afop, anoc, ajec, arar, benu, akaj, asuz, ataj, beda;
+	logic axyn, adyr, apys, afop, anoc, ajec, arar, benu, akaj, asuz, ataj, beda;
 	assign #T_INV  axyn = !bedo;
 	assign #T_INV  adyr = !axyn;
 	assign #T_NOR  apys = !(from_cpu || adyr);
 	assign #T_INV  afop = !apys;
-	assign #T_TRI  anoc = !afop ? 1'b1 : 1'bz;
-	assign #T_TRI  ajec = !afop ? 1'b1 : 1'bz;
-	assign #T_TRI  arar = !afop ? 1'b1 : 1'bz;
-	assign #T_TRI  benu = !afop ? 1'b1 : 1'bz;
-	assign #T_TRI  akaj = !afop ? 1'b1 : 1'bz;
-	assign #T_TRI  asuz = !afop ? 1'b1 : 1'bz;
-	assign #T_TRI  ataj = !afop ? 1'b1 : 1'bz;
-	assign #T_TRI  beda = !afop ? 1'b1 : 1'bz;
+	assign #T_TRI  anoc = !afop ? '1 : 'z;
+	assign #T_TRI  ajec = !afop ? '1 : 'z;
+	assign #T_TRI  arar = !afop ? '1 : 'z;
+	assign #T_TRI  benu = !afop ? '1 : 'z;
+	assign #T_TRI  akaj = !afop ? '1 : 'z;
+	assign #T_TRI  asuz = !afop ? '1 : 'z;
+	assign #T_TRI  ataj = !afop ? '1 : 'z;
+	assign #T_TRI  beda = !afop ? '1 : 'z;
 	assign d[0] = anoc;
 	assign d[2] = ajec;
 	assign d[6] = arar;

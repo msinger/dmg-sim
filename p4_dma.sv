@@ -1,27 +1,19 @@
 `default_nettype none
-`timescale 1ns/100ps
 
 module dma(
-		clk1, d, ma, dma_a,
-		nreset6, from_cpu5,
-		cpu_rd2, cpu_wr2, ff46,
-		amab, wyja, caty, dma_run,
-		vram_to_oam, dma_addr_ext, oam_addr_dma,
-		nphi_out, mopa_phi
+		inout  tri logic [7:0]  d,
+		inout  tri logic [12:0] ma,
+		output     logic [15:0] dma_a,
+
+		input logic clk1, nreset6, from_cpu5,
+		input logic cpu_rd2, cpu_wr2, ff46,
+
+		input  logic amab, nphi_out,
+		output logic wyja, caty, dma_run, mopa_phi,
+		output logic vram_to_oam, dma_addr_ext, oam_addr_dma
 	);
 
-	inout  wire [7:0] d;
-	output wire [12:0] ma;
-	output wire [15:0] dma_a;
-
-	input wire clk1, nreset6, from_cpu5;
-	input wire cpu_rd2, cpu_wr2, ff46;
-
-	input  wire amab, nphi_out;
-	output wire wyja, caty, dma_run, mopa_phi;
-	output wire vram_to_oam, dma_addr_ext, oam_addr_dma;
-
-	wire decy, maka, naxy, powu, luvy, molu, nygo, pusy, lavy, loru, lyxe, lupa, ahoc, loko, lapa, meta;
+	logic decy, maka, naxy, powu, luvy, molu, nygo, pusy, lavy, loru, lyxe, lupa, ahoc, loko, lapa, meta;
 	dffr dffr_maka(clk1,     nreset6, caty, maka); // check edge
 	dffr dffr_luvy(nphi_out, nreset6, lupa, luvy); // check edge
 	assign #T_INV  decy = !from_cpu5;
@@ -41,7 +33,7 @@ module dma(
 	assign #T_INV  lapa = !loko;
 	assign #T_AND  meta = nphi_out && loky;
 
-	wire mopa, navo, nolo, myte, lene, lara, loky, matu, mory, luma, logo, duga, lebu, muda, muho, lufa;
+	logic mopa, navo, nolo, myte, lene, lara, loky, matu, mory, luma, logo, duga, lebu, muda, muho, lufa;
 	dffr dffr_myte(mopa,     lapa,    nolo, myte); // check edge
 	dffr dffr_lene(mopa,     nreset6, luvy, lene); // check edge
 	dffr dffr_matu(nphi_out, nreset6, loky, matu); // check edge
@@ -64,8 +56,8 @@ module dma(
 	assign oam_addr_dma = duga;
 	assign vram_to_oam  = lufa;
 
-	wire nafa, nygy, para, pyne, pula, nydo, poku, maru, poly, pare, rema, rofo, raly, pane, resu, nuvy;
-	wire evax, exyf, eraf, duve, fusy;
+	logic nafa, nygy, para, pyne, pula, nydo, poku, maru, poly, pare, rema, rofo, raly, pane, resu, nuvy;
+	logic evax, exyf, eraf, duve, fusy;
 	dff dff_nafa(loru, d[0], nafa); // check edge
 	dff dff_nygy(loru, d[4], nygy); // check edge
 	dff dff_para(loru, d[2], para); // check edge
@@ -74,19 +66,19 @@ module dma(
 	dff dff_nydo(loru, d[3], nydo); // check edge
 	dff dff_poku(loru, d[6], poku); // check edge
 	dff dff_maru(loru, d[7], maru); // check edge
-	assign #T_TRI  poly = pusy ? nafa : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  pare = pusy ? nygy : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  rema = pusy ? para : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  rofo = pusy ? pyne : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  raly = pusy ? pula : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  pane = pusy ? nydo : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  resu = pusy ? poku : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  nuvy = pusy ? maru : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  evax = !ahoc ? !nafa : 1'bz;
-	assign #T_TRI  exyf = !ahoc ? !nygy : 1'bz;
-	assign #T_TRI  eraf = !ahoc ? !para : 1'bz;
-	assign #T_TRI  duve = !ahoc ? !pyne : 1'bz;
-	assign #T_TRI  fusy = !ahoc ? !nydo : 1'bz;
+	assign #T_TRI  poly = pusy ? nafa : 'z; /* takes !q output of dff */
+	assign #T_TRI  pare = pusy ? nygy : 'z; /* takes !q output of dff */
+	assign #T_TRI  rema = pusy ? para : 'z; /* takes !q output of dff */
+	assign #T_TRI  rofo = pusy ? pyne : 'z; /* takes !q output of dff */
+	assign #T_TRI  raly = pusy ? pula : 'z; /* takes !q output of dff */
+	assign #T_TRI  pane = pusy ? nydo : 'z; /* takes !q output of dff */
+	assign #T_TRI  resu = pusy ? poku : 'z; /* takes !q output of dff */
+	assign #T_TRI  nuvy = pusy ? maru : 'z; /* takes !q output of dff */
+	assign #T_TRI  evax = !ahoc ? !nafa : 'z;
+	assign #T_TRI  exyf = !ahoc ? !nygy : 'z;
+	assign #T_TRI  eraf = !ahoc ? !para : 'z;
+	assign #T_TRI  duve = !ahoc ? !pyne : 'z;
+	assign #T_TRI  fusy = !ahoc ? !nydo : 'z;
 	assign d[0] = poly;
 	assign d[4] = pare;
 	assign d[2] = rema;
@@ -109,7 +101,7 @@ module dma(
 	assign ma[9]  = duve;
 	assign ma[11] = fusy;
 
-	wire naky, pyro, nefy, muty, nyko, pylo, nuto, mugu, ecal, egez, fuhe, fyzy, damu, dava, eteg, erew;
+	logic naky, pyro, nefy, muty, nyko, pylo, nuto, mugu, ecal, egez, fuhe, fyzy, damu, dava, eteg, erew;
 	dffr dffr_naky(meta,  lapa, !naky, naky); // check edge
 	dffr dffr_pyro(!naky, lapa, !pyro, pyro); // check edge
 	dffr dffr_nefy(!pyro, lapa, !nefy, nefy); // check edge
@@ -118,14 +110,14 @@ module dma(
 	dffr dffr_pylo(!nyko, lapa, !pylo, pylo); // check edge
 	dffr dffr_nuto(!pylo, lapa, !nuto, nuto); // check edge
 	dffr dffr_mugu(!nuto, lapa, !mugu, mugu); // check edge
-	assign #T_TRI  ecal = !ahoc ? !naky : 1'bz;
-	assign #T_TRI  egez = !ahoc ? !pyro : 1'bz;
-	assign #T_TRI  fuhe = !ahoc ? !nefy : 1'bz;
-	assign #T_TRI  fyzy = !ahoc ? !muty : 1'bz;
-	assign #T_TRI  damu = !ahoc ? !nyko : 1'bz;
-	assign #T_TRI  dava = !ahoc ? !pylo : 1'bz;
-	assign #T_TRI  eteg = !ahoc ? !nuto : 1'bz;
-	assign #T_TRI  erew = !ahoc ? !mugu : 1'bz;
+	assign #T_TRI  ecal = !ahoc ? !naky : 'z;
+	assign #T_TRI  egez = !ahoc ? !pyro : 'z;
+	assign #T_TRI  fuhe = !ahoc ? !nefy : 'z;
+	assign #T_TRI  fyzy = !ahoc ? !muty : 'z;
+	assign #T_TRI  damu = !ahoc ? !nyko : 'z;
+	assign #T_TRI  dava = !ahoc ? !pylo : 'z;
+	assign #T_TRI  eteg = !ahoc ? !nuto : 'z;
+	assign #T_TRI  erew = !ahoc ? !mugu : 'z;
 	assign dma_a[0] = naky;
 	assign dma_a[1] = pyro;
 	assign dma_a[2] = nefy;

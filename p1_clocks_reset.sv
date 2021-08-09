@@ -1,70 +1,54 @@
 `default_nettype none
-`timescale 1ns/100ps
 
 module clocks_reset(
-		clkin_a, clkin_b, reset,
-		nreset2, nreset6,
-		clk1, nphi_out, nphi,
-		d,
-		cpu_rd_sync,
-		cpu_wr, cpu_rd,
-		nt1_nt2, nt1_t2, t1_nt2,
-		from_cpu3, from_cpu4, clk_from_cpu, to_cpu,
-		ff04_ff07, ff40_d7, ff60_d1, tovy_na0, tola_na1,
-		apu_reset, napu_reset5, boga1mhz,
-		apuv_4mhz, ajer_2mhz, byfe_128hz, bufy_256hz, horu_512hz,
-		fero_q, bedo, abuz, afas, abol,
-		nff04_d0, nff04_d1,
-		_16384hz, _65536hz, _262144hz
+		input logic clkin_a, clkin_b,
+		input logic reset,
+
+		output logic nreset2, nreset6,
+		output logic clk1,
+		output logic nphi_out, nphi,
+
+		inout tri logic [7:0] d,
+
+		output logic cpu_rd_sync,
+		input  logic cpu_wr, cpu_rd,
+		input  logic nt1_nt2, nt1_t2, t1_nt2,
+
+		input  logic from_cpu3,
+		input  logic from_cpu4,
+		input  logic clk_from_cpu,
+		output logic to_cpu,
+
+		input logic ff04_ff07,
+		input logic ff40_d7,
+		input logic ff60_d1,
+		input logic tovy_na0,
+		input logic tola_na1,
+
+		input  logic apu_reset,
+		input  logic napu_reset5,
+		output logic apuv_4mhz,
+		input  logic ajer_2mhz,
+		output logic boga1mhz,
+		output logic byfe_128hz,
+		output logic bufy_256hz,
+		output logic horu_512hz,
+		input  logic fero_q,
+		output logic bedo, abuz, afas, abol,
+		output logic nff04_d0, nff04_d1,
+		output logic _16384hz, _65536hz, _262144hz
 	);
 
-	input wire clkin_a, clkin_b;
-	input wire reset;
-
-	output wire nreset2, nreset6;
-	output wire clk1;
-	output wire nphi_out, nphi;
-
-	inout wire [7:0] d;
-
-	output wire cpu_rd_sync;
-	input  wire cpu_wr, cpu_rd;
-	input  wire nt1_nt2, nt1_t2, t1_nt2;
-
-	input  wire from_cpu3;
-	input  wire from_cpu4;
-	input  wire clk_from_cpu;
-	output wire to_cpu;
-
-	input wire ff04_ff07;
-	input wire ff40_d7;
-	input wire ff60_d1;
-	input wire tovy_na0;
-	input wire tola_na1;
-
-	input  wire apu_reset;
-	input  wire napu_reset5;
-	output wire apuv_4mhz;
-	input  wire ajer_2mhz;
-	output wire boga1mhz;
-	output wire byfe_128hz;
-	output wire bufy_256hz;
-	output wire horu_512hz;
-	input  wire fero_q;
-	output wire bedo, abuz, afas, abol;
-	output wire nff04_d0, nff04_d1;
-	output wire _16384hz, _65536hz, _262144hz;
-
-	wire arys, anos, avet;
+	logic arys, anos, avet;
 	assign #T_INV  arys = !clkin_b;
 	assign #T_NAND anos = !(clkin_b && avet);
 	assign #T_NAND avet = !(anos && arys);
 
-	wire atal, atal_4mhz;
+	logic atal, atal_4mhz;
 	assign #T_INV  atal = !avet;
 	assign atal_4mhz = atal;
 
-	wire azof, zaxy, zeme, alet, lape, tava, atag, amuk, clk2, clk4, clk5, amuk_4mhz;
+	logic azof, zaxy, zeme, alet, lape, tava, atag, amuk, clk2, clk4, clk5, amuk_4mhz;
 	assign #T_INV  azof = !atal;
 	assign #T_INV  zaxy = !azof;
 	assign #T_INV  zeme = !zaxy;
@@ -79,7 +63,7 @@ module clocks_reset(
 	assign clk5 = tava;
 	assign amuk_4mhz = amuk;
 
-	wire aryf, apuv, cybo, bela, cery, aryf_4mhz, cery_2mhz;
+	logic aryf, apuv, cybo, bela, cery, aryf_4mhz, cery_2mhz;
 	assign #T_INV  aryf = !amuk;
 	assign #T_INV  apuv = !amuk;
 	assign #T_INV  cybo = !amuk;
@@ -89,7 +73,7 @@ module clocks_reset(
 	assign apuv_4mhz = apuv;
 	assign cery_2mhz = cery;
 
-	wire dula, cunu, xore, walu, wesy, xebe, reset7, nreset7, nreset8, nreset9;
+	logic dula, cunu, xore, walu, wesy, xebe, reset7, nreset7, nreset8, nreset9;
 	assign #T_INV  dula = !nreset2;
 	assign #T_INV  cunu = !dula;
 	assign #T_INV  xore = !cunu;
@@ -102,7 +86,7 @@ module clocks_reset(
 	assign nreset8 = walu;
 	assign nreset9 = wesy;
 
-	wire xodo, xapo, pyry, atar, lyha, lyfe, reset_video, nreset_video, reset_video2, nreset_video2, reset_video3;
+	logic xodo, xapo, pyry, atar, lyha, lyfe, reset_video, nreset_video, reset_video2, nreset_video2, reset_video3;
 	assign #T_NAND xodo = !(ff40_d7 && nreset7);
 	assign #T_INV  xapo = !xodo;
 	assign #T_INV  pyry = !xapo;
@@ -115,8 +99,8 @@ module clocks_reset(
 	assign nreset_video2 = lyfe;
 	assign reset_video3  = lyha;
 
-	wire adyk, afur, alef, apuk, ucob, uvyt, nclkin_a;
-	wire adar, atyp, afep, arov, ajax, bugo, arev, apov, agut, awod, bate, basu, buke;
+	logic adyk, afur, alef, apuk, ucob, uvyt, nclkin_a;
+	logic adar, atyp, afep, arov, ajax, bugo, arev, apov, agut, awod, bate, basu, buke;
 	dffr dffr_adyk(atal_4mhz,  nt1_nt2, apuk,  adyk);
 	dffr dffr_afur(!atal_4mhz, nt1_nt2, !adyk, afur);
 	dffr dffr_alef(atal_4mhz,  nt1_nt2, afur,  alef);
@@ -143,8 +127,8 @@ module clocks_reset(
 	assign nphi_out = uvyt;
 	assign cpu_rd_sync = apov;
 
-	wire bapy, belu, beru, byry, bufa, byly, bude, beva, bolo, byda, beko, bavy, beja, dova, phi_out;
-	wire bane, belo, baze, buto;
+	logic bapy, belu, beru, byry, bufa, byly, bude, beva, bolo, byda, beko, bavy, beja, dova, phi_out;
+	logic bane, belo, baze, buto;
 	assign #T_NOR  bapy = !(abol || arov || atyp);
 	assign #T_NOR  belu = !(atyp || abol);
 	assign #T_INV  beru = !bapy;
@@ -166,7 +150,7 @@ module clocks_reset(
 	assign phi_out = bude;
 	assign nphi    = dova;
 
-	wire bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, boma, byxo, bowa, afer, avor, alur;
+	logic bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, boma, byxo, bowa, afer, avor, alur;
 	dffr dffr_afer(boma, nt1_nt2, asol, afer); // check clk edge
 	assign #T_INV  bele = !buto;
 	assign #T_INV  atez = !clkin_a;
@@ -188,13 +172,13 @@ module clocks_reset(
 	assign to_cpu   = bowa;
 	assign nreset2  = alur;
 
-	wire tape, ufol, nreset_div;
+	logic tape, ufol, nreset_div;
 	assign #T_AND  tape = ff04_ff07 && cpu_wr && tola_na1 && tovy_na0;
 	assign #T_NOR  ufol = !(nclkin_a || reset || tape);
 	assign nreset_div = ufol;
 
-	wire tama, unyk, tero, uner, ufor, ukup, uvyn, tama16384;
-	wire _32768hz, _131072hz, _524288hz;
+	logic tama, unyk, tero, uner, ufor, ukup, uvyn, tama16384;
+	logic _32768hz, _131072hz, _524288hz;
 	dffr dffr_tama(!unyk,    nreset_div, !tama, tama);
 	dffr dffr_unyk(!tero,    nreset_div, !unyk, unyk);
 	dffr dffr_tero(!uner,    nreset_div, !tero, tero);
@@ -210,10 +194,10 @@ module clocks_reset(
 	assign _262144hz = ufor;
 	assign _524288hz = ukup;
 
-	wire ulur, ugot, tulu, tugo, tofe, teru, sola, subu, teka, uket, upof;
-	wire umek, urek, utok, sapy, umer, rave, ryso, udor;
-	wire tagy, tawu, taku, temu, tuse, upug, sepu, sawa, tatu;
-	wire upyf, tubo, unut, taba;
+	logic ulur, ugot, tulu, tugo, tofe, teru, sola, subu, teka, uket, upof;
+	logic umek, urek, utok, sapy, umer, rave, ryso, udor;
+	logic tagy, tawu, taku, temu, tuse, upug, sepu, sawa, tatu;
+	logic upyf, tubo, unut, taba;
 	dffr dffr_ugot(ulur,  nreset_div, !ugot, ugot);
 	dffr dffr_tulu(!ugot, nreset_div, !tulu, tulu);
 	dffr dffr_tugo(!tulu, nreset_div, !tugo, tugo);
@@ -238,20 +222,20 @@ module clocks_reset(
 	assign #T_OR   tubo = clk_from_cpu || upyf;
 	assign #T_AND  unut = upof && tubo;
 	assign #T_OR   taba = nt1_t2 || t1_nt2 || unut;
-	assign #T_TRI  tawu = tagy ? !umek : 1'bz;
-	assign #T_TRI  taku = tagy ? !urek : 1'bz;
-	assign #T_TRI  temu = tagy ? !utok : 1'bz;
-	assign #T_TRI  tuse = tagy ? !sapy : 1'bz;
-	assign #T_TRI  upug = tagy ? !umer : 1'bz;
-	assign #T_TRI  sepu = tagy ? !rave : 1'bz;
-	assign #T_TRI  sawa = tagy ? !ryso : 1'bz;
-	assign #T_TRI  tatu = tagy ? !udor : 1'bz;
+	assign #T_TRI  tawu = tagy ? !umek : 'z;
+	assign #T_TRI  taku = tagy ? !urek : 'z;
+	assign #T_TRI  temu = tagy ? !utok : 'z;
+	assign #T_TRI  tuse = tagy ? !sapy : 'z;
+	assign #T_TRI  upug = tagy ? !umer : 'z;
+	assign #T_TRI  sepu = tagy ? !rave : 'z;
+	assign #T_TRI  sawa = tagy ? !ryso : 'z;
+	assign #T_TRI  tatu = tagy ? !udor : 'z;
 	assign nff04_d0 = umek;
 	assign nff04_d1 = urek;
 	assign d = { tatu, sawa, sepu, upug, tuse, temu, taku, tawu };
 
-	wire atus, coke, bara, caru, bylu, bure, fyne, culo, apef, gale, beze, bule, gexy, cofu, baru, horu, bufy, byfe;
-	wire _512hz, _256hz, _128hz;
+	logic atus, coke, bara, caru, bylu, bure, fyne, culo, apef, gale, beze, bule, gexy, cofu, baru, horu, bufy, byfe;
+	logic _512hz, _256hz, _128hz;
 	dffr dffr_bara(coke,  atus, umer,  bara); // check edge
 	dffr dffr_caru(bure,  atus, !caru, caru); // check edge
 	dffr dffr_bylu(!caru, atus, !bylu, bylu); // check edge
@@ -277,7 +261,7 @@ module clocks_reset(
 	assign bufy_256hz = bufy;
 	assign byfe_128hz = byfe;
 
-	wire bopo, atyk, avok, bavu, jeso, hama, bavu_1mhz, _2097152hz, _1048576hz, jeso_512k, hama_512k;
+	logic bopo, atyk, avok, bavu, jeso, hama, bavu_1mhz, _2097152hz, _1048576hz, jeso_512k, hama_512k;
 	dffr dffr_atyk(aryf_4mhz, bopo,        !atyk, atyk); // check edge
 	dffr dffr_avok(atyk,      bopo,        !avok, avok); // check edge
 	dffr dffr_jeso(bavu,      napu_reset5, !jeso, jeso); // check edge

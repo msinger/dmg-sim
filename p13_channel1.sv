@@ -1,37 +1,25 @@
 `default_nettype none
-`timescale 1ns/100ps
 
 module channel1(
-		d, apu_wr, apu_reset, napu_reset6, nphi, net03,
-		ff11, ff11_d6, nff11_d6, ff11_d7, nff11_d7, ff14, ff14_d6, nff14_d6,
-		nff10_d0, nff10_d1, nff10_d2, nff10_d4, nff10_d5, nff10_d6,
-		ff12_d0, ff12_d1, ff12_d2, ff12_d3, ff12_d4, ff12_d5, ff12_d6, ff12_d7,
-		nff12_d0, nff12_d1, nff12_d2, nff12_d3,
-		ch1_restart, ch1_shift_clk, ch1_ld_shift, ch1_freq_upd1, ch1_freq_upd2,
-		nch1_active, nch1_amp_en,
-		atys, gexu, copu, cope, cate, abol, kyly, adad,
-		byfe_128hz, bufy_256hz, horu_512hz, dyfa_1mhz, ajer_2mhz,
-		ch1_out
+		input logic [7:0] d,
+
+		input logic apu_wr, apu_reset, napu_reset6, nphi, net03,
+		input logic ff11, ff11_d6, nff11_d6, ff11_d7, nff11_d7, ff14, ff14_d6, nff14_d6,
+		input logic nff10_d0, nff10_d1, nff10_d2, nff10_d4, nff10_d5, nff10_d6,
+		input logic ff12_d0, ff12_d1, ff12_d2, ff12_d3, ff12_d4, ff12_d5, ff12_d6, ff12_d7,
+		input logic nff12_d0, nff12_d1, nff12_d2, nff12_d3,
+
+		output logic ch1_restart, ch1_shift_clk, ch1_ld_shift, ch1_freq_upd1, ch1_freq_upd2,
+		output logic nch1_active, nch1_amp_en,
+		input  logic atys, copu, cate, abol,
+		output logic gexu, cope, kyly, adad,
+		input  logic byfe_128hz, bufy_256hz, horu_512hz, dyfa_1mhz, ajer_2mhz,
+
+		output logic [3:0] ch1_out
 	);
 
-	input wire [7:0] d;
-
-	input wire apu_wr, apu_reset, napu_reset6, nphi, net03;
-	input wire ff11, ff11_d6, nff11_d6, ff11_d7, nff11_d7, ff14, ff14_d6, nff14_d6;
-	input wire nff10_d0, nff10_d1, nff10_d2, nff10_d4, nff10_d5, nff10_d6;
-	input wire ff12_d0, ff12_d1, ff12_d2, ff12_d3, ff12_d4, ff12_d5, ff12_d6, ff12_d7;
-	input wire nff12_d0, nff12_d1, nff12_d2, nff12_d3;
-
-	output wire ch1_restart, ch1_shift_clk, ch1_ld_shift, ch1_freq_upd1, ch1_freq_upd2;
-	output wire nch1_active, nch1_amp_en;
-	input  wire atys, copu, cate, abol;
-	output wire gexu, cope, kyly, adad;
-	input  wire byfe_128hz, bufy_256hz, horu_512hz, dyfa_1mhz, ajer_2mhz;
-
-	output wire [3:0] ch1_out;
-
-	wire boro, boka, cory, cero, capy, cyfa, hoca, bone, bery, femy, gepu, bugy, canu, bepe, cuso;
-	wire bacy, cavy, bovy, cuno, cura, eram;
+	logic boro, boka, cory, cero, capy, cyfa, hoca, bone, bery, femy, gepu, bugy, canu, bepe, cuso;
+	logic bacy, cavy, bovy, cuno, cura, eram;
 	dffr dffr_cero(!eram, cory, !cero, cero); // check clk edge
 	count count_bacy(canu, bugy, d[0], bacy);
 	count count_cavy(bacy, bugy, d[1], cavy);
@@ -56,7 +44,7 @@ module channel1(
 	assign #T_INV  cuso = cuno; /* takes !q output of dff */
 	assign nch1_amp_en = hoca;
 
-	wire cala, comy, cyte, dyru, doka;
+	logic cala, comy, cyte, dyru, doka;
 	dffr dffr_comy(cala, dyru, !comy, comy); // check clk edge
 	assign #T_INV  cala = !copu;
 	assign #T_INV  cyte = !comy;
@@ -64,7 +52,7 @@ module channel1(
 	assign #T_NOR  dyru = !(apu_reset || ch1_restart || doka);
 	assign #T_AND  doka = comy && dyfa_1mhz;
 
-	wire dafa, cymu, bave, caxy, cypu, cupo, bury, coze, bexa;
+	logic dafa, cymu, bave, caxy, cypu, cupo, bury, coze, bexa;
 	dffr dffr_bexa(ajer_2mhz, bury, coze, bexa); // check clk edge
 	count count_caxy(cypu, cymu, nff10_d6, caxy);
 	count count_cypu(cupo, cymu, nff10_d5, cypu);
@@ -75,11 +63,11 @@ module channel1(
 	assign #T_NOR  bury = !(bave || apu_reset);
 	assign #T_AND  coze = caxy && cypu && cupo;
 
-	wire jone, kado, kaly, kere, jola, jova, kenu, kera, kote, kury, kuku, koro, kozy, kaza, kuxu, koma, kake;
-	wire erum, fare, fyte, eget, doge, dado, dupe, duka, ezec, gefe, fyfo, feku, keko, kaba;
-	wire hufu, hano, hake, koru, jade, kyno, kezu;
-	wire cyto, cara, duwo, cowe, boto;
-	wire hesu, heto, hyto, jufy, hevo, hoko, hemy, hafo, aceg, agof, ason, amop;
+	logic jone, kado, kaly, kere, jola, jova, kenu, kera, kote, kury, kuku, koro, kozy, kaza, kuxu, koma, kake;
+	logic erum, fare, fyte, eget, doge, dado, dupe, duka, ezec, gefe, fyfo, feku, keko, kaba;
+	logic hufu, hano, hake, koru, jade, kyno, kezu;
+	logic cyto, cara, duwo, cowe, boto;
+	logic hesu, heto, hyto, jufy, hevo, hoko, hemy, hafo, aceg, agof, ason, amop;
 	dffr dffr_kaly(jone,       kado,        !kaly,       kaly); // check clk edge
 	dffr dffr_kozy(horu_512hz, koro,        kote,        kozy); // check clk edge
 	dffr dffr_fare(dyfa_1mhz,  erum,        ch1_restart, fare); // check clk edge
@@ -143,8 +131,8 @@ module channel1(
 	assign ch1_out[1]  = ason;
 	assign ch1_out[0]  = amop;
 
-	wire dacu, cylu, copa, caja, byra, buge, copy, atat, BYTE, epuk, evol, femu, egyp, cele, dody, egor, dapu;
-	wire nno_sweep;
+	logic dacu, cylu, copa, caja, byra, buge, copy, atat, BYTE, epuk, evol, femu, egyp, cele, dody, egor, dapu;
+	logic nno_sweep;
 	dffr dffr_byte(ajer_2mhz, atat, copy, BYTE); // check clk edge
 	count count_copa(dapu, cylu, nff10_d0, copa);
 	count count_caja(copa, cylu, nff10_d1, caja);
@@ -166,8 +154,8 @@ module channel1(
 	assign nno_sweep     = buge;
 	assign ch1_shift_clk = egor;
 
-	wire dajo, esut, eros, dape, duvo, ezoz, enek, codo, coso, cava, cevu, caxo, duna;
-	wire ch1_bit;
+	logic dajo, esut, eros, dape, duvo, ezoz, enek, codo, coso, cava, cevu, caxo, duna;
+	logic ch1_bit;
 	dffr dffr_esut(dajo,  napu_reset6, !esut, esut); // check clk edge
 	dffr dffr_eros(!esut, napu_reset6, !eros, eros); // check clk edge
 	dffr dffr_dape(!eros, napu_reset6, !dape, dape); // check clk edge
@@ -183,7 +171,7 @@ module channel1(
 	assign #T_AOI  duna = !((enek && coso) || (ezoz && cava) || (dape && cevu) || (codo && caxo)); // check if this is what is meant by AOI_MUX_4
 	assign ch1_bit = duna;
 
-	wire atuv, boje, buso, kala;
+	logic atuv, boje, buso, kala;
 	assign #T_AND  atuv = bexa && atys;
 	assign #T_AND  boje = atuv && nno_sweep;
 	assign #T_AND  buso = nno_sweep && atys && bexa;

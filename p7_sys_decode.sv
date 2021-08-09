@@ -1,39 +1,28 @@
 `default_nettype none
-`timescale 1ns/100ps
 
 module sys_decode(
-		reset, nreset2, t1, t2, wr_in, rd_b, a, d,
-		cpu_rd_sync, cpu_raw_rd, cpu_wr_raw,
-		from_cpu6, to_cpu_tutu,
-		cpu_wr, cpu_wr2, cpu_rd, cpu_rd2,
-		nt1_nt2, nt1_t2, t1_nt2,
-		ff04_ff07, nff0f_rd, nff0f_wr,
-		hram_cs,
-		anap, bedo, tutu,
-		a00_07, ffxx, nffxx, nfexxffxx, saro,
-		ff60_d1, ff60_d0, boot_cs
+		input      logic [15:0] a,
+		inout  tri logic [7:0]  d,
+
+		input  logic reset, nreset2, t1, t2, wr_in, rd_b,
+		input  logic cpu_rd_sync, cpu_raw_rd, cpu_wr_raw,
+		input  logic from_cpu6,
+		output logic to_cpu_tutu,
+		output logic cpu_wr, cpu_wr2, cpu_rd, cpu_rd2,
+		output logic nt1_nt2, nt1_t2, t1_nt2,
+
+		output logic ff04_ff07, nff0f_rd, nff0f_wr,
+		output logic hram_cs,
+
+		input  logic anap, bedo,
+		output logic tutu,
+		input  logic a00_07,
+		output logic ffxx, nffxx, nfexxffxx, saro,
+		output logic ff60_d1, ff60_d0,
+		output logic boot_cs
 	);
 
-	input  wire reset, nreset2, t1, t2, wr_in, rd_b;
-	input  wire [15:0] a;
-	inout  wire [7:0] d;
-	input  wire cpu_rd_sync, cpu_raw_rd, cpu_wr_raw;
-	input  wire from_cpu6;
-	output wire to_cpu_tutu;
-	output wire cpu_wr, cpu_wr2, cpu_rd, cpu_rd2;
-	output wire nt1_nt2, nt1_t2, t1_nt2;
-
-	output wire ff04_ff07, nff0f_rd, nff0f_wr;
-	output wire hram_cs;
-
-	input  wire anap, bedo;
-	output wire tutu;
-	input  wire a00_07;
-	output wire ffxx, nffxx, nfexxffxx, saro;
-	output wire ff60_d1, ff60_d0;
-	output wire boot_cs;
-
-	wire ubet, uvar, upoj, unor, umut;
+	logic ubet, uvar, upoj, unor, umut;
 	assign #T_INV  ubet = !t1;
 	assign #T_INV  uvar = !t2;
 	assign #T_NAND upoj = !(ubet && uvar && reset);
@@ -43,7 +32,7 @@ module sys_decode(
 	assign nt1_t2  = unor;
 	assign t1_nt2  = umut;
 
-	wire ubal, ujyv, lexy, tapu, tedo, dyky, ajas, cupa, asot, pin_nc;
+	logic ubal, ujyv, lexy, tapu, tedo, dyky, ajas, cupa, asot, pin_nc;
 	assign #T_MUXI ubal = !(nt1_t2 ? wr_in : cpu_rd_sync);
 	assign #T_MUXI ujyv = !(nt1_t2 ? rd_b  : cpu_raw_rd);
 	assign #T_INV  lexy = !from_cpu6;
@@ -59,7 +48,7 @@ module sys_decode(
 	assign cpu_rd  = tedo;
 	assign cpu_rd2 = asot;
 
-	wire ryfo, semy, sapa, rolo, refa;
+	logic ryfo, semy, sapa, rolo, refa;
 	assign #T_AND  ryfo = a[2] && a00_07 && ffxx;
 	assign #T_NOR  semy = !(a[7] || a[6] || a[5] || a[4]);
 	assign #T_AND  sapa = a[0] && a[1] && a[2] && a[3];
@@ -69,10 +58,10 @@ module sys_decode(
 	assign nff0f_rd  = rolo;
 	assign nff0f_wr  = refa;
 
-	wire zyra, zage, zabu, zoke, zera, zufy, zyky, zyga, zovy, zuko, zuvy, zyba, zole, zaje, zubu, zapy;
-	wire zete, zefu, zyro, zapa, bootrom_na7, bootrom_na6, bootrom_na3, bootrom_na2;
-	wire bootrom_na5_na4, bootrom_na5_a4, bootrom_a5_na4, bootrom_a5_a4;
-	wire bootrom_na1_na0, bootrom_na1_a0, bootrom_a1_na0, bootrom_a1_a0;
+	logic zyra, zage, zabu, zoke, zera, zufy, zyky, zyga, zovy, zuko, zuvy, zyba, zole, zaje, zubu, zapy;
+	logic zete, zefu, zyro, zapa, bootrom_na7, bootrom_na6, bootrom_na3, bootrom_na2;
+	logic bootrom_na5_na4, bootrom_na5_a4, bootrom_a5_na4, bootrom_a5_a4;
+	logic bootrom_na1_na0, bootrom_na1_a0, bootrom_a1_na0, bootrom_a1_a0;
 	assign #T_INV  zyra = !a[7];
 	assign #T_INV  zage = !a[6];
 	assign #T_INV  zabu = !a[3];
@@ -106,7 +95,7 @@ module sys_decode(
 	assign bootrom_a1_na0  = zyro;
 	assign bootrom_a1_a0   = zapa;
 
-	wire apet, aper, amut, buro;
+	logic apet, aper, amut, buro;
 	assign #T_OR   apet = nt1_t2 || t1_nt2;
 	assign #T_NAND aper = !(apet && a[5] && a[6] && cpu_wr && anap);
 	dffr dffr_amut(aper, nreset2, d[1], amut); // check edge
@@ -114,16 +103,16 @@ module sys_decode(
 	assign ff60_d1 = amut;
 	assign ff60_d0 = buro;
 
-	wire leco, raru, rowe, ryke, ryne, rase, rejy, reka, romy;
+	logic leco, raru, rowe, ryke, ryne, rase, rejy, reka, romy;
 	assign #T_NOR  leco = !(bedo || nt1_t2);
-	assign #T_TRI  raru = leco ? 1'b1 : 1'bz;
-	assign #T_TRI  rowe = leco ? 1'b1 : 1'bz;
-	assign #T_TRI  ryke = leco ? 1'b1 : 1'bz;
-	assign #T_TRI  ryne = leco ? 1'b1 : 1'bz;
-	assign #T_TRI  rase = leco ? 1'b1 : 1'bz;
-	assign #T_TRI  rejy = leco ? 1'b1 : 1'bz;
-	assign #T_TRI  reka = leco ? 1'b1 : 1'bz;
-	assign #T_TRI  romy = leco ? 1'b1 : 1'bz;
+	assign #T_TRI  raru = leco ? '1 : 'z;
+	assign #T_TRI  rowe = leco ? '1 : 'z;
+	assign #T_TRI  ryke = leco ? '1 : 'z;
+	assign #T_TRI  ryne = leco ? '1 : 'z;
+	assign #T_TRI  rase = leco ? '1 : 'z;
+	assign #T_TRI  rejy = leco ? '1 : 'z;
+	assign #T_TRI  reka = leco ? '1 : 'z;
+	assign #T_TRI  romy = leco ? '1 : 'z;
 	assign d[7] = raru;
 	assign d[5] = rowe;
 	assign d[6] = ryke;
@@ -133,13 +122,13 @@ module sys_decode(
 	assign d[4] = reka;
 	assign d[0] = romy;
 
-	wire wale, woly, wuta;
+	logic wale, woly, wuta;
 	assign #T_NAND wale = !(a[0] && a[1] && a[2] && a[3] && a[4] && a[5] && a[6]);
 	assign #T_NAND woly = !(wale && a[7] && ffxx);
 	assign #T_INV  wuta = !woly;
 	assign hram_cs = woly;
 
-	wire tona, syke, bako, tuna, rycu, rope, soha;
+	logic tona, syke, bako, tuna, rycu, rope, soha;
 	assign #T_INV  tona = !a[8];
 	assign #T_NAND tuna = !(a[15] && a[14] && a[13] && a[12] && a[11] && a[10] && a[9]);
 	assign #T_NOR  syke = !(tona || tuna);
@@ -152,7 +141,7 @@ module sys_decode(
 	assign nffxx     = bako;
 	assign nfexxffxx = tuna;
 
-	wire tyro, tufa, texe, sato, tuge, tepu, sypu, tera, yaza, yula, tulo, zoro, zadu, zufa, zado, zery;
+	logic tyro, tufa, texe, sato, tuge, tepu, sypu, tera, yaza, yula, tulo, zoro, zadu, zufa, zado, zery;
 	dffr dffr_tepu(tuge, nreset2, sato, tepu); // check edge
 	assign #T_NOR  tyro = !(a[7] || a[5] || a[3] || a[2] || a[1] || a[0]);
 	assign #T_AND  tufa = a[4] && a[6];

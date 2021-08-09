@@ -1,44 +1,33 @@
 `default_nettype none
-`timescale 1ns/100ps
 
 module vram_interface(
-		a, ma, ma_out,
-		md, md_in, md_out, md_a,
-		d, d_in, d_a,
-		oam_a_d, oam_b_d,
-		moe_in, mwr_in, mcs_in, moe_a, moe_d, mwr_a, mwr_d, mcs_a, mcs_d, md_b,
-		nt1_t2, dma_run, mopa_phi, nfexxffxx, nreset6, cpu_rd_sync, vram_to_oam, dma_addr_ext, ff40_d4,
-		roru, lula, bedo, saro, tacu, tuvo, acyl, xyso, texo, abuz, afas, texy, myma, lena, xymu, leko,
-		xuha, vyno, vujo, vymu, neta, pore, potu, npyju, npowy, npoju, npulo, npoxa, npyzo, npozo, nrawu,
-		cota, wuko
+		input logic [15:0] a,
+
+		inout  tri logic [12:0] ma,
+		output     logic [12:0] ma_out,
+
+		inout  tri logic [7:0] d,
+		input      logic [7:0] d_in,
+		output     logic [7:0] d_a,
+
+		inout  tri logic [7:0] md,
+		input      logic [7:0] md_in,
+		output     logic [7:0] md_out, md_a,
+
+		inout tri logic [7:0] oam_a_d, oam_b_d,
+
+		input  logic moe_in, mwr_in, mcs_in,
+		output logic moe_a, moe_d, mwr_a, mwr_d, mcs_a, mcs_d, md_b,
+
+		input logic nt1_t2, dma_run, mopa_phi, nfexxffxx, nreset6, cpu_rd_sync, vram_to_oam, dma_addr_ext, ff40_d4,
+
+		input  logic roru, lula, bedo, saro, tacu, tuvo, acyl, xyso, texo, abuz, afas, texy, myma, lena, xymu, leko,
+		input  logic xuha, vyno, vujo, vymu, neta, pore, potu, npyju, npowy, npoju, npulo, npoxa, npyzo, npozo, nrawu,
+		output logic cota, wuko
 	);
 
-	input wire [15:0] a;
-
-	inout  wire [12:0] ma;
-	output wire [12:0] ma_out;
-
-	inout  wire [7:0] d;
-	input  wire [7:0] d_in;
-	output wire [7:0] d_a;
-
-	inout  wire [7:0] md;
-	input  wire [7:0] md_in;
-	output wire [7:0] md_out, md_a;
-
-	output wire [7:0] oam_a_d, oam_b_d;
-
-	input  wire moe_in, mwr_in, mcs_in;
-	output wire moe_a, moe_d, mwr_a, mwr_d, mcs_a, mcs_d, md_b;
-
-	input wire nt1_t2, dma_run, mopa_phi, nfexxffxx, nreset6, cpu_rd_sync, vram_to_oam, dma_addr_ext, ff40_d4;
-
-	input  wire roru, lula, bedo, saro, tacu, tuvo, acyl, xyso, texo, abuz, afas, texy, myma, lena, xymu, leko;
-	input  wire xuha, vyno, vujo, vymu, neta, pore, potu, npyju, npowy, npoju, npulo, npoxa, npyzo, npozo, nrawu;
-	output wire cota, wuko;
-
-	wire reho, pony, ruma, pedu, ruky, nuva, vode, tago, vova, tujy, mume, luby, mewy;
-	wire lefa, mysa, lalo, mepa, loly, mavu, luvo, myre, laca, masa, lozu, myfu, lexe;
+	logic reho, pony, ruma, pedu, ruky, nuva, vode, tago, vova, tujy, mume, luby, mewy;
+	logic lefa, mysa, lalo, mepa, loly, mavu, luvo, myre, laca, masa, lozu, myfu, lexe;
 	assign #T_INV  reho = !ma[12];
 	assign #T_INV  ruma = !ma[11];
 	assign #T_INV  ruky = !ma[10];
@@ -79,7 +68,7 @@ module vram_interface(
 	assign ma_out[1]  = lozu;
 	assign ma_out[0]  = lexe;
 
-	wire ryvo, rera, raby, rory, ruja, ravu, rafy, ruxa;
+	logic ryvo, rera, raby, rory, ruja, ravu, rafy, ruxa;
 	assign #T_NAND ryvo = !(d[5] && lula);
 	assign #T_NAND rera = !(d[3] && lula);
 	assign #T_NAND raby = !(d[2] && lula);
@@ -97,7 +86,7 @@ module vram_interface(
 	assign d_a[6] = rafy;
 	assign d_a[0] = ruxa;
 
-	wire cufe, vape, aver, xujy, bycu;
+	logic cufe, vape, aver, xujy, bycu;
 	assign #T_NAO  cufe = !((saro && dma_run) || mopa_phi);
 	assign #T_AND  vape = tacu && tuvo;
 	assign #T_AND  aver = acyl && xyso;
@@ -105,7 +94,7 @@ module vram_interface(
 	assign #T_NOR  bycu = !(cufe || xujy || aver);
 	assign #T_INV  cota = !bycu;
 
-	wire syro, tefa, sose, tuca, tuja, tegu, tavy, sycy, soto, tuto, sudo, tefy, sale, tyjy, tole;
+	logic syro, tefa, sose, tuca, tuja, tegu, tavy, sycy, soto, tuto, sudo, tefy, sale, tyjy, tole;
 	dffr dffr_soto(sycy, nreset6, !soto, soto); // check edge
 	assign #T_INV  syro = !nfexxffxx;
 	assign #T_NOR  tefa = !(syro || texo);
@@ -122,8 +111,8 @@ module vram_interface(
 	assign #T_MUX  tyjy = tuto ? sudo : tuja;
 	assign #T_MUX  tole = tuto ? tefy : tuca;
 
-	wire soho, rawa, raco, rylu, racu, apam, ruvy, sohy, sutu, sere, sazo, ropy, ryje, revo, rela, rocy;
-	wire rena, rahu, rofa, rute, sema, sofy, taxy, sewo, tode, saha, refo, ragu, sysy, sety, soky;
+	logic soho, rawa, raco, rylu, racu, apam, ruvy, sohy, sutu, sere, sazo, ropy, ryje, revo, rela, rocy;
+	logic rena, rahu, rofa, rute, sema, sofy, taxy, sewo, tode, saha, refo, ragu, sysy, sety, soky;
 	assign #T_AND  soho = tacu && texy;
 	assign #T_INV  rawa = !soho;
 	assign #T_NAND rylu = !(sale && ropy);
@@ -163,15 +152,15 @@ module vram_interface(
 	assign mcs_a = soky;
 	assign md_b = rofa;
 
-	wire raku, roce, remo, ropu, reta, rydo, rody, reba;
-	assign #T_TRI  raku = rena ? !md_in[7] : 1'bz;
-	assign #T_TRI  roce = rena ? !md_in[4] : 1'bz;
-	assign #T_TRI  remo = rena ? !md_in[3] : 1'bz;
-	assign #T_TRI  ropu = rena ? !md_in[5] : 1'bz;
-	assign #T_TRI  reta = rena ? !md_in[6] : 1'bz;
-	assign #T_TRI  rydo = rena ? !md_in[2] : 1'bz;
-	assign #T_TRI  rody = rena ? !md_in[0] : 1'bz;
-	assign #T_TRI  reba = rena ? !md_in[1] : 1'bz;
+	logic raku, roce, remo, ropu, reta, rydo, rody, reba;
+	assign #T_TRI  raku = rena ? !md_in[7] : 'z;
+	assign #T_TRI  roce = rena ? !md_in[4] : 'z;
+	assign #T_TRI  remo = rena ? !md_in[3] : 'z;
+	assign #T_TRI  ropu = rena ? !md_in[5] : 'z;
+	assign #T_TRI  reta = rena ? !md_in[6] : 'z;
+	assign #T_TRI  rydo = rena ? !md_in[2] : 'z;
+	assign #T_TRI  rody = rena ? !md_in[0] : 'z;
+	assign #T_TRI  reba = rena ? !md_in[1] : 'z;
 	assign md[7] = raku;
 	assign md[4] = roce;
 	assign md[3] = remo;
@@ -181,18 +170,18 @@ module vram_interface(
 	assign md[0] = rody;
 	assign md[1] = reba;
 
-	wire runy, tuso, sole, tahy, tesu, taxo, tovu, tazu, tewa, sosa, sedu;
-	assign         runy = 1'b1;
+	logic runy, tuso, sole, tahy, tesu, taxo, tovu, tazu, tewa, sosa, sedu;
+	assign         runy = 1;
 	assign #T_NOR  tuso = !(nt1_t2 || bedo);
 	assign #T_INV  sole = !tuso;
-	assign #T_TRI  tahy = !runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  tesu = !runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  taxo = !runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  tovu = !runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  tazu = !runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  tewa = !runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  sosa = !runy ? !sole : 1'bz; // check enable input polarity
-	assign #T_TRI  sedu = !runy ? !sole : 1'bz; // check enable input polarity
+	assign #T_TRI  tahy = !runy ? !sole : 'z; // check enable input polarity
+	assign #T_TRI  tesu = !runy ? !sole : 'z; // check enable input polarity
+	assign #T_TRI  taxo = !runy ? !sole : 'z; // check enable input polarity
+	assign #T_TRI  tovu = !runy ? !sole : 'z; // check enable input polarity
+	assign #T_TRI  tazu = !runy ? !sole : 'z; // check enable input polarity
+	assign #T_TRI  tewa = !runy ? !sole : 'z; // check enable input polarity
+	assign #T_TRI  sosa = !runy ? !sole : 'z; // check enable input polarity
+	assign #T_TRI  sedu = !runy ? !sole : 'z; // check enable input polarity
 	assign d[4] = tahy;
 	assign d[5] = tesu;
 	assign d[3] = taxo;
@@ -202,22 +191,22 @@ module vram_interface(
 	assign d[1] = sosa;
 	assign d[2] = sedu;
 
-	wire xane, xedu, xeca, xybo, rysu, ruse, rumo, xyne, xoba, xody, ryna, rese, xaky, xopo, xuxu;
+	logic xane, xedu, xeca, xybo, rysu, ruse, rumo, xyne, xoba, xody, ryna, rese, xaky, xopo, xuxu;
 	assign #T_NOR  xane = !(vram_to_oam || xymu);
 	assign #T_INV  xedu = !xane;
-	assign #T_TRI  xeca = !xedu ? !a[4]  : 1'bz;
-	assign #T_TRI  xybo = !xedu ? !a[7]  : 1'bz;
-	assign #T_TRI  rysu = !xedu ? !a[8]  : 1'bz;
-	assign #T_TRI  ruse = !xedu ? !a[10] : 1'bz;
-	assign #T_TRI  rumo = !xedu ? !a[12] : 1'bz;
-	assign #T_TRI  xyne = !xedu ? !a[2]  : 1'bz;
-	assign #T_TRI  xoba = !xedu ? !a[5]  : 1'bz;
-	assign #T_TRI  xody = !xedu ? !a[3]  : 1'bz;
-	assign #T_TRI  ryna = !xedu ? !a[11] : 1'bz;
-	assign #T_TRI  rese = !xedu ? !a[9]  : 1'bz;
-	assign #T_TRI  xaky = !xedu ? !a[0]  : 1'bz;
-	assign #T_TRI  xopo = !xedu ? !a[6]  : 1'bz;
-	assign #T_TRI  xuxu = !xedu ? !a[1]  : 1'bz;
+	assign #T_TRI  xeca = !xedu ? !a[4]  : 'z;
+	assign #T_TRI  xybo = !xedu ? !a[7]  : 'z;
+	assign #T_TRI  rysu = !xedu ? !a[8]  : 'z;
+	assign #T_TRI  ruse = !xedu ? !a[10] : 'z;
+	assign #T_TRI  rumo = !xedu ? !a[12] : 'z;
+	assign #T_TRI  xyne = !xedu ? !a[2]  : 'z;
+	assign #T_TRI  xoba = !xedu ? !a[5]  : 'z;
+	assign #T_TRI  xody = !xedu ? !a[3]  : 'z;
+	assign #T_TRI  ryna = !xedu ? !a[11] : 'z;
+	assign #T_TRI  rese = !xedu ? !a[9]  : 'z;
+	assign #T_TRI  xaky = !xedu ? !a[0]  : 'z;
+	assign #T_TRI  xopo = !xedu ? !a[6]  : 'z;
+	assign #T_TRI  xuxu = !xedu ? !a[1]  : 'z;
 	assign ma[4]  = xeca;
 	assign ma[7]  = xybo;
 	assign ma[8]  = rysu;
@@ -232,8 +221,8 @@ module vram_interface(
 	assign ma[6]  = xopo;
 	assign ma[1]  = xuxu;
 
-	wire lyra, ryba, ruzy, rome, tehe, soca, ratu, tovo, saza;
-	wire ropa, sywa, sugu, tute, temy, sajo, tuty, tawo;
+	logic lyra, ryba, ruzy, rome, tehe, soca, ratu, tovo, saza;
+	logic ropa, sywa, sugu, tute, temy, sajo, tuty, tawo;
 	assign #T_NAND lyra = !(nt1_t2 && roru);
 	assign #T_INV  ryba = !d_in[7];
 	assign #T_INV  ruzy = !d_in[1];
@@ -243,14 +232,14 @@ module vram_interface(
 	assign #T_INV  ratu = !d_in[5];
 	assign #T_INV  tovo = !d_in[0];
 	assign #T_INV  saza = !d_in[3];
-	assign #T_TRI  ropa = !lyra ? !ryba : 1'bz; // check enable input polarity
-	assign #T_TRI  sywa = !lyra ? !ruzy : 1'bz; // check enable input polarity
-	assign #T_TRI  sugu = !lyra ? !rome : 1'bz; // check enable input polarity
-	assign #T_TRI  tute = !lyra ? !tehe : 1'bz; // check enable input polarity
-	assign #T_TRI  temy = !lyra ? !soca : 1'bz; // check enable input polarity
-	assign #T_TRI  sajo = !lyra ? !ratu : 1'bz; // check enable input polarity
-	assign #T_TRI  tuty = !lyra ? !tovo : 1'bz; // check enable input polarity
-	assign #T_TRI  tawo = !lyra ? !saza : 1'bz; // check enable input polarity
+	assign #T_TRI  ropa = !lyra ? !ryba : 'z; // check enable input polarity
+	assign #T_TRI  sywa = !lyra ? !ruzy : 'z; // check enable input polarity
+	assign #T_TRI  sugu = !lyra ? !rome : 'z; // check enable input polarity
+	assign #T_TRI  tute = !lyra ? !tehe : 'z; // check enable input polarity
+	assign #T_TRI  temy = !lyra ? !soca : 'z; // check enable input polarity
+	assign #T_TRI  sajo = !lyra ? !ratu : 'z; // check enable input polarity
+	assign #T_TRI  tuty = !lyra ? !tovo : 'z; // check enable input polarity
+	assign #T_TRI  tawo = !lyra ? !saza : 'z; // check enable input polarity
 	assign d[7] = ropa;
 	assign d[1] = sywa;
 	assign d[2] = sugu;
@@ -260,7 +249,7 @@ module vram_interface(
 	assign d[0] = tuty;
 	assign d[3] = tawo;
 
-	wire rove, sefa, suna, sumo, suke, samo, sogo, sazu, sefu, rege, rada, ryro, ryze, reku, ryky, revu, razo;
+	logic rove, sefa, suna, sumo, suke, samo, sogo, sazu, sefu, rege, rada, ryro, ryze, reku, ryky, revu, razo;
 	assign #T_INV  rove = !rahu;
 	assign #T_AND  sefa = md[0] && rove;
 	assign #T_AND  suna = md[3] && rove;
@@ -287,8 +276,8 @@ module vram_interface(
 	assign md_a[5] = revu;
 	assign md_a[2] = razo;
 
-	wire cede, syzo, tune, sera, sysa, tube, sugy, ralo, tenu;
-	wire bape, bypy, bomo, bubo, basa, betu, buma, baxu, basy, byny, bupy, buhu, wasa, wejo, cako, cyme;
+	logic cede, syzo, tune, sera, sysa, tube, sugy, ralo, tenu;
+	logic bape, bypy, bomo, bubo, basa, betu, buma, baxu, basy, byny, bupy, buhu, wasa, wejo, cako, cyme;
 	assign #T_INV  cede = !dma_addr_ext;
 	assign #T_INV  syzo = !d_in[7];
 	assign #T_INV  tune = !d_in[1];
@@ -298,22 +287,22 @@ module vram_interface(
 	assign #T_INV  sugy = !d_in[5];
 	assign #T_INV  ralo = !d_in[0];
 	assign #T_INV  tenu = !d_in[3];
-	assign #T_TRI  bape = !cede ? !syzo : 1'bz;
-	assign #T_TRI  bypy = !cede ? !syzo : 1'bz;
-	assign #T_TRI  bomo = !cede ? !tune : 1'bz;
-	assign #T_TRI  bubo = !cede ? !tune : 1'bz;
-	assign #T_TRI  basa = !cede ? !sera : 1'bz;
-	assign #T_TRI  betu = !cede ? !sera : 1'bz;
-	assign #T_TRI  buma = !cede ? !sysa : 1'bz;
-	assign #T_TRI  baxu = !cede ? !sysa : 1'bz;
-	assign #T_TRI  basy = !cede ? !tube : 1'bz;
-	assign #T_TRI  byny = !cede ? !tube : 1'bz;
-	assign #T_TRI  bupy = !cede ? !sugy : 1'bz;
-	assign #T_TRI  buhu = !cede ? !sugy : 1'bz;
-	assign #T_TRI  wasa = !cede ? !ralo : 1'bz;
-	assign #T_TRI  wejo = !cede ? !ralo : 1'bz;
-	assign #T_TRI  cako = !cede ? !tenu : 1'bz;
-	assign #T_TRI  cyme = !cede ? !tenu : 1'bz;
+	assign #T_TRI  bape = !cede ? !syzo : 'z;
+	assign #T_TRI  bypy = !cede ? !syzo : 'z;
+	assign #T_TRI  bomo = !cede ? !tune : 'z;
+	assign #T_TRI  bubo = !cede ? !tune : 'z;
+	assign #T_TRI  basa = !cede ? !sera : 'z;
+	assign #T_TRI  betu = !cede ? !sera : 'z;
+	assign #T_TRI  buma = !cede ? !sysa : 'z;
+	assign #T_TRI  baxu = !cede ? !sysa : 'z;
+	assign #T_TRI  basy = !cede ? !tube : 'z;
+	assign #T_TRI  byny = !cede ? !tube : 'z;
+	assign #T_TRI  bupy = !cede ? !sugy : 'z;
+	assign #T_TRI  buhu = !cede ? !sugy : 'z;
+	assign #T_TRI  wasa = !cede ? !ralo : 'z;
+	assign #T_TRI  wejo = !cede ? !ralo : 'z;
+	assign #T_TRI  cako = !cede ? !tenu : 'z;
+	assign #T_TRI  cyme = !cede ? !tenu : 'z;
 	assign oam_b_d[7] = bape;
 	assign oam_a_d[7] = bypy;
 	assign oam_b_d[1] = bomo;
@@ -331,7 +320,7 @@ module vram_interface(
 	assign oam_b_d[3] = cako;
 	assign oam_a_d[3] = cyme;
 
-	wire tyvy, seby, roro, rery, rona, runa, runo, same, sana, rabo, rexu, ruga, rybu, rota, raju, toku, tyja, rupy;
+	logic tyvy, seby, roro, rery, rona, runa, runo, same, sana, rabo, rexu, ruga, rybu, rota, raju, toku, tyja, rupy;
 	assign #T_NAND tyvy = !(sere && leko);
 	assign #T_INV  seby = !tyvy;
 	assign #T_INV  roro = !md[5];
@@ -342,14 +331,14 @@ module vram_interface(
 	assign #T_INV  same = !md[7];
 	assign #T_INV  sana = !md[4];
 	assign #T_INV  rabo = !md[6];
-	assign #T_TRI  rexu = seby ? !roro : 1'bz;
-	assign #T_TRI  ruga = seby ? !rery : 1'bz;
-	assign #T_TRI  rybu = seby ? !rona : 1'bz;
-	assign #T_TRI  rota = seby ? !runa : 1'bz;
-	assign #T_TRI  raju = seby ? !runo : 1'bz;
-	assign #T_TRI  toku = seby ? !same : 1'bz;
-	assign #T_TRI  tyja = seby ? !sana : 1'bz;
-	assign #T_TRI  rupy = seby ? !rabo : 1'bz;
+	assign #T_TRI  rexu = seby ? !roro : 'z;
+	assign #T_TRI  ruga = seby ? !rery : 'z;
+	assign #T_TRI  rybu = seby ? !rona : 'z;
+	assign #T_TRI  rota = seby ? !runa : 'z;
+	assign #T_TRI  raju = seby ? !runo : 'z;
+	assign #T_TRI  toku = seby ? !same : 'z;
+	assign #T_TRI  tyja = seby ? !sana : 'z;
+	assign #T_TRI  rupy = seby ? !rabo : 'z;
 	assign d[5] = rexu;
 	assign d[0] = ruga;
 	assign d[2] = rybu;
@@ -359,26 +348,26 @@ module vram_interface(
 	assign d[4] = tyja;
 	assign d[6] = rupy;
 
-	wire xonu, wudo, wawe, wolu, xucy, xeze;
-	assign #T_TRI  xonu = !xucy ? !xuha : 1'bz;
-	assign #T_TRI  wudo = !xucy ? !vyno : 1'bz;
-	assign #T_TRI  wawe = !xucy ? !vujo : 1'bz;
-	assign #T_TRI  wolu = !xucy ? !vymu : 1'bz;
+	logic xonu, wudo, wawe, wolu, xucy, xeze;
+	assign #T_TRI  xonu = !xucy ? !xuha : 'z;
+	assign #T_TRI  wudo = !xucy ? !vyno : 'z;
+	assign #T_TRI  wawe = !xucy ? !vujo : 'z;
+	assign #T_TRI  wolu = !xucy ? !vymu : 'z;
 	assign #T_NAND xucy = !(neta && pore);
 	assign #T_AND  xeze = potu && pore;
 	assign #T_INV  wuko = !xeze;
 
-	wire teme, tewu, tygo, sote, seke, rujo, tofa, suza;
-	wire synu, syma, roko, sybu, sako, sejy, sedo, sawu;
-	wire rura, ruly, rare, rodu, rube, rumu, ryty, rady;
-	assign #T_TRI  teme = !rahu ? !d[0] : 1'bz; // check enable input polarity
-	assign #T_TRI  tewu = !rahu ? !d[1] : 1'bz; // check enable input polarity
-	assign #T_TRI  tygo = !rahu ? !d[2] : 1'bz; // check enable input polarity
-	assign #T_TRI  sote = !rahu ? !d[3] : 1'bz; // check enable input polarity
-	assign #T_TRI  seke = !rahu ? !d[4] : 1'bz; // check enable input polarity
-	assign #T_TRI  rujo = !rahu ? !d[5] : 1'bz; // check enable input polarity
-	assign #T_TRI  tofa = !rahu ? !d[6] : 1'bz; // check enable input polarity
-	assign #T_TRI  suza = !rahu ? !d[7] : 1'bz; // check enable input polarity
+	logic teme, tewu, tygo, sote, seke, rujo, tofa, suza;
+	logic synu, syma, roko, sybu, sako, sejy, sedo, sawu;
+	logic rura, ruly, rare, rodu, rube, rumu, ryty, rady;
+	assign #T_TRI  teme = !rahu ? !d[0] : 'z; // check enable input polarity
+	assign #T_TRI  tewu = !rahu ? !d[1] : 'z; // check enable input polarity
+	assign #T_TRI  tygo = !rahu ? !d[2] : 'z; // check enable input polarity
+	assign #T_TRI  sote = !rahu ? !d[3] : 'z; // check enable input polarity
+	assign #T_TRI  seke = !rahu ? !d[4] : 'z; // check enable input polarity
+	assign #T_TRI  rujo = !rahu ? !d[5] : 'z; // check enable input polarity
+	assign #T_TRI  tofa = !rahu ? !d[6] : 'z; // check enable input polarity
+	assign #T_TRI  suza = !rahu ? !d[7] : 'z; // check enable input polarity
 	assign #T_OR   synu = rahu || md[0];
 	assign #T_OR   syma = rahu || md[1];
 	assign #T_OR   roko = rahu || md[2];
@@ -412,17 +401,17 @@ module vram_interface(
 	assign md_out[6] = ryty;
 	assign md_out[7] = rady;
 
-	wire vuza, vury, tobo, suvo, reso, roha, rusa, vejy, sezu, vapy;
+	logic vuza, vury, tobo, suvo, reso, roha, rusa, vejy, sezu, vapy;
 	assign #T_NOR  vuza = !(ff40_d4 || npyju);
-	assign #T_TRI  vury = neta ? !vuza  : 1'bz;
-	assign #T_TRI  tobo = neta ? !npyju : 1'bz;
-	assign #T_TRI  suvo = neta ? !npowy : 1'bz;
-	assign #T_TRI  reso = neta ? !npoju : 1'bz;
-	assign #T_TRI  roha = neta ? !npulo : 1'bz;
-	assign #T_TRI  rusa = neta ? !npoxa : 1'bz;
-	assign #T_TRI  vejy = neta ? !npyzo : 1'bz;
-	assign #T_TRI  sezu = neta ? !npozo : 1'bz;
-	assign #T_TRI  vapy = neta ? !nrawu : 1'bz;
+	assign #T_TRI  vury = neta ? !vuza  : 'z;
+	assign #T_TRI  tobo = neta ? !npyju : 'z;
+	assign #T_TRI  suvo = neta ? !npowy : 'z;
+	assign #T_TRI  reso = neta ? !npoju : 'z;
+	assign #T_TRI  roha = neta ? !npulo : 'z;
+	assign #T_TRI  rusa = neta ? !npoxa : 'z;
+	assign #T_TRI  vejy = neta ? !npyzo : 'z;
+	assign #T_TRI  sezu = neta ? !npozo : 'z;
+	assign #T_TRI  vapy = neta ? !nrawu : 'z;
 	assign ma[12] = vury;
 	assign ma[11] = tobo;
 	assign ma[10] = suvo;

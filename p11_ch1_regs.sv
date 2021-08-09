@@ -1,37 +1,26 @@
 `default_nettype none
-`timescale 1ns/100ps
 
 module ch1_regs(
-		d, apu_wr, cpu_rd, ncpu_rd, apu_reset, napu_reset, napu_reset6,
-		ff10, ff11, ff12, ff13, ff14,
-		nff10_d0, nff10_d1, nff10_d2, nff10_d3, nff10_d4, nff10_d5, nff10_d6,
-		ff11_d6, ff11_d7, nff11_d6, nff11_d7,
-		ff12_d0, ff12_d1, ff12_d2, ff12_d3, ff12_d4, ff12_d5, ff12_d6, ff12_d7,
-		nff12_d0, nff12_d1, nff12_d2, nff12_d3,
-		ff14_d6, nff14_d6,
-		acc_d, ch1_restart, dyfa_1mhz, net03,
-		anuj, cope, gexu, copu
+		inout tri logic [7:0] d,
+
+		input logic apu_wr, cpu_rd, ncpu_rd, apu_reset, napu_reset, napu_reset6,
+		input logic ff10, ff11, ff12, ff13, ff14,
+
+		output logic nff10_d0, nff10_d1, nff10_d2, nff10_d3, nff10_d4, nff10_d5, nff10_d6,
+		output logic ff11_d6, ff11_d7, nff11_d6, nff11_d7,
+		output logic ff12_d0, ff12_d1, ff12_d2, ff12_d3, ff12_d4, ff12_d5, ff12_d6, ff12_d7,
+		output logic nff12_d0, nff12_d1, nff12_d2, nff12_d3,
+		output logic ff14_d6, nff14_d6,
+
+		input  logic [10:0] acc_d,
+		input  logic ch1_restart, dyfa_1mhz, net03,
+		input  logic anuj, cope, gexu,
+		output logic copu
 	);
 
-	inout wire [7:0] d;
-
-	input wire apu_wr, cpu_rd, ncpu_rd, apu_reset, napu_reset, napu_reset6;
-	input wire ff10, ff11, ff12, ff13, ff14;
-
-	output wire nff10_d0, nff10_d1, nff10_d2, nff10_d3, nff10_d4, nff10_d5, nff10_d6;
-	output wire ff11_d6, ff11_d7, nff11_d6, nff11_d7;
-	output wire ff12_d0, ff12_d1, ff12_d2, ff12_d3, ff12_d4, ff12_d5, ff12_d6, ff12_d7;
-	output wire nff12_d0, nff12_d1, nff12_d2, nff12_d3;
-	output wire ff14_d6, nff14_d6;
-
-	input  wire [10:0] acc_d;
-	input  wire ch1_restart, dyfa_1mhz, net03;
-	input  wire anuj, cope, gexu;
-	output wire copu;
-
-	wire gago, hocu, gaxu, kagy, hato, haxe, hamy, hafu, kygy;
-	wire jopu, jena, jaxo, jaty, jafy, jusa, juzy, joma;
-	wire jyse, heve, hewa, howu, hono, jyne, jaca, joku;
+	logic gago, hocu, gaxu, kagy, hato, haxe, hamy, hafu, kygy;
+	logic jopu, jena, jaxo, jaty, jafy, jusa, juzy, joma;
+	logic jyse, heve, hewa, howu, hono, jyne, jaca, joku;
 	dffr dffr_jopu(kagy, hato, d[7], jopu); // check clk edge
 	dffr dffr_jena(kagy, hato, d[6], jena); // check clk edge
 	dffr dffr_jaxo(kagy, hato, d[5], jaxo); // check clk edge
@@ -49,14 +38,14 @@ module ch1_regs(
 	assign #T_OR   hamy = haxe || ncpu_rd;
 	assign #T_AND  hafu = apu_wr && ff12;
 	assign #T_INV  kygy = !hafu;
-	assign #T_TRI  jyse = !hocu ? jopu : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  heve = !hocu ? jopu : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  hewa = !hocu ? jopu : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  howu = !hocu ? jopu : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  hono = !hocu ? jopu : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  jyne = !hocu ? jopu : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  jaca = !hocu ? jopu : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  joku = !hocu ? jopu : 1'bz; /* takes !q output of dff */
+	assign #T_TRI  jyse = !hocu ? jopu : 'z; /* takes !q output of dff */
+	assign #T_TRI  heve = !hocu ? jopu : 'z; /* takes !q output of dff */
+	assign #T_TRI  hewa = !hocu ? jopu : 'z; /* takes !q output of dff */
+	assign #T_TRI  howu = !hocu ? jopu : 'z; /* takes !q output of dff */
+	assign #T_TRI  hono = !hocu ? jopu : 'z; /* takes !q output of dff */
+	assign #T_TRI  jyne = !hocu ? jopu : 'z; /* takes !q output of dff */
+	assign #T_TRI  jaca = !hocu ? jopu : 'z; /* takes !q output of dff */
+	assign #T_TRI  joku = !hocu ? jopu : 'z; /* takes !q output of dff */
 	assign ff12_d7  = jopu;
 	assign ff12_d6  = jena;
 	assign ff12_d5  = jaxo;
@@ -78,20 +67,20 @@ module ch1_regs(
 	assign d[1] = jaca;
 	assign d[2] = joku;
 
-	wire buda, bale, bage, camy, boko, bytu;
+	logic buda, bale, bage, camy, boko, bytu;
 	dffr dffr_boko(bage, camy, d[6], boko); // check clk edge
 	assign #T_INV  buda = !cpu_rd;
 	assign #T_NAND bale = !(buda && ff14);
 	assign #T_NAND bage = !(anuj && ff14);
 	assign #T_INV  camy = !apu_reset;
-	assign #T_TRI  bytu = !bale ? boko : 1'bz; /* takes !q output of dff */
+	assign #T_TRI  bytu = !bale ? boko : 'z; /* takes !q output of dff */
 	assign ff14_d6  = boko;
 	assign nff14_d6 = !boko;
 	assign d[6] = bytu;
 
-	wire cege, daxa, caca, dypu, evaj, epyk, fume, fulo, geku, dega, kype, cure, dako, deru, dupy;
-	wire gaxe, hyfe, jyty, kyna, jema, hyke, feva, ekov, emus, evak;
-	wire foru, gefu, kyvu, kumo, kary, gode, goje, foze, dopa, demu, dexo;
+	logic cege, daxa, caca, dypu, evaj, epyk, fume, fulo, geku, dega, kype, cure, dako, deru, dupy;
+	logic gaxe, hyfe, jyty, kyna, jema, hyke, feva, ekov, emus, evak;
+	logic foru, gefu, kyvu, kumo, kary, gode, goje, foze, dopa, demu, dexo;
 	count count_gaxe(geku, fume, acc_d[0],  gaxe);
 	count count_hyfe(gaxe, fume, acc_d[1],  hyfe);
 	count count_jyty(hyfe, fume, acc_d[2],  jyty);
@@ -118,17 +107,17 @@ module ch1_regs(
 	assign #T_OR   dupy = cure || daxa;
 	assign #T_INV  dako = !epyk;
 	assign #T_INV  deru = ekov; /* takes !q output of count */
-	assign #T_TRI  foru = !evaj ? gaxe : 1'bz; /* takes !q output of count */
-	assign #T_TRI  gefu = !evaj ? hyfe : 1'bz; /* takes !q output of count */
-	assign #T_TRI  kyvu = !evaj ? jyty : 1'bz; /* takes !q output of count */
-	assign #T_TRI  kumo = !evaj ? kyna : 1'bz; /* takes !q output of count */
-	assign #T_TRI  kary = !evaj ? jema : 1'bz; /* takes !q output of count */
-	assign #T_TRI  gode = !evaj ? hyke : 1'bz; /* takes !q output of count */
-	assign #T_TRI  goje = !evaj ? feva : 1'bz; /* takes !q output of count */
-	assign #T_TRI  foze = !evaj ? ekov : 1'bz; /* takes !q output of count */
-	assign #T_TRI  dopa = !dupy ? emus : 1'bz; /* takes !q output of count */
-	assign #T_TRI  demu = !dupy ? evak : 1'bz; /* takes !q output of count */
-	assign #T_TRI  dexo = !dupy ? copu : 1'bz; /* takes !q output of count */
+	assign #T_TRI  foru = !evaj ? gaxe : 'z; /* takes !q output of count */
+	assign #T_TRI  gefu = !evaj ? hyfe : 'z; /* takes !q output of count */
+	assign #T_TRI  kyvu = !evaj ? jyty : 'z; /* takes !q output of count */
+	assign #T_TRI  kumo = !evaj ? kyna : 'z; /* takes !q output of count */
+	assign #T_TRI  kary = !evaj ? jema : 'z; /* takes !q output of count */
+	assign #T_TRI  gode = !evaj ? hyke : 'z; /* takes !q output of count */
+	assign #T_TRI  goje = !evaj ? feva : 'z; /* takes !q output of count */
+	assign #T_TRI  foze = !evaj ? ekov : 'z; /* takes !q output of count */
+	assign #T_TRI  dopa = !dupy ? emus : 'z; /* takes !q output of count */
+	assign #T_TRI  demu = !dupy ? evak : 'z; /* takes !q output of count */
+	assign #T_TRI  dexo = !dupy ? copu : 'z; /* takes !q output of count */
 	assign d[0] = foru;
 	assign d[1] = gefu;
 	assign d[2] = kyvu;
@@ -141,8 +130,8 @@ module ch1_regs(
 	assign d[1] = demu;
 	assign d[2] = dexo;
 
-	wire cenu, buze, atyn, asop;
-	wire bany, anaz, botu, avaf, arax, adek, bana, amyd, azyp, awos, afox, atax, avek, akux;
+	logic cenu, buze, atyn, asop;
+	logic bany, anaz, botu, avaf, arax, adek, bana, amyd, azyp, awos, afox, atax, avek, akux;
 	dffr dffr_bany(cenu, napu_reset, d[0], bany); // check clk edge
 	dffr dffr_anaz(cenu, napu_reset, d[2], anaz); // check clk edge
 	dffr dffr_botu(cenu, napu_reset, d[6], botu); // check clk edge
@@ -154,13 +143,13 @@ module ch1_regs(
 	assign #T_INV  buze = !ff10;
 	assign #T_NOR  atyn = !(ncpu_rd || buze);
 	assign #T_INV  asop = !atyn;
-	assign #T_TRI  amyd = !asop ? bany : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  azyp = !asop ? anaz : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  awos = !asop ? botu : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  afox = !asop ? avaf : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  atax = !asop ? arax : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  avek = !asop ? adek : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  akux = !asop ? bana : 1'bz; /* takes !q output of dff */
+	assign #T_TRI  amyd = !asop ? bany : 'z; /* takes !q output of dff */
+	assign #T_TRI  azyp = !asop ? anaz : 'z; /* takes !q output of dff */
+	assign #T_TRI  awos = !asop ? botu : 'z; /* takes !q output of dff */
+	assign #T_TRI  afox = !asop ? avaf : 'z; /* takes !q output of dff */
+	assign #T_TRI  atax = !asop ? arax : 'z; /* takes !q output of dff */
+	assign #T_TRI  avek = !asop ? adek : 'z; /* takes !q output of dff */
+	assign #T_TRI  akux = !asop ? bana : 'z; /* takes !q output of dff */
 	assign nff10_d0 = !bany;
 	assign nff10_d2 = !anaz;
 	assign nff10_d6 = !botu;
@@ -176,15 +165,15 @@ module ch1_regs(
 	assign d[4] = avek;
 	assign d[5] = akux;
 
-	wire buwa, bexu, covu, dafo, cena, dyca, bowo, cuda;
+	logic buwa, bexu, covu, dafo, cena, dyca, bowo, cuda;
 	dffr dffr_cena(dafo, napu_reset6, d[6], cena); // check clk edge
 	dffr dffr_dyca(dafo, napu_reset6, d[7], dyca); // check clk edge
 	assign #T_INV  buwa = !ncpu_rd;
 	assign #T_NOR  bexu = !(buwa || ff11);
 	assign #T_AND  covu = apu_wr && ff11;
 	assign #T_INV  dafo = !covu;
-	assign #T_TRI  bowo = !bexu ? cena : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  cuda = !bexu ? dyca : 1'bz; /* takes !q output of dff */
+	assign #T_TRI  bowo = !bexu ? cena : 'z; /* takes !q output of dff */
+	assign #T_TRI  cuda = !bexu ? dyca : 'z; /* takes !q output of dff */
 	assign ff11_d6  = cena;
 	assign nff11_d6 = !cena;
 	assign ff11_d7  = dyca;

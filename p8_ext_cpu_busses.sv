@@ -1,36 +1,26 @@
 `default_nettype none
-`timescale 1ns/100ps
 
 module ext_cpu_busses(
-		d, d_in, d_d,
-		a, a_c, a_a, a_d, dma_a,
-		wr_a, wr_c, rd_a, rd_c,
-		from_cpu3, from_cpu4, from_cpu5,
-		cpu_raw_rd, cpu_rd_sync,
-		cpu_rd, t1_nt2, nt1_t2, dma_addr_ext,
-		abuz, tutu, texo, roru, lula, nfexxffxx,
-		ncs_out, tola_na1
+		inout  tri logic [7:0]  d,
+		input      logic [7:0]  d_in,
+		output     logic [7:0]  d_d,
+		inout  tri logic [15:0] a,
+		input      logic [15:0] a_c, dma_a,
+		output     logic [15:0] a_a, a_d,
+
+		output logic wr_a, wr_c, rd_a, rd_c,
+
+		input logic from_cpu3, from_cpu4, from_cpu5,
+		input logic cpu_raw_rd, cpu_rd_sync,
+		input logic cpu_rd, t1_nt2, nt1_t2, dma_addr_ext,
+
+		input  logic abuz, tutu, nfexxffxx,
+		output logic texo, roru, lula,
+
+		output logic ncs_out, tola_na1
 	);
 
-	inout  wire [7:0]  d;
-	input  wire [7:0]  d_in;
-	output wire [7:0]  d_d;
-	inout  wire [15:0] a;
-	input  wire [15:0] a_c, dma_a;
-	output wire [15:0] a_a, a_d;
-
-	output wire wr_a, wr_c, rd_a, rd_c;
-
-	input wire from_cpu3, from_cpu4, from_cpu5;
-	input wire cpu_raw_rd, cpu_rd_sync;
-	input wire cpu_rd, t1_nt2, nt1_t2, dma_addr_ext;
-
-	input  wire abuz, tutu, nfexxffxx;
-	output wire texo, roru, lula;
-
-	output wire ncs_out, tola_na1;
-
-	wire sogy, tuma, tynu, toza, soby, sepy, ryca, raza, syzu, tyho, tazy, rulo, suze;
+	logic sogy, tuma, tynu, toza, soby, sepy, ryca, raza, syzu, tyho, tazy, rulo, suze;
 	assign #T_INV  sogy = !a[14];
 	assign #T_AND  tuma = a[13] && sogy && a[15];
 	assign #T_AO   tynu = (a[15] && a[14]) || tuma;
@@ -39,7 +29,7 @@ module ext_cpu_busses(
 	assign #T_NAND sepy = !(abuz && soby);
 	assign #T_INV  ryca = !nt1_t2;
 	assign #T_INV  raza = a_c[15];
-	assign #T_TRI  syzu = !ryca ? !raza : 1'bz;
+	assign #T_TRI  syzu = !ryca ? !raza : 'z;
 	assign #T_MUX  tyho = dma_addr_ext ? dma_a[15] : toza;
 	assign #T_MUX  tazy = dma_addr_ext ? dma_a[15] : sepy;
 	assign #T_NOR  rulo = !(nt1_t2 || tazy);
@@ -49,8 +39,8 @@ module ext_cpu_busses(
 	assign a_a[15] = suze;
 	assign a[15]   = syzu;
 
-	wire tova, nyre, lonu, lobu, lumy, pate, lysa, luno, pege, muce, mojy, male, pamy, masu, mano;
-	wire pahy, puhe, leva, labe, loso, luce, lyny, lepy, rore, roxu, meny, mune, mego, myny, net01;
+	logic tova, nyre, lonu, lobu, lumy, pate, lysa, luno, pege, muce, mojy, male, pamy, masu, mano;
+	logic pahy, puhe, leva, labe, loso, luce, lyny, lepy, rore, roxu, meny, mune, mego, myny, net01;
 	latch latch_nyre(mate, a[14], nyre);
 	latch latch_lonu(mate, a[13], lonu);
 	latch latch_lobu(mate, a[12], lobu);
@@ -96,8 +86,8 @@ module ext_cpu_busses(
 	assign a_d[8]  = mego;
 	assign a_a[8]  = myny;
 
-	wire arym, aros, atev, avys, aret, alyr, apur, alor, asur, atyr, atov, atem, amer, apok, atol, amet;
-	wire colo, defy, cyka, cepu, ajav, badu, bevo, byla, bola, boty, bajo, boku, cotu, caba, koty, kupo;
+	logic arym, aros, atev, avys, aret, alyr, apur, alor, asur, atyr, atov, atem, amer, apok, atol, amet;
+	logic colo, defy, cyka, cepu, ajav, badu, bevo, byla, bola, boty, bajo, boku, cotu, caba, koty, kupo;
 	latch latch_arym(mate, a[7], arym);
 	latch latch_aros(mate, a[6], aros);
 	latch latch_atev(mate, a[5], atev);
@@ -147,7 +137,7 @@ module ext_cpu_busses(
 	assign a_d[0] = koty;
 	assign a_a[0] = kupo;
 
-	wire tola, mule, loxo, lasy, mate, sore, tevy, levo, lagu;
+	logic tola, mule, loxo, lasy, mate, sore, tevy, levo, lagu;
 	assign #T_INV  tola = !a[1];
 	assign #T_INV  mule = !t1_nt2;
 	assign #T_AO   loxo = (mule && texo) || t1_nt2;
@@ -160,7 +150,7 @@ module ext_cpu_busses(
 	assign #T_AO   lagu = (cpu_raw_rd && levo) || from_cpu3;
 	assign tola_na1 = tola;
 
-	wire moca, mexo, lywe, nevy, moty, puva, tymu, usuf, uver, ugac, urun;
+	logic moca, mexo, lywe, nevy, moty, puva, tymu, usuf, uver, ugac, urun;
 	assign #T_NOR  moca = !(texo || t1_nt2);
 	assign #T_INV  mexo = !cpu_rd_sync;
 	assign #T_INV  lywe = !lagu;
@@ -177,7 +167,7 @@ module ext_cpu_busses(
 	assign rd_a = ugac;
 	assign rd_c = urun;
 
-	wire base, afec, buxu, camu, cygu, cogo, kova, anar, azuv, akan, byxe, byne, byna, kejo;
+	logic base, afec, buxu, camu, cygu, cogo, kova, anar, azuv, akan, byxe, byne, byna, kejo;
 	assign #T_INV  base = !a_c[3];
 	assign #T_INV  afec = !a_c[4];
 	assign #T_INV  buxu = !a_c[2];
@@ -185,13 +175,13 @@ module ext_cpu_busses(
 	assign #T_INV  cygu = !a_c[6];
 	assign #T_INV  cogo = !a_c[7];
 	assign #T_INV  kova = !a_c[0];
-	assign #T_TRI  anar = !net01 ? !base : 1'bz;
-	assign #T_TRI  azuv = !net01 ? !afec : 1'bz;
-	assign #T_TRI  akan = !net01 ? !buxu : 1'bz;
-	assign #T_TRI  byxe = !net01 ? !camu : 1'bz;
-	assign #T_TRI  byne = !net01 ? !cygu : 1'bz;
-	assign #T_TRI  byna = !net01 ? !cogo : 1'bz;
-	assign #T_TRI  kejo = !net01 ? !kova : 1'bz;
+	assign #T_TRI  anar = !net01 ? !base : 'z;
+	assign #T_TRI  azuv = !net01 ? !afec : 'z;
+	assign #T_TRI  akan = !net01 ? !buxu : 'z;
+	assign #T_TRI  byxe = !net01 ? !camu : 'z;
+	assign #T_TRI  byne = !net01 ? !cygu : 'z;
+	assign #T_TRI  byna = !net01 ? !cogo : 'z;
+	assign #T_TRI  kejo = !net01 ? !kova : 'z;
 	assign a[3] = anar;
 	assign a[4] = azuv;
 	assign a[2] = akan;
@@ -200,7 +190,7 @@ module ext_cpu_busses(
 	assign a[7] = byna;
 	assign a[0] = kejo;
 
-	wire lahe, lura, mujy, pevo, mady, nena, sura, abup, lyna, lefy, lofa, nefe, lora, mapu, rala, ajov;
+	logic lahe, lura, mujy, pevo, mady, nena, sura, abup, lyna, lefy, lofa, nefe, lora, mapu, rala, ajov;
 	assign #T_INV  lahe = !a_c[12];
 	assign #T_INV  lura = !a_c[13];
 	assign #T_INV  mujy = !a_c[8];
@@ -209,14 +199,14 @@ module ext_cpu_busses(
 	assign #T_INV  nena = !a_c[9];
 	assign #T_INV  sura = !a_c[10];
 	assign #T_INV  abup = !a_c[5];
-	assign #T_TRI  lyna = !net01 ? !lahe : 1'bz;
-	assign #T_TRI  lefy = !net01 ? !lura : 1'bz;
-	assign #T_TRI  lofa = !net01 ? !mujy : 1'bz;
-	assign #T_TRI  nefe = !net01 ? !pevo : 1'bz;
-	assign #T_TRI  lora = !net01 ? !mady : 1'bz;
-	assign #T_TRI  mapu = !net01 ? !nena : 1'bz;
-	assign #T_TRI  rala = !net01 ? !sura : 1'bz;
-	assign #T_TRI  ajov = !net01 ? !abup : 1'bz;
+	assign #T_TRI  lyna = !net01 ? !lahe : 'z;
+	assign #T_TRI  lefy = !net01 ? !lura : 'z;
+	assign #T_TRI  lofa = !net01 ? !mujy : 'z;
+	assign #T_TRI  nefe = !net01 ? !pevo : 'z;
+	assign #T_TRI  lora = !net01 ? !mady : 'z;
+	assign #T_TRI  mapu = !net01 ? !nena : 'z;
+	assign #T_TRI  rala = !net01 ? !sura : 'z;
+	assign #T_TRI  ajov = !net01 ? !abup : 'z;
 	assign a[12] = lyna;
 	assign a[13] = lefy;
 	assign a[8]  = lofa;
@@ -226,7 +216,7 @@ module ext_cpu_busses(
 	assign a[10] = rala;
 	assign a[5]  = ajov;
 
-	wire redu, rogy, ryda, rune, resy, rypu, suly, seze, tamu;
+	logic redu, rogy, ryda, rune, resy, rypu, suly, seze, tamu;
 	assign #T_INV  redu = !cpu_rd;
 	assign #T_MUX  roru = nt1_t2 ? redu : moty;
 	assign #T_INV  lula = !roru;
@@ -247,8 +237,8 @@ module ext_cpu_busses(
 	assign d_d[3] = seze;
 	assign d_d[5] = tamu;
 
-	wire lavo, sody, selo, rony, soma, raxy, rupa, sago, sazy;
-	wire tepe, tavo, ruvo, ryma, ryko, sevu, safo, taju;
+	logic lavo, sody, selo, rony, soma, raxy, rupa, sago, sazy;
+	logic tepe, tavo, ruvo, ryma, ryko, sevu, safo, taju;
 	latch latch_sody(lavo, d_in[4], sody);
 	latch latch_selo(lavo, d_in[3], selo);
 	latch latch_rony(lavo, d_in[1], rony);
@@ -258,14 +248,14 @@ module ext_cpu_busses(
 	latch latch_sago(lavo, d_in[5], sago);
 	latch latch_sazy(lavo, d_in[7], sazy);
 	assign #T_NAND lavo = !(cpu_raw_rd && texo && from_cpu5);
-	assign #T_TRI  tepe = !lavo ? !sody : 1'bz;
-	assign #T_TRI  tavo = !lavo ? !selo : 1'bz;
-	assign #T_TRI  ruvo = !lavo ? !rony : 1'bz;
-	assign #T_TRI  ryma = !lavo ? !soma : 1'bz;
-	assign #T_TRI  ryko = !lavo ? !raxy : 1'bz;
-	assign #T_TRI  sevu = !lavo ? !rupa : 1'bz;
-	assign #T_TRI  safo = !lavo ? !sago : 1'bz;
-	assign #T_TRI  taju = !lavo ? !sazy : 1'bz;
+	assign #T_TRI  tepe = !lavo ? !sody : 'z;
+	assign #T_TRI  tavo = !lavo ? !selo : 'z;
+	assign #T_TRI  ruvo = !lavo ? !rony : 'z;
+	assign #T_TRI  ryma = !lavo ? !soma : 'z;
+	assign #T_TRI  ryko = !lavo ? !raxy : 'z;
+	assign #T_TRI  sevu = !lavo ? !rupa : 'z;
+	assign #T_TRI  safo = !lavo ? !sago : 'z;
+	assign #T_TRI  taju = !lavo ? !sazy : 'z;
 	assign d[4] = tepe;
 	assign d[3] = tavo;
 	assign d[1] = ruvo;

@@ -1,25 +1,20 @@
 `default_nettype none
-`timescale 1ns/100ps
 
 module serial_link(
-		a, d, nreset2, cpu_wr, cpu_rd, ffxx, a00_07,
-		sck_a, sck_dir, sck_in, sck_d, sin_in, ser_out,
-		_16384hz, int_serial, tovy_na0, tola_na1
+		input     logic [15:0] a,
+		inout tri logic [7:0]  d,
+
+		input logic  nreset2, cpu_wr, cpu_rd, ffxx,
+		output logic a00_07, int_serial,
+
+		output logic sck_a, sck_dir, sck_d, ser_out,
+		input  logic sck_in, sin_in,
+
+		input logic _16384hz, tovy_na0, tola_na1
 	);
 
-	input wire [15:0] a;
-	inout wire [7:0]  d;
-
-	input wire  nreset2, cpu_wr, cpu_rd, ffxx;
-	output wire a00_07, int_serial;
-
-	output wire sck_a, sck_dir, sck_d, ser_out;
-	input  wire sck_in, sin_in;
-
-	input wire _16384hz, tovy_na0, tola_na1;
-
-	wire uwam, ucom, coty, cave, dawa, etaf, culy, caro, eluv, core, _8192hz;
-	wire kexu, jago, kujo, edyl, cafa, cylo, cyde, caly, coba, caby, nser_tick;
+	logic uwam, ucom, coty, cave, dawa, etaf, culy, caro, eluv, core, _8192hz;
+	logic kexu, jago, kujo, edyl, cafa, cylo, cyde, caly, coba, caby, nser_tick;
 	dffr dffr_coty(_16384hz, uwam,    !coty, coty); // check clk edge
 	dffr dffr_etaf(uwam,     caby,    d[7],  etaf); // check clk edge
 	dffr dffr_culy(uwam,     nreset2, d[0],  culy); // check clk edge
@@ -31,8 +26,8 @@ module serial_link(
 	assign #T_AND  ucom = sano && cpu_rd && a[1] && tovy_na0;
 	assign #T_MUXI cave = !(culy ? coty : sck_in);
 	assign #T_OR   dawa = cave || !etaf; /* takes !q output of dff */
-	assign #T_TRI  eluv = ucom ? etaf : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  core = ucom ? culy : 1'bz; /* takes !q output of dff */
+	assign #T_TRI  eluv = ucom ? etaf : 'z; /* takes !q output of dff */
+	assign #T_TRI  core = ucom ? culy : 'z; /* takes !q output of dff */
 	assign #T_AND  caro = uwam && nreset2;
 	assign #T_NAND kexu = !(dawa && sck_dir);
 	assign #T_INV  jago = !sck_dir;
@@ -49,9 +44,9 @@ module serial_link(
 	assign nser_tick  = edyl;
 	assign int_serial = caly;
 
-	wire sare, sefy, sano, urys, daku, epyt, deho, dawe, cage, ufeg;
-	wire cohy, dumo, dybo, daju, dyly, ehuj, efak, eguv, cufu, docu, dela, dyge, dola, elok, edel, efef;
-	wire cuba, degu, dyra, dojo, dovu, ejab, erod, eder, cugy, dude, detu, daso, dame, evok, efab, etak, elys;
+	logic sare, sefy, sano, urys, daku, epyt, deho, dawe, cage, ufeg;
+	logic cohy, dumo, dybo, daju, dyly, ehuj, efak, eguv, cufu, docu, dela, dyge, dola, elok, edel, efef;
+	logic cuba, degu, dyra, dojo, dovu, ejab, erod, eder, cugy, dude, detu, daso, dame, evok, efab, etak, elys;
 	dffsr dffsr_cuba(dawe, cufu, cohy, cage, cuba); // check clk edge
 	dffsr dffsr_degu(dawe, docu, dumo, cuba, degu); // check clk edge
 	dffsr dffsr_dyra(dawe, dela, dybo, degu, dyra); // check clk edge
@@ -87,14 +82,14 @@ module serial_link(
 	assign #T_NAND elok = !(d[5] && daku);
 	assign #T_NAND edel = !(d[6] && daku);
 	assign #T_NAND efef = !(d[7] && daku);
-	assign #T_TRI  cugy = ufeg ? cuba : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  dude = ufeg ? degu : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  detu = ufeg ? dyra : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  daso = ufeg ? dojo : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  dame = ufeg ? dovu : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  evok = ufeg ? ejab : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  efab = ufeg ? erod : 1'bz; /* takes !q output of dff */
-	assign #T_TRI  etak = ufeg ? eder : 1'bz; /* takes !q output of dff */
+	assign #T_TRI  cugy = ufeg ? cuba : 'z; /* takes !q output of dff */
+	assign #T_TRI  dude = ufeg ? degu : 'z; /* takes !q output of dff */
+	assign #T_TRI  detu = ufeg ? dyra : 'z; /* takes !q output of dff */
+	assign #T_TRI  daso = ufeg ? dojo : 'z; /* takes !q output of dff */
+	assign #T_TRI  dame = ufeg ? dovu : 'z; /* takes !q output of dff */
+	assign #T_TRI  evok = ufeg ? ejab : 'z; /* takes !q output of dff */
+	assign #T_TRI  efab = ufeg ? erod : 'z; /* takes !q output of dff */
+	assign #T_TRI  etak = ufeg ? eder : 'z; /* takes !q output of dff */
 	assign a00_07  = sare;
 	assign d[0]    = cugy;
 	assign d[1]    = dude;

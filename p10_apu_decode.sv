@@ -1,30 +1,21 @@
 `default_nettype none
-`timescale 1ns/100ps
 
 module apu_decode(
-		a,
-		cpu_wr, cpu_rd,
-		ff00wr, ff00rd, apu_wr, ff26, ff3x,
-		ffxx, nffxx, anap, duce,
-		nff1a_d7, nch1_amp_en, nch2_amp_en, nch4_amp_en, namp_en,
-		ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a,
-		ff1b, ff1c, ff1d, ff1e, ff20, ff21, ff22, ff23, ff24, ff25
+		input logic [15:0] a,
+
+		input logic cpu_wr, cpu_rd,
+
+		output logic ff00wr, ff00rd, apu_wr, ff26, ff3x,
+		input  logic ffxx, nffxx,
+		output logic anap, duce,
+		input  logic nff1a_d7, nch1_amp_en, nch2_amp_en, nch4_amp_en,
+		output logic namp_en,
+
+		output logic ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a,
+		output logic ff1b, ff1c, ff1d, ff1e, ff20, ff21, ff22, ff23, ff24, ff25
 	);
 
-	input wire [15:0] a;
-
-	input wire cpu_wr, cpu_rd;
-
-	output wire ff00wr, ff00rd, apu_wr, ff26, ff3x;
-	input  wire ffxx, nffxx;
-	output wire anap, duce;
-	input  wire nff1a_d7, nch1_amp_en, nch2_amp_en, nch4_amp_en;
-	output wire namp_en;
-
-	output wire ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a;
-	output wire ff1b, ff1c, ff1d, ff1e, ff20, ff21, ff22, ff23, ff24, ff25;
-
-	wire amus, byko, akug, atoz, acat;
+	logic amus, byko, akug, atoz, acat;
 	assign #T_NOR  amus = !(a[7] || a[4] || a[3] || a[2] || a[1] || a[0]);
 	assign #T_AND  anap = amus && ffxx;
 	assign #T_INV  byko = !a[5];
@@ -34,8 +25,8 @@ module apu_decode(
 	assign ff00wr = atoz;
 	assign ff00rd = acat;
 
-	wire boxy, awet, bezy, avun, asad, acom, baro, atup, ateg, buno, banu, cona, doxy, bafu, bogy, tace, nff1x;
-	wire ff2x, nff2x;
+	logic boxy, awet, bezy, avun, asad, acom, baro, atup, ateg, buno, banu, cona, doxy, bafu, bogy, tace, nff1x;
+	logic ff2x, nff2x;
 	assign #T_INV  boxy = !a[5];
 	assign #T_OR   awet = a[4] || boxy || a[6] || a[7];
 	assign #T_OR   bezy = awet || nffxx;
@@ -60,10 +51,10 @@ module apu_decode(
 	assign apu_wr  = bogy;
 	assign namp_en = tace;
 
-	wire dyte, doso, afob, dupa, abub, deno, acol;
-	wire dupo, datu, daza, dura, duvu, dofa, damy, dufe, duno, dewa, dejy, dona, dafy, emos;
-	wire ekag, esot, egen, exat, emax, etuf, gany, dyva, cafy, covy, cora, dutu, ekez, edaf;
-	wire cuge, caxe, covo, doza, danu, dara, feny, duja, dugo, emor, dusa, deco, gefo, xxx6;
+	logic dyte, doso, afob, dupa, abub, deno, acol;
+	logic dupo, datu, daza, dura, duvu, dofa, damy, dufe, duno, dewa, dejy, dona, dafy, emos;
+	logic ekag, esot, egen, exat, emax, etuf, gany, dyva, cafy, covy, cora, dutu, ekez, edaf;
+	logic cuge, caxe, covo, doza, danu, dara, feny, duja, dugo, emor, dusa, deco, gefo, xxx6;
 	assign #T_INV  dyte = !a[0];
 	assign #T_INV  doso = !dyte;
 	assign #T_INV  afob = !a[1];
