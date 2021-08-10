@@ -41,7 +41,7 @@ module channel1(
 	assign #T_INV  bugy = !boro;
 	assign #T_INV  canu = !capy;
 	assign #T_INV  bepe = !boro;
-	assign #T_INV  cuso = cuno; /* takes !q output of dff */
+	assign #T_INV  cuso = cuno; /* takes !q output of counter */
 	assign nch1_amp_en = hoca;
 
 	logic cala, comy, cyte, dyru, doka;

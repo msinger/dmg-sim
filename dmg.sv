@@ -99,7 +99,6 @@ module dmg;
 	logic cpu_irq2_ack = 0;
 	logic cpu_irq3_ack = 0;
 	logic cpu_irq4_ack = 0;
-	logic anuj = 0;
 
 	logic clk1;
 
@@ -138,8 +137,9 @@ module dmg;
 	logic boga1mhz;
 	logic byfe_128hz, bufy_256hz, horu_512hz, dyfa_1mhz;
 	logic afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko, copu, atys;
-	logic abol, gexu, cope, kyly, adad;
+	logic abol, gexu, cope, kyly, adad, elox_q, anuj, doca, cogu, erog, dera, gypa;
 	logic ch1_restart, ch1_shift_clk, ch1_ld_shift, ch1_freq_upd1, ch1_freq_upd2;
+	logic ch2_ftick;
 	logic nch1_active, nch1_amp_en;
 	logic _16384hz, _65536hz, _262144hz;
 
@@ -151,6 +151,10 @@ module dmg;
 	logic ff12_d0, ff12_d1, ff12_d2, ff12_d3, ff12_d4, ff12_d5, ff12_d6, ff12_d7;
 	logic nff12_d0, nff12_d1, nff12_d2, nff12_d3;
 	logic ff14_d6, nff14_d6;
+	logic nff16_wr, ff16_d6, nff16_d6, ff16_d7, nff16_d7;
+	logic ff17_d0, nff17_d0, ff17_d1, nff17_d1, ff17_d2, nff17_d2;
+	logic ff17_d3, nff17_d3, ff17_d4, ff17_d5, ff17_d6, ff17_d7;
+	logic ff19_d6, nff19_d6, ff19_d7;
 
 	logic [10:0] acc_d;
 	logic [3:0]  lmixer, rmixer;
@@ -169,6 +173,7 @@ module dmg;
 	ch1_regs       p11_ch1_regs(.*);
 	ch1_sweep      p12_ch1_sweep(.*);
 	channel1       p13_channel1(.*);
+	ch2_regs       p14_ch2_regs(.*);
 	vram_interface p25_vram_interface(.*);
 
 endmodule
