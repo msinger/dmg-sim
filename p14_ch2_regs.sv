@@ -159,8 +159,8 @@ module ch2_regs(
 	logic gado, huma, evyf, fazo, emer, gojy;
 	dffr dffr_emer(evyf, fazo, d[6], emer); // check clk edge
 	assign #T_INV  gado = !ncpu_rd;
-	assign #T_NOR  huma = !(ff19 || gado);
-	assign #T_NOR  evyf = !(anuj || ff19);
+	assign #T_NAND huma = !(ff19 && gado);
+	assign #T_NAND evyf = !(anuj && ff19);
 	assign #T_INV  fazo = !apu_reset;
 	assign #T_TRI  gojy = !huma ? !emer : 'z;
 	assign ff19_d6  = emer;

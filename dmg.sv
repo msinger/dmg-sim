@@ -143,6 +143,8 @@ module dmg;
 	logic nch1_active, nch1_amp_en;
 	logic _16384hz, _65536hz, _262144hz;
 
+	// TODO: lula controlls direction of external D0-7 pins?
+
 	logic ffxx, nffxx, nfexxffxx, a00_07, saro;
 	logic ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a;
 	logic ff1b, ff1c, ff1d, ff1e, ff20, ff21, ff22, ff23, ff24, ff25;

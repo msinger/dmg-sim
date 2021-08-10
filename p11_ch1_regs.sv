@@ -169,7 +169,7 @@ module ch1_regs(
 	dffr dffr_cena(dafo, napu_reset6, d[6], cena); // check clk edge
 	dffr dffr_dyca(dafo, napu_reset6, d[7], dyca); // check clk edge
 	assign #T_INV  buwa = !ncpu_rd;
-	assign #T_NOR  bexu = !(buwa || ff11);
+	assign #T_NAND bexu = !(buwa && ff11);
 	assign #T_AND  covu = apu_wr && ff11;
 	assign #T_INV  dafo = !covu;
 	assign #T_TRI  bowo = !bexu ? cena : 'z; /* takes !q output of dff */
