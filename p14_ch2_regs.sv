@@ -11,12 +11,12 @@ module ch2_regs(
 		output logic ff17_d3, nff17_d3, ff17_d4, ff17_d5, ff17_d6, ff17_d7,
 		output logic ff19_d6, nff19_d6, ff19_d7,
 
-		output logic ch2_ftick,
+		output logic ch2_ftick, beny,
 
 		input logic elox_q, anuj, duce, doca, cogu, erog, dera, gypa
 	);
 
-	logic agyn, asyp, beny, bygo, coro, bacu, budu, bamy, bera, ceka, cecy;
+	logic agyn, asyp, bygo, coro, bacu, budu, bamy, bera, ceka, cecy;
 	dffr dffr_bamy(budu, napu_reset2, d[7], bamy); // check clk edge
 	dffr dffr_bera(budu, napu_reset2, d[6], bera); // check clk edge
 	assign #T_NAND agyn = !(apu_wr && ff16);

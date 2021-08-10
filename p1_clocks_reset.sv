@@ -27,7 +27,7 @@ module clocks_reset(
 
 		input  logic apu_reset,
 		input  logic napu_reset5,
-		output logic apuv_4mhz,
+		output logic apuv_4mhz, amuk_4mhz,
 		input  logic ajer_2mhz,
 		output logic boga1mhz,
 		output logic byfe_128hz,
@@ -48,7 +48,7 @@ module clocks_reset(
 	assign #T_INV  atal = !avet;
 	assign atal_4mhz = atal;
 
-	logic azof, zaxy, zeme, alet, lape, tava, atag, amuk, clk2, clk4, clk5, amuk_4mhz;
+	logic azof, zaxy, zeme, alet, lape, tava, atag, amuk, clk2, clk4, clk5;
 	assign #T_INV  azof = !atal;
 	assign #T_INV  zaxy = !azof;
 	assign #T_INV  zeme = !zaxy;
