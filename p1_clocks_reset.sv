@@ -28,7 +28,7 @@ module clocks_reset(
 		input  logic apu_reset,
 		input  logic napu_reset5,
 		output logic apuv_4mhz, amuk_4mhz,
-		input  logic ajer_2mhz,
+		input  logic ajer_2mhz, cery_2mhz,
 		output logic boga1mhz,
 		output logic byfe_128hz,
 		output logic bufy_256hz,
@@ -63,7 +63,7 @@ module clocks_reset(
 	assign clk5 = tava;
 	assign amuk_4mhz = amuk;
 
-	logic aryf, apuv, cybo, bela, cery, aryf_4mhz, cery_2mhz;
+	logic aryf, apuv, cybo, bela, cery, aryf_4mhz;
 	assign #T_INV  aryf = !amuk;
 	assign #T_INV  apuv = !amuk;
 	assign #T_INV  cybo = !amuk;

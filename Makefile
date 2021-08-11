@@ -14,6 +14,7 @@ p12_ch1_sweep.sv \
 p13_channel1.sv \
 p14_ch2_regs.sv \
 p15_channel2.sv \
+p16_ch3_regs.sv \
 p25_vram_interface.sv
 
 DMG_DEPENDENCIES = \
