@@ -63,7 +63,6 @@ module dmg;
 	logic ff40_d4 = 0;
 	logic amab = 0;
 	logic nch4_amp_en = 1;
-	logic nch3_active = 1;
 	logic nch4_active = 1;
 	logic tacu = 0;
 	logic tuvo = 0;
@@ -132,15 +131,18 @@ module dmg;
 	logic apuv_4mhz, amuk_4mhz;
 	logic ajer_2mhz, cery_2mhz;
 	logic boga1mhz;
-	logic byfe_128hz, bufy_256hz, horu_512hz, dyfa_1mhz;
+	logic byfe_128hz, bufy_256hz, horu_512hz, butu_512khz, dyfa_1mhz;
 	logic afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko, copu, atys;
 	logic abol, gexu, cope, kyly, adad, elox_q, anuj, doca, cogu, erog, dera, gypa, beny, gugu, gara;
 	logic nkeno, nkafo, nkepa, nkygu, nkemu, nkunu, nkupe, nkutu, njapu, nkeza, nkeju;
+	logic buke, gase, efar_q;
 	logic ch1_restart, ch1_shift_clk, ch1_ld_shift, ch1_freq_upd1, ch1_freq_upd2;
 	logic ch2_ftick;
 	logic nch1_active, nch1_amp_en;
 	logic nch2_active, nch2_amp_en;
+	logic ch3_active, nch3_active;
 	logic _16384hz, _65536hz, _262144hz;
+	logic wave_ram_rd, nwave_ram_wr, wave_ram_ctrl1;
 
 	// TODO: lula controlls direction of external D0-7 pins?
 
@@ -163,7 +165,8 @@ module dmg;
 
 	logic [10:0] acc_d;
 	logic [3:0]  lmixer, rmixer;
-	logic [3:0]  ch1_out, ch2_out;
+	logic [3:0]  ch1_out, ch2_out, wave_play_d;
+	logic [7:0]  wave_rd_d;
 
 	clocks_reset   p1_clocks_reset(.*);
 	interrupts     p2_interrupts(.*);
@@ -181,6 +184,7 @@ module dmg;
 	ch2_regs       p14_ch2_regs(.*);
 	channel2       p15_channel2(.*);
 	ch3_regs       p16_ch3_regs(.*);
+	wave_ram       p17_wave_ram(.*);
 	vram_interface p25_vram_interface(.*);
 
 endmodule
