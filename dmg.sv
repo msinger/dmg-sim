@@ -142,7 +142,6 @@ module dmg;
 	logic nch2_active, nch2_amp_en;
 	logic ch3_active, nch3_active;
 	logic _16384hz, _65536hz, _262144hz;
-	logic wave_ram_rd, nwave_ram_wr, wave_ram_ctrl1;
 
 	// TODO: lula controlls direction of external D0-7 pins?
 
@@ -164,9 +163,24 @@ module dmg;
 	logic ff1e_d0, ff1e_d1, ff1e_d2, ff1e_d6, nff1e_d6;
 
 	logic [10:0] acc_d;
-	logic [3:0]  lmixer, rmixer;
-	logic [3:0]  ch1_out, ch2_out, wave_play_d;
-	logic [7:0]  wave_rd_d;
+	logic [3:0]  wave_play_d;
+	logic        wave_ram_rd;
+
+	/* connections to audio DAC */
+	logic [3:0] lmixer, rmixer;
+	logic [3:0] ch1_out, ch2_out, wave_dac_d;
+
+	/* connections to wave RAM */
+	logic [7:0] wave_rd_d;      /* data output (data input is directly connected to common d[7:0]) */
+	logic [3:0] wave_a;         /* address */
+	logic       wave_ram_ctrl1; /* !CS */
+	logic       nwave_ram_wr;   /* !WR */
+	logic       atok;           /* !OE */
+
+	logic [7:0] wave_ram[0:15];
+	initial foreach (wave_ram[i]) wave_ram[i] = $random;
+	always_ff @(negedge nwave_ram_wr) if (!wave_ram_ctrl1) wave_ram[wave_a] <= d;
+	always_ff @(negedge atok) if (!wave_ram_ctrl1) wave_rd_d <= wave_ram[wave_a];
 
 	clocks_reset   p1_clocks_reset(.*);
 	interrupts     p2_interrupts(.*);
@@ -185,6 +199,7 @@ module dmg;
 	channel2       p15_channel2(.*);
 	ch3_regs       p16_ch3_regs(.*);
 	wave_ram       p17_wave_ram(.*);
+	channel3       p18_channel3(.*);
 	vram_interface p25_vram_interface(.*);
 
 endmodule
