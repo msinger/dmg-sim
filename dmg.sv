@@ -62,8 +62,6 @@ module dmg;
 	logic ff46 = 0;
 	logic ff40_d4 = 0;
 	logic amab = 0;
-	logic nch4_amp_en = 1;
-	logic nch4_active = 1;
 	logic tacu = 0;
 	logic tuvo = 0;
 	logic acyl = 0;
@@ -135,12 +133,14 @@ module dmg;
 	logic afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko, copu, atys;
 	logic abol, gexu, cope, kyly, adad, elox_q, anuj, doca, cogu, erog, dera, gypa, beny, gugu, gara;
 	logic nkeno, nkafo, nkepa, nkygu, nkemu, nkunu, nkupe, nkutu, njapu, nkeza, nkeju;
-	logic buke, gase, efar_q;
+	logic buke, gase, efar_q, fugo_q;
 	logic ch1_restart, ch1_shift_clk, ch1_ld_shift, ch1_freq_upd1, ch1_freq_upd2;
 	logic ch2_ftick;
 	logic nch1_active, nch1_amp_en;
 	logic nch2_active, nch2_amp_en;
 	logic ch3_active, nch3_active;
+	logic ch4_restart;
+	logic nch4_active, nch4_amp_en;
 	logic _16384hz, _65536hz, _262144hz;
 
 	// TODO: lula controlls direction of external D0-7 pins?
@@ -161,6 +161,11 @@ module dmg;
 	logic ff1c_d5, nff1c_d5, ff1c_d6, nff1c_d6;
 	logic ff1d_d0, ff1d_d1, ff1d_d2, ff1d_d3, ff1d_d4, ff1d_d5, ff1d_d6, ff1d_d7;
 	logic ff1e_d0, ff1e_d1, ff1e_d2, ff1e_d6, nff1e_d6;
+	logic ff21_d0, nff21_d0, ff21_d1, nff21_d1, ff21_d2, nff21_d2;
+	logic ff21_d3, nff21_d3, ff21_d4, ff21_d5, ff21_d6, ff21_d7;
+	logic nff22_d0, nff22_d1, nff22_d2, ff22_d3, nff22_d3, ff22_d4, nff22_d4;
+	logic ff22_d5, nff22_d5, ff22_d6, nff22_d6, ff22_d7;
+	logic ff23_d6, ff23_d7, rst_ff23_d7;
 
 	logic [10:0] acc_d;
 	logic [3:0]  wave_play_d;
@@ -200,6 +205,7 @@ module dmg;
 	ch3_regs       p16_ch3_regs(.*);
 	wave_ram       p17_wave_ram(.*);
 	channel3       p18_channel3(.*);
+	ch4_regs       p19_ch4_regs(.*);
 	vram_interface p25_vram_interface(.*);
 
 endmodule
