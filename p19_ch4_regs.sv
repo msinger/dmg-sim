@@ -11,9 +11,9 @@ module ch4_regs(
 		output logic ff21_d3, nff21_d3, ff21_d4, ff21_d5, ff21_d6, ff21_d7,
 		output logic nff22_d0, nff22_d1, nff22_d2, ff22_d3, nff22_d3, ff22_d4, nff22_d4,
 		output logic ff22_d5, nff22_d5, ff22_d6, nff22_d6, ff22_d7,
-		output logic ff23_d6, ff23_d7, rst_ff23_d7,
+		output logic ff23_d6, ff23_d7,
 
-		input  logic ch4_restart, anuj,
+		input  logic ch4_restart, rst_ff23_d7, anuj,
 		output logic fugo_q
 	);
 

@@ -29,10 +29,11 @@ module clocks_reset(
 		input  logic napu_reset5,
 		output logic apuv_4mhz, amuk_4mhz,
 		input  logic ajer_2mhz, cery_2mhz,
-		output logic boga1mhz,
+		output logic boga1mhz, bavu_1mhz,
 		output logic byfe_128hz,
 		output logic bufy_256hz,
 		output logic horu_512hz,
+		output logic jeso_512k, hama_512k,
 		input  logic fero_q,
 		output logic bedo, abuz, afas, abol,
 		output logic nff04_d0, nff04_d1,
@@ -261,7 +262,7 @@ module clocks_reset(
 	assign bufy_256hz = bufy;
 	assign byfe_128hz = byfe;
 
-	logic bopo, atyk, avok, bavu, jeso, hama, bavu_1mhz, _2097152hz, _1048576hz, jeso_512k, hama_512k;
+	logic bopo, atyk, avok, bavu, jeso, hama, _2097152hz, _1048576hz;
 	dffr dffr_atyk(aryf_4mhz, bopo,        !atyk, atyk); // check edge
 	dffr dffr_avok(atyk,      bopo,        !avok, avok); // check edge
 	dffr dffr_jeso(bavu,      napu_reset5, !jeso, jeso); // check edge

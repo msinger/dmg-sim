@@ -116,10 +116,10 @@ module channel1(
 	assign #T_INV  cara = !cyto;
 	assign #T_AND  cowe = cyto && duwo;
 	assign #T_OR   boto = cowe || net03;
-	assign #T_AOI  hesu = !((ff12_d3 && hoko) || (!hoko && nff12_d3)); // check if this is what is meant by AOI_MUX_2
-	assign #T_AOI  heto = !((ff12_d3 && hemy) || (!hemy && nff12_d3)); // check if this is what is meant by AOI_MUX_2
-	assign #T_AOI  hyto = !((ff12_d3 && hafo) || (!hafo && nff12_d3)); // check if this is what is meant by AOI_MUX_2
-	assign #T_AOI  jufy = !((ff12_d3 && kake) || (kake && nff12_d3)); // check if this is what is meant by AOI_MUX_2
+	assign #T_AOI  hesu = !((ff12_d3 && hoko) || (!hoko && nff12_d3));
+	assign #T_AOI  heto = !((ff12_d3 && hemy) || (!hemy && nff12_d3));
+	assign #T_AOI  hyto = !((ff12_d3 && hafo) || (!hafo && nff12_d3));
+	assign #T_AOI  jufy = !((ff12_d3 && kake) || (kake && nff12_d3));
 	assign #T_AND  aceg = hevo && boto;
 	assign #T_AND  agof = hoko && boto;
 	assign #T_AND  ason = hemy && boto;
@@ -168,7 +168,7 @@ module channel1(
 	assign #T_NOR  cava = !(nff11_d6 || ff11_d7);
 	assign #T_NOR  cevu = !(ff11_d6 || nff11_d7);
 	assign #T_NOR  caxo = !(nff11_d6 || nff11_d7);
-	assign #T_AOI  duna = !((enek && coso) || (ezoz && cava) || (dape && cevu) || (codo && caxo)); // check if this is what is meant by AOI_MUX_4
+	assign #T_AOI  duna = !((enek && coso) || (ezoz && cava) || (dape && cevu) || (codo && caxo));
 	assign ch1_bit = duna;
 
 	logic atuv, boje, buso, kala;

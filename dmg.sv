@@ -128,8 +128,8 @@ module dmg;
 	logic napu_reset, napu_reset2, napu_reset4, napu_reset5, napu_reset6;
 	logic apuv_4mhz, amuk_4mhz;
 	logic ajer_2mhz, cery_2mhz;
-	logic boga1mhz;
-	logic byfe_128hz, bufy_256hz, horu_512hz, butu_512khz, dyfa_1mhz;
+	logic boga1mhz, bavu_1mhz;
+	logic byfe_128hz, bufy_256hz, horu_512hz, butu_512khz, jeso_512k, hama_512k, dyfa_1mhz;
 	logic afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko, copu, atys;
 	logic abol, gexu, cope, kyly, adad, elox_q, anuj, doca, cogu, erog, dera, gypa, beny, gugu, gara;
 	logic nkeno, nkafo, nkepa, nkygu, nkemu, nkunu, nkupe, nkutu, njapu, nkeza, nkeju;
@@ -173,7 +173,7 @@ module dmg;
 
 	/* connections to audio DAC */
 	logic [3:0] lmixer, rmixer;
-	logic [3:0] ch1_out, ch2_out, wave_dac_d;
+	logic [3:0] ch1_out, ch2_out, wave_dac_d, ch4_out;
 
 	/* connections to wave RAM */
 	logic [7:0] wave_rd_d;      /* data output (data input is directly connected to common d[7:0]) */
@@ -206,6 +206,7 @@ module dmg;
 	wave_ram       p17_wave_ram(.*);
 	channel3       p18_channel3(.*);
 	ch4_regs       p19_ch4_regs(.*);
+	channel4       p20_channel4(.*);
 	vram_interface p25_vram_interface(.*);
 
 endmodule

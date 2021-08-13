@@ -12,6 +12,7 @@ parameter time T_MUX   = 6ns;
 parameter time T_MUXI  = 6ns;
 parameter time T_AOI   = 5ns;
 parameter time T_XOR   = 5ns;
+parameter time T_XNOR  = 5ns;
 parameter time T_ADD   = 6ns;
 parameter time T_TRI   = 2ns;
 parameter time T_DFFSR = 8ns;
