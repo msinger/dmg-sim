@@ -118,7 +118,7 @@ module clocks_reset(
 	assign #T_INV  apov = !arev;
 	assign #T_INV  ajax = !atyp;
 	assign #T_INV  bugo = !afep;
-	assign #T_OA   agut = (ajax || arov) && from_cpu4;
+	assign #T_OA   agut = (arov || ajax) && from_cpu4;
 	assign #T_OR   awod = nt1_t2 || agut;
 	assign #T_INV  abuz = !awod;
 	assign #T_NOR  bate = !(bugo || arov || abol);
@@ -152,7 +152,7 @@ module clocks_reset(
 	assign nphi    = dova;
 
 	logic bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, boma, byxo, bowa, afer, avor, alur;
-	dffr dffr_afer(boma, nt1_nt2, asol, afer); // check clk edge
+	dffr dffr_afer(boga, nt1_nt2, asol, afer);
 	assign #T_INV  bele = !buto;
 	assign #T_INV  atez = !clkin_a;
 	assign #T_OR   byju = bele || atez;

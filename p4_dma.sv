@@ -24,9 +24,9 @@ module dma(
 	assign #T_AND  molu = ff46 && cpu_rd2;
 	assign #T_INV  nygo = !molu;
 	assign #T_INV  pusy = !nygo;
-	assign #T_AND  lavy = ff46 && cpu_wr2;
+	assign #T_AND  lavy = cpu_wr2 && ff46;
 	assign #T_INV  loru = !lavy;
-	assign #T_OR   lyxe = loru || loko;
+	assign #T_OR   lyxe = lavy || loko;
 	assign #T_NOR  lupa = !(lavy || lyxe);
 	assign #T_INV  ahoc = !vram_to_oam;
 	assign #T_NAND loko = !(nreset6 && !lene);
