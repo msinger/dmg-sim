@@ -5,7 +5,7 @@ module sys_decode(
 		inout  tri logic [7:0]  d,
 
 		input  logic reset, nreset2, t1, t2, wr_in, rd_b,
-		input  logic cpu_rd_sync, cpu_raw_rd, cpu_wr_raw,
+		input  logic cpu_rd_sync, cpu_raw_rd,
 		input  logic from_cpu6,
 		output logic to_cpu_tutu,
 		output logic cpu_wr, cpu_wr2, cpu_rd, cpu_rd2,
@@ -53,7 +53,7 @@ module sys_decode(
 	assign #T_NOR  semy = !(a[7] || a[6] || a[5] || a[4]);
 	assign #T_AND  sapa = a[0] && a[1] && a[2] && a[3];
 	assign #T_NAND rolo = !(semy && sapa && ffxx && cpu_rd);
-	assign #T_NAND refa = !(semy && sapa && ffxx && cpu_wr_raw);
+	assign #T_NAND refa = !(semy && sapa && ffxx && cpu_wr);
 	assign ff04_ff07 = ryfo;
 	assign nff0f_rd  = rolo;
 	assign nff0f_wr  = refa;

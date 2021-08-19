@@ -45,7 +45,6 @@ module dmg;
 	logic mwr_in = 0;
 	logic mcs_in = 0;
 	logic cpu_raw_rd = 0;
-	logic cpu_wr_raw = 0;
 	logic p10_c = 0;
 	logic p11_c = 0;
 	logic p12_c = 0;
