@@ -52,7 +52,6 @@ module dmg;
 	logic sin_in = 0;
 	logic sck_in = 0;
 	logic ff40_d7 = 0;
-	logic from_cpu = 0;
 	logic from_cpu3 = 1;
 	logic from_cpu4 = 0;
 	logic from_cpu5 = 0;
