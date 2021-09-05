@@ -153,7 +153,8 @@ module clocks_reset(
 	assign from_cpu5 = bufa;
 
 	logic bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, byxo, bowa, avor, alur;
-	dffr dffr_afer(boga, nt1_nt2, asol, afer);
+	dffr dffr_afer(boga, nt1_nt2, !asol, afer);
+	srlatch latch_asol(afar, reset, asol);
 	assign #T_INV  bele = !buto;
 	assign #T_INV  atez = !clkin_a;
 	assign #T_OR   byju = bele || atez;
@@ -163,12 +164,11 @@ module clocks_reset(
 	assign #T_NOR  afar = !(alyp || reset);
 	assign #T_AND  buvu = buty && baly;
 	assign #T_INV  boga = !baly;
-	assign #T_OR   asol = afar || reset;
 	assign #T_INV  byxo = !buvu;
 	assign #T_INV  boma = !boga;
 	assign #T_INV  bedo = !byxo;
 	assign #T_INV  bowa = !bedo;
-	assign #T_OR   avor = afer || asol;
+	assign #T_OR   avor = afer || !asol; /* takes !q output of srlatch */
 	assign #T_INV  alur = !avor;
 	assign boga1mhz = boga;
 	assign to_cpu   = bowa;
@@ -210,6 +210,7 @@ module clocks_reset(
 	dffr dffr_teka(!subu, nreset_div, !teka, teka);
 	dffr dffr_uket(!teka, nreset_div, !uket, uket);
 	dffr dffr_upof(!uket, nreset_div, !upof, upof);
+	srlatch latch_tubo(clk_from_cpu, upyf, tubo);
 	assign #T_MUX  ulur = ff60_d1 ? boga1mhz : tama16384;
 	assign #T_INV  umek = !ugot;
 	assign #T_INV  urek = !tulu;
@@ -221,8 +222,7 @@ module clocks_reset(
 	assign #T_INV  udor = !teka;
 	assign #T_AND  tagy = ff04_ff07 && cpu_rd && tola_na1 && tovy_na0;
 	assign #T_OR   upyf = reset || nclkin_a;
-	assign #T_OR   tubo = clk_from_cpu || upyf;
-	assign #T_AND  unut = upof && tubo;
+	assign #T_AND  unut = upof && !tubo; /* takes !q output of srlatch */
 	assign #T_OR   taba = nt1_t2 || t1_nt2 || unut;
 	assign #T_TRI  tawu = tagy ? !umek : 'z;
 	assign #T_TRI  taku = tagy ? !urek : 'z;

@@ -210,7 +210,7 @@ module dmg;
 	logic boga1mhz, bavu_1mhz;
 	logic byfe_128hz, bufy_256hz, horu_512hz, butu_512khz, jeso_512k, hama_512k, dyfa_1mhz;
 	logic afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko, copu, atys;
-	logic abol, gexu, cope, kyly, adad, elox_q, anuj, doca, cogu, erog, dera, gypa, beny, gugu, gara;
+	logic abol, ngexu, cope, kyly, adad, elox_q, anuj, doca, cogu, erog, dera, gypa, beny, ngugu, gara;
 	logic nkeno, nkafo, nkepa, nkygu, nkemu, nkunu, nkupe, nkutu, njapu, nkeza, nkeju;
 	logic buke, gase, efar_q, fugo_q, beko, bolo, boma, afer, taba, syro;
 	logic ch1_restart, ch1_shift_clk, ch1_ld_shift, ch1_freq_upd1, ch1_freq_upd2;

@@ -81,6 +81,7 @@ module channel4(
 	count count_faty(etef, ch4_restart, ff21_d5, faty);
 	count count_feru(edyf, ch4_restart, ff21_d6, feru);
 	count count_fyro(elaf, ch4_restart, ff21_d7, fyro);
+	srlatch latch_erox(fyno, enur, erox);
 	assign #T_OR   felo = ch4_eg_tick || ch4_eg_disable || erox;
 	assign #T_AOI  fole = !((felo && ff21_d3) || (felo && nff21_d3));
 	assign #T_AOI  etef = !((feko && ff21_d3) || (!feko && nff21_d3));
@@ -96,7 +97,6 @@ module channel4(
 	assign #T_NOR  emet = !(ch4_restart || apu_reset);
 	assign #T_OR   evur = daro || dubo;
 	assign #T_OR   enur = apu_reset || ch4_restart;
-	assign #T_OR   erox = fyno || enur;
 	assign ch4_out = { boza, apyr, byzy, akof };
 
 	logic alop, boky, abel, bawa, buxo, dogo, cofe, cuna, ejex;
@@ -128,7 +128,7 @@ module channel4(
 	logic jepe, javo, hepa, hory, heno, hyro, hezu;
 	logic joto, komu, ketu, kuta, kuzy, kywy, jaju, hape, juxe;
 	dffr dffr_gysu(nphi,          gaso, ff23_d7, gysu); // check clk edge
-	dffr dffr_gone(hama_512k,     fale, hazo,    gone); // check clk edge
+	dffr dffr_gone(hama_512k,     fale, !hazo,   gone); // check clk edge
 	dffr dffr_gora(hama_512k,     feby, gone,    gora); // check clk edge
 	dffr dffr_gaty(hama_512k,     feby, gora,    gaty); // check clk edge
 	dffr dffr_gary(gyba,          guny, hyno,    gary); // check clk edge
@@ -151,10 +151,12 @@ module channel4(
 	count count_jyco(kanu, huce, nff22_d0, jyco);
 	count count_jyre(jyco, huce, nff22_d1, jyre);
 	count count_jyfu(jyre, huce, nff22_d2, jyfu);
+	srlatch latch_gena(ch4_restart, fegy,  gena);
+	srlatch latch_hazo(helu,        gysu,  hazo);
+	srlatch latch_jery(!hapu,       !hery, jery); /* srlatch with !s & !r inputs */
 	assign #T_INV  gaso = !apu_reset;
 	assign #T_NOR  fale = !(apu_reset || gora);
 	assign #T_INV  helu = !fale;
-	assign #T_OR   hazo = helu || gysu;
 	assign #T_NOR  guzy = !(apu_reset || gysu);
 	assign #T_INV  feby = !apu_reset;
 	assign #T_INV  hapu = !gaty;
@@ -162,9 +164,7 @@ module channel4(
 	assign #T_AND  efot = ff23_d6 && fugo_q;
 	assign #T_NOR  hery = !(gevy || apu_reset);
 	assign #T_OR   fegy = apu_reset || efot || gevy;
-	assign #T_AND  jery = hery && hapu;
-	assign #T_OR   gena = ch4_restart || fegy;
-	assign #T_OR   kyku = jery || jeso_512k;
+	assign #T_OR   kyku = !jery || jeso_512k; /* takes !q output of srlatch */
 	assign #T_INV  juwa = !gena;
 	assign #T_INV  kony = !kyku;
 	assign #T_INV  kanu = !kony;

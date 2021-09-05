@@ -12,13 +12,13 @@ module channel1(
 		output logic ch1_restart, ch1_shift_clk, ch1_ld_shift, ch1_freq_upd1, ch1_freq_upd2,
 		output logic nch1_active, nch1_amp_en,
 		input  logic atys, copu, cate, abol,
-		output logic gexu, cope, kyly, adad,
+		output logic ngexu, cope, kyly, adad,
 		input  logic byfe_128hz, bufy_256hz, horu_512hz, dyfa_1mhz, ajer_2mhz,
 
 		output logic [3:0] ch1_out
 	);
 
-	logic boro, boka, cory, cero, capy, cyfa, hoca, bone, bery, femy, gepu, bugy, canu, bepe, cuso;
+	logic boro, boka, cory, cero, capy, cyfa, hoca, bone, bery, femy, gepu, gexu, bugy, canu, bepe, cuso;
 	logic bacy, cavy, bovy, cuno, cura, eram;
 	dffr dffr_cero(!eram, cory, !cero, cero); // check clk edge
 	count count_bacy(canu, bugy, d[0], bacy);
@@ -27,6 +27,7 @@ module channel1(
 	count count_cuno(bovy, bugy, d[3], cuno);
 	count count_cura(cuso, bepe, d[4], cura);
 	count count_eram(cura, bepe, d[5], eram);
+	srlatch latch_gexu(!gepu, !femy, gexu); /* srlatch with !s & !r inputs */
 	assign #T_NAND boro = !(apu_wr && ff11);
 	assign #T_INV  boka = !boro;
 	assign #T_NOR  cory = !(ch1_restart || apu_reset || boka);
@@ -37,12 +38,12 @@ module channel1(
 	assign #T_OR   bery = bone || apu_reset || cyfa || hoca;
 	assign #T_NOR  femy = !(apu_reset || hoca);
 	assign #T_INV  gepu = !fyte;
-	assign #T_AND  gexu = gepu && femy;
 	assign #T_INV  bugy = !boro;
 	assign #T_INV  canu = !capy;
 	assign #T_INV  bepe = !boro;
 	assign #T_INV  cuso = cuno; /* takes !q output of counter */
 	assign nch1_amp_en = hoca;
+	assign ngexu       = !gexu;
 
 	logic cala, comy, cyte, dyru, doka;
 	dffr dffr_comy(cala, dyru, !comy, comy); // check clk edge
@@ -74,7 +75,7 @@ module channel1(
 	dffr dffr_fyte(dyfa_1mhz,  erum,        fare,        fyte); // check clk edge
 	dffr dffr_dupe(doge,       dado,        d[7],        dupe); // check clk edge
 	dffr dffr_ezec(nphi,       duka,        dupe,        ezec); // check clk edge
-	dffr dffr_feku(dyfa_1mhz,  eget,        fyfo,        feku); // check clk edge
+	dffr dffr_feku(dyfa_1mhz,  eget,        !fyfo,       feku); // check clk edge
 	dffr dffr_kyno(kozy,       koru,        jade,        kyno); // check clk edge
 	dffr dffr_duwo(cope,       napu_reset6, ch1_bit,     duwo); // check clk edge
 	count count_jova(jola, kuxu,        nff12_d0, jova);
@@ -84,6 +85,9 @@ module channel1(
 	count count_hoko(heto, ch1_restart, ff12_d6,  hoko);
 	count count_hemy(hyto, ch1_restart, ff12_d5,  hemy);
 	count count_hafo(jufy, ch1_restart, ff12_d4,  hafo);
+	srlatch latch_cyto(ch1_restart, bery, cyto);
+	srlatch latch_fyfo(gefe,        ezec, fyfo);
+	srlatch latch_kezu(kyno,        keko, kezu);
 	assign #T_INV  jone = !byfe_128hz;
 	assign #T_INV  kado = !apu_reset;
 	assign #T_INV  kere = !kaly;
@@ -102,7 +106,6 @@ module channel1(
 	assign #T_NOR  dado = !(apu_reset || ezec);
 	assign #T_INV  duka = !apu_reset;
 	assign #T_INV  gefe = !eget;
-	assign #T_OR   fyfo = gefe || ezec;
 	assign #T_OR   keko = apu_reset || feku;
 	assign #T_OR   kaba = apu_reset || feku;
 	assign #T_INV  kyly = !kaba;
@@ -111,8 +114,6 @@ module channel1(
 	assign #T_INV  hake = !hufu;
 	assign #T_NOR  koru = !(ch1_restart || apu_reset);
 	assign #T_OR   jade = hake || hano;
-	assign #T_OR   kezu = kyno || keko;
-	assign #T_OR   cyto = ch1_restart || bery;
 	assign #T_INV  cara = !cyto;
 	assign #T_AND  cowe = cyto && duwo;
 	assign #T_OR   boto = cowe || net03;
@@ -137,6 +138,7 @@ module channel1(
 	count count_copa(dapu, cylu, nff10_d0, copa);
 	count count_caja(copa, cylu, nff10_d1, caja);
 	count count_byra(caja, cylu, nff10_d2, byra);
+	srlatch latch_femu(!evol, !epuk, femu); /* srlatch with !s & !r inputs */
 	assign #T_NOR  dacu = !(ch1_restart || bexa);
 	assign #T_INV  cylu = !dacu;
 	assign #T_NAND buge = !(nff10_d2 && nff10_d1 && nff10_d0);
@@ -145,8 +147,7 @@ module channel1(
 	assign #T_INV  adad = BYTE; /* takes !q output of dff */
 	assign #T_NOR  epuk = !(apu_reset || adad);
 	assign #T_NOR  evol = !(bexa || fyte);
-	assign #T_AND  femu = epuk && evol;
-	assign #T_NOR  egyp = !(femu || dyfa_1mhz);
+	assign #T_NOR  egyp = !(!femu || dyfa_1mhz); /* takes !q output of srlatch */
 	assign #T_INV  cele = !nno_sweep;
 	assign #T_NOR  dody = !(cele || egyp);
 	assign #T_INV  egor = !dody;

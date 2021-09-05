@@ -34,7 +34,7 @@ module channel2(
 	dffr dffr_jopa(horu_512hz, hafe,        kyvo,    jopa); // check clk edge
 	dffr dffr_hepo(jopa,       hypa,        gufy,    hepo); // check clk edge
 	dffr dffr_dope(nphi,       cywu,        ff19_d7, dope); // check clk edge
-	dffr dffr_elox(cemo_1mhz,  doxa,        dala,    elox); // check clk edge
+	dffr dffr_elox(cemo_1mhz,  doxa,        !dala,   elox); // check clk edge
 	dffr dffr_dory(cemo_1mhz,  cexe,        elox,    dory); // check clk edge
 	dffr dffr_cyre(akyd_nq,    beny,        !cyre,   cyre); // check clk edge
 	dffr dffr_cano(cule,       napu_reset2, !cano,   cano); // check clk edge
@@ -57,6 +57,10 @@ module channel2(
 	count count_fomy(etup, elox_q, ff17_d6,  fomy);
 	count count_fete(faru, elox_q, ff17_d5,  fete);
 	count count_feno(gafa, elox_q, ff17_d4,  feno);
+	srlatch latch_buta(!bodo, !ares, buta); /* srlatch with !s & !r inputs */
+	srlatch latch_dala(celo,  dope,  dala);
+	srlatch latch_dane(elox,  esyk,  dane);
+	srlatch latch_jeme(hepo,  hyle,  jeme);
 	assign #T_INV  hota = !byfe_128hz;
 	assign #T_INV  katy = !apu_reset;
 	assign #T_INV  kylo = !jyna;
@@ -72,14 +76,12 @@ module channel2(
 	assign #T_INV  erog = !duju;
 	assign #T_INV  gypa = !duju;
 	assign #T_INV  cywu = !apu_reset;
-	assign #T_OR   dala = celo || dope;
 	assign #T_NOR  dera = !(apu_reset || dope);
 	assign #T_NOR  hyly = !(elox || jopa);
 	assign #T_NOR  hypa = !(elox || apu_reset);
 	assign #T_OR   hyle = apu_reset || elox;
 	assign #T_INV  jake = !hyly;
 	assign #T_INV  cexe = !apu_reset;
-	assign #T_OR   jeme = hepo || hyle;
 	assign #T_OR   doxa = apu_reset || dory;
 	assign #T_INV  celo = !doxa;
 	assign #T_INV  gade = !jopa;
@@ -92,8 +94,7 @@ module channel2(
 	assign #T_INV  byho = !buwe;
 	assign #T_INV  bufo = !atep;
 	assign #T_INV  bodo = !caza;
-	assign #T_AND  buta = bodo && ares;
-	assign #T_NOR  cama = !(cemo || buta);
+	assign #T_NOR  cama = !(cemo || !buta); /* takes !q output of srlatch */
 	assign #T_INV  doca = !cama;
 	assign #T_AOI  fopy = !((fomy && ff17_d3) || (!fomy && nff17_d3));
 	assign #T_AOI  etup = !((fete && ff17_d3) || (!fete && nff17_d3));

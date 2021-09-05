@@ -15,7 +15,7 @@ module channel3(
 
 		output logic ch3_active, nch3_active, gase, efar_q, atok,
 		output logic nkutu, nkupe, nkunu, nkemu, nkygu, nkepa, nkafo, nkeno, nkeju, nkeza, njapu,
-		input  logic wave_ram_rd, gugu, gara,
+		input  logic wave_ram_rd, ngugu, gara,
 
 		input  logic [3:0] wave_play_d,
 		output logic [3:0] wave_a, wave_dac_d
@@ -50,7 +50,7 @@ module channel3(
 	assign #T_INV  hema = !huno;
 	assign #T_INV  gase = !hema;
 	assign #T_NOR  gafu = !(apu_reset || gara || hupa);
-	assign #T_NOR  hefo = !(cery_2mhz || gugu);
+	assign #T_NOR  hefo = !(cery_2mhz || ngugu);
 	assign #T_INV  juty = !hefo;
 	assign #T_NOR  hera = !(gase || gara);
 	assign #T_INV  kyko = !hera;
@@ -95,9 +95,9 @@ module channel3(
 
 	logic gedo, fygo, fozu, ezas, calu, doru, davo, coka, ered;
 	dffr dffr_davo(ajer_2mhz, calu, doru, davo); // check clk edge
+	srlatch latch_fozu(gara, fygo, fozu);
 	assign #T_AND  gedo = fexu && ff1e_d6;
 	assign #T_OR   fygo = apu_reset || gedo || nff1a_d7;
-	assign #T_OR   fozu = gara || fygo;
 	assign #T_INV  ezas = !fozu;
 	assign #T_INV  calu = !apu_reset;
 	assign #T_INV  doru = !ezas;

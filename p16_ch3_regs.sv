@@ -13,19 +13,21 @@ module ch3_regs(
 		output logic ff1d_d0, ff1d_d1, ff1d_d2, ff1d_d3, ff1d_d4, ff1d_d5, ff1d_d6, ff1d_d7,
 		output logic ff1e_d0, ff1e_d1, ff1e_d2, ff1e_d6, nff1e_d6,
 
-		output logic gara, gugu, anuj,
+		output logic gara, ngugu, anuj,
 		input  logic nkeno, nkafo, nkepa, nkygu, nkemu, nkunu, nkupe, nkutu, njapu, nkeza, nkeju,
 		input  logic gaxo
 	);
 
-	logic gejo, gucy, gove, guxe, fuvo, fasy, fevo, geko;
+	logic gejo, gucy, gove, guxe, fuvo, gugu, fasy, fevo, geko;
 	logic fabo, gaze, gyta, gyra, faju, goma, foba, fury, gulo, gofy, fako, epyx, gavu;
-	dffr dffr_guxe(gucy,      gove, d[7], guxe); // check clk edge
-	dffr dffr_gara(fabo,      fury, gofy, gara); // check clk edge
-	dffr dffr_gyta(fabo,      gaze, gara, gyta); // check clk edge
-	dffr dffr_gyra(cery_2mhz, gaze, gyta, gyra); // check clk edge
-	dffr dffr_foba(nphi,      goma, gavu, foba); // check clk edge
-	dffr dffr_gavu(epyx,      fako, d[7], gavu); // check clk edge
+	dffr dffr_guxe(gucy,      gove, d[7],  guxe); // check clk edge
+	dffr dffr_gara(fabo,      fury, !gofy, gara); // check clk edge
+	dffr dffr_gyta(fabo,      gaze, gara,  gyta); // check clk edge
+	dffr dffr_gyra(cery_2mhz, gaze, gyta,  gyra); // check clk edge
+	dffr dffr_foba(nphi,      goma, gavu,  foba); // check clk edge
+	dffr dffr_gavu(epyx,      fako, d[7],  gavu); // check clk edge
+	srlatch latch_gofy(gulo,  foba,  gofy);
+	srlatch latch_gugu(!faju, !fuvo, gugu); /* srlatch with !s & !r inputs */
 	assign #T_AND  gejo = ff1a && apu_wr;
 	assign #T_INV  gucy = !gejo;
 	assign #T_INV  gove = !apu_reset;
@@ -33,18 +35,17 @@ module ch3_regs(
 	assign #T_NAND fasy = !(ff1a && gaxo);
 	assign #T_INV  fevo = !guxe;
 	assign #T_TRI  geko = !fasy ? !fevo : 'z;
-	assign #T_AND  gugu = fuvo && faju;
 	assign #T_INV  fabo = !cery_2mhz;
 	assign #T_INV  gaze = !apu_reset;
 	assign #T_INV  faju = !gyra;
 	assign #T_INV  goma = !apu_reset;
 	assign #T_NOR  fury = !(apu_reset || gyta);
 	assign #T_INV  gulo = !fury;
-	assign #T_OR   gofy = gulo || foba;
 	assign #T_NOR  fako = !(apu_reset || foba);
 	assign #T_NAND epyx = !(apu_wr && ff1e);
 	assign nff1a_d7 = !guxe;
 	assign d[7]     = geko;
+	assign ngugu    = !gugu;
 
 	logic dery, geto, emut, gajy;
 	assign #T_NAND dery = !(apu_wr && ff1b);

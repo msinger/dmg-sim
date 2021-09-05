@@ -14,7 +14,7 @@ module ch1_regs(
 
 		input  logic [10:0] acc_d,
 		input  logic ch1_restart, dyfa_1mhz, net03,
-		input  logic anuj, cope, gexu,
+		input  logic anuj, cope, ngexu,
 		output logic copu
 	);
 
@@ -99,7 +99,7 @@ module ch1_regs(
 	assign #T_INV  evaj = !dypu;
 	assign #T_NOR  epyk = !(ch1_restart || cope);
 	assign #T_INV  fume = !epyk;
-	assign #T_NOR  fulo = !(dyfa_1mhz || gexu);
+	assign #T_NOR  fulo = !(dyfa_1mhz || ngexu);
 	assign #T_INV  geku = !fulo;
 	assign #T_INV  dega = !epyk;
 	assign #T_INV  kype = kyna; /* takes !q output of count */
