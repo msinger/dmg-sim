@@ -16,6 +16,7 @@ module dma(
 	logic decy, maka, naxy, powu, luvy, molu, nygo, pusy, lavy, loru, lyxe, lupa, ahoc, loko, lapa, meta;
 	dffr dffr_maka(clk1,     nreset6, caty, maka); // check edge
 	dffr dffr_luvy(nphi_out, nreset6, lupa, luvy); // check edge
+	srlatch latch_lyxe(lavy, loko, lyxe);
 	assign #T_INV  decy = !from_cpu5;
 	assign #T_INV  caty = !decy;
 	assign #T_NOR  naxy = !(maka || nphi_out);
@@ -26,8 +27,7 @@ module dma(
 	assign #T_INV  pusy = !nygo;
 	assign #T_AND  lavy = cpu_wr2 && ff46;
 	assign #T_INV  loru = !lavy;
-	assign #T_OR   lyxe = lavy || loko;
-	assign #T_NOR  lupa = !(lavy || lyxe);
+	assign #T_NOR  lupa = !(lavy || !lyxe); /* takes !q output of srlatch */
 	assign #T_INV  ahoc = !vram_to_oam;
 	assign #T_NAND loko = !(nreset6 && !lene);
 	assign #T_INV  lapa = !loko;
