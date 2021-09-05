@@ -1,6 +1,6 @@
 `default_nettype none
 
-module latch(
+module dlatch(
 		input  logic c, d,
 		output logic q
 	);
@@ -14,6 +14,6 @@ module latch(
 			l = d;
 	end
 
-	assign #T_LATCH q = l;
+	assign #T_DL q = l;
 
 endmodule

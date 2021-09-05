@@ -18,5 +18,6 @@ parameter time T_TRI   = 2ns;
 parameter time T_DFFSR = 8ns;
 parameter time T_DFFR  = 8ns;
 parameter time T_DFF   = 8ns;
-parameter time T_LATCH = 4ns;
+parameter time T_DL    = 4ns;
+parameter time T_SRL   = 4ns;
 parameter time T_COUNT = 8ns;

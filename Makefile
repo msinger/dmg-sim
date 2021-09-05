@@ -26,7 +26,8 @@ timing_param.sv \
 dffsr.sv \
 dffr.sv \
 dff.sv \
-latch.sv \
+dlatch.sv \
+srlatch.sv \
 count.sv \
 $(DMG_SCH_PAGES)
 

@@ -18,7 +18,7 @@ module interrupts(
 	dffr dffr_acef(boga1mhz, nreset2, batu, acef); // check clk edge
 	dffr dffr_agem(boga1mhz, nreset2, acef, agem); // check clk edge
 	dffr dffr_apug(boga1mhz, nreset2, agem, apug); // check clk edge
-	latch latch_awob(boga1mhz, kery, awob);
+	dlatch latch_awob(boga1mhz, kery, awob);
 	assign #T_OR   kery = p13_c || p12_c || p11_c || p10_c;
 	assign #T_AND  asok = apug && batu;
 	assign to_cpu2 = awob;
@@ -33,11 +33,11 @@ module interrupts(
 	dffsr dffsr_ulak(int_jp,      toga, tyme, '1, ulak);
 	dffsr dffsr_lalu(int_stat,    mody, movu, '1, lalu);
 	dffsr dffsr_nybo(int_timer,   pyhu, pyga, '1, nybo);
-	latch latch_maty(nff0f_rd, lope, maty);
-	latch latch_nejy(nff0f_rd, ubul, nejy);
-	latch latch_nuty(nff0f_rd, ulak, nuty);
-	latch latch_mopo(nff0f_rd, lalu, mopo);
-	latch latch_pavy(nff0f_rd, nybo, pavy);
+	dlatch latch_maty(nff0f_rd, lope, maty);
+	dlatch latch_nejy(nff0f_rd, ubul, nejy);
+	dlatch latch_nuty(nff0f_rd, ulak, nuty);
+	dlatch latch_mopo(nff0f_rd, lalu, mopo);
+	dlatch latch_pavy(nff0f_rd, nybo, pavy);
 	assign #T_INV  rotu = !nff0f_wr;
 	assign #T_INV  lety = !cpu_irq0_ack;
 	assign #T_OR   muxe = d[0] || nff0f_wr;

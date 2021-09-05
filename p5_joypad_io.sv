@@ -34,10 +34,10 @@ module joypad_io(
 	dffr dffr_cofy(ff00wr, nreset2, d[5], cofy); // check clk edge
 	dffr dffr_jute(ff00wr, nreset2, d[0], jute); // check clk edge
 	dffr dffr_kecy(ff00wr, nreset2, d[1], kecy); // check clk edge
-	latch latch_kolo(byzo, p13_c, kolo);
-	latch latch_keja(byzo, p12_c, keja);
-	latch latch_kevu(byzo, p10_c, kevu);
-	latch latch_kapa(byzo, p11_c, kapa);
+	dlatch latch_kolo(byzo, p13_c, kolo);
+	dlatch latch_keja(byzo, p12_c, keja);
+	dlatch latch_kevu(byzo, p10_c, kevu);
+	dlatch latch_kapa(byzo, p11_c, kapa);
 	assign #T_INV  jeva = !ff60_d0;
 	assign #T_NAND kore = !(keru && ff60_d0);
 	assign #T_NOR  kywe = !(jeva || keru);
