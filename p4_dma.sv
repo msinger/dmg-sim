@@ -18,7 +18,7 @@ module dma(
 	dffr dffr_luvy(nphi_out, nreset6, lupa, luvy); // check edge
 	assign #T_INV  decy = !from_cpu5;
 	assign #T_INV  caty = !decy;
-	assign #T_NOR  naxy = !(maka || luvy);
+	assign #T_NOR  naxy = !(maka || nphi_out);
 	assign #T_AND  powu = matu && naxy;
 	assign #T_AO   wyja = (amab && cpu_wr2) || powu;
 	assign #T_AND  molu = ff46 && cpu_rd2;
