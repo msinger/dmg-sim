@@ -23,7 +23,7 @@ module vram_interface(
 
 		input  logic from_cpu3, roru, lula, bedo, saro, tacu, tuvo, acyl, xyso, texo, abuz, texy, myma, lena, xymu, leko,
 		input  logic xuha, vyno, vujo, vymu, neta, pore, potu, npyju, npowy, npoju, npulo, npoxa, npyzo, npozo, nrawu,
-		output logic cota, wuko
+		output logic cota, wuko, syro
 	);
 
 	logic reho, pony, ruma, pedu, ruky, nuva, vode, tago, vova, tujy, mume, luby, mewy;
@@ -94,7 +94,7 @@ module vram_interface(
 	assign #T_NOR  bycu = !(cufe || xujy || aver);
 	assign #T_INV  cota = !bycu;
 
-	logic syro, tefa, sose, tuca, tuja, tegu, tavy, sycy, soto, tuto, sudo, tefy, sale, tyjy, tole;
+	logic tefa, sose, tuca, tuja, tegu, tavy, sycy, soto, tuto, sudo, tefy, sale, tyjy, tole;
 	dffr dffr_soto(sycy, nreset6, !soto, soto); // check edge
 	assign #T_INV  syro = !nfexxffxx;
 	assign #T_NOR  tefa = !(syro || texo);

@@ -2,30 +2,112 @@
 
 module dmg;
 
-	int   cyc;
-	logic xi;
-	logic clkin_a, clkin_b;
-	logic reset; /* inverted !RST pin */
-	logic t1 = 0;
-	logic t2 = 0;
-	assign clkin_a = cyc >= 2;
-	assign clkin_b = xi;
-	assign reset = cyc >= 40 && cyc <= 80;
+	logic xo, xi;         /* XI, XO clock pins */
+	logic t1 = 0, t2 = 0; /* T1, T2 test pins */
+	assign xi = xo;
+
+	task automatic xi_tick();
+		#122ns xo = xo_ena ? !xi : 0;
+	endtask
+
+	task automatic cyc(input int num);
+		int i;
+		if (xi)
+			xi_tick();
+		for (i = 0; i < num * 2; i++)
+			xi_tick();
+	endtask
+
+	/* CPU I/Os labeled like here: http://iceboy.a-singer.de/doc/dmg_cpu_connections.html */
+	logic cpu_out_t1;     /* CPU out T1  */
+	logic cpu_clkin_t2;   /* CPU in  T2  */
+	logic cpu_clkin_t3;   /* CPU in  T3  */
+	logic cpu_clkin_t4;   /* CPU in  T4  */
+	logic cpu_clkin_t5;   /* CPU in  T5  */
+	logic cpu_clkin_t6;   /* CPU in  T6  */
+	logic cpu_clkin_t7;   /* CPU in  T7  */
+	logic cpu_clkin_t8;   /* CPU in  T8  */
+	logic cpu_clkin_t9;   /* CPU in  T9  */
+	logic cpu_clkin_t10;  /* CPU in  T10 */
+	logic cpu_clk_ena;    /* CPU out T11 */
+	logic cpu_in_t12;     /* CPU in  T12 */
+	logic reset;          /* CPU in  T13  (inverted !RST pin) */
+	logic xo_ena;         /* CPU out T14 */
+	logic cpu_in_t15;     /* CPU in  T15 */
+	logic cpu_in_t16 = 1; /* CPU in  T16 */
+	logic cpu_raw_rd;     /* CPU out R1  */
+	logic cpu_raw_wr;     /* CPU out R2  */
+	logic nt1_t2;         /* CPU in  R3  */
+	logic cpu_in_r4;      /* CPU in  R4  */
+	logic cpu_in_r5;      /* CPU in  R5  */
+	logic t1_nt2;         /* CPU in  R6  */
+	logic cpu_out_r7;     /* CPU out R7  */
+	logic cpu_irq0_ack;   /* CPU out R14 */
+	logic cpu_irq0_trig;  /* CPU in  R15 */
+	logic cpu_irq1_ack;   /* CPU out R16 */
+	logic cpu_irq1_trig;  /* CPU in  R17 */
+	logic cpu_irq2_ack;   /* CPU out R18 */
+	logic cpu_irq2_trig;  /* CPU in  R19 */
+	logic cpu_irq3_ack;   /* CPU out R20 */
+	logic cpu_irq3_trig;  /* CPU in  R21 */
+	logic cpu_irq4_ack;   /* CPU out R22 */
+	logic cpu_irq4_trig;  /* CPU in  R23 */
+	logic [7:0]  cpu_d;   /* CPU I/O B1-B8  */
+	logic [15:0] cpu_a;   /* CPU out B9-B24 */
+	logic        cpu_drv_d, cpu_drv_a;
+	logic cpu_wakeup;     /* CPU in  B25 */
+	assign cpu_clkin_t2  = to_cpu;
+	assign cpu_clkin_t3  = bedo;
+	assign cpu_clkin_t4  = beko;
+	assign cpu_clkin_t5  = phi_out;
+	assign cpu_clkin_t6  = bolo;
+	assign cpu_clkin_t7  = from_cpu5;
+	assign cpu_clkin_t8  = buke;
+	assign cpu_clkin_t9  = boma;
+	assign cpu_clkin_t10 = boga1mhz;
+	assign cpu_in_t12    = afer;
+	assign cpu_in_t15    = taba;
+	assign cpu_in_r4     = syro;
+	assign cpu_in_r5     = tutu;
+	assign d             = cpu_drv_d ? cpu_d : 'z;
+	assign a             = cpu_drv_a ? cpu_a : 'z;
+	assign cpu_wakeup    = to_cpu2;
 
 	initial begin
 		$dumpfile("dmg.vcd");
 		$dumpvars(0, dmg);
 
-		xi = 0;
+		xo     = 0;
+		reset  = 1;
 
-		for (cyc = 0; cyc < 20000; cyc++)
-			#122ns xi = !xi;
+		cpu_out_t1   = 0;
+		cpu_clk_ena  = 1;
+		xo_ena       = 1;
+		cpu_raw_rd   = 0;
+		cpu_raw_wr   = 0;
+		cpu_out_r7   = 0;
+		cpu_irq0_ack = 0;
+		cpu_irq1_ack = 0;
+		cpu_irq2_ack = 0;
+		cpu_irq3_ack = 0;
+		cpu_irq4_ack = 0;
+		cpu_drv_d    = 0;
+		cpu_d        = 0;
+		cpu_drv_a    = 1;
+		cpu_a        = 0;
+
+		cyc(256);
+
+		reset = 0;
+
+		cyc(20000);
 
 		$finish;
 	end
 
-	tri1 logic [7:0]  d, md, oam_a_d, oam_b_d;
+	tri0 logic [7:0]  d;
 	tri0 logic [15:0] a;
+	tri0 logic [7:0]  md, oam_a_d, oam_b_d;
 	tri0 logic [12:0] ma;
 
 	logic [7:0]  d_a, d_d, md_out, md_a;
@@ -44,7 +126,6 @@ module dmg;
 	logic moe_in = 0;
 	logic mwr_in = 0;
 	logic mcs_in = 0;
-	logic cpu_raw_rd = 0;
 	logic p10_c = 0;
 	logic p11_c = 0;
 	logic p12_c = 0;
@@ -52,11 +133,6 @@ module dmg;
 	logic sin_in = 0;
 	logic sck_in = 0;
 	logic ff40_d7 = 0;
-	logic from_cpu3 = 1;
-	logic from_cpu4 = 0;
-	logic from_cpu5 = 0;
-	logic from_cpu6 = 0;
-	logic clk_from_cpu = 1;
 	logic ff46 = 0;
 	logic ff40_d4 = 0;
 	logic amab = 0;
@@ -86,27 +162,32 @@ module dmg;
 	logic nrawu = 1;
 	logic int_vbl_buf = 0;
 	logic int_stat = 0;
-	logic cpu_irq0_ack = 0;
-	logic cpu_irq1_ack = 0;
-	logic cpu_irq2_ack = 0;
-	logic cpu_irq3_ack = 0;
-	logic cpu_irq4_ack = 0;
 
 	logic clk1;
 
 	logic cpu_wr, cpu_wr2;
 	logic cpu_rd, cpu_rd2;
-	logic cpu_rd_sync;
-	logic nt1_nt2, nt1_t2, t1_nt2;
+	logic cpu_rd_sync; /* this is wrongly labeled in the schematics; it is actually WR sync */
+	logic nt1_nt2;
 	logic ff04_ff07, nff0f_rd, nff0f_wr, ff00wr, ff00rd;
 	logic nff04_d0, nff04_d1;
 	logic apu_wr, ncpu_rd;
 	logic hram_cs, boot_cs, ncs_out;
-	logic to_cpu, to_cpu2, to_cpu_tutu;
-	logic cpu_irq0_trig, cpu_irq1_trig, cpu_irq2_trig, cpu_irq3_trig, cpu_irq4_trig;
+	logic to_cpu, to_cpu2;
+	logic from_cpu5; /* this is wrongly labeled in the schematics; it is actually a CPU input */
+
+	logic clkin_a, clkin_b;
+	assign clkin_a = xo_ena;
+	assign clkin_b = xi;
+
+	logic from_cpu3, from_cpu4, from_cpu6, clk_from_cpu;
+	assign from_cpu3    = cpu_raw_wr;
+	assign from_cpu4    = cpu_out_r7;
+	assign from_cpu6    = cpu_out_t1;
+	assign clk_from_cpu = cpu_clk_ena;
 
 	logic nreset2, nreset6;
-	logic nphi_out, nphi;
+	logic phi_out, nphi_out, nphi;
 
 	logic sout, sin_a, sin_b, sin_d, sck_a, sck_dir, sck_d;
 	logic p10_a, p10_b, p10_d, p11_a, p11_b, p11_d, p12_a, p12_b, p12_d, p13_a, p13_b, p13_d;
@@ -131,7 +212,7 @@ module dmg;
 	logic afas, fero_q, cate, gaxo, bedo, abuz, tutu, texo, roru, lula, anap, duce, cota, wuko, copu, atys;
 	logic abol, gexu, cope, kyly, adad, elox_q, anuj, doca, cogu, erog, dera, gypa, beny, gugu, gara;
 	logic nkeno, nkafo, nkepa, nkygu, nkemu, nkunu, nkupe, nkutu, njapu, nkeza, nkeju;
-	logic buke, gase, efar_q, fugo_q;
+	logic buke, gase, efar_q, fugo_q, beko, bolo, boma, afer, taba, syro;
 	logic ch1_restart, ch1_shift_clk, ch1_ld_shift, ch1_freq_upd1, ch1_freq_upd2;
 	logic ch2_ftick;
 	logic nch1_active, nch1_amp_en;

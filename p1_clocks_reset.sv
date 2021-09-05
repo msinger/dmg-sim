@@ -6,7 +6,7 @@ module clocks_reset(
 
 		output logic nreset2, nreset6,
 		output logic clk1,
-		output logic nphi_out, nphi,
+		output logic phi_out, nphi_out, nphi,
 
 		inout tri logic [7:0] d,
 
@@ -17,7 +17,7 @@ module clocks_reset(
 		input  logic from_cpu3,
 		input  logic from_cpu4,
 		input  logic clk_from_cpu,
-		output logic to_cpu,
+		output logic to_cpu, from_cpu5,
 
 		input logic ff04_ff07,
 		input logic ff40_d7,
@@ -35,7 +35,7 @@ module clocks_reset(
 		output logic horu_512hz,
 		output logic jeso_512k, hama_512k,
 		input  logic fero_q,
-		output logic bedo, abuz, afas, abol,
+		output logic bedo, abuz, afas, abol, beko, bolo, boma, afer, taba, buke,
 		output logic nff04_d0, nff04_d1,
 		output logic _16384hz, _65536hz, _262144hz
 	);
@@ -101,7 +101,7 @@ module clocks_reset(
 	assign reset_video3  = lyha;
 
 	logic adyk, afur, alef, apuk, ucob, uvyt, nclkin_a;
-	logic adar, atyp, afep, arov, ajax, bugo, arev, apov, agut, awod, bate, basu, buke;
+	logic adar, atyp, afep, arov, ajax, bugo, arev, apov, agut, awod, bate, basu;
 	dffr dffr_adyk(atal_4mhz,  nt1_nt2, apuk,  adyk);
 	dffr dffr_afur(!atal_4mhz, nt1_nt2, !adyk, afur);
 	dffr dffr_alef(atal_4mhz,  nt1_nt2, afur,  alef);
@@ -128,7 +128,7 @@ module clocks_reset(
 	assign nphi_out = uvyt;
 	assign cpu_rd_sync = apov;
 
-	logic bapy, belu, beru, byry, bufa, byly, bude, beva, bolo, byda, beko, bavy, beja, dova, phi_out;
+	logic bapy, belu, beru, byry, bufa, byly, bude, beva, byda, bavy, beja, dova;
 	logic bane, belo, baze, buto;
 	assign #T_NOR  bapy = !(abol || arov || atyp);
 	assign #T_NOR  belu = !(atyp || abol);
@@ -148,10 +148,11 @@ module clocks_reset(
 	assign #T_INV  belo = !bane;
 	assign #T_INV  baze = !belo;
 	assign #T_NAND buto = !(afep && atyp && baze);
-	assign phi_out = bude;
-	assign nphi    = dova;
+	assign phi_out   = bude;
+	assign nphi      = dova;
+	assign from_cpu5 = bufa;
 
-	logic bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, boma, byxo, bowa, afer, avor, alur;
+	logic bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, byxo, bowa, avor, alur;
 	dffr dffr_afer(boga, nt1_nt2, asol, afer);
 	assign #T_INV  bele = !buto;
 	assign #T_INV  atez = !clkin_a;
@@ -198,7 +199,7 @@ module clocks_reset(
 	logic ulur, ugot, tulu, tugo, tofe, teru, sola, subu, teka, uket, upof;
 	logic umek, urek, utok, sapy, umer, rave, ryso, udor;
 	logic tagy, tawu, taku, temu, tuse, upug, sepu, sawa, tatu;
-	logic upyf, tubo, unut, taba;
+	logic upyf, tubo, unut;
 	dffr dffr_ugot(ulur,  nreset_div, !ugot, ugot);
 	dffr dffr_tulu(!ugot, nreset_div, !tulu, tulu);
 	dffr dffr_tugo(!tulu, nreset_div, !tugo, tugo);

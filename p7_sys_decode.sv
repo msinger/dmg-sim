@@ -7,7 +7,6 @@ module sys_decode(
 		input  logic reset, nreset2, t1, t2, wr_in, rd_b,
 		input  logic cpu_rd_sync, cpu_raw_rd,
 		input  logic from_cpu6,
-		output logic to_cpu_tutu,
 		output logic cpu_wr, cpu_wr2, cpu_rd, cpu_rd2,
 		output logic nt1_nt2, nt1_t2, t1_nt2,
 
@@ -159,7 +158,6 @@ module sys_decode(
 	assign #T_AND  zufa = zoro && zadu;
 	assign #T_NAND zado = !(yula && zufa);
 	assign #T_INV  zery = !zado;
-	assign to_cpu_tutu = tutu;
-	assign boot_cs     = zery;
+	assign boot_cs = zery;
 
 endmodule
