@@ -33,7 +33,10 @@ $(DMG_SCH_PAGES)
 
 all: dmg.vcd
 
-.PHONY: all
+clean:
+	rm -f dmg.vcd dmg
+
+.PHONY: all clean
 
 %: %.f %.sv
 	iverilog -g2012 -o $@ -f $^
