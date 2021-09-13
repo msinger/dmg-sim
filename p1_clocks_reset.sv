@@ -265,7 +265,7 @@ module clocks_reset(
 
 	logic bopo, atyk, avok, bavu, jeso, hama, _2097152hz, _1048576hz;
 	dffr dffr_atyk(aryf_4mhz, bopo,        !atyk, atyk); // check edge
-	dffr dffr_avok(atyk,      bopo,        !avok, avok); // check edge
+	dffr dffr_avok(!atyk,     bopo,        !avok, avok); // check edge
 	dffr dffr_jeso(bavu,      napu_reset5, !jeso, jeso); // check edge
 	assign #T_INV  bopo = !apu_reset;
 	assign #T_INV  bavu = !avok;
