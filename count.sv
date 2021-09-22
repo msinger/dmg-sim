@@ -9,13 +9,14 @@ module count #(
 		output logic q
 	);
 
-	logic ff;
+	logic initff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
 
-	initial ff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
+	logic ff;
+	initial ff = initff;
 
 	always @(negedge nclk, posedge load) begin
 		if (load)
-			ff <= $isunknown(d) ? $random : d;
+			ff <= $isunknown(d) ? initff : d;
 		else
 			ff <= !ff;
 	end

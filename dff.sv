@@ -7,12 +7,13 @@ module dff #(
 		output logic q
 	);
 
-	logic ff;
+	logic initff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
 
-	initial ff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
+	logic ff;
+	initial ff = initff;
 
 	always_ff @(posedge clk) begin
-		ff <= $isunknown(d) ? $random : d;
+		ff <= $isunknown(d) ? initff : d;
 	end
 
 	assign #T_DFF q = ff;

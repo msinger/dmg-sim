@@ -7,13 +7,14 @@ module dffr #(
 		output logic q
 	);
 
-	logic ff;
+	logic initff = $isunknown(INITIAL_Q) ? $random&1 : INITIAL_Q;
 
-	initial ff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
+	logic ff;
+	initial ff = initff;
 
 	always_ff @(posedge clk, negedge nreset) begin
 		if (nreset)
-			ff <= $isunknown(d) ? $random : d;
+			ff <= $isunknown(d) ? initff : d;
 		else
 			ff <= 0;
 	end

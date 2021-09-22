@@ -7,13 +7,14 @@ module dffsr #(
 		output logic q
 	);
 
-	logic ff;
+	logic initff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
 
-	initial ff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
+	logic ff;
+	initial ff = initff;
 
 	always_ff @(posedge clk, negedge nset, negedge nreset) begin
 		if (nset && nreset)
-			ff <= $isunknown(d) ? $random : d;
+			ff <= $isunknown(d) ? initff : d;
 		else if (!nreset) // TODO: check priority of set/reset
 			ff <= 0;
 		else
