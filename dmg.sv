@@ -37,10 +37,10 @@ module dmg;
 	logic cpu_in_t16 = 1; /* CPU in  T16 */
 	logic cpu_raw_rd;     /* CPU out R1  */
 	logic cpu_raw_wr;     /* CPU out R2  */
-	logic nt1_t2;         /* CPU in  R3  */
+	logic t1_nt2;         /* CPU in  R3  */
 	logic cpu_in_r4;      /* CPU in  R4  */
 	logic cpu_in_r5;      /* CPU in  R5  */
-	logic t1_nt2;         /* CPU in  R6  */
+	logic nt1_t2;         /* CPU in  R6  */
 	logic cpu_out_r7;     /* CPU out R7  */
 	logic cpu_irq0_ack;   /* CPU out R14 */
 	logic cpu_irq0_trig;  /* CPU in  R15 */
@@ -168,7 +168,7 @@ module dmg;
 	logic cpu_wr, cpu_wr2;
 	logic cpu_rd, cpu_rd2;
 	logic cpu_rd_sync; /* this is wrongly labeled in the schematics; it is actually WR sync */
-	logic nt1_nt2;
+	logic t1t2_nrst;
 	logic ff04_ff07, nff0f_rd, nff0f_wr, ff00wr, ff00rd;
 	logic nff04_d0, nff04_d1;
 	logic apu_wr, ncpu_rd;
@@ -185,6 +185,10 @@ module dmg;
 	assign from_cpu4    = cpu_out_r7;
 	assign from_cpu6    = cpu_out_t1;
 	assign clk_from_cpu = cpu_clk_ena;
+
+	logic nt1, nt2;
+	assign nt1 = !t1;
+	assign nt2 = !t2;
 
 	logic nreset2, nreset6;
 	logic phi_out, nphi_out, nphi;

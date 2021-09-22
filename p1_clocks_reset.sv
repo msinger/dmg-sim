@@ -12,7 +12,7 @@ module clocks_reset(
 
 		output logic cpu_rd_sync,
 		input  logic cpu_wr, cpu_rd,
-		input  logic nt1_nt2, nt1_t2, t1_nt2,
+		input  logic t1t2_nrst, t1_nt2, nt1_t2,
 
 		input  logic from_cpu3,
 		input  logic from_cpu4,
@@ -102,10 +102,10 @@ module clocks_reset(
 
 	logic adyk, afur, alef, apuk, ucob, uvyt, nclkin_a;
 	logic adar, atyp, afep, arov, ajax, bugo, arev, apov, agut, awod, bate, basu;
-	dffr dffr_adyk(atal_4mhz,  nt1_nt2, apuk,  adyk);
-	dffr dffr_afur(!atal_4mhz, nt1_nt2, !adyk, afur);
-	dffr dffr_alef(atal_4mhz,  nt1_nt2, afur,  alef);
-	dffr dffr_apuk(!atal_4mhz, nt1_nt2, alef,  apuk);
+	dffr dffr_adyk(atal_4mhz,  t1t2_nrst, apuk,  adyk);
+	dffr dffr_afur(!atal_4mhz, t1t2_nrst, !adyk, afur);
+	dffr dffr_alef(atal_4mhz,  t1t2_nrst, afur,  alef);
+	dffr dffr_apuk(!atal_4mhz, t1t2_nrst, alef,  apuk);
 	assign #T_INV  abol = !clk_from_cpu;
 	assign #T_INV  ucob = !clkin_a;
 	assign #T_INV  uvyt = !phi_out;
@@ -119,7 +119,7 @@ module clocks_reset(
 	assign #T_INV  ajax = !atyp;
 	assign #T_INV  bugo = !afep;
 	assign #T_OA   agut = (arov || ajax) && from_cpu4;
-	assign #T_OR   awod = nt1_t2 || agut;
+	assign #T_OR   awod = t1_nt2 || agut;
 	assign #T_INV  abuz = !awod;
 	assign #T_NOR  bate = !(bugo || arov || abol);
 	assign #T_INV  basu = !bate;
@@ -153,7 +153,7 @@ module clocks_reset(
 	assign from_cpu5 = bufa;
 
 	logic bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, byxo, bowa, avor, alur;
-	dffr dffr_afer(boga, nt1_nt2, !asol, afer);
+	dffr dffr_afer(boga, t1t2_nrst, !asol, afer);
 	srlatch latch_asol(afar, reset, asol);
 	assign #T_INV  bele = !buto;
 	assign #T_INV  atez = !clkin_a;
@@ -223,7 +223,7 @@ module clocks_reset(
 	assign #T_AND  tagy = ff04_ff07 && cpu_rd && tola_na1 && tovy_na0;
 	assign #T_OR   upyf = reset || nclkin_a;
 	assign #T_AND  unut = upof && !tubo; /* takes !q output of srlatch */
-	assign #T_OR   taba = nt1_t2 || t1_nt2 || unut;
+	assign #T_OR   taba = t1_nt2 || nt1_t2 || unut;
 	assign #T_TRI  tawu = tagy ? !umek : 'z;
 	assign #T_TRI  taku = tagy ? !urek : 'z;
 	assign #T_TRI  temu = tagy ? !utok : 'z;

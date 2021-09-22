@@ -19,7 +19,7 @@ module vram_interface(
 		input  logic moe_in, mwr_in, mcs_in,
 		output logic moe_a, moe_d, mwr_a, mwr_d, mcs_a, mcs_d, md_b,
 
-		input logic nt1_t2, dma_run, mopa_phi, nfexxffxx, nreset6, cpu_rd_sync, vram_to_oam, dma_addr_ext, ff40_d4,
+		input logic t1_nt2, dma_run, mopa_phi, nfexxffxx, nreset6, cpu_rd_sync, vram_to_oam, dma_addr_ext, ff40_d4,
 
 		input  logic from_cpu3, roru, lula, bedo, saro, tacu, tuvo, acyl, xyso, texo, abuz, texy, myma, lena, xymu, leko,
 		input  logic xuha, vyno, vujo, vymu, neta, pore, potu, npyju, npowy, npoju, npulo, npoxa, npyzo, npozo, nrawu,
@@ -103,8 +103,8 @@ module vram_interface(
 	assign #T_AND  tuja = sose && cpu_rd_sync;
 	assign #T_NAND tegu = !(sose && from_cpu3);
 	assign #T_INV  tavy = !moe_in;
-	assign #T_INV  sycy = !nt1_t2;
-	assign #T_AND  tuto = nt1_t2 && !soto;
+	assign #T_INV  sycy = !t1_nt2;
+	assign #T_AND  tuto = t1_nt2 && !soto;
 	assign #T_INV  sudo = !mwr_in;
 	assign #T_INV  tefy = !mcs_in;
 	assign #T_MUX  sale = tuto ? tavy : tegu;
@@ -172,7 +172,7 @@ module vram_interface(
 
 	logic runy, tuso, sole, tahy, tesu, taxo, tovu, tazu, tewa, sosa, sedu;
 	assign         runy = 1;
-	assign #T_NOR  tuso = !(nt1_t2 || bedo);
+	assign #T_NOR  tuso = !(t1_nt2 || bedo);
 	assign #T_INV  sole = !tuso;
 	assign #T_TRI  tahy = !runy ? !sole : 'z; // check enable input polarity
 	assign #T_TRI  tesu = !runy ? !sole : 'z; // check enable input polarity
@@ -223,7 +223,7 @@ module vram_interface(
 
 	logic lyra, ryba, ruzy, rome, tehe, soca, ratu, tovo, saza;
 	logic ropa, sywa, sugu, tute, temy, sajo, tuty, tawo;
-	assign #T_NAND lyra = !(nt1_t2 && roru);
+	assign #T_NAND lyra = !(t1_nt2 && roru);
 	assign #T_INV  ryba = !d_in[7];
 	assign #T_INV  ruzy = !d_in[1];
 	assign #T_INV  rome = !d_in[2];

@@ -12,7 +12,7 @@ module ext_cpu_busses(
 
 		input logic from_cpu3, from_cpu4, from_cpu5,
 		input logic cpu_raw_rd, cpu_rd_sync,
-		input logic cpu_rd, t1_nt2, nt1_t2, dma_addr_ext,
+		input logic cpu_rd, nt1_t2, t1_nt2, dma_addr_ext,
 
 		input  logic abuz, tutu, nfexxffxx,
 		output logic texo, roru, lula,
@@ -27,12 +27,12 @@ module ext_cpu_busses(
 	assign #T_AND  toza = tynu && abuz && nfexxffxx;
 	assign #T_NOR  soby = !(a[15] || tutu);
 	assign #T_NAND sepy = !(abuz && soby);
-	assign #T_INV  ryca = !nt1_t2;
+	assign #T_INV  ryca = !t1_nt2;
 	assign #T_INV  raza = a_c[15];
 	assign #T_TRI  syzu = !ryca ? !raza : 'z;
 	assign #T_MUX  tyho = dma_addr_ext ? dma_a[15] : toza;
 	assign #T_MUX  tazy = dma_addr_ext ? dma_a[15] : sepy;
-	assign #T_NOR  rulo = !(nt1_t2 || tazy);
+	assign #T_NOR  rulo = !(t1_nt2 || tazy);
 	assign #T_NAND suze = !(tazy && ryca);
 	assign ncs_out = tyho;
 	assign a_d[15] = rulo;
@@ -48,7 +48,7 @@ module ext_cpu_busses(
 	dlatch latch_pate(mate, a[10], pate);
 	dlatch latch_lysa(mate, a[9],  lysa);
 	dlatch latch_luno(mate, a[8],  luno);
-	assign #T_INV  tova = !nt1_t2;
+	assign #T_INV  tova = !t1_nt2;
 	assign #T_MUX  pege = dma_addr_ext ? dma_a[14] : nyre;
 	assign #T_MUX  muce = dma_addr_ext ? dma_a[13] : lonu;
 	assign #T_MUX  mojy = dma_addr_ext ? dma_a[12] : lobu;
@@ -56,19 +56,19 @@ module ext_cpu_busses(
 	assign #T_MUX  pamy = dma_addr_ext ? dma_a[10] : pate;
 	assign #T_MUX  masu = dma_addr_ext ? dma_a[9]  : lysa;
 	assign #T_MUX  mano = dma_addr_ext ? dma_a[8]  : luno;
-	assign #T_NOR  pahy = !(nt1_t2 || pege);
+	assign #T_NOR  pahy = !(t1_nt2 || pege);
 	assign #T_NAND puhe = !(pege && tova);
-	assign #T_NOR  leva = !(nt1_t2 || muce);
+	assign #T_NOR  leva = !(t1_nt2 || muce);
 	assign #T_NAND labe = !(muce && tova);
-	assign #T_NOR  loso = !(nt1_t2 || mojy);
+	assign #T_NOR  loso = !(t1_nt2 || mojy);
 	assign #T_NAND luce = !(mojy && tova);
-	assign #T_NOR  lyny = !(nt1_t2 || male);
+	assign #T_NOR  lyny = !(t1_nt2 || male);
 	assign #T_NAND lepy = !(male && tova);
-	assign #T_NOR  rore = !(nt1_t2 || pamy);
+	assign #T_NOR  rore = !(t1_nt2 || pamy);
 	assign #T_NAND roxu = !(pamy && tova);
-	assign #T_NOR  meny = !(nt1_t2 || masu);
+	assign #T_NOR  meny = !(t1_nt2 || masu);
 	assign #T_NAND mune = !(masu && tova);
-	assign #T_NOR  mego = !(nt1_t2 || mano);
+	assign #T_NOR  mego = !(t1_nt2 || mano);
 	assign #T_NAND myny = !(mano && tova);
 	assign net01   = tova;
 	assign a_d[14] = pahy;
@@ -104,21 +104,21 @@ module ext_cpu_busses(
 	assign #T_MUX  apok = dma_addr_ext ? dma_a[2] : alyr;
 	assign #T_MUX  atol = dma_addr_ext ? dma_a[1] : apur;
 	assign #T_MUX  amet = dma_addr_ext ? dma_a[0] : alor;
-	assign #T_NOR  colo = !(nt1_t2 || asur);
+	assign #T_NOR  colo = !(t1_nt2 || asur);
 	assign #T_NAND defy = !(net01 && asur);
-	assign #T_NOR  cyka = !(nt1_t2 || atyr);
+	assign #T_NOR  cyka = !(t1_nt2 || atyr);
 	assign #T_NAND cepu = !(net01 && atyr);
-	assign #T_NOR  ajav = !(nt1_t2 || atov);
+	assign #T_NOR  ajav = !(t1_nt2 || atov);
 	assign #T_NAND badu = !(net01 && atov);
-	assign #T_NOR  bevo = !(nt1_t2 || atem);
+	assign #T_NOR  bevo = !(t1_nt2 || atem);
 	assign #T_NAND byla = !(net01 && atem);
-	assign #T_NOR  bola = !(nt1_t2 || amer);
+	assign #T_NOR  bola = !(t1_nt2 || amer);
 	assign #T_NAND boty = !(net01 && amer);
-	assign #T_NOR  bajo = !(nt1_t2 || apok);
+	assign #T_NOR  bajo = !(t1_nt2 || apok);
 	assign #T_NAND boku = !(net01 && apok);
-	assign #T_NOR  cotu = !(nt1_t2 || atol);
+	assign #T_NOR  cotu = !(t1_nt2 || atol);
 	assign #T_NAND caba = !(net01 && atol);
-	assign #T_NOR  koty = !(nt1_t2 || amet);
+	assign #T_NOR  koty = !(t1_nt2 || amet);
 	assign #T_NAND kupo = !(net01 && amet);
 	assign a_d[7] = colo;
 	assign a_a[7] = defy;
@@ -139,8 +139,8 @@ module ext_cpu_busses(
 
 	logic tola, mule, loxo, lasy, mate, sore, tevy, levo, lagu;
 	assign #T_INV  tola = !a[1];
-	assign #T_INV  mule = !t1_nt2;
-	assign #T_AO   loxo = (mule && texo) || t1_nt2;
+	assign #T_INV  mule = !nt1_t2;
+	assign #T_AO   loxo = (mule && texo) || nt1_t2;
 	assign #T_INV  lasy = !loxo;
 	assign #T_INV  mate = !lasy;
 	assign #T_INV  sore = !a[15];
@@ -151,17 +151,17 @@ module ext_cpu_busses(
 	assign tola_na1 = tola;
 
 	logic moca, mexo, lywe, nevy, moty, puva, tymu, usuf, uver, ugac, urun;
-	assign #T_NOR  moca = !(texo || t1_nt2);
+	assign #T_NOR  moca = !(texo || nt1_t2);
 	assign #T_INV  mexo = !cpu_rd_sync;
 	assign #T_INV  lywe = !lagu;
 	assign #T_OR   nevy = mexo || moca;
 	assign #T_OR   moty = moca || lywe;
 	assign #T_OR   puva = nevy || dma_addr_ext;
 	assign #T_NOR  tymu = !(dma_addr_ext || moty);
-	assign #T_NOR  usuf = !(nt1_t2 || puva);
+	assign #T_NOR  usuf = !(t1_nt2 || puva);
 	assign #T_NAND uver = !(puva && net01);
 	assign #T_NAND ugac = !(net01 && tymu);
-	assign #T_NOR  urun = !(tymu || nt1_t2);
+	assign #T_NOR  urun = !(tymu || t1_nt2);
 	assign wr_c = usuf;
 	assign wr_a = uver;
 	assign rd_a = ugac;
@@ -218,7 +218,7 @@ module ext_cpu_busses(
 
 	logic redu, rogy, ryda, rune, resy, rypu, suly, seze, tamu;
 	assign #T_INV  redu = !cpu_rd;
-	assign #T_MUX  roru = nt1_t2 ? redu : moty;
+	assign #T_MUX  roru = t1_nt2 ? redu : moty;
 	assign #T_INV  lula = !roru;
 	assign #T_NOR  rogy = !(roru || d[6]);
 	assign #T_NOR  ryda = !(roru || d[7]);

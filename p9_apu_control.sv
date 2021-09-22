@@ -6,7 +6,7 @@ module apu_control(
 
 		inout tri logic [7:0] d,
 
-		input logic nt1_t2,
+		input logic t1_nt2,
 
 		input logic ff24, ff25, ff26,
 
@@ -67,7 +67,7 @@ module apu_control(
 	assign #T_INV  cone = !cely;
 	assign #T_INV  cate = !cone;
 	assign #T_AND  etuc = apu_wr && ff26;
-	assign #T_AND  efop = d[4] && nt1_t2;
+	assign #T_AND  efop = d[4] && t1_nt2;
 	assign #T_INV  foku = !etuc;
 	assign #T_INV  edek = fero; /* takes !q output of dff */
 	assign apu_reset = keba;

@@ -4,7 +4,7 @@ module joypad_io(
 		inout tri logic [7:0] d,
 
 		input logic nreset2, bedo,
-		input logic ff00wr, ff00rd, ff60_d0, nt1_t2,
+		input logic ff00wr, ff00rd, ff60_d0, t1_nt2,
 
 		input  logic ser_out,
 		output logic sout, sin_a, sin_b, sin_d,
@@ -83,7 +83,7 @@ module joypad_io(
 	logic axyn, adyr, apys, afop, anoc, ajec, arar, benu, akaj, asuz, ataj, beda;
 	assign #T_INV  axyn = !bedo;
 	assign #T_INV  adyr = !axyn;
-	assign #T_NOR  apys = !(nt1_t2 || adyr);
+	assign #T_NOR  apys = !(t1_nt2 || adyr);
 	assign #T_INV  afop = !apys;
 	assign #T_TRI  anoc = !afop ? '1 : 'z;
 	assign #T_TRI  ajec = !afop ? '1 : 'z;

@@ -4,11 +4,11 @@ module sys_decode(
 		input      logic [15:0] a,
 		inout  tri logic [7:0]  d,
 
-		input  logic reset, nreset2, t1, t2, wr_in, rd_b,
+		input  logic reset, nreset2, nt1, nt2, wr_in, rd_b,
 		input  logic cpu_rd_sync, cpu_raw_rd,
 		input  logic from_cpu6,
 		output logic cpu_wr, cpu_wr2, cpu_rd, cpu_rd2,
-		output logic nt1_nt2, nt1_t2, t1_nt2,
+		output logic t1t2_nrst, t1_nt2, nt1_t2,
 
 		output logic ff04_ff07, nff0f_rd, nff0f_wr,
 		output logic hram_cs,
@@ -22,18 +22,18 @@ module sys_decode(
 	);
 
 	logic ubet, uvar, upoj, unor, umut;
-	assign #T_INV  ubet = !t1;
-	assign #T_INV  uvar = !t2;
+	assign #T_INV  ubet = !nt1;
+	assign #T_INV  uvar = !nt2;
 	assign #T_NAND upoj = !(ubet && uvar && reset);
-	assign #T_AND  unor = t2 && ubet;
-	assign #T_AND  umut = uvar && t1;
-	assign nt1_nt2 = upoj;
-	assign nt1_t2  = unor;
-	assign t1_nt2  = umut;
+	assign #T_AND  unor = nt2 && ubet;
+	assign #T_AND  umut = uvar && nt1;
+	assign t1t2_nrst = upoj;
+	assign t1_nt2    = unor;
+	assign nt1_t2    = umut;
 
 	logic ubal, ujyv, lexy, tapu, tedo, dyky, ajas, cupa, asot, pin_nc;
-	assign #T_MUXI ubal = !(nt1_t2 ? wr_in : cpu_rd_sync);
-	assign #T_MUXI ujyv = !(nt1_t2 ? rd_b  : cpu_raw_rd);
+	assign #T_MUXI ubal = !(t1_nt2 ? wr_in : cpu_rd_sync);
+	assign #T_MUXI ujyv = !(t1_nt2 ? rd_b  : cpu_raw_rd);
 	assign #T_INV  lexy = !from_cpu6;
 	assign #T_INV  tapu = !ubal;
 	assign #T_INV  tedo = !ujyv;
@@ -95,7 +95,7 @@ module sys_decode(
 	assign bootrom_a1_a0   = zapa;
 
 	logic apet, aper, amut, buro;
-	assign #T_OR   apet = nt1_t2 || t1_nt2;
+	assign #T_OR   apet = t1_nt2 || nt1_t2;
 	assign #T_NAND aper = !(apet && a[5] && a[6] && cpu_wr && anap);
 	dffr dffr_amut(aper, nreset2, d[1], amut); // check edge
 	dffr dffr_buro(aper, nreset2, d[0], buro); // check edge
@@ -103,7 +103,7 @@ module sys_decode(
 	assign ff60_d0 = buro;
 
 	logic leco, raru, rowe, ryke, ryne, rase, rejy, reka, romy;
-	assign #T_NOR  leco = !(bedo || nt1_t2);
+	assign #T_NOR  leco = !(bedo || t1_nt2);
 	assign #T_TRI  raru = leco ? '1 : 'z;
 	assign #T_TRI  rowe = leco ? '1 : 'z;
 	assign #T_TRI  ryke = leco ? '1 : 'z;
@@ -149,7 +149,7 @@ module sys_decode(
 	assign #T_NAND tuge = !(tyro && tufa && ffxx && cpu_wr);
 	assign #T_TRI  sypu = texe ? tepu : 1'bz; /* takes !q output of dff */
 	assign #T_INV  tera = !tepu;
-	assign #T_INV  yaza = t1_nt2;
+	assign #T_INV  yaza = nt1_t2;
 	assign #T_AND  tutu = tera && tulo;
 	assign #T_AND  yula = yaza && tutu && cpu_rd;
 	assign #T_NOR  tulo = !(a[15] || a[14] || a[13] || a[12] || a[11] || a[10] || a[9] || a[8]);
