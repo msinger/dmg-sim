@@ -3,7 +3,7 @@
 module ch3_regs(
 		inout tri logic [7:0] d,
 
-		input logic ncpu_rd, apu_wr, apu_reset, nphi, net03, from_cpu5,
+		input logic ncpu_rd, apu_wr, apu_reset, dova_phi, net03, from_cpu5,
 
 		input logic cery_2mhz,
 
@@ -24,7 +24,7 @@ module ch3_regs(
 	dffr dffr_gara(fabo,      fury, !gofy, gara); // check clk edge
 	dffr dffr_gyta(fabo,      gaze, gara,  gyta); // check clk edge
 	dffr dffr_gyra(cery_2mhz, gaze, gyta,  gyra); // check clk edge
-	dffr dffr_foba(nphi,      goma, gavu,  foba); // check clk edge
+	dffr dffr_foba(dova_phi,  goma, gavu,  foba); // check clk edge
 	dffr dffr_gavu(epyx,      fako, d[7],  gavu); // check clk edge
 	srlatch latch_gofy(gulo,  foba,  gofy);
 	srlatch latch_gugu(!faju, !fuvo, gugu); /* srlatch with !s & !r inputs */

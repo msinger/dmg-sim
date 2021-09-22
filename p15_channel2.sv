@@ -3,7 +3,7 @@
 module channel2(
 		input logic [7:0] d,
 
-		input logic apu_reset, napu_reset2, nphi, net03,
+		input logic apu_reset, napu_reset2, dova_phi, net03,
 
 		input logic byfe_128hz, bufy_256hz, horu_512hz, amuk_4mhz,
 
@@ -33,7 +33,7 @@ module channel2(
 	dffr dffr_gyko(galu,       gyre,        !gyko,   gyko); // check clk edge
 	dffr dffr_jopa(horu_512hz, hafe,        kyvo,    jopa); // check clk edge
 	dffr dffr_hepo(jopa,       hypa,        gufy,    hepo); // check clk edge
-	dffr dffr_dope(nphi,       cywu,        ff19_d7, dope); // check clk edge
+	dffr dffr_dope(dova_phi,   cywu,        ff19_d7, dope); // check clk edge
 	dffr dffr_elox(cemo_1mhz,  doxa,        !dala,   elox); // check clk edge
 	dffr dffr_dory(cemo_1mhz,  cexe,        elox,    dory); // check clk edge
 	dffr dffr_cyre(akyd_nq,    beny,        !cyre,   cyre); // check clk edge

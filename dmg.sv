@@ -2,9 +2,12 @@
 
 module dmg;
 
-	logic xo, xi;         /* XI, XO clock pins */
-	logic t1 = 0, t2 = 0; /* T1, T2 test pins */
-	assign xi = xo;
+	logic xo, xi; /* XI, XO clock pins */
+	logic t1, t2; /* T1, T2 test pins */
+	logic nrst;   /* !RST reset pin */
+	logic phi;    /* PHI pin */
+	assign xi  = xo;
+	assign phi = !nphi_out;
 
 	task automatic xi_tick();
 		#122ns xo = xo_ena ? !xi : 0;
@@ -59,7 +62,7 @@ module dmg;
 	assign cpu_clkin_t2  = to_cpu;
 	assign cpu_clkin_t3  = bedo;
 	assign cpu_clkin_t4  = beko;
-	assign cpu_clkin_t5  = phi_out;
+	assign cpu_clkin_t5  = nphi_out;
 	assign cpu_clkin_t6  = bolo;
 	assign cpu_clkin_t7  = from_cpu5;
 	assign cpu_clkin_t8  = buke;
@@ -69,6 +72,7 @@ module dmg;
 	assign cpu_in_t15    = taba;
 	assign cpu_in_r4     = syro;
 	assign cpu_in_r5     = tutu;
+	assign reset         = !nrst;
 	assign d             = cpu_drv_d ? cpu_d : 'z;
 	assign a             = cpu_drv_a ? cpu_a : 'z;
 	assign cpu_wakeup    = to_cpu2;
@@ -77,11 +81,13 @@ module dmg;
 		$dumpfile("dmg.vcd");
 		$dumpvars(0, dmg);
 
-		xo     = 0;
-		reset  = 1;
+		t1   = 0;
+		t2   = 0;
+		xo   = 0;
+		nrst = 0;
 
 		cpu_out_t1   = 0;
-		cpu_clk_ena  = 1;
+		cpu_clk_ena  = 0;
 		xo_ena       = 1;
 		cpu_raw_rd   = 0;
 		cpu_raw_wr   = 0;
@@ -97,8 +103,18 @@ module dmg;
 		cpu_a        = 0;
 
 		cyc(256);
-
-		reset = 0;
+		cpu_d      = 'ha5;
+		cpu_drv_d  = 1;
+		cpu_raw_wr = 1;
+		cyc(256);
+		cpu_a      = 'h1000;
+		cyc(256);
+		cpu_out_r7 = 1;
+		cyc(256);
+		cpu_a      = 'h0000;
+		cyc(256);
+		cpu_raw_wr = 0;
+		cpu_drv_d  = 0;
 
 		cyc(20000);
 
@@ -178,7 +194,7 @@ module dmg;
 
 	logic clkin_a, clkin_b;
 	assign clkin_a = xo_ena;
-	assign clkin_b = xi;
+	assign clkin_b = !xi;
 
 	logic from_cpu3, from_cpu4, from_cpu6, clk_from_cpu;
 	assign from_cpu3    = cpu_raw_wr;
@@ -191,14 +207,14 @@ module dmg;
 	assign nt2 = !t2;
 
 	logic nreset2, nreset6;
-	logic phi_out, nphi_out, nphi;
+	logic nphi_out, phi_out, dova_phi;
 
 	logic sout, sin_a, sin_b, sin_d, sck_a, sck_dir, sck_d;
 	logic p10_a, p10_b, p10_d, p11_a, p11_b, p11_d, p12_a, p12_b, p12_d, p13_a, p13_b, p13_d;
 	logic p14_a, p14_b, p15_a, p15_b;
 
 	logic dma_run, vram_to_oam, dma_addr_ext, oam_addr_dma;
-	logic caty, wyja, mopa_phi;
+	logic caty, wyja, mopa_nphi;
 	logic tovy_na0, tola_na1;
 
 	logic ff60_d1, ff60_d0;

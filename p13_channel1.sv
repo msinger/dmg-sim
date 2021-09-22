@@ -3,7 +3,7 @@
 module channel1(
 		input logic [7:0] d,
 
-		input logic apu_wr, apu_reset, napu_reset6, nphi, net03,
+		input logic apu_wr, apu_reset, napu_reset6, dova_phi, net03,
 		input logic ff11, ff11_d6, nff11_d6, ff11_d7, nff11_d7, ff14, ff14_d6, nff14_d6,
 		input logic nff10_d0, nff10_d1, nff10_d2, nff10_d4, nff10_d5, nff10_d6,
 		input logic ff12_d0, ff12_d1, ff12_d2, ff12_d3, ff12_d4, ff12_d5, ff12_d6, ff12_d7,
@@ -74,7 +74,7 @@ module channel1(
 	dffr dffr_fare(dyfa_1mhz,  erum,        ch1_restart, fare); // check clk edge
 	dffr dffr_fyte(dyfa_1mhz,  erum,        fare,        fyte); // check clk edge
 	dffr dffr_dupe(doge,       dado,        d[7],        dupe); // check clk edge
-	dffr dffr_ezec(nphi,       duka,        dupe,        ezec); // check clk edge
+	dffr dffr_ezec(dova_phi,   duka,        dupe,        ezec); // check clk edge
 	dffr dffr_feku(dyfa_1mhz,  eget,        !fyfo,       feku); // check clk edge
 	dffr dffr_kyno(kozy,       koru,        jade,        kyno); // check clk edge
 	dffr dffr_duwo(cope,       napu_reset6, ch1_bit,     duwo); // check clk edge

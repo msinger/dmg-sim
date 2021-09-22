@@ -3,7 +3,7 @@
 module channel4(
 		inout tri logic [7:0] d,
 
-		input logic ncpu_rd, apu_reset, napu_reset4, nphi, net03,
+		input logic ncpu_rd, apu_reset, napu_reset4, dova_phi, net03,
 		input logic byfe_128hz, horu_512hz, jeso_512k, hama_512k, bavu_1mhz,
 
 		input  logic ff23,
@@ -127,7 +127,7 @@ module channel4(
 	logic gepo, goge, jyja, kavu, game, hura, lfsr_out;
 	logic jepe, javo, hepa, hory, heno, hyro, hezu;
 	logic joto, komu, ketu, kuta, kuzy, kywy, jaju, hape, juxe;
-	dffr dffr_gysu(nphi,          gaso, ff23_d7, gysu); // check clk edge
+	dffr dffr_gysu(dova_phi,      gaso, ff23_d7, gysu); // check clk edge
 	dffr dffr_gone(hama_512k,     fale, !hazo,   gone); // check clk edge
 	dffr dffr_gora(hama_512k,     feby, gone,    gora); // check clk edge
 	dffr dffr_gaty(hama_512k,     feby, gora,    gaty); // check clk edge

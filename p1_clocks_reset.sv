@@ -6,7 +6,7 @@ module clocks_reset(
 
 		output logic nreset2, nreset6,
 		output logic clk1,
-		output logic phi_out, nphi_out, nphi,
+		output logic nphi_out, phi_out, dova_phi,
 
 		inout tri logic [7:0] d,
 
@@ -108,7 +108,7 @@ module clocks_reset(
 	dffr dffr_apuk(!atal_4mhz, t1t2_nrst, alef,  apuk);
 	assign #T_INV  abol = !clk_from_cpu;
 	assign #T_INV  ucob = !clkin_a;
-	assign #T_INV  uvyt = !phi_out;
+	assign #T_INV  uvyt = !nphi_out;
 	assign #T_INV  adar = !adyk;
 	assign #T_INV  atyp = afur; /* takes !q output of dff */
 	assign #T_INV  afep = !alef;
@@ -124,8 +124,8 @@ module clocks_reset(
 	assign #T_NOR  bate = !(bugo || arov || abol);
 	assign #T_INV  basu = !bate;
 	assign #T_INV  buke = !basu;
-	assign nclkin_a = ucob;
-	assign nphi_out = uvyt;
+	assign nclkin_a    = ucob;
+	assign phi_out     = uvyt;
 	assign cpu_rd_sync = apov;
 
 	logic bapy, belu, beru, byry, bufa, byly, bude, beva, byda, bavy, beja, dova;
@@ -148,8 +148,8 @@ module clocks_reset(
 	assign #T_INV  belo = !bane;
 	assign #T_INV  baze = !belo;
 	assign #T_NAND buto = !(afep && atyp && baze);
-	assign phi_out   = bude;
-	assign nphi      = dova;
+	assign nphi_out  = bude;
+	assign dova_phi  = dova;
 	assign from_cpu5 = bufa;
 
 	logic bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, byxo, bowa, avor, alur;

@@ -19,7 +19,7 @@ module vram_interface(
 		input  logic moe_in, mwr_in, mcs_in,
 		output logic moe_a, moe_d, mwr_a, mwr_d, mcs_a, mcs_d, md_b,
 
-		input logic t1_nt2, dma_run, mopa_phi, nfexxffxx, nreset6, cpu_rd_sync, vram_to_oam, dma_addr_ext, ff40_d4,
+		input logic t1_nt2, dma_run, mopa_nphi, nfexxffxx, nreset6, cpu_rd_sync, vram_to_oam, dma_addr_ext, ff40_d4,
 
 		input  logic from_cpu3, roru, lula, bedo, saro, tacu, tuvo, acyl, xyso, texo, abuz, texy, myma, lena, xymu, leko,
 		input  logic xuha, vyno, vujo, vymu, neta, pore, potu, npyju, npowy, npoju, npulo, npoxa, npyzo, npozo, nrawu,
@@ -87,7 +87,7 @@ module vram_interface(
 	assign d_a[0] = ruxa;
 
 	logic cufe, vape, aver, xujy, bycu;
-	assign #T_NAO  cufe = !((saro && dma_run) || mopa_phi);
+	assign #T_NAO  cufe = !((saro && dma_run) || mopa_nphi);
 	assign #T_AND  vape = tacu && tuvo;
 	assign #T_AND  aver = acyl && xyso;
 	assign #T_INV  xujy = !vape;

@@ -8,18 +8,18 @@ module dma(
 		input logic clk1, nreset6, from_cpu5,
 		input logic cpu_rd2, cpu_wr2, ff46,
 
-		input  logic amab, nphi_out,
-		output logic wyja, caty, dma_run, mopa_phi,
+		input  logic amab, phi_out,
+		output logic wyja, caty, dma_run, mopa_nphi,
 		output logic vram_to_oam, dma_addr_ext, oam_addr_dma
 	);
 
 	logic decy, maka, naxy, powu, luvy, molu, nygo, pusy, lavy, loru, lyxe, lupa, ahoc, loko, lapa, meta;
-	dffr dffr_maka(clk1,     nreset6, caty, maka); // check edge
-	dffr dffr_luvy(nphi_out, nreset6, lupa, luvy); // check edge
+	dffr dffr_maka(clk1,    nreset6, caty, maka); // check edge
+	dffr dffr_luvy(phi_out, nreset6, lupa, luvy); // check edge
 	srlatch latch_lyxe(lavy, loko, lyxe);
 	assign #T_INV  decy = !from_cpu5;
 	assign #T_INV  caty = !decy;
-	assign #T_NOR  naxy = !(maka || nphi_out);
+	assign #T_NOR  naxy = !(maka || phi_out);
 	assign #T_AND  powu = matu && naxy;
 	assign #T_AO   wyja = (amab && cpu_wr2) || powu;
 	assign #T_AND  molu = ff46 && cpu_rd2;
@@ -31,13 +31,13 @@ module dma(
 	assign #T_INV  ahoc = !vram_to_oam;
 	assign #T_NAND loko = !(nreset6 && !lene);
 	assign #T_INV  lapa = !loko;
-	assign #T_AND  meta = nphi_out && loky;
+	assign #T_AND  meta = phi_out && loky;
 
 	logic mopa, navo, nolo, myte, lene, lara, loky, matu, mory, luma, logo, duga, lebu, muda, muho, lufa;
-	dffr dffr_myte(mopa,     lapa,    nolo, myte); // check edge
-	dffr dffr_lene(mopa,     nreset6, luvy, lene); // check edge
-	dffr dffr_matu(nphi_out, nreset6, loky, matu); // check edge
-	assign #T_INV  mopa = !nphi_out;
+	dffr dffr_myte(mopa,    lapa,    nolo, myte); // check edge
+	dffr dffr_lene(mopa,    nreset6, luvy, lene); // check edge
+	dffr dffr_matu(phi_out, nreset6, loky, matu); // check edge
+	assign #T_INV  mopa = !phi_out;
 	assign #T_NAND navo = !(dma_a[0] && dma_a[1] && dma_a[2] && dma_a[3] && dma_a[4] && dma_a[7]);
 	assign #T_INV  nolo = !navo;
 	assign #T_NAND lara = !(loky && !myte && nreset6);
@@ -50,7 +50,7 @@ module dma(
 	assign #T_NOR  muda = !(dma_a[13] || dma_a[14] || lebu);
 	assign #T_NAND muho = !(matu && muda);
 	assign #T_INV  lufa = !muho;
-	assign mopa_phi     = mopa;
+	assign mopa_nphi    = mopa;
 	assign dma_run      = matu;
 	assign dma_addr_ext = luma;
 	assign oam_addr_dma = duga;
