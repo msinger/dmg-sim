@@ -107,7 +107,7 @@ module dmg;
 
 	tri0 logic [7:0]  d;
 	tri0 logic [15:0] a;
-	tri0 logic [7:0]  md, oam_a_d, oam_b_d;
+	tri0 logic [7:0]  md, oam_a_nd, oam_b_nd;
 	tri0 logic [12:0] ma;
 
 	logic [7:0]  d_a, d_d, md_out, md_a;

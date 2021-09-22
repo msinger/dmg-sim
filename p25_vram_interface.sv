@@ -14,7 +14,7 @@ module vram_interface(
 		input      logic [7:0] md_in,
 		output     logic [7:0] md_out, md_a,
 
-		inout tri logic [7:0] oam_a_d, oam_b_d,
+		inout tri logic [7:0] oam_a_nd, oam_b_nd,
 
 		input  logic moe_in, mwr_in, mcs_in,
 		output logic moe_a, moe_d, mwr_a, mwr_d, mcs_a, mcs_d, md_b,
@@ -303,22 +303,22 @@ module vram_interface(
 	assign #T_TRI  wejo = !cede ? !ralo : 'z;
 	assign #T_TRI  cako = !cede ? !tenu : 'z;
 	assign #T_TRI  cyme = !cede ? !tenu : 'z;
-	assign oam_b_d[7] = bape;
-	assign oam_a_d[7] = bypy;
-	assign oam_b_d[1] = bomo;
-	assign oam_a_d[1] = bubo;
-	assign oam_a_d[2] = basa;
-	assign oam_b_d[2] = betu;
-	assign oam_b_d[4] = buma;
-	assign oam_a_d[4] = baxu;
-	assign oam_b_d[6] = basy;
-	assign oam_a_d[6] = byny;
-	assign oam_a_d[5] = bupy;
-	assign oam_b_d[5] = buhu;
-	assign oam_a_d[0] = wasa;
-	assign oam_b_d[0] = wejo;
-	assign oam_b_d[3] = cako;
-	assign oam_a_d[3] = cyme;
+	assign oam_b_nd[7] = bape;
+	assign oam_a_nd[7] = bypy;
+	assign oam_b_nd[1] = bomo;
+	assign oam_a_nd[1] = bubo;
+	assign oam_a_nd[2] = basa;
+	assign oam_b_nd[2] = betu;
+	assign oam_b_nd[4] = buma;
+	assign oam_a_nd[4] = baxu;
+	assign oam_b_nd[6] = basy;
+	assign oam_a_nd[6] = byny;
+	assign oam_a_nd[5] = bupy;
+	assign oam_b_nd[5] = buhu;
+	assign oam_a_nd[0] = wasa;
+	assign oam_b_nd[0] = wejo;
+	assign oam_b_nd[3] = cako;
+	assign oam_a_nd[3] = cyme;
 
 	logic tyvy, seby, roro, rery, rona, runa, runo, same, sana, rabo, rexu, ruga, rybu, rota, raju, toku, tyja, rupy;
 	assign #T_NAND tyvy = !(sere && leko);
