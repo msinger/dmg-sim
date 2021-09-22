@@ -6,8 +6,12 @@ module dmg;
 	logic t1, t2; /* T1, T2 test pins */
 	logic nrst;   /* !RST reset pin */
 	logic phi;    /* PHI pin */
+	logic nrd;    /* !RD pin */
+	logic nwr;    /* !WR pin */
 	assign xi  = xo;
 	assign phi = !nphi_out;
+	assign nrd = (rd_a == rd_c) ? !rd_a : 'z;
+	assign nwr = (wr_a == wr_c) ? !wr_a : 'z;
 
 	task automatic xi_tick();
 		#122ns xo = xo_ena ? !xi : 0;
@@ -102,17 +106,21 @@ module dmg;
 		cpu_drv_a    = 1;
 		cpu_a        = 0;
 
-		cyc(256);
+		cyc(64);
+		fork
+			cyc(64);
+			@(posedge cpu_clkin_t9) cpu_clk_ena = 1;
+		join
 		cpu_d      = 'ha5;
 		cpu_drv_d  = 1;
 		cpu_raw_wr = 1;
-		cyc(256);
+		cyc(64);
 		cpu_a      = 'h1000;
-		cyc(256);
+		cyc(64);
 		cpu_out_r7 = 1;
-		cyc(256);
+		cyc(64);
 		cpu_a      = 'h0000;
-		cyc(256);
+		cyc(64);
 		cpu_raw_wr = 0;
 		cpu_drv_d  = 0;
 
