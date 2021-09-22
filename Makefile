@@ -23,12 +23,15 @@ p25_vram_interface.sv
 
 DMG_DEPENDENCIES = \
 timing_param.sv \
-dffsr.sv \
-dffr.sv \
-dff.sv \
-dlatch.sv \
 srlatch.sv \
-count.sv \
+dlatch.sv \
+dff.sv \
+dffr_a.sv \
+dffr_b.sv \
+dffr_bp.sv \
+dffr_c.sv \
+dffsr.sv \
+tffd.sv \
 $(DMG_SCH_PAGES)
 
 all: dmg.vcd

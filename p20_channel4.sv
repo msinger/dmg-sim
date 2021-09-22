@@ -25,20 +25,20 @@ module channel4(
 	logic etyr, elyx, dary, eryf, feme, ezul, gufa, gyve, kara, kopa;
 	logic cosa, dyry, cepy, como, cote, bagu, befa, dato, atel;
 	logic ch4_lfsr_clk1, ch4_lfsr_clk2, ch4_lfsr_clk3, nff23_d6, ch4_bit;
-	dffr dffr_esep(!dere, napu_reset4, !esep, esep); // check clk edge
-	dffr dffr_dere(!dota, napu_reset4, !dere, dere); // check clk edge
-	dffr dffr_dota(!erut, napu_reset4, !dota, dota); // check clk edge
-	dffr dffr_erut(!dete, napu_reset4, !erut, erut); // check clk edge
-	dffr dffr_dete(!dose, napu_reset4, !dete, dete); // check clk edge
-	dffr dffr_dose(!demo, napu_reset4, !dose, dose); // check clk edge
-	dffr dffr_demo(!doke, napu_reset4, !demo, demo); // check clk edge
-	dffr dffr_doke(!dale, napu_reset4, !doke, doke); // check clk edge
-	dffr dffr_dale(!dure, napu_reset4, !dale, dale); // check clk edge
-	dffr dffr_dure(!epor, napu_reset4, !dure, dure); // check clk edge
-	dffr dffr_epor(!ezef, napu_reset4, !epor, epor); // check clk edge
-	dffr dffr_ezef(!deko, napu_reset4, !ezef, ezef); // check clk edge
-	dffr dffr_deko(!cexo, napu_reset4, !deko, deko); // check clk edge
-	dffr dffr_cexo(cary,  napu_reset4, !cexo, cexo); // check clk edge
+	dffr_bp dffr_esep(!dere, napu_reset4, !esep, esep); // check clk edge
+	dffr_bp dffr_dere(!dota, napu_reset4, !dere, dere); // check clk edge
+	dffr_bp dffr_dota(!erut, napu_reset4, !dota, dota); // check clk edge
+	dffr_bp dffr_erut(!dete, napu_reset4, !erut, erut); // check clk edge
+	dffr_bp dffr_dete(!dose, napu_reset4, !dete, dete); // check clk edge
+	dffr_bp dffr_dose(!demo, napu_reset4, !dose, dose); // check clk edge
+	dffr_bp dffr_demo(!doke, napu_reset4, !demo, demo); // check clk edge
+	dffr_bp dffr_doke(!dale, napu_reset4, !doke, doke); // check clk edge
+	dffr_bp dffr_dale(!dure, napu_reset4, !dale, dale); // check clk edge
+	dffr_bp dffr_dure(!epor, napu_reset4, !dure, dure); // check clk edge
+	dffr_bp dffr_epor(!ezef, napu_reset4, !epor, epor); // check clk edge
+	dffr_bp dffr_ezef(!deko, napu_reset4, !ezef, ezef); // check clk edge
+	dffr_bp dffr_deko(!cexo, napu_reset4, !deko, deko); // check clk edge
+	dffr_bp dffr_cexo(cary,  napu_reset4, !cexo, cexo); // check clk edge
 	assign #T_NOR  emof = !(nff22_d4 || nff22_d5 || nff22_d6);
 	assign #T_NOR  elar = !(nff22_d6 || nff22_d5 || ff22_d4);
 	assign #T_NOR  dudu = !(nff22_d6 || ff22_d5 || nff22_d4);
@@ -76,11 +76,11 @@ module channel4(
 
 	logic felo, fole, etef, edyf, elaf, feko, faty, feru, fyro, akof, byzy, apyr, boza;
 	logic daro, cuty, dubo, emet, evur, fyno, enur, erox;
-	dffr dffr_fyno(ch4_eg_tick, emet, evur, fyno); // check clk edge
-	count count_feko(fole, ch4_restart, ff21_d4, feko);
-	count count_faty(etef, ch4_restart, ff21_d5, faty);
-	count count_feru(edyf, ch4_restart, ff21_d6, feru);
-	count count_fyro(elaf, ch4_restart, ff21_d7, fyro);
+	dffr_bp dffr_fyno(ch4_eg_tick, emet, evur, fyno); // check clk edge
+	tffd tffd_feko(fole, ch4_restart, ff21_d4, feko);
+	tffd tffd_faty(etef, ch4_restart, ff21_d5, faty);
+	tffd tffd_feru(edyf, ch4_restart, ff21_d6, feru);
+	tffd tffd_fyro(elaf, ch4_restart, ff21_d7, fyro);
 	srlatch latch_erox(fyno, enur, erox);
 	assign #T_OR   felo = ch4_eg_tick || ch4_eg_disable || erox;
 	assign #T_AOI  fole = !((felo && ff21_d3) || (felo && nff21_d3));
@@ -102,11 +102,11 @@ module channel4(
 	logic alop, boky, abel, bawa, buxo, dogo, cofe, cuna, ejex;
 	logic fosy, enec, dapy, gexe, hury, fowa, gopa;
 	logic ch4_eg_tick, ch4_eg_disable;
-	dffr dffr_abel(alop,       boky, !abel, abel); // check clk edge
-	dffr dffr_fosy(horu_512hz, gopa, ejex,  fosy); // check clk edge
-	count count_dogo(cofe, dapy, nff21_d2, dogo);
-	count count_cofe(cuna, dapy, nff21_d1, cofe);
-	count count_cuna(buxo, dapy, nff21_d0, cuna);
+	dffr_bp dffr_abel(alop,       boky, !abel, abel); // check clk edge
+	dffr_bp dffr_fosy(horu_512hz, gopa, ejex,  fosy); // check clk edge
+	tffd tffd_dogo(cofe, dapy, nff21_d2, dogo);
+	tffd tffd_cofe(cuna, dapy, nff21_d1, cofe);
+	tffd tffd_cuna(buxo, dapy, nff21_d0, cuna);
 	assign #T_INV  alop = !byfe_128hz;
 	assign #T_INV  boky = !apu_reset;
 	assign #T_INV  bawa = !abel;
@@ -127,30 +127,30 @@ module channel4(
 	logic gepo, goge, jyja, kavu, game, hura, lfsr_out;
 	logic jepe, javo, hepa, hory, heno, hyro, hezu;
 	logic joto, komu, ketu, kuta, kuzy, kywy, jaju, hape, juxe;
-	dffr dffr_gysu(dova_phi,      gaso, ff23_d7, gysu); // check clk edge
-	dffr dffr_gone(hama_512k,     fale, !hazo,   gone); // check clk edge
-	dffr dffr_gora(hama_512k,     feby, gone,    gora); // check clk edge
-	dffr dffr_gaty(hama_512k,     feby, gora,    gaty); // check clk edge
-	dffr dffr_gary(gyba,          guny, hyno,    gary); // check clk edge
-	dffr dffr_jepe(ch4_lfsr_clk2, goge, kavu,    jepe); // check clk edge
-	dffr dffr_javo(ch4_lfsr_clk2, goge, jepe,    javo); // check clk edge
-	dffr dffr_hepa(ch4_lfsr_clk1, goge, javo,    hepa); // check clk edge
-	dffr dffr_hory(ch4_lfsr_clk1, goge, hepa,    hory); // check clk edge
-	dffr dffr_heno(ch4_lfsr_clk1, goge, hory,    heno); // check clk edge
-	dffr dffr_hyro(ch4_lfsr_clk1, goge, heno,    hyro); // check clk edge
-	dffr dffr_hezu(ch4_lfsr_clk1, goge, hyro,    hezu); // check clk edge
-	dffr dffr_joto(jyja,          goge, hura,    joto); // check clk edge
-	dffr dffr_komu(ch4_lfsr_clk3, goge, joto,    komu); // check clk edge
-	dffr dffr_ketu(ch4_lfsr_clk3, goge, komu,    ketu); // check clk edge
-	dffr dffr_kuta(ch4_lfsr_clk3, goge, ketu,    kuta); // check clk edge
-	dffr dffr_kuzy(ch4_lfsr_clk3, goge, kuta,    kuzy); // check clk edge
-	dffr dffr_kywy(ch4_lfsr_clk3, goge, kuzy,    kywy); // check clk edge
-	dffr dffr_jaju(ch4_lfsr_clk2, goge, kywy,    jaju); // check clk edge
-	dffr dffr_hape(ch4_lfsr_clk2, goge, jaju,    hape); // check clk edge
-	dffr dffr_juxe(ch4_lfsr_clk2, goge, hape,    juxe); // check clk edge
-	count count_jyco(kanu, huce, nff22_d0, jyco);
-	count count_jyre(jyco, huce, nff22_d1, jyre);
-	count count_jyfu(jyre, huce, nff22_d2, jyfu);
+	dffr_bp dffr_gysu(dova_phi,      gaso, ff23_d7, gysu); // check clk edge
+	dffr_bp dffr_gone(hama_512k,     fale, !hazo,   gone); // check clk edge
+	dffr_bp dffr_gora(hama_512k,     feby, gone,    gora); // check clk edge
+	dffr_bp dffr_gaty(hama_512k,     feby, gora,    gaty); // check clk edge
+	dffr_bp dffr_gary(gyba,          guny, hyno,    gary); // check clk edge
+	dffr_bp dffr_jepe(ch4_lfsr_clk2, goge, kavu,    jepe); // check clk edge
+	dffr_bp dffr_javo(ch4_lfsr_clk2, goge, jepe,    javo); // check clk edge
+	dffr_bp dffr_hepa(ch4_lfsr_clk1, goge, javo,    hepa); // check clk edge
+	dffr_bp dffr_hory(ch4_lfsr_clk1, goge, hepa,    hory); // check clk edge
+	dffr_bp dffr_heno(ch4_lfsr_clk1, goge, hory,    heno); // check clk edge
+	dffr_bp dffr_hyro(ch4_lfsr_clk1, goge, heno,    hyro); // check clk edge
+	dffr_bp dffr_hezu(ch4_lfsr_clk1, goge, hyro,    hezu); // check clk edge
+	dffr_bp dffr_joto(jyja,          goge, hura,    joto); // check clk edge
+	dffr_bp dffr_komu(ch4_lfsr_clk3, goge, joto,    komu); // check clk edge
+	dffr_bp dffr_ketu(ch4_lfsr_clk3, goge, komu,    ketu); // check clk edge
+	dffr_bp dffr_kuta(ch4_lfsr_clk3, goge, ketu,    kuta); // check clk edge
+	dffr_bp dffr_kuzy(ch4_lfsr_clk3, goge, kuta,    kuzy); // check clk edge
+	dffr_bp dffr_kywy(ch4_lfsr_clk3, goge, kuzy,    kywy); // check clk edge
+	dffr_bp dffr_jaju(ch4_lfsr_clk2, goge, kywy,    jaju); // check clk edge
+	dffr_bp dffr_hape(ch4_lfsr_clk2, goge, jaju,    hape); // check clk edge
+	dffr_bp dffr_juxe(ch4_lfsr_clk2, goge, hape,    juxe); // check clk edge
+	tffd tffd_jyco(kanu, huce, nff22_d0, jyco);
+	tffd tffd_jyre(jyco, huce, nff22_d1, jyre);
+	tffd tffd_jyfu(jyre, huce, nff22_d2, jyfu);
 	srlatch latch_gena(ch4_restart, fegy,  gena);
 	srlatch latch_hazo(helu,        gysu,  hazo);
 	srlatch latch_jery(!hapu,       !hery, jery); /* srlatch with !s & !r inputs */

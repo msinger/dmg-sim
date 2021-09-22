@@ -14,10 +14,10 @@ module interrupts(
 	);
 
 	logic kery, batu, awob, acef, agem, apug, asok, int_jp;
-	dffr dffr_batu(boga1mhz, nreset2, kery, batu); // check clk edge
-	dffr dffr_acef(boga1mhz, nreset2, batu, acef); // check clk edge
-	dffr dffr_agem(boga1mhz, nreset2, acef, agem); // check clk edge
-	dffr dffr_apug(boga1mhz, nreset2, agem, apug); // check clk edge
+	dffr_bp dffr_batu(boga1mhz, nreset2, kery, batu); // check clk edge
+	dffr_bp dffr_acef(boga1mhz, nreset2, batu, acef); // check clk edge
+	dffr_bp dffr_agem(boga1mhz, nreset2, acef, agem); // check clk edge
+	dffr_bp dffr_apug(boga1mhz, nreset2, agem, apug); // check clk edge
 	dlatch latch_awob(boga1mhz, kery, awob);
 	assign #T_OR   kery = p13_c || p12_c || p11_c || p10_c;
 	assign #T_AND  asok = apug && batu;
@@ -60,11 +60,11 @@ module interrupts(
 	assign #T_NAND pyhu = !(rotu && lesa && d[2]);
 	assign #T_AND  pyga = rake && lesa && nreset2;
 	assign #T_INV  pola = !nff0f_rd;
-	assign #T_TRI  nela = pola ? maty : 'z; /* takes !q output of dff */
-	assign #T_TRI  pado = pola ? nejy : 'z; /* takes !q output of dff */
-	assign #T_TRI  pegy = pola ? nuty : 'z; /* takes !q output of dff */
-	assign #T_TRI  nabo = pola ? mopo : 'z; /* takes !q output of dff */
-	assign #T_TRI  rova = pola ? pavy : 'z; /* takes !q output of dff */
+	assign #T_TRI  nela = pola ? maty : 'z; /* takes !q output of dlatch */
+	assign #T_TRI  pado = pola ? nejy : 'z; /* takes !q output of dlatch */
+	assign #T_TRI  pegy = pola ? nuty : 'z; /* takes !q output of dlatch */
+	assign #T_TRI  nabo = pola ? mopo : 'z; /* takes !q output of dlatch */
+	assign #T_TRI  rova = pola ? pavy : 'z; /* takes !q output of dlatch */
 	assign cpu_irq0_trig = lope;
 	assign cpu_irq3_trig = ubul;
 	assign cpu_irq4_trig = ulak;

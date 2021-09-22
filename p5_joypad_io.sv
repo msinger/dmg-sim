@@ -26,14 +26,14 @@ module joypad_io(
 	logic kyme, kuko, keru, jale, kore, jeva, kywe, kena, kory, kale, kyhu, kasy;
 	logic byzo, kolo, keja, kevu, kapa, jeku, kuve, kema, kuro, kely, cofy, karu, koce, cudy;
 	logic kura, cela, jute, kecy, kole, kybu, kyto, kabu;
-	dffr dffr_kyme(ff00wr, nreset2, d[3], kyme); // check clk edge
-	dffr dffr_kuko(ff00wr, nreset2, d[6], kuko); // check clk edge
-	dffr dffr_keru(ff00wr, nreset2, d[7], keru); // check clk edge
-	dffr dffr_jale(ff00wr, nreset2, d[2], jale); // check clk edge
-	dffr dffr_kely(ff00wr, nreset2, d[4], kely); // check clk edge
-	dffr dffr_cofy(ff00wr, nreset2, d[5], cofy); // check clk edge
-	dffr dffr_jute(ff00wr, nreset2, d[0], jute); // check clk edge
-	dffr dffr_kecy(ff00wr, nreset2, d[1], kecy); // check clk edge
+	dffr_bp dffr_kyme(ff00wr, nreset2, d[3], kyme); // check clk edge
+	dffr_bp dffr_kuko(ff00wr, nreset2, d[6], kuko); // check clk edge
+	dffr_bp dffr_keru(ff00wr, nreset2, d[7], keru); // check clk edge
+	dffr_bp dffr_jale(ff00wr, nreset2, d[2], jale); // check clk edge
+	dffr_bp dffr_kely(ff00wr, nreset2, d[4], kely); // check clk edge
+	dffr_bp dffr_cofy(ff00wr, nreset2, d[5], cofy); // check clk edge
+	dffr_bp dffr_jute(ff00wr, nreset2, d[0], jute); // check clk edge
+	dffr_bp dffr_kecy(ff00wr, nreset2, d[1], kecy); // check clk edge
 	dlatch latch_kolo(byzo, p13_c, kolo);
 	dlatch latch_keja(byzo, p12_c, keja);
 	dlatch latch_kevu(byzo, p10_c, kevu);
@@ -51,10 +51,10 @@ module joypad_io(
 	assign #T_TRI  kuve = !byzo ? !keja : 'z;
 	assign #T_TRI  kema = !byzo ? !kevu : 'z;
 	assign #T_TRI  kuro = !byzo ? !kapa : 'z;
-	assign #T_OR   karu = kura || !kely; /* takes !q output of dff */
-	assign #T_TRI  koce = !byzo ? kely : 'z; /* takes !q output of dff */
-	assign #T_TRI  cudy = !byzo ? cofy : 'z; /* takes !q output of dff */
-	assign #T_OR   cela = !cofy || kura; /* takes !q output of dff */
+	assign #T_OR   karu = kura || !kely; /* takes !q output of dffr */
+	assign #T_TRI  koce = !byzo ? kely : 'z; /* takes !q output of dffr */
+	assign #T_TRI  cudy = !byzo ? cofy : 'z; /* takes !q output of dffr */
+	assign #T_OR   cela = !cofy || kura; /* takes !q output of dffr */
 	assign #T_INV  kura = !ff60_d0;
 	assign #T_NAND kole = !(jute && ff60_d0);
 	assign #T_NOR  kybu = !(jute || kura);

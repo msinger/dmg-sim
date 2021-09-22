@@ -1,13 +1,13 @@
 `default_nettype none
 
-module dffr #(
+module dffr_a #(
 		parameter logic INITIAL_Q = 'x
 	) (
 		input  logic clk, nreset, d,
 		output logic q
 	);
 
-	logic initff = $isunknown(INITIAL_Q) ? $random&1 : INITIAL_Q;
+	logic initff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
 
 	logic ff;
 	initial ff = initff;
@@ -19,6 +19,6 @@ module dffr #(
 			ff <= 0;
 	end
 
-	assign #T_DFFR q = ff;
+	assign #T_DFFR_A q = ff;
 
 endmodule

@@ -27,24 +27,24 @@ module channel3(
 	logic fety, foto, etan, gyry, dero, jeco, hony, geno;
 	logic efar, erus, efuz, exel, efal, bole, agyl, afum, axol;
 	logic fapy, faro, fote, fana, fera;
-	dffr dffr_huno(jyfo,  gafu, !huno, huno); // check clk edge
-	dffr dffr_fety(!efal, gyry, !fety, fety); // check clk edge
-	dffr dffr_efar(dero,  etan, !efar, efar); // check clk edge
-	dffr dffr_erus(!efar, etan, !erus, erus); // check clk edge
-	dffr dffr_efuz(!erus, etan, !efuz, efuz); // check clk edge
-	dffr dffr_exel(!efuz, etan, !exel, exel); // check clk edge
-	dffr dffr_efal(!exel, etan, !efal, efal); // check clk edge
-	count count_kutu(juty, kyko, ff1d_d0, kutu);
-	count count_kupe(kutu, kyko, ff1d_d1, kupe);
-	count count_kunu(kupe, kyko, ff1d_d2, kunu);
-	count count_kemu(kunu, kyko, ff1d_d3, kemu);
-	count count_kygu(kyru, kaso, ff1d_d4, kygu);
-	count count_kepa(kygu, kaso, ff1d_d5, kepa);
-	count count_kafo(kepa, kaso, ff1d_d6, kafo);
-	count count_keno(kafo, kaso, ff1d_d7, keno);
-	count count_keju(kese, jera, ff1e_d0, keju);
-	count count_keza(keju, jera, ff1e_d1, keza);
-	count count_japu(keza, jera, ff1e_d2, japu);
+	dffr_bp dffr_huno(jyfo,  gafu, !huno, huno); // check clk edge
+	dffr_bp dffr_fety(!efal, gyry, !fety, fety); // check clk edge
+	dffr_bp dffr_efar(dero,  etan, !efar, efar); // check clk edge
+	dffr_bp dffr_erus(!efar, etan, !erus, erus); // check clk edge
+	dffr_bp dffr_efuz(!erus, etan, !efuz, efuz); // check clk edge
+	dffr_bp dffr_exel(!efuz, etan, !exel, exel); // check clk edge
+	dffr_bp dffr_efal(!exel, etan, !efal, efal); // check clk edge
+	tffd tffd_kutu(juty, kyko, ff1d_d0, kutu);
+	tffd tffd_kupe(kutu, kyko, ff1d_d1, kupe);
+	tffd tffd_kunu(kupe, kyko, ff1d_d2, kunu);
+	tffd tffd_kemu(kunu, kyko, ff1d_d3, kemu);
+	tffd tffd_kygu(kyru, kaso, ff1d_d4, kygu);
+	tffd tffd_kepa(kygu, kaso, ff1d_d5, kepa);
+	tffd tffd_kafo(kepa, kaso, ff1d_d6, kafo);
+	tffd tffd_keno(kafo, kaso, ff1d_d7, keno);
+	tffd tffd_keju(kese, jera, ff1e_d0, keju);
+	tffd tffd_keza(keju, jera, ff1e_d1, keza);
+	tffd tffd_japu(keza, jera, ff1e_d2, japu);
 	assign #T_INV  jyfo = !japu;
 	assign #T_AND  hupa = huno && cery_2mhz;
 	assign #T_INV  hema = !huno;
@@ -55,9 +55,9 @@ module channel3(
 	assign #T_NOR  hera = !(gase || gara);
 	assign #T_INV  kyko = !hera;
 	assign #T_INV  kaso = !hera;
-	assign #T_INV  kyru = kemu; /* takes !q output of dff */
+	assign #T_INV  kyru = kemu; /* takes !q output of tffd */
 	assign #T_INV  jera = !hera;
-	assign #T_INV  kese = keno; /* takes !q output of dff */
+	assign #T_INV  kese = keno; /* takes !q output of tffd */
 	assign #T_AND  foto = fety && gase;
 	assign #T_OR   etan = gara || fety;
 	assign #T_NOR  gyry = !(apu_reset || gara || foto);
@@ -69,11 +69,11 @@ module channel3(
 	assign #T_MUX  agyl = ch3_active ? efuz : a[1];
 	assign #T_MUX  afum = ch3_active ? exel : a[2];
 	assign #T_MUX  axol = ch3_active ? efal : a[3];
-	assign #T_TRI  fapy = !geno ? efar : 'z; /* takes !q output of dff */
-	assign #T_TRI  faro = !geno ? erus : 'z; /* takes !q output of dff */
-	assign #T_TRI  fote = !geno ? efuz : 'z; /* takes !q output of dff */
-	assign #T_TRI  fana = !geno ? exel : 'z; /* takes !q output of dff */
-	assign #T_TRI  fera = !geno ? efal : 'z; /* takes !q output of dff */
+	assign #T_TRI  fapy = !geno ? efar : 'z; /* takes !q output of dffr */
+	assign #T_TRI  faro = !geno ? erus : 'z; /* takes !q output of dffr */
+	assign #T_TRI  fote = !geno ? efuz : 'z; /* takes !q output of dffr */
+	assign #T_TRI  fana = !geno ? exel : 'z; /* takes !q output of dffr */
+	assign #T_TRI  fera = !geno ? efal : 'z; /* takes !q output of dffr */
 	assign nkutu = !kutu;
 	assign nkupe = !kupe;
 	assign nkunu = !kunu;
@@ -94,33 +94,33 @@ module channel3(
 	assign d[4] = fera;
 
 	logic gedo, fygo, fozu, ezas, calu, doru, davo, coka, ered;
-	dffr dffr_davo(ajer_2mhz, calu, doru, davo); // check clk edge
+	dffr_bp dffr_davo(ajer_2mhz, calu, doru, davo); // check clk edge
 	srlatch latch_fozu(gara, fygo, fozu);
 	assign #T_AND  gedo = fexu && ff1e_d6;
 	assign #T_OR   fygo = apu_reset || gedo || nff1a_d7;
 	assign #T_INV  ezas = !fozu;
 	assign #T_INV  calu = !apu_reset;
 	assign #T_INV  doru = !ezas;
-	assign #T_INV  coka = davo; /* takes !q output of dff */
+	assign #T_INV  coka = davo; /* takes !q output of dffr */
 	assign #T_INV  ered = !coka;
 	assign ch3_active  = coka;
 	assign nch3_active = ered;
 
 	logic guda, fexu, gepy, genu, falu;
 	logic gevo, fory, gatu, gapo, gemo, foro, fave, fyru;
-	dffr dffr_fexu(!fyru, guda, !fexu, fexu); // check clk edge
-	count count_gevo(genu, ff1b_wr2, d[0], gevo);
-	count count_fory(gevo, ff1b_wr2, d[1], fory);
-	count count_gatu(fory, ff1b_wr2, d[2], gatu);
-	count count_gapo(gatu, ff1b_wr2, d[3], gapo);
-	count count_gemo(falu, ff1b_wr1, d[4], gemo);
-	count count_foro(gemo, ff1b_wr1, d[5], foro);
-	count count_fave(foro, ff1b_wr1, d[6], fave);
-	count count_fyru(fave, ff1b_wr1, d[7], fyru);
+	dffr_bp dffr_fexu(!fyru, guda, !fexu, fexu); // check clk edge
+	tffd tffd_gevo(genu, ff1b_wr2, d[0], gevo);
+	tffd tffd_fory(gevo, ff1b_wr2, d[1], fory);
+	tffd tffd_gatu(fory, ff1b_wr2, d[2], gatu);
+	tffd tffd_gapo(gatu, ff1b_wr2, d[3], gapo);
+	tffd tffd_gemo(falu, ff1b_wr1, d[4], gemo);
+	tffd tffd_foro(gemo, ff1b_wr1, d[5], foro);
+	tffd tffd_fave(foro, ff1b_wr1, d[6], fave);
+	tffd tffd_fyru(fave, ff1b_wr1, d[7], fyru);
 	assign #T_NOR  guda = !(ff1b_wr3 || apu_reset || gara);
 	assign #T_NOR  gepy = !(fexu || bufy_256hz || nff1e_d6);
 	assign #T_INV  genu = !gepy;
-	assign #T_INV  falu = gapo; /* takes !q output of dff */
+	assign #T_INV  falu = gapo; /* takes !q output of tffd */
 
 	logic goka, gemy, gege, ezag, evug, doky, dore, bary, byka, bopa, bely;
 	assign #T_NOR  goka = !(nff1c_d6 || ff1c_d5);

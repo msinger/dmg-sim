@@ -14,8 +14,8 @@ module dma(
 	);
 
 	logic decy, maka, naxy, powu, luvy, molu, nygo, pusy, lavy, loru, lyxe, lupa, ahoc, loko, lapa, meta;
-	dffr dffr_maka(clk1,    nreset6, caty, maka); // check edge
-	dffr dffr_luvy(phi_out, nreset6, lupa, luvy); // check edge
+	dffr_bp dffr_maka(clk1,    nreset6, caty, maka); // check edge
+	dffr_bp dffr_luvy(phi_out, nreset6, lupa, luvy); // check edge
 	srlatch latch_lyxe(lavy, loko, lyxe);
 	assign #T_INV  decy = !from_cpu5;
 	assign #T_INV  caty = !decy;
@@ -34,9 +34,9 @@ module dma(
 	assign #T_AND  meta = phi_out && loky;
 
 	logic mopa, navo, nolo, myte, lene, lara, loky, matu, mory, luma, logo, duga, lebu, muda, muho, lufa;
-	dffr dffr_myte(mopa,    lapa,    nolo, myte); // check edge
-	dffr dffr_lene(mopa,    nreset6, luvy, lene); // check edge
-	dffr dffr_matu(phi_out, nreset6, loky, matu); // check edge
+	dffr_bp dffr_myte(mopa,    lapa,    nolo, myte); // check edge
+	dffr_bp dffr_lene(mopa,    nreset6, luvy, lene); // check edge
+	dffr_bp dffr_matu(phi_out, nreset6, loky, matu); // check edge
 	assign #T_INV  mopa = !phi_out;
 	assign #T_NAND navo = !(dma_a[0] && dma_a[1] && dma_a[2] && dma_a[3] && dma_a[4] && dma_a[7]);
 	assign #T_INV  nolo = !navo;
@@ -102,14 +102,14 @@ module dma(
 	assign ma[11] = fusy;
 
 	logic naky, pyro, nefy, muty, nyko, pylo, nuto, mugu, ecal, egez, fuhe, fyzy, damu, dava, eteg, erew;
-	dffr dffr_naky(meta,  lapa, !naky, naky); // check edge
-	dffr dffr_pyro(!naky, lapa, !pyro, pyro); // check edge
-	dffr dffr_nefy(!pyro, lapa, !nefy, nefy); // check edge
-	dffr dffr_muty(!nefy, lapa, !muty, muty); // check edge
-	dffr dffr_nyko(!muty, lapa, !nyko, nyko); // check edge
-	dffr dffr_pylo(!nyko, lapa, !pylo, pylo); // check edge
-	dffr dffr_nuto(!pylo, lapa, !nuto, nuto); // check edge
-	dffr dffr_mugu(!nuto, lapa, !mugu, mugu); // check edge
+	dffr_bp dffr_naky(meta,  lapa, !naky, naky); // check edge
+	dffr_bp dffr_pyro(!naky, lapa, !pyro, pyro); // check edge
+	dffr_bp dffr_nefy(!pyro, lapa, !nefy, nefy); // check edge
+	dffr_bp dffr_muty(!nefy, lapa, !muty, muty); // check edge
+	dffr_bp dffr_nyko(!muty, lapa, !nyko, nyko); // check edge
+	dffr_bp dffr_pylo(!nyko, lapa, !pylo, pylo); // check edge
+	dffr_bp dffr_nuto(!pylo, lapa, !nuto, nuto); // check edge
+	dffr_bp dffr_mugu(!nuto, lapa, !mugu, mugu); // check edge
 	assign #T_TRI  ecal = !ahoc ? !naky : 'z;
 	assign #T_TRI  egez = !ahoc ? !pyro : 'z;
 	assign #T_TRI  fuhe = !ahoc ? !nefy : 'z;

@@ -20,13 +20,13 @@ module channel1(
 
 	logic boro, boka, cory, cero, capy, cyfa, hoca, bone, bery, femy, gepu, gexu, bugy, canu, bepe, cuso;
 	logic bacy, cavy, bovy, cuno, cura, eram;
-	dffr dffr_cero(!eram, cory, !cero, cero); // check clk edge
-	count count_bacy(canu, bugy, d[0], bacy);
-	count count_cavy(bacy, bugy, d[1], cavy);
-	count count_bovy(cavy, bugy, d[2], bovy);
-	count count_cuno(bovy, bugy, d[3], cuno);
-	count count_cura(cuso, bepe, d[4], cura);
-	count count_eram(cura, bepe, d[5], eram);
+	dffr_bp dffr_cero(!eram, cory, !cero, cero); // check clk edge
+	tffd tffd_bacy(canu, bugy, d[0], bacy);
+	tffd tffd_cavy(bacy, bugy, d[1], cavy);
+	tffd tffd_bovy(cavy, bugy, d[2], bovy);
+	tffd tffd_cuno(bovy, bugy, d[3], cuno);
+	tffd tffd_cura(cuso, bepe, d[4], cura);
+	tffd tffd_eram(cura, bepe, d[5], eram);
 	srlatch latch_gexu(!gepu, !femy, gexu); /* srlatch with !s & !r inputs */
 	assign #T_NAND boro = !(apu_wr && ff11);
 	assign #T_INV  boka = !boro;
@@ -41,12 +41,12 @@ module channel1(
 	assign #T_INV  bugy = !boro;
 	assign #T_INV  canu = !capy;
 	assign #T_INV  bepe = !boro;
-	assign #T_INV  cuso = cuno; /* takes !q output of counter */
+	assign #T_INV  cuso = cuno; /* takes !q output of tffd */
 	assign nch1_amp_en = hoca;
 	assign ngexu       = !gexu;
 
 	logic cala, comy, cyte, dyru, doka;
-	dffr dffr_comy(cala, dyru, !comy, comy); // check clk edge
+	dffr_bp dffr_comy(cala, dyru, !comy, comy); // check clk edge
 	assign #T_INV  cala = !copu;
 	assign #T_INV  cyte = !comy;
 	assign #T_INV  cope = !cyte;
@@ -54,10 +54,10 @@ module channel1(
 	assign #T_AND  doka = comy && dyfa_1mhz;
 
 	logic dafa, cymu, bave, caxy, cypu, cupo, bury, coze, bexa;
-	dffr dffr_bexa(ajer_2mhz, bury, coze, bexa); // check clk edge
-	count count_caxy(cypu, cymu, nff10_d6, caxy);
-	count count_cypu(cupo, cymu, nff10_d5, cypu);
-	count count_cupo(cate, cymu, nff10_d4, cupo);
+	dffr_bp dffr_bexa(ajer_2mhz, bury, coze, bexa); // check clk edge
+	tffd tffd_caxy(cypu, cymu, nff10_d6, caxy);
+	tffd tffd_cypu(cupo, cymu, nff10_d5, cypu);
+	tffd tffd_cupo(cate, cymu, nff10_d4, cupo);
 	assign #T_NOR  dafa = !(bexa || ch1_restart);
 	assign #T_INV  cymu = !dafa;
 	assign #T_AND  bave = nff10_d6 && nff10_d5 && nff10_d4;
@@ -69,22 +69,22 @@ module channel1(
 	logic hufu, hano, hake, koru, jade, kyno, kezu;
 	logic cyto, cara, duwo, cowe, boto;
 	logic hesu, heto, hyto, jufy, hevo, hoko, hemy, hafo, aceg, agof, ason, amop;
-	dffr dffr_kaly(jone,       kado,        !kaly,       kaly); // check clk edge
-	dffr dffr_kozy(horu_512hz, koro,        kote,        kozy); // check clk edge
-	dffr dffr_fare(dyfa_1mhz,  erum,        ch1_restart, fare); // check clk edge
-	dffr dffr_fyte(dyfa_1mhz,  erum,        fare,        fyte); // check clk edge
-	dffr dffr_dupe(doge,       dado,        d[7],        dupe); // check clk edge
-	dffr dffr_ezec(dova_phi,   duka,        dupe,        ezec); // check clk edge
-	dffr dffr_feku(dyfa_1mhz,  eget,        !fyfo,       feku); // check clk edge
-	dffr dffr_kyno(kozy,       koru,        jade,        kyno); // check clk edge
-	dffr dffr_duwo(cope,       napu_reset6, ch1_bit,     duwo); // check clk edge
-	count count_jova(jola, kuxu,        nff12_d0, jova);
-	count count_kenu(jova, kuxu,        nff12_d1, kenu);
-	count count_kera(kenu, kuxu,        nff12_d2, kera);
-	count count_hevo(hesu, ch1_restart, ff12_d7,  hevo);
-	count count_hoko(heto, ch1_restart, ff12_d6,  hoko);
-	count count_hemy(hyto, ch1_restart, ff12_d5,  hemy);
-	count count_hafo(jufy, ch1_restart, ff12_d4,  hafo);
+	dffr_bp dffr_kaly(jone,       kado,        !kaly,       kaly); // check clk edge
+	dffr_bp dffr_kozy(horu_512hz, koro,        kote,        kozy); // check clk edge
+	dffr_bp dffr_fare(dyfa_1mhz,  erum,        ch1_restart, fare); // check clk edge
+	dffr_bp dffr_fyte(dyfa_1mhz,  erum,        fare,        fyte); // check clk edge
+	dffr_a  dffr_dupe(doge,       dado,        d[7],        dupe); // check clk edge
+	dffr_bp dffr_ezec(dova_phi,   duka,        dupe,        ezec); // check clk edge
+	dffr_bp dffr_feku(dyfa_1mhz,  eget,        !fyfo,       feku); // check clk edge
+	dffr_bp dffr_kyno(kozy,       koru,        jade,        kyno); // check clk edge
+	dffr_bp dffr_duwo(cope,       napu_reset6, ch1_bit,     duwo); // check clk edge
+	tffd tffd_jova(jola, kuxu,        nff12_d0, jova);
+	tffd tffd_kenu(jova, kuxu,        nff12_d1, kenu);
+	tffd tffd_kera(kenu, kuxu,        nff12_d2, kera);
+	tffd tffd_hevo(hesu, ch1_restart, ff12_d7,  hevo);
+	tffd tffd_hoko(heto, ch1_restart, ff12_d6,  hoko);
+	tffd tffd_hemy(hyto, ch1_restart, ff12_d5,  hemy);
+	tffd tffd_hafo(jufy, ch1_restart, ff12_d4,  hafo);
 	srlatch latch_cyto(ch1_restart, bery, cyto);
 	srlatch latch_fyfo(gefe,        ezec, fyfo);
 	srlatch latch_kezu(kyno,        keko, kezu);
@@ -134,17 +134,17 @@ module channel1(
 
 	logic dacu, cylu, copa, caja, byra, buge, copy, atat, BYTE, epuk, evol, femu, egyp, cele, dody, egor, dapu;
 	logic nno_sweep;
-	dffr dffr_byte(ajer_2mhz, atat, copy, BYTE); // check clk edge
-	count count_copa(dapu, cylu, nff10_d0, copa);
-	count count_caja(copa, cylu, nff10_d1, caja);
-	count count_byra(caja, cylu, nff10_d2, byra);
+	dffr_bp dffr_byte(ajer_2mhz, atat, copy, BYTE); // check clk edge
+	tffd tffd_copa(dapu, cylu, nff10_d0, copa);
+	tffd tffd_caja(copa, cylu, nff10_d1, caja);
+	tffd tffd_byra(caja, cylu, nff10_d2, byra);
 	srlatch latch_femu(!evol, !epuk, femu); /* srlatch with !s & !r inputs */
 	assign #T_NOR  dacu = !(ch1_restart || bexa);
 	assign #T_INV  cylu = !dacu;
 	assign #T_NAND buge = !(nff10_d2 && nff10_d1 && nff10_d0);
 	assign #T_AND  copy = copa && caja && byra;
 	assign #T_NOR  atat = !(bexa || apu_reset);
-	assign #T_INV  adad = BYTE; /* takes !q output of dff */
+	assign #T_INV  adad = BYTE; /* takes !q output of dffr */
 	assign #T_NOR  epuk = !(apu_reset || adad);
 	assign #T_NOR  evol = !(bexa || fyte);
 	assign #T_NOR  egyp = !(!femu || dyfa_1mhz); /* takes !q output of srlatch */
@@ -157,9 +157,9 @@ module channel1(
 
 	logic dajo, esut, eros, dape, duvo, ezoz, enek, codo, coso, cava, cevu, caxo, duna;
 	logic ch1_bit;
-	dffr dffr_esut(dajo,  napu_reset6, !esut, esut); // check clk edge
-	dffr dffr_eros(!esut, napu_reset6, !eros, eros); // check clk edge
-	dffr dffr_dape(!eros, napu_reset6, !dape, dape); // check clk edge
+	dffr_bp dffr_esut(dajo,  napu_reset6, !esut, esut); // check clk edge
+	dffr_b  dffr_eros(!esut, napu_reset6, !eros, eros); // check clk edge
+	dffr_b  dffr_dape(!eros, napu_reset6, !dape, dape); // check clk edge
 	assign #T_INV  dajo = !cope;
 	assign #T_INV  duvo = !esut;
 	assign #T_AND  ezoz = dape && eros;

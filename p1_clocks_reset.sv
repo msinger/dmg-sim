@@ -69,7 +69,7 @@ module clocks_reset(
 	assign #T_INV  apuv = !amuk;
 	assign #T_INV  cybo = !amuk;
 	assign #T_INV  bela = !apu_reset;
-	dffr dffr_cery(cybo, bela, !cery, cery);
+	dffr_bp dffr_cery(cybo, bela, !cery, cery);
 	assign aryf_4mhz = aryf;
 	assign apuv_4mhz = apuv;
 	assign cery_2mhz = cery;
@@ -102,17 +102,17 @@ module clocks_reset(
 
 	logic adyk, afur, alef, apuk, ucob, uvyt, nclkin_a;
 	logic adar, atyp, afep, arov, ajax, bugo, arev, apov, agut, awod, bate, basu;
-	dffr dffr_adyk(atal_4mhz,  t1t2_nrst, apuk,  adyk);
-	dffr dffr_afur(!atal_4mhz, t1t2_nrst, !adyk, afur);
-	dffr dffr_alef(atal_4mhz,  t1t2_nrst, afur,  alef);
-	dffr dffr_apuk(!atal_4mhz, t1t2_nrst, alef,  apuk);
+	dffr_a dffr_adyk(atal_4mhz,  t1t2_nrst, apuk,  adyk);
+	dffr_a dffr_afur(!atal_4mhz, t1t2_nrst, !adyk, afur);
+	dffr_a dffr_alef(atal_4mhz,  t1t2_nrst, afur,  alef);
+	dffr_a dffr_apuk(!atal_4mhz, t1t2_nrst, alef,  apuk);
 	assign #T_INV  abol = !clk_from_cpu;
 	assign #T_INV  ucob = !clkin_a;
 	assign #T_INV  uvyt = !nphi_out;
 	assign #T_INV  adar = !adyk;
-	assign #T_INV  atyp = afur; /* takes !q output of dff */
+	assign #T_INV  atyp = afur; /* takes !q output of dffr */
 	assign #T_INV  afep = !alef;
-	assign #T_INV  arov = apuk; /* takes !q output of dff */
+	assign #T_INV  arov = apuk; /* takes !q output of dffr */
 	assign #T_NOR  afas = !(adar || atyp);
 	assign #T_NAND arev = !(from_cpu3 && afas);
 	assign #T_INV  apov = !arev;
@@ -153,7 +153,7 @@ module clocks_reset(
 	assign from_cpu5 = bufa;
 
 	logic bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, byxo, bowa, avor, alur;
-	dffr dffr_afer(boga, t1t2_nrst, !asol, afer);
+	dffr_b dffr_afer(boga, t1t2_nrst, !asol, afer);
 	srlatch latch_asol(afar, reset, asol);
 	assign #T_INV  bele = !buto;
 	assign #T_INV  atez = !clkin_a;
@@ -181,12 +181,12 @@ module clocks_reset(
 
 	logic tama, unyk, tero, uner, ufor, ukup, uvyn, tama16384;
 	logic _32768hz, _131072hz, _524288hz;
-	dffr dffr_tama(!unyk,    nreset_div, !tama, tama);
-	dffr dffr_unyk(!tero,    nreset_div, !unyk, unyk);
-	dffr dffr_tero(!uner,    nreset_div, !tero, tero);
-	dffr dffr_uner(!ufor,    nreset_div, !uner, uner);
-	dffr dffr_ufor(!ukup,    nreset_div, !ufor, ufor);
-	dffr dffr_ukup(boga1mhz, nreset_div, !ukup, ukup);
+	dffr_bp dffr_tama(!unyk,    nreset_div, !tama, tama);
+	dffr_bp dffr_unyk(!tero,    nreset_div, !unyk, unyk);
+	dffr_bp dffr_tero(!uner,    nreset_div, !tero, tero);
+	dffr_bp dffr_uner(!ufor,    nreset_div, !uner, uner);
+	dffr_bp dffr_ufor(!ukup,    nreset_div, !ufor, ufor);
+	dffr_bp dffr_ukup(boga1mhz, nreset_div, !ukup, ukup);
 	assign #T_INV  uvyn = !tama;
 	assign tama16384 = !tama;
 	assign _16384hz  = uvyn;
@@ -200,16 +200,16 @@ module clocks_reset(
 	logic umek, urek, utok, sapy, umer, rave, ryso, udor;
 	logic tagy, tawu, taku, temu, tuse, upug, sepu, sawa, tatu;
 	logic upyf, tubo, unut;
-	dffr dffr_ugot(ulur,  nreset_div, !ugot, ugot);
-	dffr dffr_tulu(!ugot, nreset_div, !tulu, tulu);
-	dffr dffr_tugo(!tulu, nreset_div, !tugo, tugo);
-	dffr dffr_tofe(!tugo, nreset_div, !tofe, tofe);
-	dffr dffr_teru(!tofe, nreset_div, !teru, teru);
-	dffr dffr_sola(!teru, nreset_div, !sola, sola);
-	dffr dffr_subu(!sola, nreset_div, !subu, subu);
-	dffr dffr_teka(!subu, nreset_div, !teka, teka);
-	dffr dffr_uket(!teka, nreset_div, !uket, uket);
-	dffr dffr_upof(!uket, nreset_div, !upof, upof);
+	dffr_bp dffr_ugot(ulur,  nreset_div, !ugot, ugot);
+	dffr_bp dffr_tulu(!ugot, nreset_div, !tulu, tulu);
+	dffr_bp dffr_tugo(!tulu, nreset_div, !tugo, tugo);
+	dffr_bp dffr_tofe(!tugo, nreset_div, !tofe, tofe);
+	dffr_bp dffr_teru(!tofe, nreset_div, !teru, teru);
+	dffr_bp dffr_sola(!teru, nreset_div, !sola, sola);
+	dffr_bp dffr_subu(!sola, nreset_div, !subu, subu);
+	dffr_bp dffr_teka(!subu, nreset_div, !teka, teka);
+	dffr_bp dffr_uket(!teka, nreset_div, !uket, uket);
+	dffr_bp dffr_upof(!uket, nreset_div, !upof, upof);
 	srlatch latch_tubo(clk_from_cpu, upyf, tubo);
 	assign #T_MUX  ulur = ff60_d1 ? boga1mhz : tama16384;
 	assign #T_INV  umek = !ugot;
@@ -238,15 +238,15 @@ module clocks_reset(
 
 	logic atus, coke, bara, caru, bylu, bure, fyne, culo, apef, gale, beze, bule, gexy, cofu, baru, horu, bufy, byfe;
 	logic _512hz, _256hz, _128hz;
-	dffr dffr_bara(coke,  atus, umer,  bara); // check edge
-	dffr dffr_caru(bure,  atus, !caru, caru); // check edge
-	dffr dffr_bylu(!caru, atus, !bylu, bylu); // check edge
+	dffr_bp dffr_bara(coke,  atus, umer,  bara); // check edge
+	dffr_bp dffr_caru(bure,  atus, !caru, caru); // check edge
+	dffr_bp dffr_bylu(!caru, atus, !bylu, bylu); // check edge
 	assign #T_INV  atus = !apu_reset;
 	assign #T_INV  coke = !ajer_2mhz;
-	assign #T_INV  bure = bara; /* takes !q output of dff */
+	assign #T_INV  bure = bara; /* takes !q output of dffr */
 	assign #T_INV  fyne = !bure;
-	assign #T_INV  culo = caru; /* takes !q output of dff */
-	assign #T_INV  apef = bylu; /* takes !q output of dff */
+	assign #T_INV  culo = caru; /* takes !q output of dffr */
+	assign #T_INV  apef = bylu; /* takes !q output of dffr */
 	assign #T_MUX  gale = fero_q ? hama_512k : fyne;
 	assign #T_MUX  beze = fero_q ? hama_512k : culo;
 	assign #T_MUX  bule = fero_q ? hama_512k : apef;
@@ -264,12 +264,12 @@ module clocks_reset(
 	assign byfe_128hz = byfe;
 
 	logic bopo, atyk, avok, bavu, jeso, hama, _2097152hz, _1048576hz;
-	dffr dffr_atyk(aryf_4mhz, bopo,        !atyk, atyk); // check edge
-	dffr dffr_avok(!atyk,     bopo,        !avok, avok); // check edge
-	dffr dffr_jeso(bavu,      napu_reset5, !jeso, jeso); // check edge
+	dffr_bp dffr_atyk(aryf_4mhz, bopo,        !atyk, atyk); // check edge
+	dffr_bp dffr_avok(!atyk,     bopo,        !avok, avok); // check edge
+	dffr_bp dffr_jeso(bavu,      napu_reset5, !jeso, jeso); // check edge
 	assign #T_INV  bopo = !apu_reset;
 	assign #T_INV  bavu = !avok;
-	assign #T_INV  hama = jeso; /* takes !q output of dff */
+	assign #T_INV  hama = jeso; /* takes !q output of dffr */
 	assign _2097152hz = atyk;
 	assign _1048576hz = avok;
 	assign jeso_512k = jeso;

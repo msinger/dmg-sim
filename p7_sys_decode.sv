@@ -97,8 +97,8 @@ module sys_decode(
 	logic apet, aper, amut, buro;
 	assign #T_OR   apet = t1_nt2 || nt1_t2;
 	assign #T_NAND aper = !(apet && a[5] && a[6] && cpu_wr && anap);
-	dffr dffr_amut(aper, nreset2, d[1], amut); // check edge
-	dffr dffr_buro(aper, nreset2, d[0], buro); // check edge
+	dffr_bp dffr_amut(aper, nreset2, d[1], amut); // check edge
+	dffr_bp dffr_buro(aper, nreset2, d[0], buro); // check edge
 	assign ff60_d1 = amut;
 	assign ff60_d0 = buro;
 
@@ -141,13 +141,13 @@ module sys_decode(
 	assign nfexxffxx = tuna;
 
 	logic tyro, tufa, texe, sato, tuge, tepu, sypu, tera, yaza, yula, tulo, zoro, zadu, zufa, zado, zery;
-	dffr dffr_tepu(tuge, nreset2, sato, tepu); // check edge
+	dffr_bp dffr_tepu(tuge, nreset2, sato, tepu); // check edge
 	assign #T_NOR  tyro = !(a[7] || a[5] || a[3] || a[2] || a[1] || a[0]);
 	assign #T_AND  tufa = a[4] && a[6];
 	assign #T_AND  texe = cpu_rd && ffxx && tufa && tyro;
 	assign #T_OR   sato = d[0] || tepu;
 	assign #T_NAND tuge = !(tyro && tufa && ffxx && cpu_wr);
-	assign #T_TRI  sypu = texe ? tepu : 1'bz; /* takes !q output of dff */
+	assign #T_TRI  sypu = texe ? tepu : 1'bz; /* takes !q output of dffr */
 	assign #T_INV  tera = !tepu;
 	assign #T_INV  yaza = nt1_t2;
 	assign #T_AND  tutu = tera && tulo;

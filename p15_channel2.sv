@@ -29,34 +29,34 @@ module channel2(
 	logic buwe, azeg, atep, caza, byho, bufo, bodo, cemo, cemo_1mhz, buta, cama;
 	logic fopy, etup, faru, gafa, fena, fomy, fete, feno;
 	logic dome, cyse, bonu, emyr, erat, fyre, gufy, amov, asog, anyv, anan;
-	dffr dffr_jyna(hota,       katy,        !jyna,   jyna); // check clk edge
-	dffr dffr_gyko(galu,       gyre,        !gyko,   gyko); // check clk edge
-	dffr dffr_jopa(horu_512hz, hafe,        kyvo,    jopa); // check clk edge
-	dffr dffr_hepo(jopa,       hypa,        gufy,    hepo); // check clk edge
-	dffr dffr_dope(dova_phi,   cywu,        ff19_d7, dope); // check clk edge
-	dffr dffr_elox(cemo_1mhz,  doxa,        !dala,   elox); // check clk edge
-	dffr dffr_dory(cemo_1mhz,  cexe,        elox,    dory); // check clk edge
-	dffr dffr_cyre(akyd_nq,    beny,        !cyre,   cyre); // check clk edge
-	dffr dffr_cano(cule,       napu_reset2, !cano,   cano); // check clk edge
-	dffr dffr_cagy(!cano,      napu_reset2, !cagy,   cagy); // check clk edge
-	dffr dffr_dyve(!cagy,      napu_reset2, !dyve,   dyve); // check clk edge
-	dffr dffr_atep(azeg,       buwe,        !atep,   atep); // check clk edge
-	dffr dffr_caza(cemo,       cexe,        dory_q,  caza); // check clk edge
-	dffr dffr_cemo(bufo,       byho,        !cemo,   cemo); // check clk edge
-	dffr dffr_dome(davu,       napu_reset2, exes,    dome); // check clk edge
-	count count_jore(kene, jake,   nff17_d0, jore);
-	count count_jona(jore, jake,   nff17_d1, jona);
-	count count_jevy(jona, jake,   nff17_d2, jevy);
-	count count_eryc(dyro, bymo,   d[0],     eryc);
-	count count_cera(eryc, bymo,   d[1],     cera);
-	count count_conu(cera, bymo,   d[2],     conu);
-	count count_came(conu, bymo,   d[3],     came);
-	count count_buva(buko, aget,   d[4],     buva);
-	count count_akyd(buva, aget,   d[5],     akyd);
-	count count_fena(fopy, elox_q, ff17_d7,  fena);
-	count count_fomy(etup, elox_q, ff17_d6,  fomy);
-	count count_fete(faru, elox_q, ff17_d5,  fete);
-	count count_feno(gafa, elox_q, ff17_d4,  feno);
+	dffr_bp dffr_jyna(hota,       katy,        !jyna,   jyna); // check clk edge
+	dffr_bp dffr_gyko(galu,       gyre,        !gyko,   gyko); // check clk edge
+	dffr_bp dffr_jopa(horu_512hz, hafe,        kyvo,    jopa); // check clk edge
+	dffr_bp dffr_hepo(jopa,       hypa,        gufy,    hepo); // check clk edge
+	dffr_bp dffr_dope(dova_phi,   cywu,        ff19_d7, dope); // check clk edge
+	dffr_bp dffr_elox(cemo_1mhz,  doxa,        !dala,   elox); // check clk edge
+	dffr_bp dffr_dory(cemo_1mhz,  cexe,        elox,    dory); // check clk edge
+	dffr_bp dffr_cyre(akyd_nq,    beny,        !cyre,   cyre); // check clk edge
+	dffr_bp dffr_cano(cule,       napu_reset2, !cano,   cano); // check clk edge
+	dffr_b  dffr_cagy(!cano,      napu_reset2, !cagy,   cagy); // check clk edge
+	dffr_b  dffr_dyve(!cagy,      napu_reset2, !dyve,   dyve); // check clk edge
+	dffr_bp dffr_atep(azeg,       buwe,        !atep,   atep); // check clk edge
+	dffr_bp dffr_caza(cemo,       cexe,        dory_q,  caza); // check clk edge
+	dffr_bp dffr_cemo(bufo,       byho,        !cemo,   cemo); // check clk edge
+	dffr_bp dffr_dome(davu,       napu_reset2, exes,    dome); // check clk edge
+	tffd tffd_jore(kene, jake,   nff17_d0, jore);
+	tffd tffd_jona(jore, jake,   nff17_d1, jona);
+	tffd tffd_jevy(jona, jake,   nff17_d2, jevy);
+	tffd tffd_eryc(dyro, bymo,   d[0],     eryc);
+	tffd tffd_cera(eryc, bymo,   d[1],     cera);
+	tffd tffd_conu(cera, bymo,   d[2],     conu);
+	tffd tffd_came(conu, bymo,   d[3],     came);
+	tffd tffd_buva(buko, aget,   d[4],     buva);
+	tffd tffd_akyd(buva, aget,   d[5],     akyd);
+	tffd tffd_fena(fopy, elox_q, ff17_d7,  fena);
+	tffd tffd_fomy(etup, elox_q, ff17_d6,  fomy);
+	tffd tffd_fete(faru, elox_q, ff17_d5,  fete);
+	tffd tffd_feno(gafa, elox_q, ff17_d4,  feno);
 	srlatch latch_buta(!bodo, !ares, buta); /* srlatch with !s & !r inputs */
 	srlatch latch_dala(celo,  dope,  dala);
 	srlatch latch_dane(elox,  esyk,  dane);

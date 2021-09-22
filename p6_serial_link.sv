@@ -15,19 +15,19 @@ module serial_link(
 
 	logic uwam, ucom, coty, cave, dawa, etaf, culy, caro, eluv, core, _8192hz;
 	logic kexu, jago, kujo, edyl, cafa, cylo, cyde, caly, coba, caby, nser_tick;
-	dffr dffr_coty(_16384hz, uwam,    !coty, coty); // check clk edge
-	dffr dffr_etaf(uwam,     caby,    d[7],  etaf); // check clk edge
-	dffr dffr_culy(uwam,     nreset2, d[0],  culy); // check clk edge
-	dffr dffr_cafa(dawa,     caro,    !cafa, cafa); // check clk edge
-	dffr dffr_cylo(!cafa,    caro,    !cylo, cylo); // check clk edge
-	dffr dffr_cyde(!cylo,    caro,    !cyde, cyde); // check clk edge
-	dffr dffr_caly(!cyde,    caro,    !caly, caly); // check clk edge
+	dffr_bp dffr_coty(_16384hz, uwam,    !coty, coty); // check clk edge
+	dffr_bp dffr_etaf(uwam,     caby,    d[7],  etaf); // check clk edge
+	dffr_bp dffr_culy(uwam,     nreset2, d[0],  culy); // check clk edge
+	dffr_bp dffr_cafa(dawa,     caro,    !cafa, cafa); // check clk edge
+	dffr_bp dffr_cylo(!cafa,    caro,    !cylo, cylo); // check clk edge
+	dffr_bp dffr_cyde(!cylo,    caro,    !cyde, cyde); // check clk edge
+	dffr_bp dffr_caly(!cyde,    caro,    !caly, caly); // check clk edge
 	assign #T_NAND uwam = !(tovy_na0 && a[1] && cpu_wr && sano);
 	assign #T_AND  ucom = sano && cpu_rd && a[1] && tovy_na0;
 	assign #T_MUXI cave = !(culy ? coty : sck_in);
-	assign #T_OR   dawa = cave || !etaf; /* takes !q output of dff */
-	assign #T_TRI  eluv = ucom ? etaf : 'z; /* takes !q output of dff */
-	assign #T_TRI  core = ucom ? culy : 'z; /* takes !q output of dff */
+	assign #T_OR   dawa = cave || !etaf; /* takes !q output of dffr */
+	assign #T_TRI  eluv = ucom ? etaf : 'z; /* takes !q output of dffr */
+	assign #T_TRI  core = ucom ? culy : 'z; /* takes !q output of dffr */
 	assign #T_AND  caro = uwam && nreset2;
 	assign #T_NAND kexu = !(dawa && sck_dir);
 	assign #T_INV  jago = !sck_dir;
@@ -55,7 +55,7 @@ module serial_link(
 	dffsr dffsr_ejab(epyt, elok, ehuj, dovu, ejab); // check clk edge
 	dffsr dffsr_erod(epyt, edel, efak, ejab, erod); // check clk edge
 	dffsr dffsr_eder(epyt, efef, eguv, erod, eder); // check clk edge
-	dffr dffr_elys(nser_tick, nreset2, eder, elys); // check clk edge
+	dffr_bp dffr_elys(nser_tick, nreset2, eder, elys); // check clk edge
 	assign #T_NOR  sare = !(a[7] || a[6] || a[5] || a[4] || a[3]);
 	assign #T_INV  sefy = !a[2];
 	assign #T_AND  sano = sefy && sare && ffxx;
@@ -82,14 +82,14 @@ module serial_link(
 	assign #T_NAND elok = !(d[5] && daku);
 	assign #T_NAND edel = !(d[6] && daku);
 	assign #T_NAND efef = !(d[7] && daku);
-	assign #T_TRI  cugy = ufeg ? cuba : 'z; /* takes !q output of dff */
-	assign #T_TRI  dude = ufeg ? degu : 'z; /* takes !q output of dff */
-	assign #T_TRI  detu = ufeg ? dyra : 'z; /* takes !q output of dff */
-	assign #T_TRI  daso = ufeg ? dojo : 'z; /* takes !q output of dff */
-	assign #T_TRI  dame = ufeg ? dovu : 'z; /* takes !q output of dff */
-	assign #T_TRI  evok = ufeg ? ejab : 'z; /* takes !q output of dff */
-	assign #T_TRI  efab = ufeg ? erod : 'z; /* takes !q output of dff */
-	assign #T_TRI  etak = ufeg ? eder : 'z; /* takes !q output of dff */
+	assign #T_TRI  cugy = ufeg ? cuba : 'z; /* takes !q output of dffsr */
+	assign #T_TRI  dude = ufeg ? degu : 'z; /* takes !q output of dffsr */
+	assign #T_TRI  detu = ufeg ? dyra : 'z; /* takes !q output of dffsr */
+	assign #T_TRI  daso = ufeg ? dojo : 'z; /* takes !q output of dffsr */
+	assign #T_TRI  dame = ufeg ? dovu : 'z; /* takes !q output of dffsr */
+	assign #T_TRI  evok = ufeg ? ejab : 'z; /* takes !q output of dffsr */
+	assign #T_TRI  efab = ufeg ? erod : 'z; /* takes !q output of dffsr */
+	assign #T_TRI  etak = ufeg ? eder : 'z; /* takes !q output of dffsr */
 	assign a00_07  = sare;
 	assign d[0]    = cugy;
 	assign d[1]    = dude;

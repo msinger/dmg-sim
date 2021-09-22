@@ -24,10 +24,10 @@ module apu_control(
 	);
 
 	logic ajer, bata, calo, dyfa, najer_2mhz;
-	dffr dffr_ajer(apuv_4mhz, napu_reset3, !ajer, ajer); // check edge
-	dffr dffr_calo(bata,      napu_reset,  !calo, calo); // check edge
+	dffr_bp dffr_ajer(apuv_4mhz, napu_reset3, !ajer, ajer); // check edge
+	dffr_bp dffr_calo(bata,      napu_reset,  !calo, calo); // check edge
 	assign #T_INV  bata = !ajer_2mhz;
-	assign #T_INV  dyfa = calo; /* takes !q output of dff */
+	assign #T_INV  dyfa = calo; /* takes !q output of dffr */
 	assign ajer_2mhz  = ajer;
 	assign najer_2mhz = !ajer;
 	assign dyfa_1mhz  = dyfa;
@@ -48,10 +48,10 @@ module apu_control(
 
 	logic kydu, jure, hapo, gufo, jyro, kuby, keba, hawu, hada, hope, bopy, bowy, baza, cely, cone;
 	logic kepy, etuc, foku, efop, fero, edek;
-	dffr dffr_hada(hawu,       gufo,        d[7], hada); // check edge
-	dffr dffr_bowy(bopy,       kepy,        d[5], bowy); // check edge
-	dffr dffr_baza(najer_2mhz, napu_reset3, bowy, baza); // check edge
-	dffr dffr_fero(foku,       kepy,        efop, fero); // check edge
+	dffr_bp dffr_hada(hawu,       gufo,        d[7], hada); // check edge
+	dffr_bp dffr_bowy(bopy,       kepy,        d[5], bowy); // check edge
+	dffr_bp dffr_baza(najer_2mhz, napu_reset3, bowy, baza); // check edge
+	dffr_a  dffr_fero(foku,       kepy,        efop, fero); // check edge
 	assign #T_INV  kydu = !ncpu_rd;
 	assign #T_NAND jure = !(kydu && ff26);
 	assign #T_NAND hawu = !(ff26 && apu_wr);
@@ -69,7 +69,7 @@ module apu_control(
 	assign #T_AND  etuc = apu_wr && ff26;
 	assign #T_AND  efop = d[4] && t1_nt2;
 	assign #T_INV  foku = !etuc;
-	assign #T_INV  edek = fero; /* takes !q output of dff */
+	assign #T_INV  edek = fero; /* takes !q output of dffr */
 	assign apu_reset = keba;
 	assign fero_q    = fero;
 	assign net03     = edek;
@@ -78,14 +78,14 @@ module apu_control(
 	logic aguz, byma, befu, adak, bosu, baxy, bubu, bowe, ataf;
 	logic bedu, cozu, bumo, byre, apos, ager, byga, apeg;
 	logic atum, bocy, arux, amad, axem, avud, awed, akod;
-	dffr dffr_bedu(bubu, jyro, d[7], bedu); // check edge
-	dffr dffr_cozu(bubu, jyro, d[6], cozu); // check edge
-	dffr dffr_bumo(bubu, jyro, d[5], bumo); // check edge
-	dffr dffr_byre(bubu, jyro, d[4], byre); // check edge
-	dffr dffr_apos(ataf, jyro, d[3], apos); // check edge
-	dffr dffr_ager(ataf, jyro, d[2], ager); // check edge
-	dffr dffr_byga(ataf, jyro, d[1], byga); // check edge
-	dffr dffr_apeg(ataf, jyro, d[0], apeg); // check edge
+	dffr_a dffr_bedu(bubu, jyro, d[7], bedu); // check edge
+	dffr_a dffr_cozu(bubu, jyro, d[6], cozu); // check edge
+	dffr_a dffr_bumo(bubu, jyro, d[5], bumo); // check edge
+	dffr_a dffr_byre(bubu, jyro, d[4], byre); // check edge
+	dffr_a dffr_apos(ataf, jyro, d[3], apos); // check edge
+	dffr_a dffr_ager(ataf, jyro, d[2], ager); // check edge
+	dffr_a dffr_byga(ataf, jyro, d[1], byga); // check edge
+	dffr_a dffr_apeg(ataf, jyro, d[0], apeg); // check edge
 	assign #T_INV  aguz = !cpu_rd;
 	assign #T_INV  byma = !ff24;
 	assign #T_NOR  befu = !(aguz || byma);
@@ -95,14 +95,14 @@ module apu_control(
 	assign #T_INV  bubu = !baxy;
 	assign #T_INV  bowe = !bosu;
 	assign #T_INV  ataf = !bowe;
-	assign #T_TRI  atum = !adak ? bedu : 'z; /* takes !q output of dff */
-	assign #T_TRI  bocy = !adak ? cozu : 'z; /* takes !q output of dff */
-	assign #T_TRI  arux = !adak ? bumo : 'z; /* takes !q output of dff */
-	assign #T_TRI  amad = !adak ? byre : 'z; /* takes !q output of dff */
-	assign #T_TRI  axem = !adak ? apos : 'z; /* takes !q output of dff */
-	assign #T_TRI  avud = !adak ? ager : 'z; /* takes !q output of dff */
-	assign #T_TRI  awed = !adak ? byga : 'z; /* takes !q output of dff */
-	assign #T_TRI  akod = !adak ? apeg : 'z; /* takes !q output of dff */
+	assign #T_TRI  atum = !adak ? bedu : 'z; /* takes !q output of dffr */
+	assign #T_TRI  bocy = !adak ? cozu : 'z; /* takes !q output of dffr */
+	assign #T_TRI  arux = !adak ? bumo : 'z; /* takes !q output of dffr */
+	assign #T_TRI  amad = !adak ? byre : 'z; /* takes !q output of dffr */
+	assign #T_TRI  axem = !adak ? apos : 'z; /* takes !q output of dffr */
+	assign #T_TRI  avud = !adak ? ager : 'z; /* takes !q output of dffr */
+	assign #T_TRI  awed = !adak ? byga : 'z; /* takes !q output of dffr */
+	assign #T_TRI  akod = !adak ? apeg : 'z; /* takes !q output of dffr */
 	assign ncpu_rd = aguz;
 	assign d[7]    = atum;
 	assign d[6]    = bocy;
@@ -116,28 +116,28 @@ module apu_control(
 	logic gepa, hefa, gumu, bupo, bono, byfa;
 	logic bogu, bafo, atuf, anev, bepu, befo, bume, bofa;
 	logic capu, caga, boca, buzu, cere, cada, cavu, cudu;
-	dffr dffr_bogu(bono, jyro, d[1], bogu); // check edge
-	dffr dffr_bafo(bono, jyro, d[2], bafo); // check edge
-	dffr dffr_atuf(bono, jyro, d[3], atuf); // check edge
-	dffr dffr_anev(bono, jyro, d[0], anev); // check edge
-	dffr dffr_bepu(byfa, jyro, d[7], bepu); // check edge
-	dffr dffr_befo(byfa, jyro, d[6], befo); // check edge
-	dffr dffr_bume(byfa, jyro, d[4], bume); // check edge
-	dffr dffr_bofa(byfa, jyro, d[5], bofa); // check edge
+	dffr_a dffr_bogu(bono, jyro, d[1], bogu); // check edge
+	dffr_a dffr_bafo(bono, jyro, d[2], bafo); // check edge
+	dffr_a dffr_atuf(bono, jyro, d[3], atuf); // check edge
+	dffr_a dffr_anev(bono, jyro, d[0], anev); // check edge
+	dffr_a dffr_bepu(byfa, jyro, d[7], bepu); // check edge
+	dffr_a dffr_befo(byfa, jyro, d[6], befo); // check edge
+	dffr_a dffr_bume(byfa, jyro, d[4], bume); // check edge
+	dffr_a dffr_bofa(byfa, jyro, d[5], bofa); // check edge
 	assign #T_INV  gepa = !ff25;
 	assign #T_NOR  hefa = !(ncpu_rd || gepa);
 	assign #T_INV  gumu = !hefa;
 	assign #T_NAND bupo = !(ff25 && apu_wr);
 	assign #T_INV  bono = !bupo;
 	assign #T_INV  byfa = !bupo;
-	assign #T_TRI  capu = !gumu ? bogu : 'z; /* takes !q output of dff */
-	assign #T_TRI  caga = !gumu ? bafo : 'z; /* takes !q output of dff */
-	assign #T_TRI  boca = !gumu ? atuf : 'z; /* takes !q output of dff */
-	assign #T_TRI  buzu = !gumu ? anev : 'z; /* takes !q output of dff */
-	assign #T_TRI  cere = !gumu ? bepu : 'z; /* takes !q output of dff */
-	assign #T_TRI  cada = !gumu ? befo : 'z; /* takes !q output of dff */
-	assign #T_TRI  cavu = !gumu ? bume : 'z; /* takes !q output of dff */
-	assign #T_TRI  cudu = !gumu ? bofa : 'z; /* takes !q output of dff */
+	assign #T_TRI  capu = !gumu ? bogu : 'z; /* takes !q output of dffr */
+	assign #T_TRI  caga = !gumu ? bafo : 'z; /* takes !q output of dffr */
+	assign #T_TRI  boca = !gumu ? atuf : 'z; /* takes !q output of dffr */
+	assign #T_TRI  buzu = !gumu ? anev : 'z; /* takes !q output of dffr */
+	assign #T_TRI  cere = !gumu ? bepu : 'z; /* takes !q output of dffr */
+	assign #T_TRI  cada = !gumu ? befo : 'z; /* takes !q output of dffr */
+	assign #T_TRI  cavu = !gumu ? bume : 'z; /* takes !q output of dffr */
+	assign #T_TRI  cudu = !gumu ? bofa : 'z; /* takes !q output of dffr */
 	assign lmixer[1] = bogu;
 	assign lmixer[2] = bafo;
 	assign lmixer[3] = atuf;

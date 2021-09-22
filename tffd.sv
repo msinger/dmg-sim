@@ -1,8 +1,6 @@
 `default_nettype none
 
-// TODO: check if clock is negedge for all COUNT cells
-// TODO: check if async load is active high for all COUNT cells
-module count #(
+module tffd #(
 		parameter logic INITIAL_Q = 'x
 	) (
 		input  logic nclk, load, d,
@@ -21,6 +19,6 @@ module count #(
 			ff <= !ff;
 	end
 
-	assign #T_COUNT q = load ? d : ff;
+	assign #T_TFFD q = load ? d : ff;
 
 endmodule

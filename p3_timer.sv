@@ -12,16 +12,16 @@ module timer(
 	);
 
 	logic sara, sora, uvyr, ubot, sabo, samy, sopu, ukap, teko, supe, rote, ryla, tecy, sogu;
-	dffr dffr_sabo(sara, nreset2, d[2], sabo); // check clk edge
-	dffr dffr_samy(sara, nreset2, d[1], samy); // check clk edge
-	dffr dffr_sopu(sara, nreset2, d[0], sopu); // check clk edge
+	dffr_bp dffr_sabo(sara, nreset2, d[2], sabo); // check clk edge
+	dffr_bp dffr_samy(sara, nreset2, d[1], samy); // check clk edge
+	dffr_bp dffr_sopu(sara, nreset2, d[0], sopu); // check clk edge
 	assign #T_NAND sara = !(a[0] && a[1] && cpu_wr && ff04_ff07);
 	assign #T_AND  sora = ff04_ff07 && cpu_rd && a[1] && a[0];
 	assign #T_INV  uvyr = !_65536hz;
 	assign #T_INV  ubot = !_262144hz;
-	assign #T_TRI  supe = sora ? sabo : 'z; /* takes !q output of dff */
-	assign #T_TRI  rote = sora ? samy : 'z; /* takes !q output of dff */
-	assign #T_TRI  ryla = sora ? sopu : 'z; /* takes !q output of dff */
+	assign #T_TRI  supe = sora ? sabo : 'z; /* takes !q output of dffr */
+	assign #T_TRI  rote = sora ? samy : 'z; /* takes !q output of dffr */
+	assign #T_TRI  ryla = sora ? sopu : 'z; /* takes !q output of dffr */
 	assign #T_MUXI ukap = !(sopu ? _16384hz : uvyr);
 	assign #T_MUXI teko = !(sopu ? ubot : nff04_d1);
 	assign #T_MUXI tecy = !(samy ? ukap : teko);
@@ -32,30 +32,30 @@ module timer(
 
 	logic muzu, meke, mexu, teda, rega, povy, peru, rate, ruby, rage, peda, nuga, mugy;
 	logic soku, racy, ravy, sosy, somu, suro, rowu, puso, nydu, mery, moba;
-	count count_rega(sogu, mexu, puxy, rega);
-	count count_povy(rega, mexu, nero, povy);
-	count count_peru(povy, mexu, nada, peru);
-	count count_rate(peru, mexu, repa, rate);
-	count count_ruby(rate, mexu, rolu, ruby);
-	count count_rage(ruby, mexu, rugy, rage);
-	count count_peda(rage, mexu, pyma, peda);
-	count count_nuga(peda, mexu, pagu, nuga);
-	dffr dffr_nydu(boga1mhz, mugy,    nuga, nydu); // check clk edge
-	dffr dffr_moba(boga1mhz, nreset2, mery, moba); // check clk edge
+	tffd tffd_rega(sogu, mexu, puxy, rega);
+	tffd tffd_povy(rega, mexu, nero, povy);
+	tffd tffd_peru(povy, mexu, nada, peru);
+	tffd tffd_rate(peru, mexu, repa, rate);
+	tffd tffd_ruby(rate, mexu, rolu, ruby);
+	tffd tffd_rage(ruby, mexu, rugy, rage);
+	tffd tffd_peda(rage, mexu, pyma, peda);
+	tffd tffd_nuga(peda, mexu, pagu, nuga);
+	dffr_bp dffr_nydu(boga1mhz, mugy,    nuga, nydu); // check clk edge
+	dffr_bp dffr_moba(boga1mhz, nreset2, mery, moba); // check clk edge
 	assign #T_OR   muzu = from_cpu5 || tope;
 	assign #T_INV  meke = !int_timer;
 	assign #T_NAND mexu = !(muzu && nreset2 && meke);
 	assign #T_AND  teda = ff04_ff07 && cpu_rd && tola_na1 && a[0];
 	assign #T_INV  mugy = !mexu;
-	assign #T_TRI  soku = teda ? rega : 'z; /* takes !q output of count */
-	assign #T_TRI  racy = teda ? povy : 'z; /* takes !q output of count */
-	assign #T_TRI  ravy = teda ? peru : 'z; /* takes !q output of count */
-	assign #T_TRI  sosy = teda ? rate : 'z; /* takes !q output of count */
-	assign #T_TRI  somu = teda ? ruby : 'z; /* takes !q output of count */
-	assign #T_TRI  suro = teda ? rage : 'z; /* takes !q output of count */
-	assign #T_TRI  rowu = teda ? peda : 'z; /* takes !q output of count */
-	assign #T_TRI  puso = teda ? nuga : 'z; /* takes !q output of count */
-	assign #T_NOR  mery = !(!nydu || nuga); /* takes !q output of dff */
+	assign #T_TRI  soku = teda ? rega : 'z; /* takes !q output of tffd */
+	assign #T_TRI  racy = teda ? povy : 'z; /* takes !q output of tffd */
+	assign #T_TRI  ravy = teda ? peru : 'z; /* takes !q output of tffd */
+	assign #T_TRI  sosy = teda ? rate : 'z; /* takes !q output of tffd */
+	assign #T_TRI  somu = teda ? ruby : 'z; /* takes !q output of tffd */
+	assign #T_TRI  suro = teda ? rage : 'z; /* takes !q output of tffd */
+	assign #T_TRI  rowu = teda ? peda : 'z; /* takes !q output of tffd */
+	assign #T_TRI  puso = teda ? nuga : 'z; /* takes !q output of tffd */
+	assign #T_NOR  mery = !(!nydu || nuga); /* takes !q output of dffr */
 	assign d[0] = soku;
 	assign d[1] = racy;
 	assign d[2] = ravy;
@@ -69,27 +69,27 @@ module timer(
 	logic tovy, tuby, tyju, tope, mulo;
 	logic peto, muru, nyke, seta, sabu, tyru, sufy, tyva, reva, nola, pyre, sapu, sete, supo, sotu, salu;
 	logic refu, nyku, petu, rato, roke, sala, syru, soce, pyma, nada, nero, pagu, puxy, rolu, rugy, repa;
-	dffr dffr_peto(tyju, nreset2, d[6], peto); // check clk edge
-	dffr dffr_muru(tyju, nreset2, d[2], muru); // check clk edge
-	dffr dffr_nyke(tyju, nreset2, d[1], nyke); // check clk edge
-	dffr dffr_seta(tyju, nreset2, d[7], seta); // check clk edge
-	dffr dffr_sabu(tyju, nreset2, d[0], sabu); // check clk edge
-	dffr dffr_tyru(tyju, nreset2, d[4], tyru); // check clk edge
-	dffr dffr_sufy(tyju, nreset2, d[5], sufy); // check clk edge
-	dffr dffr_tyva(tyju, nreset2, d[3], tyva); // check clk edge
+	dffr_bp dffr_peto(tyju, nreset2, d[6], peto); // check clk edge
+	dffr_bp dffr_muru(tyju, nreset2, d[2], muru); // check clk edge
+	dffr_bp dffr_nyke(tyju, nreset2, d[1], nyke); // check clk edge
+	dffr_bp dffr_seta(tyju, nreset2, d[7], seta); // check clk edge
+	dffr_bp dffr_sabu(tyju, nreset2, d[0], sabu); // check clk edge
+	dffr_bp dffr_tyru(tyju, nreset2, d[4], tyru); // check clk edge
+	dffr_bp dffr_sufy(tyju, nreset2, d[5], sufy); // check clk edge
+	dffr_bp dffr_tyva(tyju, nreset2, d[3], tyva); // check clk edge
 	assign #T_INV  tovy = !a[0];
 	assign #T_AND  tuby = ff04_ff07 && cpu_rd && a[1] && tovy;
 	assign #T_NAND tyju = !(tovy && a[1] && cpu_wr && ff04_ff07);
 	assign #T_NAND tope = !(a[0] && tola_na1 && cpu_wr && ff04_ff07);
 	assign #T_INV  mulo = !nreset2;
-	assign #T_TRI  reva = tuby ? peto : 'z; /* takes !q output of dff */
-	assign #T_TRI  nola = tuby ? muru : 'z; /* takes !q output of dff */
-	assign #T_TRI  pyre = tuby ? nyke : 'z; /* takes !q output of dff */
-	assign #T_TRI  sapu = tuby ? seta : 'z; /* takes !q output of dff */
-	assign #T_TRI  sete = tuby ? sabu : 'z; /* takes !q output of dff */
-	assign #T_TRI  supo = tuby ? tyru : 'z; /* takes !q output of dff */
-	assign #T_TRI  sotu = tuby ? sufy : 'z; /* takes !q output of dff */
-	assign #T_TRI  salu = tuby ? tyva : 'z; /* takes !q output of dff */
+	assign #T_TRI  reva = tuby ? peto : 'z; /* takes !q output of dffr */
+	assign #T_TRI  nola = tuby ? muru : 'z; /* takes !q output of dffr */
+	assign #T_TRI  pyre = tuby ? nyke : 'z; /* takes !q output of dffr */
+	assign #T_TRI  sapu = tuby ? seta : 'z; /* takes !q output of dffr */
+	assign #T_TRI  sete = tuby ? sabu : 'z; /* takes !q output of dffr */
+	assign #T_TRI  supo = tuby ? tyru : 'z; /* takes !q output of dffr */
+	assign #T_TRI  sotu = tuby ? sufy : 'z; /* takes !q output of dffr */
+	assign #T_TRI  salu = tuby ? tyva : 'z; /* takes !q output of dffr */
 	assign #T_MUXI refu = !(tope ? peto : d[6]);
 	assign #T_MUXI nyku = !(tope ? muru : d[2]);
 	assign #T_MUXI petu = !(tope ? nyke : d[1]);
