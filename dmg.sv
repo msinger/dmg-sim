@@ -8,8 +8,10 @@ parameter bit xi_in_inv     = 1; /* XI clock input is inverting? */
 
 module dmg;
 
-	function logic bidir_out(input logic drv_low, ndrv_high);
-		if (drv_low == ndrv_high)
+	function automatic logic bidir_out(input logic drv_low, ndrv_high);
+		if ($isunknown(drv_low) || $isunknown(ndrv_high))
+			bidir_out = 'x;
+		else if (drv_low == ndrv_high)
 			bidir_out = !drv_low;
 		else if (drv_low)
 			bidir_out = 'x;
@@ -23,10 +25,68 @@ module dmg;
 	logic phi;    /* PHI pin */
 	logic nrd;    /* !RD pin */
 	logic nwr;    /* !WR pin */
+	logic ncs;    /* !CS pin */
 	assign xi  = xo;
 	assign phi = !nphi_out;
 	assign nrd = bidir_out(rd_c, rd_a);
 	assign nwr = bidir_out(wr_c, wr_a);
+	assign ncs = !cs_out;
+
+	tri logic nmoe; /* !MOE pin */
+	tri logic nmwr; /* !MWR pin */
+	tri logic nmcs; /* !MCS pin */
+	assign nmoe = bidir_out(moe_d, moe_a);
+	assign nmwr = bidir_out(mwr_d, mwr_a);
+	assign nmcs = bidir_out(mcs_d, mcs_a);
+
+	tri logic [7:0] d_pin; /* D0-D7 */
+	generate
+		for (genvar i = 0; i < 8; i++)
+			assign d_pin[i] = bidir_out(d_d[i], d_a[i]);
+	endgenerate
+	assign (pull1, highz0) d_pin = {8{!lula}};
+
+	tri logic [7:0] md_pin; /* MD0-MD7 */
+	generate
+		for (genvar i = 0; i < 8; i++)
+			assign md_pin[i] = bidir_out(md_out[i], md_a[i]);
+	endgenerate
+	assign (pull1, highz0) md_pin = {8{!md_b}};
+
+	tri logic [15:0] a_pin; /* A0-A15 pins */
+	generate
+		for (genvar i = 0; i < 16; i++)
+			assign a_pin[i] = bidir_out(a_d[i], a_a[i]);
+	endgenerate
+
+	logic [12:0] ma_pin; /* MA0-MA12 pins */
+	assign ma_pin = ~ma_out;
+
+	logic     sout; /* SOUT pin */
+	tri logic sin;  /* SIN pin */
+	tri logic sck;  /* SCK pin */
+	assign                 sout = nsout;
+	assign                 sin  = bidir_out(sin_d, sin_a);
+	assign                 sck  = bidir_out(sck_d, sck_a);
+	assign (pull1, highz0) sin  = !sin_b;
+	assign (pull1, highz0) sck  = !sck_dir;
+
+	tri logic p10; /* P10 pin */
+	tri logic p11; /* P11 pin */
+	tri logic p12; /* P12 pin */
+	tri logic p13; /* P13 pin */
+	logic     p14; /* P14 pin */
+	logic     p15; /* P15 pin */
+	assign                 p10  = bidir_out(p10_d, p10_a);
+	assign                 p11  = bidir_out(p11_d, p11_a);
+	assign                 p12  = bidir_out(p12_d, p12_a);
+	assign                 p13  = bidir_out(p13_d, p13_a);
+	assign                 p14  = bidir_out(p14_b, p14_a);
+	assign                 p15  = bidir_out(p15_b, p15_a);
+	assign (pull1, highz0) p10  = !p10_b;
+	assign (pull1, highz0) p11  = !p11_b;
+	assign (pull1, highz0) p12  = !p12_b;
+	assign (pull1, highz0) p13  = !p13_b;
 
 	task automatic xi_tick();
 		#122ns xo = xo_ena ? !xi : 0;
@@ -149,28 +209,22 @@ module dmg;
 	tri0 logic [7:0]  md, oam_a_nd, oam_b_nd;
 	tri0 logic [12:0] ma;
 
-	logic [7:0]  d_a, d_d, md_out, md_a;
-	logic [15:0] a_a, a_d, dma_a;
+	logic [7:0]  d_a, d_in, d_d, md_a, md_in, md_out;
+	logic [15:0] a_a, a_c, a_d, dma_a;
 	logic [12:0] ma_out;
+	assign d_in  = ~d_pin;
+	assign md_in = ~md_pin;
+	assign a_c   = ~a_pin;
 
-	logic wr_a, wr_c, rd_a, rd_c;
-	logic moe_a, moe_d, mwr_a, mwr_d, mcs_a, mcs_d, md_b;
+	logic wr_a, wr_in, wr_c, rd_a, rd_b, rd_c;
+	logic moe_a, moe_in, moe_d, mwr_a, mwr_in, mwr_d, mcs_a, mcs_in, mcs_d, md_b;
+	assign wr_in  = !nwr;
+	assign rd_b   = !nrd;
+	assign moe_in = !nmoe;
+	assign mwr_in = !nmwr;
+	assign mcs_in = !nmcs;
 
 	/* not yet generated signals */
-	logic [7:0] d_in = '1;
-	logic [7:0] md_in = '1;
-	logic [15:0] a_c = '0;
-	logic wr_in = 0;
-	logic rd_b = 0;
-	logic moe_in = 0;
-	logic mwr_in = 0;
-	logic mcs_in = 0;
-	logic p10_c = 0;
-	logic p11_c = 0;
-	logic p12_c = 0;
-	logic p13_c = 0;
-	logic sin_in = 0;
-	logic sck_in = 0;
 	logic ff40_d7 = 0;
 	logic ff46 = 0;
 	logic ff40_d4 = 0;
@@ -232,9 +286,15 @@ module dmg;
 	logic nreset2, nreset6;
 	logic nphi_out, phi_out, dova_phi;
 
-	logic nsout, sin_a, sin_b, sin_d, sck_a, sck_dir, sck_d;
-	logic p10_a, p10_b, p10_d, p11_a, p11_b, p11_d, p12_a, p12_b, p12_d, p13_a, p13_b, p13_d;
+	logic nsout, sin_a, sin_b, sin_in, sin_d, sck_a, sck_dir, sck_in, sck_d;
+	logic p10_a, p10_b, p10_c, p10_d, p11_a, p11_b, p11_c, p11_d, p12_a, p12_b, p12_c, p12_d, p13_a, p13_b, p13_c, p13_d;
 	logic p14_a, p14_b, p15_a, p15_b;
+	assign sin_in = !sin;
+	assign sck_in = !sck;
+	assign p10_c  = !p10;
+	assign p11_c  = !p11;
+	assign p12_c  = !p12;
+	assign p13_c  = !p13;
 
 	logic dma_run, vram_to_oam, dma_addr_ext, oam_addr_dma;
 	logic caty, wyja, mopa_nphi;
