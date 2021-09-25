@@ -60,7 +60,7 @@ module dmg;
 	endgenerate
 
 	logic [12:0] ma_pin; /* MA0-MA12 pins */
-	assign ma_pin = ~ma_out;
+	assign ma_pin = ~nma_out;
 
 	logic     sout; /* SOUT pin */
 	tri logic sin;  /* SIN pin */
@@ -207,11 +207,11 @@ module dmg;
 	tri0 logic [7:0]  d;
 	tri0 logic [15:0] a;
 	tri0 logic [7:0]  md, oam_a_nd, oam_b_nd;
-	tri0 logic [12:0] ma;
+	tri0 logic [12:0] nma;
 
 	logic [7:0]  d_a, d_in, d_d, md_a, md_in, md_out;
 	logic [15:0] a_a, a_c, a_d, dma_a;
-	logic [12:0] ma_out;
+	logic [12:0] nma_out;
 	assign d_in  = ~d_pin;
 	assign md_in = ~md_pin;
 	assign a_c   = ~a_pin;

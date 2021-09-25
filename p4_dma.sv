@@ -2,7 +2,7 @@
 
 module dma(
 		inout  tri logic [7:0]  d,
-		inout  tri logic [12:0] ma,
+		inout  tri logic [12:0] nma,
 		output     logic [15:0] dma_a,
 
 		input logic clk1, nreset6, from_cpu5,
@@ -95,11 +95,11 @@ module dma(
 	assign dma_a[11] = nydo;
 	assign dma_a[14] = poku;
 	assign dma_a[15] = maru;
-	assign ma[8]  = evax;
-	assign ma[12] = exyf;
-	assign ma[10] = eraf;
-	assign ma[9]  = duve;
-	assign ma[11] = fusy;
+	assign nma[8]  = evax;
+	assign nma[12] = exyf;
+	assign nma[10] = eraf;
+	assign nma[9]  = duve;
+	assign nma[11] = fusy;
 
 	logic naky, pyro, nefy, muty, nyko, pylo, nuto, mugu, ecal, egez, fuhe, fyzy, damu, dava, eteg, erew;
 	dffr_bp dffr_naky(meta,  lapa, !naky, naky); // check edge
@@ -126,13 +126,13 @@ module dma(
 	assign dma_a[5] = pylo;
 	assign dma_a[6] = nuto;
 	assign dma_a[7] = mugu;
-	assign ma[0] = ecal;
-	assign ma[1] = egez;
-	assign ma[2] = fuhe;
-	assign ma[3] = fyzy;
-	assign ma[4] = damu;
-	assign ma[5] = dava;
-	assign ma[6] = eteg;
-	assign ma[7] = erew;
+	assign nma[0] = ecal;
+	assign nma[1] = egez;
+	assign nma[2] = fuhe;
+	assign nma[3] = fyzy;
+	assign nma[4] = damu;
+	assign nma[5] = dava;
+	assign nma[6] = eteg;
+	assign nma[7] = erew;
 
 endmodule

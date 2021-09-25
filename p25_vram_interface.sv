@@ -3,8 +3,8 @@
 module vram_interface(
 		input logic [15:0] a,
 
-		inout  tri logic [12:0] ma,
-		output     logic [12:0] ma_out,
+		inout  tri logic [12:0] nma,
+		output     logic [12:0] nma_out,
 
 		inout  tri logic [7:0] d,
 		input      logic [7:0] d_in,
@@ -28,19 +28,19 @@ module vram_interface(
 
 	logic reho, pony, ruma, pedu, ruky, nuva, vode, tago, vova, tujy, mume, luby, mewy;
 	logic lefa, mysa, lalo, mepa, loly, mavu, luvo, myre, laca, masa, lozu, myfu, lexe;
-	assign #T_INV  reho = !ma[12];
-	assign #T_INV  ruma = !ma[11];
-	assign #T_INV  ruky = !ma[10];
-	assign #T_INV  vode = !ma[9];
-	assign #T_INV  vova = !ma[8];
-	assign #T_INV  mume = !ma[7];
-	assign #T_INV  mewy = !ma[6];
-	assign #T_INV  mysa = !ma[5];
-	assign #T_INV  mepa = !ma[4];
-	assign #T_INV  mavu = !ma[3];
-	assign #T_INV  myre = !ma[2];
-	assign #T_INV  masa = !ma[1];
-	assign #T_INV  myfu = !ma[0];
+	assign #T_INV  reho = !nma[12];
+	assign #T_INV  ruma = !nma[11];
+	assign #T_INV  ruky = !nma[10];
+	assign #T_INV  vode = !nma[9];
+	assign #T_INV  vova = !nma[8];
+	assign #T_INV  mume = !nma[7];
+	assign #T_INV  mewy = !nma[6];
+	assign #T_INV  mysa = !nma[5];
+	assign #T_INV  mepa = !nma[4];
+	assign #T_INV  mavu = !nma[3];
+	assign #T_INV  myre = !nma[2];
+	assign #T_INV  masa = !nma[1];
+	assign #T_INV  myfu = !nma[0];
 	assign #T_INV  pony = !reho;
 	assign #T_INV  pedu = !ruma;
 	assign #T_INV  nuva = !ruky;
@@ -54,19 +54,19 @@ module vram_interface(
 	assign #T_INV  laca = !myre;
 	assign #T_INV  lozu = !masa;
 	assign #T_INV  lexe = !myfu;
-	assign ma_out[12] = pony;
-	assign ma_out[11] = pedu;
-	assign ma_out[10] = nuva;
-	assign ma_out[9]  = tago;
-	assign ma_out[8]  = tujy;
-	assign ma_out[7]  = luby;
-	assign ma_out[6]  = lefa;
-	assign ma_out[5]  = lalo;
-	assign ma_out[4]  = loly;
-	assign ma_out[3]  = luvo;
-	assign ma_out[2]  = laca;
-	assign ma_out[1]  = lozu;
-	assign ma_out[0]  = lexe;
+	assign nma_out[12] = pony;
+	assign nma_out[11] = pedu;
+	assign nma_out[10] = nuva;
+	assign nma_out[9]  = tago;
+	assign nma_out[8]  = tujy;
+	assign nma_out[7]  = luby;
+	assign nma_out[6]  = lefa;
+	assign nma_out[5]  = lalo;
+	assign nma_out[4]  = loly;
+	assign nma_out[3]  = luvo;
+	assign nma_out[2]  = laca;
+	assign nma_out[1]  = lozu;
+	assign nma_out[0]  = lexe;
 
 	logic ryvo, rera, raby, rory, ruja, ravu, rafy, ruxa;
 	assign #T_NAND ryvo = !(d[5] && lula);
@@ -207,19 +207,19 @@ module vram_interface(
 	assign #T_TRI  xaky = !xedu ? !a[0]  : 'z;
 	assign #T_TRI  xopo = !xedu ? !a[6]  : 'z;
 	assign #T_TRI  xuxu = !xedu ? !a[1]  : 'z;
-	assign ma[4]  = xeca;
-	assign ma[7]  = xybo;
-	assign ma[8]  = rysu;
-	assign ma[10] = ruse;
-	assign ma[12] = rumo;
-	assign ma[2]  = xyne;
-	assign ma[5]  = xoba;
-	assign ma[3]  = xody;
-	assign ma[11] = ryna;
-	assign ma[9]  = rese;
-	assign ma[0]  = xaky;
-	assign ma[6]  = xopo;
-	assign ma[1]  = xuxu;
+	assign nma[4]  = xeca;
+	assign nma[7]  = xybo;
+	assign nma[8]  = rysu;
+	assign nma[10] = ruse;
+	assign nma[12] = rumo;
+	assign nma[2]  = xyne;
+	assign nma[5]  = xoba;
+	assign nma[3]  = xody;
+	assign nma[11] = ryna;
+	assign nma[9]  = rese;
+	assign nma[0]  = xaky;
+	assign nma[6]  = xopo;
+	assign nma[1]  = xuxu;
 
 	logic lyra, ryba, ruzy, rome, tehe, soca, ratu, tovo, saza;
 	logic ropa, sywa, sugu, tute, temy, sajo, tuty, tawo;
@@ -356,6 +356,10 @@ module vram_interface(
 	assign #T_NAND xucy = !(neta && pore);
 	assign #T_AND  xeze = potu && pore;
 	assign #T_INV  wuko = !xeze;
+	assign nma[0] = xonu;
+	assign nma[1] = wudo;
+	assign nma[2] = wawe;
+	assign nma[3] = wolu;
 
 	logic teme, tewu, tygo, sote, seke, rujo, tofa, suza;
 	logic synu, syma, roko, sybu, sako, sejy, sedo, sawu;
@@ -412,14 +416,14 @@ module vram_interface(
 	assign #T_TRI  vejy = neta ? !npyzo : 'z;
 	assign #T_TRI  sezu = neta ? !npozo : 'z;
 	assign #T_TRI  vapy = neta ? !nrawu : 'z;
-	assign ma[12] = vury;
-	assign ma[11] = tobo;
-	assign ma[10] = suvo;
-	assign ma[9]  = reso;
-	assign ma[8]  = roha;
-	assign ma[7]  = rusa;
-	assign ma[6]  = vejy;
-	assign ma[5]  = sezu;
-	assign ma[4]  = vapy;
+	assign nma[12] = vury;
+	assign nma[11] = tobo;
+	assign nma[10] = suvo;
+	assign nma[9]  = reso;
+	assign nma[8]  = roha;
+	assign nma[7]  = rusa;
+	assign nma[6]  = vejy;
+	assign nma[5]  = sezu;
+	assign nma[4]  = vapy;
 
 endmodule
