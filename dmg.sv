@@ -8,6 +8,15 @@ parameter bit xi_in_inv     = 1; /* XI clock input is inverting? */
 
 module dmg;
 
+	function logic bidir_out(input logic drv_low, ndrv_high);
+		if (drv_low == ndrv_high)
+			bidir_out = !drv_low;
+		else if (drv_low)
+			bidir_out = 'x;
+		else
+			bidir_out = 'z;
+	endfunction
+
 	logic xo, xi; /* XI, XO clock pins */
 	logic t1, t2; /* T1, T2 test pins */
 	logic nrst;   /* !RST reset pin */
@@ -16,8 +25,8 @@ module dmg;
 	logic nwr;    /* !WR pin */
 	assign xi  = xo;
 	assign phi = !nphi_out;
-	assign nrd = (rd_a == rd_c) ? !rd_a : 'z;
-	assign nwr = (wr_a == wr_c) ? !wr_a : 'z;
+	assign nrd = bidir_out(rd_c, rd_a);
+	assign nwr = bidir_out(wr_c, wr_a);
 
 	task automatic xi_tick();
 		#122ns xo = xo_ena ? !xi : 0;
