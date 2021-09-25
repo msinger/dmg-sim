@@ -17,7 +17,7 @@ module ext_cpu_busses(
 		input  logic abuz, tutu, nfexxffxx,
 		output logic texo, roru, lula,
 
-		output logic ncs_out, tola_na1
+		output logic cs_out, tola_na1
 	);
 
 	logic sogy, tuma, tynu, toza, soby, sepy, ryca, raza, syzu, tyho, tazy, rulo, suze;
@@ -34,7 +34,7 @@ module ext_cpu_busses(
 	assign #T_MUX  tazy = dma_addr_ext ? dma_a[15] : sepy;
 	assign #T_NOR  rulo = !(t1_nt2 || tazy);
 	assign #T_NAND suze = !(tazy && ryca);
-	assign ncs_out = tyho;
+	assign cs_out = tyho;
 	assign a_d[15] = rulo;
 	assign a_a[15] = suze;
 	assign a[15]   = syzu;

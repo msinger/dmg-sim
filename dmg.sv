@@ -211,7 +211,7 @@ module dmg;
 	logic ff04_ff07, nff0f_rd, nff0f_wr, ff00wr, ff00rd;
 	logic nff04_d0, nff04_d1;
 	logic apu_wr, ncpu_rd;
-	logic hram_cs, boot_cs, ncs_out;
+	logic hram_cs, boot_cs, cs_out;
 	logic to_cpu, to_cpu2;
 	logic from_cpu5; /* this is wrongly labeled in the schematics; it is actually a CPU input */
 
@@ -232,7 +232,7 @@ module dmg;
 	logic nreset2, nreset6;
 	logic nphi_out, phi_out, dova_phi;
 
-	logic sout, sin_a, sin_b, sin_d, sck_a, sck_dir, sck_d;
+	logic nsout, sin_a, sin_b, sin_d, sck_a, sck_dir, sck_d;
 	logic p10_a, p10_b, p10_d, p11_a, p11_b, p11_d, p12_a, p12_b, p12_d, p13_a, p13_b, p13_d;
 	logic p14_a, p14_b, p15_a, p15_b;
 

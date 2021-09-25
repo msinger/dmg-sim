@@ -7,7 +7,7 @@ module joypad_io(
 		input logic ff00wr, ff00rd, ff60_d0, t1_nt2,
 
 		input  logic ser_out,
-		output logic sout, sin_a, sin_b, sin_d,
+		output logic nsout, sin_a, sin_b, sin_d,
 
 		input  logic p10_c, p11_c, p12_c, p13_c,
 		output logic p10_a, p10_b, p10_d,
@@ -62,7 +62,7 @@ module joypad_io(
 	assign #T_NOR  kabu = !(kecy || kura);
 	assign sin_a = kore;
 	assign sin_d = kywe;
-	assign sout  = kena;
+	assign nsout = kena;
 	assign p13_a = kory;
 	assign p13_d = kale;
 	assign p12_a = kyhu;
