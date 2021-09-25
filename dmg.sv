@@ -1,5 +1,11 @@
 `default_nettype none
 
+/* Not sure about these things, so make them easily switchable for testing: */
+parameter bit dff_inv_clk   = 0; /* DFF clock input is inverted? */
+parameter bit dffra_inv_clk = 0; /* DFFR Variant A clock input is inverted? */
+parameter bit dffrc_inv_clk = 0; /* DFFR Variant C clock input is inverted? */
+parameter bit xi_in_inv     = 1; /* XI clock input is inverting? */
+
 module dmg;
 
 	logic xo, xi; /* XI, XO clock pins */
@@ -202,7 +208,7 @@ module dmg;
 
 	logic clkin_a, clkin_b;
 	assign clkin_a = xo_ena;
-	assign clkin_b = !xi;
+	assign clkin_b = xi_in_inv ? !xi : xi;
 
 	logic from_cpu3, from_cpu4, from_cpu6, clk_from_cpu;
 	assign from_cpu3    = cpu_raw_wr;

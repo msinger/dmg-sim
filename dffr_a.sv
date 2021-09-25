@@ -12,7 +12,10 @@ module dffr_a #(
 	logic ff;
 	initial ff = initff;
 
-	always_ff @(posedge clk, negedge nreset) begin
+	logic dffra_clk;
+	assign dffra_clk = dffra_inv_clk ? !clk : clk;
+
+	always_ff @(posedge dffra_clk, negedge nreset) begin
 		if (nreset)
 			ff <= $isunknown(d) ? initff : d;
 		else

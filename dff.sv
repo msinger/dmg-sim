@@ -12,7 +12,10 @@ module dff #(
 	logic ff;
 	initial ff = initff;
 
-	always_ff @(posedge clk) begin
+	logic dff_clk;
+	assign dff_clk = dff_inv_clk ? !clk : clk;
+
+	always_ff @(posedge dff_clk) begin
 		ff <= $isunknown(d) ? initff : d;
 	end
 
