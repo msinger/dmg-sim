@@ -119,7 +119,7 @@ module clocks_reset(
 	assign #T_INV  ajax = !atyp;
 	assign #T_INV  bugo = !afep;
 	assign #T_OA   agut = (arov || ajax) && from_cpu4;
-	assign #T_OR   awod = t1_nt2 || agut;
+	assign #T_NOR  awod = !(t1_nt2 || agut);
 	assign #T_INV  abuz = !awod;
 	assign #T_NOR  bate = !(bugo || arov || abol);
 	assign #T_INV  basu = !bate;
