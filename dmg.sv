@@ -39,14 +39,16 @@ module dmg;
 	assign nmwr = bidir_out(mwr_d, mwr_a);
 	assign nmcs = bidir_out(mcs_d, mcs_a);
 
-	tri logic [7:0] d_pin; /* D0-D7 */
+	tri logic [7:0] d_pin;          /* D0-D7 pins */
+	logic     [7:0] d_pin_ext = 'z; /* Value driven externally onto the pins if not 'z */
 	generate
 		for (genvar i = 0; i < 8; i++)
 			assign d_pin[i] = bidir_out(d_d[i], d_a[i]);
 	endgenerate
 	assign (pull1, highz0) d_pin = {8{!lula}};
+	assign                 d_pin = d_pin_ext;
 
-	tri logic [7:0] md_pin; /* MD0-MD7 */
+	tri logic [7:0] md_pin; /* MD0-MD7 pins */
 	generate
 		for (genvar i = 0; i < 8; i++)
 			assign md_pin[i] = bidir_out(md_out[i], md_a[i]);
@@ -168,6 +170,29 @@ module dmg;
 
 	logic write_cycle;
 
+	task automatic write(input logic [15:0] adr, logic [7:0] data);
+		@(posedge cpu_clkin_t3);
+		cpu_a       = adr;
+		cpu_d       = data; // TODO: figure out if new data is actually put on later
+		write_cycle = 1;
+		cpu_out_r7  = 1;
+		@(posedge cpu_clkin_t2);
+		write_cycle = 0;
+		cpu_out_r7  = 0;
+	endtask
+
+	task automatic read(input logic [15:0] adr, logic [7:0] data);
+		@(posedge cpu_clkin_t3);
+		cpu_a        = adr;
+		d_pin_ext    = data;
+		cpu_raw_rd   = 1;
+		cpu_out_r7   = 1;
+		@(posedge cpu_clkin_t2);
+		d_pin_ext    = 'z;
+		cpu_raw_rd   = 0;
+		cpu_out_r7   = 0;
+	endtask
+
 	initial begin
 		$dumpfile("dmg.vcd");
 		$dumpvars(0, dmg);
@@ -213,13 +238,22 @@ module dmg;
 		cpu_a       = 'hc000;
 		cyc(64);
 		write_cycle = 0;
+		cpu_out_r7  = 0;
 
-		cyc(20000);
+		fork
+			cyc(20000);
+			begin
+				write('h1234, 'hab);
+				write('habcd, 'h12);
+				write('h1234, 'h34);
+				read('h2345, 'h56);
+			end
+		join
 
 		$finish;
 	end
 
-	tri0 logic [7:0]  d;
+	tri logic [7:0]  d;
 	tri0 logic [15:0] a;
 	tri0 logic [7:0]  md, oam_a_nd, oam_b_nd;
 	tri0 logic [12:0] nma;
