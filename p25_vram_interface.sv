@@ -132,7 +132,7 @@ module vram_interface(
 	assign #T_INV  rofa = !rena;
 	assign #T_AND  rocy = sazo && revo;
 	assign #T_INV  rahu = !rocy;
-	assign #T_OR   rute = tuto || raco;
+	assign #T_OR   rute = tuto || racu;
 	assign #T_AND  sema = racu && raco;
 	assign #T_OR   sofy = tuto || sohy;
 	assign #T_AND  taxy = sohy && raco;

@@ -249,7 +249,7 @@ module dmg;
 	logic acyl = 0;
 	logic xyso = 0;
 	logic texy = 0;
-	logic myma = 0;
+	logic myma = 1;
 	logic lena = 0;
 	logic xymu = 0;
 	logic leko = 0;
