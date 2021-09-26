@@ -127,7 +127,7 @@ module ch2_regs(
 	assign #T_INV  hude = !apu_reset;
 	assign #T_INV  esur = !dosa;
 	assign #T_INV  fyxo = !exuc;
-	assign #T_INV  fery = !duce;
+	assign #T_INV  fery = !ff18;
 	assign #T_NOR  guza = !(fery || fape);
 	assign #T_INV  futy = !guza;
 	assign #T_INV  edep = cyvo; /* takes !q output of tffd */
@@ -140,7 +140,7 @@ module ch2_regs(
 	assign #T_TRI  gadu = !futy ? goca : 'z; /* takes !q output of tffd */
 	assign #T_TRI  gazo = !futy ? gane : 'z; /* takes !q output of tffd */
 	assign #T_INV  foge = !ncpu_rd;
-	assign #T_AND  fape = foge && net03;
+	assign #T_NAND fape = !(foge && net03);
 	assign #T_NAND deta = !(apu_wr && ff19);
 	assign #T_INV  gote = !ff19;
 	assign #T_OR   hypo = gote || fape;
