@@ -156,6 +156,18 @@ module dmg;
 	assign a             = cpu_drv_a ? cpu_a : 'z;
 	assign cpu_wakeup    = to_cpu2;
 
+	/* CPU must not drive data bus when cpu_clkin_t3 (BEDO) is low or cpu_clkin_t2 (BOWA) is high,
+	 * otherwise it collides with 0xff driven on the right side of page 5. */
+	assign cpu_drv_d = !reset && cpu_raw_wr && cpu_clkin_t3 && !cpu_clkin_t2;
+
+	/* CPU must release WR when cpu_clkin_t3 (BEDO) is low or cpu_clkin_t2 (BOWA) is high. This
+	 * allows the RD signal to be asserted between the cycles for half a tick, like it is seen
+	 * on the cartridge connector. */
+	// TODO: Figure out if cpu_out_r7 (FROM_CPU4) has to do the same thing.
+	assign cpu_raw_wr = !reset && write_cycle && cpu_clkin_t3 && !cpu_clkin_t2;
+
+	logic write_cycle;
+
 	initial begin
 		$dumpfile("dmg.vcd");
 		$dumpvars(0, dmg);
@@ -169,35 +181,38 @@ module dmg;
 		cpu_clk_ena  = 0;
 		xo_ena       = 1;
 		cpu_raw_rd   = 0;
-		cpu_raw_wr   = 0;
+		write_cycle  = 0;
 		cpu_out_r7   = 0;
 		cpu_irq0_ack = 0;
 		cpu_irq1_ack = 0;
 		cpu_irq2_ack = 0;
 		cpu_irq3_ack = 0;
 		cpu_irq4_ack = 0;
-		cpu_drv_d    = 0;
 		cpu_d        = 0;
 		cpu_drv_a    = 1;
 		cpu_a        = 0;
 
 		cyc(64);
+		nrst = 1;
+		cyc(64);
 		fork
 			cyc(64);
 			@(posedge cpu_clkin_t9) cpu_clk_ena = 1;
 		join
-		cpu_d      = 'ha5;
-		cpu_drv_d  = 1;
-		cpu_raw_wr = 1;
+		cpu_d       = 'ha5;
+		write_cycle = 1;
 		cyc(64);
-		cpu_a      = 'h1000;
+		cpu_a       = 'h1000;
 		cyc(64);
-		cpu_out_r7 = 1;
+		cpu_out_r7  = 1;
 		cyc(64);
-		cpu_a      = 'h0000;
+		cpu_a       = 'h0000;
 		cyc(64);
-		cpu_raw_wr = 0;
-		cpu_drv_d  = 0;
+		cpu_a       = 'h8000;
+		cyc(64);
+		cpu_a       = 'hc000;
+		cyc(64);
+		write_cycle = 0;
 
 		cyc(20000);
 
