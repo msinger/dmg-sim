@@ -152,9 +152,9 @@ module clocks_reset(
 	assign dova_phi  = dova;
 	assign from_cpu5 = bufa;
 
-	logic bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, byxo, bowa, avor, alur;
-	dffr_b dffr_afer(boga, t1t2_nrst, !asol, afer);
-	srlatch latch_asol(afar, reset, asol);
+	logic bele, atez, byju, alyp, buty, baly, afar, buvu, boga, asol, nasol, byxo, bowa, avor, alur;
+	dffr_b dffr_afer(boga, t1t2_nrst, nasol, afer);
+	nor_srlatch latch_asol(afar, reset, asol, nasol);
 	assign #T_INV  bele = !buto;
 	assign #T_INV  atez = !clkin_a;
 	assign #T_OR   byju = bele || atez;
@@ -168,7 +168,7 @@ module clocks_reset(
 	assign #T_INV  boma = !boga;
 	assign #T_INV  bedo = !byxo;
 	assign #T_INV  bowa = !bedo;
-	assign #T_OR   avor = afer || !asol; /* takes !q output of srlatch */
+	assign #T_OR   avor = afer || nasol;
 	assign #T_INV  alur = !avor;
 	assign boga1mhz = boga;
 	assign to_cpu   = bowa;
@@ -199,7 +199,7 @@ module clocks_reset(
 	logic ulur, ugot, tulu, tugo, tofe, teru, sola, subu, teka, uket, upof;
 	logic umek, urek, utok, sapy, umer, rave, ryso, udor;
 	logic tagy, tawu, taku, temu, tuse, upug, sepu, sawa, tatu;
-	logic upyf, tubo, unut;
+	logic upyf, tubo, ntubo, unut;
 	dffr_bp dffr_ugot(ulur,  nreset_div, !ugot, ugot);
 	dffr_bp dffr_tulu(!ugot, nreset_div, !tulu, tulu);
 	dffr_bp dffr_tugo(!tulu, nreset_div, !tugo, tugo);
@@ -210,7 +210,7 @@ module clocks_reset(
 	dffr_bp dffr_teka(!subu, nreset_div, !teka, teka);
 	dffr_bp dffr_uket(!teka, nreset_div, !uket, uket);
 	dffr_bp dffr_upof(!uket, nreset_div, !upof, upof);
-	srlatch latch_tubo(clk_from_cpu, upyf, tubo);
+	nor_srlatch latch_tubo(clk_from_cpu, upyf, tubo, ntubo);
 	assign #T_MUX  ulur = ff60_d1 ? boga1mhz : tama16384;
 	assign #T_INV  umek = !ugot;
 	assign #T_INV  urek = !tulu;
@@ -222,7 +222,7 @@ module clocks_reset(
 	assign #T_INV  udor = !teka;
 	assign #T_AND  tagy = ff04_ff07 && cpu_rd && tola_na1 && tovy_na0;
 	assign #T_OR   upyf = reset || nclkin_a;
-	assign #T_AND  unut = upof && !tubo; /* takes !q output of srlatch */
+	assign #T_AND  unut = upof && ntubo;
 	assign #T_OR   taba = t1_nt2 || nt1_t2 || unut;
 	assign #T_TRI  tawu = tagy ? !umek : 'z;
 	assign #T_TRI  taku = tagy ? !urek : 'z;

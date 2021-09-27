@@ -19,15 +19,15 @@ module ch3_regs(
 	);
 
 	logic gejo, gucy, gove, guxe, fuvo, gugu, fasy, fevo, geko;
-	logic fabo, gaze, gyta, gyra, faju, goma, foba, fury, gulo, gofy, fako, epyx, gavu;
+	logic fabo, gaze, gyta, gyra, faju, goma, foba, fury, gulo, gofy, ngofy, fako, epyx, gavu;
 	dffr_a  dffr_guxe(gucy,      gove, d[7],  guxe); // check clk edge
-	dffr_bp dffr_gara(fabo,      fury, !gofy, gara); // check clk edge
+	dffr_bp dffr_gara(fabo,      fury, ngofy, gara); // check clk edge
 	dffr_bp dffr_gyta(fabo,      gaze, gara,  gyta); // check clk edge
 	dffr_bp dffr_gyra(cery_2mhz, gaze, gyta,  gyra); // check clk edge
 	dffr_bp dffr_foba(dova_phi,  goma, gavu,  foba); // check clk edge
 	dffr_a  dffr_gavu(epyx,      fako, d[7],  gavu); // check clk edge
-	srlatch latch_gofy(gulo,  foba,  gofy);
-	srlatch latch_gugu(!faju, !fuvo, gugu); /* srlatch with !s & !r inputs */
+	nor_srlatch  latch_gofy(gulo, foba, gofy, ngofy);
+	nand_srlatch latch_gugu(faju, fuvo, gugu, ngugu);
 	assign #T_AND  gejo = ff1a && apu_wr;
 	assign #T_INV  gucy = !gejo;
 	assign #T_INV  gove = !apu_reset;
@@ -45,7 +45,6 @@ module ch3_regs(
 	assign #T_NAND epyx = !(apu_wr && ff1e);
 	assign nff1a_d7 = !guxe;
 	assign d[7]     = geko;
-	assign ngugu    = !gugu;
 
 	logic dery, geto, emut, gajy;
 	assign #T_NAND dery = !(apu_wr && ff1b);

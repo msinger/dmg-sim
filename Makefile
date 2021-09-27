@@ -23,7 +23,8 @@ p25_vram_interface.sv
 
 DMG_DEPENDENCIES = \
 timing_param.sv \
-srlatch.sv \
+nor_srlatch.sv \
+nand_srlatch.sv \
 dlatch.sv \
 dff.sv \
 dffr_a.sv \

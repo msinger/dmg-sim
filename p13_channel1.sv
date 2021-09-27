@@ -27,7 +27,7 @@ module channel1(
 	tffd tffd_cuno(bovy, bugy, d[3], cuno);
 	tffd tffd_cura(cuso, bepe, d[4], cura);
 	tffd tffd_eram(cura, bepe, d[5], eram);
-	srlatch latch_gexu(!gepu, !femy, gexu); /* srlatch with !s & !r inputs */
+	nand_srlatch latch_gexu(gepu, femy, gexu, ngexu);
 	assign #T_NAND boro = !(apu_wr && ff11);
 	assign #T_INV  boka = !boro;
 	assign #T_NOR  cory = !(ch1_restart || apu_reset || boka);
@@ -43,7 +43,6 @@ module channel1(
 	assign #T_INV  bepe = !boro;
 	assign #T_INV  cuso = cuno; /* takes !q output of tffd */
 	assign nch1_amp_en = hoca;
-	assign ngexu       = !gexu;
 
 	logic cala, comy, cyte, dyru, doka;
 	dffr_bp dffr_comy(cala, dyru, !comy, comy); // check clk edge
@@ -65,7 +64,7 @@ module channel1(
 	assign #T_AND  coze = caxy && cypu && cupo;
 
 	logic jone, kado, kaly, kere, jola, jova, kenu, kera, kote, kury, kuku, koro, kozy, kaza, kuxu, koma, kake;
-	logic erum, fare, fyte, eget, doge, dado, dupe, duka, ezec, gefe, fyfo, feku, keko, kaba;
+	logic erum, fare, fyte, eget, doge, dado, dupe, duka, ezec, gefe, fyfo, nfyfo, feku, keko, kaba;
 	logic hufu, hano, hake, koru, jade, kyno, kezu;
 	logic cyto, cara, duwo, cowe, boto;
 	logic hesu, heto, hyto, jufy, hevo, hoko, hemy, hafo, aceg, agof, ason, amop;
@@ -75,7 +74,7 @@ module channel1(
 	dffr_bp dffr_fyte(dyfa_1mhz,  erum,        fare,        fyte); // check clk edge
 	dffr_a  dffr_dupe(doge,       dado,        d[7],        dupe); // check clk edge
 	dffr_bp dffr_ezec(dova_phi,   duka,        dupe,        ezec); // check clk edge
-	dffr_bp dffr_feku(dyfa_1mhz,  eget,        !fyfo,       feku); // check clk edge
+	dffr_bp dffr_feku(dyfa_1mhz,  eget,        nfyfo,       feku); // check clk edge
 	dffr_bp dffr_kyno(kozy,       koru,        jade,        kyno); // check clk edge
 	dffr_bp dffr_duwo(cope,       napu_reset6, ch1_bit,     duwo); // check clk edge
 	tffd tffd_jova(jola, kuxu,        nff12_d0, jova);
@@ -85,9 +84,9 @@ module channel1(
 	tffd tffd_hoko(heto, ch1_restart, ff12_d6,  hoko);
 	tffd tffd_hemy(hyto, ch1_restart, ff12_d5,  hemy);
 	tffd tffd_hafo(jufy, ch1_restart, ff12_d4,  hafo);
-	srlatch latch_cyto(ch1_restart, bery, cyto);
-	srlatch latch_fyfo(gefe,        ezec, fyfo);
-	srlatch latch_kezu(kyno,        keko, kezu);
+	nor_srlatch latch_cyto(ch1_restart, bery, cyto,);
+	nor_srlatch latch_fyfo(gefe,        ezec, fyfo, nfyfo);
+	nor_srlatch latch_kezu(kyno,        keko, kezu,);
 	assign #T_INV  jone = !byfe_128hz;
 	assign #T_INV  kado = !apu_reset;
 	assign #T_INV  kere = !kaly;
@@ -132,13 +131,13 @@ module channel1(
 	assign ch1_out[1]  = ason;
 	assign ch1_out[0]  = amop;
 
-	logic dacu, cylu, copa, caja, byra, buge, copy, atat, BYTE, epuk, evol, femu, egyp, cele, dody, egor, dapu;
+	logic dacu, cylu, copa, caja, byra, buge, copy, atat, BYTE, epuk, evol, femu, nfemu, egyp, cele, dody, egor, dapu;
 	logic nno_sweep;
 	dffr_bp dffr_byte(ajer_2mhz, atat, copy, BYTE); // check clk edge
 	tffd tffd_copa(dapu, cylu, nff10_d0, copa);
 	tffd tffd_caja(copa, cylu, nff10_d1, caja);
 	tffd tffd_byra(caja, cylu, nff10_d2, byra);
-	srlatch latch_femu(!evol, !epuk, femu); /* srlatch with !s & !r inputs */
+	nand_srlatch latch_femu(evol, epuk, femu, nfemu);
 	assign #T_NOR  dacu = !(ch1_restart || bexa);
 	assign #T_INV  cylu = !dacu;
 	assign #T_NAND buge = !(nff10_d2 && nff10_d1 && nff10_d0);
@@ -147,7 +146,7 @@ module channel1(
 	assign #T_INV  adad = BYTE; /* takes !q output of dffr */
 	assign #T_NOR  epuk = !(apu_reset || adad);
 	assign #T_NOR  evol = !(bexa || fyte);
-	assign #T_NOR  egyp = !(!femu || dyfa_1mhz); /* takes !q output of srlatch */
+	assign #T_NOR  egyp = !(nfemu || dyfa_1mhz);
 	assign #T_INV  cele = !nno_sweep;
 	assign #T_NOR  dody = !(cele || egyp);
 	assign #T_INV  egor = !dody;

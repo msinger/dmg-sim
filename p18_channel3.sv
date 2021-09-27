@@ -95,7 +95,7 @@ module channel3(
 
 	logic gedo, fygo, fozu, ezas, calu, doru, davo, coka, ered;
 	dffr_bp dffr_davo(ajer_2mhz, calu, doru, davo); // check clk edge
-	srlatch latch_fozu(gara, fygo, fozu);
+	nor_srlatch latch_fozu(gara, fygo, fozu,);
 	assign #T_AND  gedo = fexu && ff1e_d6;
 	assign #T_OR   fygo = apu_reset || gedo || nff1a_d7;
 	assign #T_INV  ezas = !fozu;

@@ -21,12 +21,12 @@ module channel2(
 
 	logic hota, katy, jyna, kylo, kene, jore, jona, jevy, kyvo;
 	logic galu, gyko, etuk, davu, fujy, gyre, duju;
-	logic jopa, cywu, hepo, dope, dala, elox, hyly, hypa, hyle;
+	logic jopa, cywu, hepo, dope, dala, ndala, elox, hyly, hypa, hyle;
 	logic jake, cexe, jeme, dory, dory_q, doxa, celo, gade, holy, jupu, hofo, hafe;
 	logic cyre, deme, dora, fute, dyro, esyk, ares, dane, defu;
 	logic bymo, aget, eryc, cera, conu, came, buva, akyd, akyd_nq, buko;
 	logic cule, cano, cagy, dyve, dymu, duge, dare, egog, domo, dyta, doju, dove, exes;
-	logic buwe, azeg, atep, caza, byho, bufo, bodo, cemo, cemo_1mhz, buta, cama;
+	logic buwe, azeg, atep, caza, byho, bufo, bodo, cemo, cemo_1mhz, buta, nbuta, cama;
 	logic fopy, etup, faru, gafa, fena, fomy, fete, feno;
 	logic dome, cyse, bonu, emyr, erat, fyre, gufy, amov, asog, anyv, anan;
 	dffr_bp dffr_jyna(hota,       katy,        !jyna,   jyna); // check clk edge
@@ -34,7 +34,7 @@ module channel2(
 	dffr_bp dffr_jopa(horu_512hz, hafe,        kyvo,    jopa); // check clk edge
 	dffr_bp dffr_hepo(jopa,       hypa,        gufy,    hepo); // check clk edge
 	dffr_bp dffr_dope(dova_phi,   cywu,        ff19_d7, dope); // check clk edge
-	dffr_bp dffr_elox(cemo_1mhz,  doxa,        !dala,   elox); // check clk edge
+	dffr_bp dffr_elox(cemo_1mhz,  doxa,        ndala,   elox); // check clk edge
 	dffr_bp dffr_dory(cemo_1mhz,  cexe,        elox,    dory); // check clk edge
 	dffr_bp dffr_cyre(akyd_nq,    beny,        !cyre,   cyre); // check clk edge
 	dffr_bp dffr_cano(cule,       napu_reset2, !cano,   cano); // check clk edge
@@ -57,10 +57,10 @@ module channel2(
 	tffd tffd_fomy(etup, elox_q, ff17_d6,  fomy);
 	tffd tffd_fete(faru, elox_q, ff17_d5,  fete);
 	tffd tffd_feno(gafa, elox_q, ff17_d4,  feno);
-	srlatch latch_buta(!bodo, !ares, buta); /* srlatch with !s & !r inputs */
-	srlatch latch_dala(celo,  dope,  dala);
-	srlatch latch_dane(elox,  esyk,  dane);
-	srlatch latch_jeme(hepo,  hyle,  jeme);
+	nand_srlatch latch_buta(bodo, ares, buta, nbuta);
+	nor_srlatch  latch_dala(celo, dope, dala, ndala);
+	nor_srlatch  latch_dane(elox, esyk, dane,);
+	nor_srlatch  latch_jeme(hepo, hyle, jeme,);
 	assign #T_INV  hota = !byfe_128hz;
 	assign #T_INV  katy = !apu_reset;
 	assign #T_INV  kylo = !jyna;
@@ -94,7 +94,7 @@ module channel2(
 	assign #T_INV  byho = !buwe;
 	assign #T_INV  bufo = !atep;
 	assign #T_INV  bodo = !caza;
-	assign #T_NOR  cama = !(cemo || !buta); /* takes !q output of srlatch */
+	assign #T_NOR  cama = !(cemo || nbuta);
 	assign #T_INV  doca = !cama;
 	assign #T_AOI  fopy = !((fomy && ff17_d3) || (!fomy && nff17_d3));
 	assign #T_AOI  etup = !((fete && ff17_d3) || (!fete && nff17_d3));
