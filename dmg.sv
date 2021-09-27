@@ -193,6 +193,11 @@ module dmg;
 		cpu_out_r7   = 0;
 	endtask
 
+	task automatic nop;
+		@(posedge cpu_clkin_t3);
+		@(posedge cpu_clkin_t2);
+	endtask
+
 	initial begin
 		$dumpfile("dmg.vcd");
 		$dumpvars(0, dmg);
@@ -219,34 +224,31 @@ module dmg;
 
 		cyc(64);
 		nrst = 1;
-		cyc(64);
-		fork
-			cyc(64);
-			@(posedge cpu_clkin_t9) cpu_clk_ena = 1;
-		join
-		cpu_d       = 'ha5;
-		write_cycle = 1;
-		cyc(64);
-		cpu_a       = 'h1000;
-		cyc(64);
-		cpu_out_r7  = 1;
-		cyc(64);
-		cpu_a       = 'h0000;
-		cyc(64);
-		cpu_a       = 'h8000;
-		cyc(64);
-		cpu_a       = 'hc000;
-		cyc(64);
-		write_cycle = 0;
-		cpu_out_r7  = 0;
 
 		fork
-			cyc(20000);
+			begin :tick_tick
+				forever cyc(16);
+			end
+
 			begin
+				/* CPU needs to wait for cpu_in_t15 before enabling cpu_clk_ena, otherwise
+				 * peripheral resets won't deassert. */
+				while (!cpu_clk_ena) @(posedge cpu_clkin_t10)
+					if (cpu_in_t15)
+						cpu_clk_ena = 1;
+
+				nop;
+				nop;
+
 				write('h1234, 'hab);
 				write('habcd, 'h12);
 				write('h1234, 'h34);
 				read('h2345, 'h56);
+
+				nop;
+				nop;
+
+				disable tick_tick;
 			end
 		join
 
@@ -440,4 +442,24 @@ module dmg;
 	channel4       p20_channel4(.*);
 	vram_interface p25_vram_interface(.*);
 
+	/* for convinience */
+	logic [15:0] div16;
+	logic [7:0]  div8;
+	assign div16[0]  = p1_clocks_reset.ukup;
+	assign div16[1]  = p1_clocks_reset.ufor;
+	assign div16[2]  = p1_clocks_reset.uner;
+	assign div16[3]  = p1_clocks_reset.tero;
+	assign div16[4]  = p1_clocks_reset.unyk;
+	assign div16[5]  = p1_clocks_reset.tama;
+	assign div16[6]  = p1_clocks_reset.ugot;
+	assign div16[7]  = p1_clocks_reset.tulu;
+	assign div16[8]  = p1_clocks_reset.tugo;
+	assign div16[9]  = p1_clocks_reset.tofe;
+	assign div16[10] = p1_clocks_reset.teru;
+	assign div16[11] = p1_clocks_reset.sola;
+	assign div16[12] = p1_clocks_reset.subu;
+	assign div16[13] = p1_clocks_reset.teka;
+	assign div16[14] = p1_clocks_reset.uket;
+	assign div16[15] = p1_clocks_reset.upof;
+	assign div8 = div16[13:6];
 endmodule
