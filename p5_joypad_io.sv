@@ -71,6 +71,8 @@ module joypad_io(
 	assign d[2] = kuve;
 	assign d[0] = kema;
 	assign d[1] = kuro;
+	assign d[4] = koce;
+	assign d[5] = cudy;
 	assign p14_a = karu;
 	assign p14_b = !kely;
 	assign p15_a = cela;
