@@ -255,10 +255,15 @@ module dmg;
 		$finish;
 	end
 
-	tri logic [7:0]  d;
+	tri logic  [7:0]  d;
 	tri0 logic [15:0] a;
 	tri0 logic [7:0]  md, oam_a_nd, oam_b_nd;
 	tri0 logic [12:0] nma;
+
+	/* Icarus doesn't support trireg, so we do it like this: */
+	logic [7:0] d_cap = 'z;
+	always @(d) d_cap = d;
+	assign (weak1, weak0) d = d_cap;
 
 	logic [7:0]  d_a, d_in, d_d, md_a, md_in, md_out;
 	logic [15:0] a_a, a_c, a_d, dma_a;
