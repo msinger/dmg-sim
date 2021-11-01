@@ -160,37 +160,46 @@ module dmg;
 
 	/* CPU must not drive data bus when cpu_clkin_t3 (BEDO) is low or cpu_clkin_t2 (BOWA) is high,
 	 * otherwise it collides with 0xff driven on the right side of page 5. */
-	assign cpu_drv_d = !reset && cpu_raw_wr && cpu_clkin_t3 && !cpu_clkin_t2;
+	assign cpu_drv_d = !reset && !cpu_in_t12 && cpu_raw_wr && cpu_clkin_t3 && !cpu_clkin_t2;
+
+	assign cpu_raw_rd = !reset && !cpu_in_t12 && read_cycle;
 
 	/* CPU must release WR when cpu_clkin_t3 (BEDO) is low or cpu_clkin_t2 (BOWA) is high. This
 	 * allows the RD signal to be asserted between the cycles for half a tick, like it is seen
 	 * on the cartridge connector. */
 	// TODO: Figure out if cpu_out_r7 (FROM_CPU4) has to do the same thing.
-	assign cpu_raw_wr = !reset && write_cycle && cpu_clkin_t3 && !cpu_clkin_t2;
+	assign cpu_raw_wr = !reset && !cpu_in_t12 && write_cycle && cpu_clkin_t3 && !cpu_clkin_t2;
 
+	/* CPU must raise cpu_out_r7 during mem cycles that are targeting external busses. It must not
+	 * raise it when accessing FExx and FFxx (cpu_in_r4). */
+	// TODO: Figure out if 00xx while boot ROM is visible (cpu_in_r5) is also an exception.
+	assign cpu_out_r7 = !reset && !cpu_in_t12 && mem_cycle && !cpu_in_r4;
+
+	logic read_cycle;
 	logic write_cycle;
+	logic mem_cycle;
 
 	task automatic write(input logic [15:0] adr, logic [7:0] data);
 		@(posedge cpu_clkin_t3);
 		cpu_a       = adr;
 		cpu_d       = data; // TODO: figure out if new data is actually put on later
 		write_cycle = 1;
-		cpu_out_r7  = 1;
+		mem_cycle   = 1;
 		@(posedge cpu_clkin_t2);
 		write_cycle = 0;
-		cpu_out_r7  = 0;
+		mem_cycle   = 0;
 	endtask
 
 	task automatic read(input logic [15:0] adr, logic [7:0] data);
 		@(posedge cpu_clkin_t3);
 		cpu_a        = adr;
 		d_pin_ext    = data;
-		cpu_raw_rd   = 1;
-		cpu_out_r7   = 1;
+		read_cycle   = 1;
+		mem_cycle    = 1;
 		@(posedge cpu_clkin_t2);
 		d_pin_ext    = 'z;
-		cpu_raw_rd   = 0;
-		cpu_out_r7   = 0;
+		read_cycle   = 0;
+		mem_cycle    = 0;
 	endtask
 
 	task automatic nop;
@@ -210,9 +219,9 @@ module dmg;
 		cpu_out_t1   = 0;
 		cpu_clk_ena  = 0;
 		xo_ena       = 1;
-		cpu_raw_rd   = 0;
+		read_cycle   = 0;
 		write_cycle  = 0;
-		cpu_out_r7   = 0;
+		mem_cycle    = 0;
 		cpu_irq0_ack = 0;
 		cpu_irq1_ack = 0;
 		cpu_irq2_ack = 0;
