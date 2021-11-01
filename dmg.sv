@@ -445,6 +445,7 @@ module dmg;
 	/* for convinience */
 	logic [15:0] div16;
 	logic [7:0]  div8;
+	logic [7:0]  reg_ff00;
 	assign div16[0]  = p1_clocks_reset.ukup;
 	assign div16[1]  = p1_clocks_reset.ufor;
 	assign div16[2]  = p1_clocks_reset.uner;
@@ -462,4 +463,11 @@ module dmg;
 	assign div16[14] = p1_clocks_reset.uket;
 	assign div16[15] = p1_clocks_reset.upof;
 	assign div8 = div16[13:6];
+	assign reg_ff00[0]   = p5_joypad_io.kema;
+	assign reg_ff00[1]   = p5_joypad_io.kuro;
+	assign reg_ff00[2]   = p5_joypad_io.kuve;
+	assign reg_ff00[3]   = p5_joypad_io.jeku;
+	assign reg_ff00[4]   = p5_joypad_io.koce;
+	assign reg_ff00[5]   = p5_joypad_io.cudy;
+	assign reg_ff00[7:6] = '1;
 endmodule
