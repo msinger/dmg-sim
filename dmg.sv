@@ -183,25 +183,40 @@ module dmg;
 
 	task automatic write(input logic [15:0] adr, logic [7:0] data);
 		@(posedge cpu_clkin_t3);
-		cpu_a       = adr;
-		cpu_d       = data; // TODO: figure out if new data is actually put on later
-		write_cycle = 1;
 		mem_cycle   = 1;
+		cpu_a       = adr;
+		cpu_d       = '1;
+		write_cycle = 1;
+		@(posedge cpu_clkin_t5);
+		cpu_d       = data;
 		@(posedge cpu_clkin_t2);
 		write_cycle = 0;
 		mem_cycle   = 0;
+		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
+			cpu_a[15:8] = 0;
 	endtask
 
 	task automatic read(input logic [15:0] adr, logic [7:0] data);
 		@(posedge cpu_clkin_t3);
-		cpu_a        = adr;
-		d_pin_ext    = data;
-		read_cycle   = 1;
 		mem_cycle    = 1;
-		@(posedge cpu_clkin_t2);
-		d_pin_ext    = 'z;
-		read_cycle   = 0;
-		mem_cycle    = 0;
+		cpu_a        = adr;
+		read_cycle   = 1;
+		fork
+			begin :drive_data_after_chip_select
+				@(negedge ncs, negedge a_pin[15]); /* Wait for any of the two chip selects */
+				#4ns
+				d_pin_ext    = data;
+			end
+			begin
+				@(posedge cpu_clkin_t2);
+				d_pin_ext    = 'z;
+				read_cycle   = 0;
+				mem_cycle    = 0;
+				if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
+					cpu_a[15:8] = 0;
+				disable drive_data_after_chip_select;
+			end
+		join
 	endtask
 
 	task automatic nop;
@@ -251,10 +266,17 @@ module dmg;
 				nop;
 				nop;
 
-				write('h1234, 'hab);
-				write('habcd, 'h12);
-				write('h1234, 'h34);
-				read('h2345, 'h56);
+				read('hff00, 'h56);
+				read('h1000, 'h56);
+				read('hff00, 'h56);
+				write('hff00, 'h56);
+				read('h0055, 'h56);
+				write('h00aa, 'h56);
+				read('h1234, 'h56);
+				write('h4321, 'h56);
+				read('h8aaa, 'h56);
+
+				/* TODO: Address lines must not change when accessing boot ROM or video RAM, but they do. */
 
 				nop;
 				nop;
