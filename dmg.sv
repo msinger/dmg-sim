@@ -41,12 +41,14 @@ module dmg;
 
 	tri logic [7:0] d_pin;          /* D0-D7 pins */
 	logic     [7:0] d_pin_ext = 'z; /* Value driven externally onto the pins if not 'z */
+	logic     [7:0] d_pin_drv;      /* Value driven internally onto the pins if not 'z */
 	generate
 		for (genvar i = 0; i < 8; i++)
-			assign d_pin[i] = bidir_out(d_d[i], d_a[i]);
+			assign d_pin_drv[i] = bidir_out(d_d[i], d_a[i]);
 	endgenerate
 	assign (pull1, highz0) d_pin = {8{!lula}};
 	assign                 d_pin = d_pin_ext;
+	assign                 d_pin = d_pin_drv;
 
 	tri logic [7:0] md_pin; /* MD0-MD7 pins */
 	generate
