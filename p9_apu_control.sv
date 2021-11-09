@@ -27,7 +27,7 @@ module apu_control(
 	dffr_bp dffr_ajer(apuv_4mhz, napu_reset3, !ajer, ajer); // check edge
 	dffr_bp dffr_calo(bata,      napu_reset,  !calo, calo); // check edge
 	assign #T_INV  bata = !ajer_2mhz;
-	assign #T_INV  dyfa = calo; /* takes !q output of dffr */
+	assign #T_INV  dyfa = !(!calo);
 	assign ajer_2mhz  = ajer;
 	assign najer_2mhz = !ajer;
 	assign dyfa_1mhz  = dyfa;
@@ -69,7 +69,7 @@ module apu_control(
 	assign #T_AND  etuc = apu_wr && ff26;
 	assign #T_AND  efop = d[4] && t1_nt2;
 	assign #T_INV  foku = !etuc;
-	assign #T_INV  edek = fero; /* takes !q output of dffr */
+	assign #T_INV  edek = !(!fero);
 	assign apu_reset = keba;
 	assign fero_q    = fero;
 	assign net03     = edek;
@@ -95,14 +95,14 @@ module apu_control(
 	assign #T_INV  bubu = !baxy;
 	assign #T_INV  bowe = !bosu;
 	assign #T_INV  ataf = !bowe;
-	assign #T_TRI  atum = !adak ? bedu : 'z; /* takes !q output of dffr */
-	assign #T_TRI  bocy = !adak ? cozu : 'z; /* takes !q output of dffr */
-	assign #T_TRI  arux = !adak ? bumo : 'z; /* takes !q output of dffr */
-	assign #T_TRI  amad = !adak ? byre : 'z; /* takes !q output of dffr */
-	assign #T_TRI  axem = !adak ? apos : 'z; /* takes !q output of dffr */
-	assign #T_TRI  avud = !adak ? ager : 'z; /* takes !q output of dffr */
-	assign #T_TRI  awed = !adak ? byga : 'z; /* takes !q output of dffr */
-	assign #T_TRI  akod = !adak ? apeg : 'z; /* takes !q output of dffr */
+	assign #T_TRI  atum = !adak ? !(!bedu) : 'z;
+	assign #T_TRI  bocy = !adak ? !(!cozu) : 'z;
+	assign #T_TRI  arux = !adak ? !(!bumo) : 'z;
+	assign #T_TRI  amad = !adak ? !(!byre) : 'z;
+	assign #T_TRI  axem = !adak ? !(!apos) : 'z;
+	assign #T_TRI  avud = !adak ? !(!ager) : 'z;
+	assign #T_TRI  awed = !adak ? !(!byga) : 'z;
+	assign #T_TRI  akod = !adak ? !(!apeg) : 'z;
 	assign ncpu_rd = aguz;
 	assign d[7]    = atum;
 	assign d[6]    = bocy;
@@ -130,14 +130,14 @@ module apu_control(
 	assign #T_NAND bupo = !(ff25 && apu_wr);
 	assign #T_INV  bono = !bupo;
 	assign #T_INV  byfa = !bupo;
-	assign #T_TRI  capu = !gumu ? bogu : 'z; /* takes !q output of dffr */
-	assign #T_TRI  caga = !gumu ? bafo : 'z; /* takes !q output of dffr */
-	assign #T_TRI  boca = !gumu ? atuf : 'z; /* takes !q output of dffr */
-	assign #T_TRI  buzu = !gumu ? anev : 'z; /* takes !q output of dffr */
-	assign #T_TRI  cere = !gumu ? bepu : 'z; /* takes !q output of dffr */
-	assign #T_TRI  cada = !gumu ? befo : 'z; /* takes !q output of dffr */
-	assign #T_TRI  cavu = !gumu ? bume : 'z; /* takes !q output of dffr */
-	assign #T_TRI  cudu = !gumu ? bofa : 'z; /* takes !q output of dffr */
+	assign #T_TRI  capu = !gumu ? !(!bogu) : 'z;
+	assign #T_TRI  caga = !gumu ? !(!bafo) : 'z;
+	assign #T_TRI  boca = !gumu ? !(!atuf) : 'z;
+	assign #T_TRI  buzu = !gumu ? !(!anev) : 'z;
+	assign #T_TRI  cere = !gumu ? !(!bepu) : 'z;
+	assign #T_TRI  cada = !gumu ? !(!befo) : 'z;
+	assign #T_TRI  cavu = !gumu ? !(!bume) : 'z;
+	assign #T_TRI  cudu = !gumu ? !(!bofa) : 'z;
 	assign lmixer[1] = bogu;
 	assign lmixer[2] = bafo;
 	assign lmixer[3] = atuf;

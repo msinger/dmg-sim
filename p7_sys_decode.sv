@@ -104,14 +104,14 @@ module sys_decode(
 
 	logic leco, raru, rowe, ryke, ryne, rase, rejy, reka, romy;
 	assign #T_NOR  leco = !(bedo || t1_nt2);
-	assign #T_TRI  raru = leco ? '1 : 'z;
-	assign #T_TRI  rowe = leco ? '1 : 'z;
-	assign #T_TRI  ryke = leco ? '1 : 'z;
-	assign #T_TRI  ryne = leco ? '1 : 'z;
-	assign #T_TRI  rase = leco ? '1 : 'z;
-	assign #T_TRI  rejy = leco ? '1 : 'z;
-	assign #T_TRI  reka = leco ? '1 : 'z;
-	assign #T_TRI  romy = leco ? '1 : 'z;
+	assign #T_TRI  raru = leco ? !0 : 'z;
+	assign #T_TRI  rowe = leco ? !0 : 'z;
+	assign #T_TRI  ryke = leco ? !0 : 'z;
+	assign #T_TRI  ryne = leco ? !0 : 'z;
+	assign #T_TRI  rase = leco ? !0 : 'z;
+	assign #T_TRI  rejy = leco ? !0 : 'z;
+	assign #T_TRI  reka = leco ? !0 : 'z;
+	assign #T_TRI  romy = leco ? !0 : 'z;
 	assign d[7] = raru;
 	assign d[5] = rowe;
 	assign d[6] = ryke;
@@ -147,7 +147,7 @@ module sys_decode(
 	assign #T_AND  texe = cpu_rd && ffxx && tufa && tyro;
 	assign #T_OR   sato = d[0] || tepu;
 	assign #T_NAND tuge = !(tyro && tufa && ffxx && cpu_wr);
-	assign #T_TRI  sypu = texe ? tepu : 1'bz; /* takes !q output of dffr */
+	assign #T_TRI  sypu = texe ? !(!tepu) : 'z;
 	assign #T_INV  tera = !tepu;
 	assign #T_INV  yaza = nt1_t2;
 	assign #T_AND  tutu = tera && tulo;

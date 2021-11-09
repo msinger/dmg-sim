@@ -110,9 +110,9 @@ module clocks_reset(
 	assign #T_INV  ucob = !clkin_a;
 	assign #T_INV  uvyt = !nphi_out;
 	assign #T_INV  adar = !adyk;
-	assign #T_INV  atyp = afur; /* takes !q output of dffr */
+	assign #T_INV  atyp = !(!afur);
 	assign #T_INV  afep = !alef;
-	assign #T_INV  arov = apuk; /* takes !q output of dffr */
+	assign #T_INV  arov = !(!apuk);
 	assign #T_NOR  afas = !(adar || atyp);
 	assign #T_NAND arev = !(from_cpu3 && afas);
 	assign #T_INV  apov = !arev;
@@ -243,10 +243,10 @@ module clocks_reset(
 	dffr_bp dffr_bylu(!caru, atus, !bylu, bylu); // check edge
 	assign #T_INV  atus = !apu_reset;
 	assign #T_INV  coke = !ajer_2mhz;
-	assign #T_INV  bure = bara; /* takes !q output of dffr */
+	assign #T_INV  bure = !(!bara);
 	assign #T_INV  fyne = !bure;
-	assign #T_INV  culo = caru; /* takes !q output of dffr */
-	assign #T_INV  apef = bylu; /* takes !q output of dffr */
+	assign #T_INV  culo = !(!caru);
+	assign #T_INV  apef = !(!bylu);
 	assign #T_MUX  gale = fero_q ? hama_512k : fyne;
 	assign #T_MUX  beze = fero_q ? hama_512k : culo;
 	assign #T_MUX  bule = fero_q ? hama_512k : apef;
@@ -269,7 +269,7 @@ module clocks_reset(
 	dffr_bp dffr_jeso(bavu,      napu_reset5, !jeso, jeso); // check edge
 	assign #T_INV  bopo = !apu_reset;
 	assign #T_INV  bavu = !avok;
-	assign #T_INV  hama = jeso; /* takes !q output of dffr */
+	assign #T_INV  hama = !(!jeso);
 	assign _2097152hz = atyk;
 	assign _1048576hz = avok;
 	assign jeso_512k = jeso;

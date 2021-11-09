@@ -26,7 +26,7 @@ module ch4_regs(
 	tffd tffd_favy(dano, dotu, d[1], favy);
 	tffd tffd_dena(favy, dotu, d[2], dena);
 	tffd tffd_cedo(dena, dotu, d[3], cedo);
-	assign #T_INV  dopu = cedo; /* takes !q output of tffd */
+	assign #T_INV  dopu = !(!cedo);
 	assign #T_NAND caze = !(apu_wr && ff20);
 	assign #T_NOR  doda = !(fugo || bufy_256hz || ff23_d6);
 	assign #T_INV  furu = !caze;
@@ -56,14 +56,14 @@ module ch4_regs(
 	assign #T_INV  dyke = !daco;
 	assign #T_INV  bofy = !ff21;
 	assign #T_OR   boxe = bofy || ncpu_rd;
-	assign #T_TRI  hacu = !hasu ? gedu : 'z; /* takes !q output of dffr */
-	assign #T_TRI  hoge = !hasu ? gozo : 'z; /* takes !q output of dffr */
-	assign #T_TRI  godu = !hasu ? goky : 'z; /* takes !q output of dffr */
-	assign #T_TRI  heda = !hasu ? garu : 'z; /* takes !q output of dffr */
-	assign #T_TRI  gome = !hasu ? geky : 'z; /* takes !q output of dffr */
-	assign #T_TRI  cuzu = !boxe ? ezyk : 'z; /* takes !q output of dffr */
-	assign #T_TRI  coce = !boxe ? etyj : 'z; /* takes !q output of dffr */
-	assign #T_TRI  demy = !boxe ? emok : 'z; /* takes !q output of dffr */
+	assign #T_TRI  hacu = !hasu ? !(!gedu) : 'z;
+	assign #T_TRI  hoge = !hasu ? !(!gozo) : 'z;
+	assign #T_TRI  godu = !hasu ? !(!goky) : 'z;
+	assign #T_TRI  heda = !hasu ? !(!garu) : 'z;
+	assign #T_TRI  gome = !hasu ? !(!geky) : 'z;
+	assign #T_TRI  cuzu = !boxe ? !(!ezyk) : 'z;
+	assign #T_TRI  coce = !boxe ? !(!etyj) : 'z;
+	assign #T_TRI  demy = !boxe ? !(!emok) : 'z;
 	assign ff21_d7  = gedu;
 	assign ff21_d6  = gozo;
 	assign ff21_d5  = goky;
@@ -93,11 +93,11 @@ module ch4_regs(
 	assign #T_OR   heze = gugo || ncpu_rd;
 	assign #T_INV  hyne = !apu_reset;
 	assign #T_INV  efug = !getu;
-	assign #T_TRI  keta = !jora ? jamy : 'z; /* takes !q output of dffr */
-	assign #T_TRI  geda = !heze ? feta : 'z; /* takes !q output of dffr */
-	assign #T_TRI  gaka = !heze ? gogo : 'z; /* takes !q output of dffr */
-	assign #T_TRI  hapy = !heze ? gafo : 'z; /* takes !q output of dffr */
-	assign #T_TRI  gype = !heze ? fyto : 'z; /* takes !q output of dffr */
+	assign #T_TRI  keta = !jora ? !(!jamy) : 'z;
+	assign #T_TRI  geda = !heze ? !(!feta) : 'z;
+	assign #T_TRI  gaka = !heze ? !(!gogo) : 'z;
+	assign #T_TRI  hapy = !heze ? !(!gafo) : 'z;
+	assign #T_TRI  gype = !heze ? !(!fyto) : 'z;
 	assign ff22_d3  = jamy;
 	assign nff22_d3 = !jamy;
 	assign ff22_d4  = feta;
@@ -121,9 +121,9 @@ module ch4_regs(
 	assign #T_INV  hova = !humo;
 	assign #T_INV  koku = !ff22;
 	assign #T_OR   keka = koku || ncpu_rd;
-	assign #T_TRI  kyro = !keka ? jaky : 'z; /* takes !q output of dffr */
-	assign #T_TRI  kaku = !keka ? jero : 'z; /* takes !q output of dffr */
-	assign #T_TRI  kamo = !keka ? jare : 'z; /* takes !q output of dffr */
+	assign #T_TRI  kyro = !keka ? !(!jaky) : 'z;
+	assign #T_TRI  kaku = !keka ? !(!jero) : 'z;
+	assign #T_TRI  kamo = !keka ? !(!jare) : 'z;
 	assign nff22_d2 = !jaky;
 	assign nff22_d1 = !jero;
 	assign nff22_d0 = !jare;
@@ -137,7 +137,7 @@ module ch4_regs(
 	assign #T_NAND dulu = !(anuj && ff23);
 	assign #T_INV  cabe = !apu_reset;
 	assign #T_NAND bare = !(ff23 && bylo);
-	assign #T_TRI  cury = !bare ? cuny : 'z; /* takes !q output of dffr */
+	assign #T_TRI  cury = !bare ? !(!cuny) : 'z;
 	assign ff23_d6 = cuny;
 	assign d[6] = cury;
 

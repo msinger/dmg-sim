@@ -55,9 +55,9 @@ module channel3(
 	assign #T_NOR  hera = !(gase || gara);
 	assign #T_INV  kyko = !hera;
 	assign #T_INV  kaso = !hera;
-	assign #T_INV  kyru = kemu; /* takes !q output of tffd */
+	assign #T_INV  kyru = !(!kemu);
 	assign #T_INV  jera = !hera;
-	assign #T_INV  kese = keno; /* takes !q output of tffd */
+	assign #T_INV  kese = !(!keno);
 	assign #T_AND  foto = fety && gase;
 	assign #T_OR   etan = gara || fety;
 	assign #T_NOR  gyry = !(apu_reset || gara || foto);
@@ -69,11 +69,11 @@ module channel3(
 	assign #T_MUX  agyl = ch3_active ? efuz : a[1];
 	assign #T_MUX  afum = ch3_active ? exel : a[2];
 	assign #T_MUX  axol = ch3_active ? efal : a[3];
-	assign #T_TRI  fapy = !geno ? efar : 'z; /* takes !q output of dffr */
-	assign #T_TRI  faro = !geno ? erus : 'z; /* takes !q output of dffr */
-	assign #T_TRI  fote = !geno ? efuz : 'z; /* takes !q output of dffr */
-	assign #T_TRI  fana = !geno ? exel : 'z; /* takes !q output of dffr */
-	assign #T_TRI  fera = !geno ? efal : 'z; /* takes !q output of dffr */
+	assign #T_TRI  fapy = !geno ? !(!efar) : 'z;
+	assign #T_TRI  faro = !geno ? !(!erus) : 'z;
+	assign #T_TRI  fote = !geno ? !(!efuz) : 'z;
+	assign #T_TRI  fana = !geno ? !(!exel) : 'z;
+	assign #T_TRI  fera = !geno ? !(!efal) : 'z;
 	assign nkutu = !kutu;
 	assign nkupe = !kupe;
 	assign nkunu = !kunu;
@@ -101,7 +101,7 @@ module channel3(
 	assign #T_INV  ezas = !fozu;
 	assign #T_INV  calu = !apu_reset;
 	assign #T_INV  doru = !ezas;
-	assign #T_INV  coka = davo; /* takes !q output of dffr */
+	assign #T_INV  coka = !(!davo);
 	assign #T_INV  ered = !coka;
 	assign ch3_active  = coka;
 	assign nch3_active = ered;
@@ -120,7 +120,7 @@ module channel3(
 	assign #T_NOR  guda = !(ff1b_wr3 || apu_reset || gara);
 	assign #T_NOR  gepy = !(fexu || bufy_256hz || nff1e_d6);
 	assign #T_INV  genu = !gepy;
-	assign #T_INV  falu = gapo; /* takes !q output of tffd */
+	assign #T_INV  falu = !(!gapo);
 
 	logic goka, gemy, gege, ezag, evug, doky, dore, bary, byka, bopa, bely;
 	assign #T_NOR  goka = !(nff1c_d6 || ff1c_d5);

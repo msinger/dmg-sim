@@ -31,7 +31,7 @@ module ch3_regs(
 	assign #T_AND  gejo = ff1a && apu_wr;
 	assign #T_INV  gucy = !gejo;
 	assign #T_INV  gove = !apu_reset;
-	assign #T_NOR  fuvo = !(!guxe || apu_reset); /* takes !q output of dffr */
+	assign #T_NOR  fuvo = !(!guxe || apu_reset);
 	assign #T_NAND fasy = !(ff1a && gaxo);
 	assign #T_INV  fevo = !guxe;
 	assign #T_TRI  geko = !fasy ? !fevo : 'z;
@@ -103,7 +103,7 @@ module ch3_regs(
 	assign #T_INV  heky = !apu_reset;
 	assign #T_INV  gory = !ncpu_rd;
 	assign #T_NAND gawa = !(ff1e && gory);
-	assign #T_TRI  haca = !gawa ? hoto : 'z; /* takes !q output of dffr */
+	assign #T_TRI  haca = !gawa ? !(!hoto) : 'z;
 	assign ff1e_d6  = hoto;
 	assign nff1e_d6 = !hoto;
 	assign d[6]     = haca;
@@ -137,8 +137,8 @@ module ch3_regs(
 	assign #T_INV  guzu = !haga;
 	assign #T_INV  jotu = !ncpu_rd;
 	assign #T_NAND henu = !(ff1c && jotu);
-	assign #T_TRI  huco = !henu ? huky : 'z; /* takes !q output of dffr */
-	assign #T_TRI  hamu = !henu ? hody : 'z; /* takes !q output of dffr */
+	assign #T_TRI  huco = !henu ? !(!huky) : 'z;
+	assign #T_TRI  hamu = !henu ? !(!hody) : 'z;
 	assign ff1c_d6  = huky;
 	assign nff1c_d6 = !huky;
 	assign ff1c_d5  = hody;

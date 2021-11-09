@@ -49,10 +49,10 @@ module wave_ram(
 	assign #T_TRI  baty = wave_ram_rd ? !atec : 'z;
 	assign #T_TRI  desy = wave_ram_rd ? !cegu : 'z;
 	assign #T_TRI  dugu = wave_ram_rd ? !cugo : 'z;
-	assign #T_MUXI copo = !(efar_q ? !begu : !bepa); /* takes !q outputs of dffrs */
-	assign #T_MUXI cuzo = !(efar_q ? !budy : !bora); /* takes !q outputs of dffrs */
-	assign #T_MUXI dazy = !(efar_q ? !cesy : !cevo); /* takes !q outputs of dffrs */
-	assign #T_MUXI date = !(efar_q ? !cyfo : !cuvo); /* takes !q outputs of dffrs */
+	assign #T_MUXI copo = !(efar_q ? !begu : !bepa);
+	assign #T_MUXI cuzo = !(efar_q ? !budy : !bora);
+	assign #T_MUXI dazy = !(efar_q ? !cesy : !cevo);
+	assign #T_MUXI date = !(efar_q ? !cyfo : !cuvo);
 	assign d           = { bezu, desa, bava, bune, bade, baty, desy, dugu };
 	assign wave_play_d = { copo, cuzo, dazy, date };
 
@@ -74,7 +74,7 @@ module wave_ram(
 	assign #T_INV  boru = !boxo;
 	assign #T_MUX  atur = ch3_active ? boru : buku;
 	assign #T_INV  aler = !atur;
-	assign #T_INV  butu = azus; /* takes !q output of dffr */
+	assign #T_INV  butu = !(!azus);
 	assign wave_ram_ctrl1 = aler;
 	assign butu_512khz    = butu;
 

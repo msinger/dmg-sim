@@ -41,7 +41,7 @@ module channel1(
 	assign #T_INV  bugy = !boro;
 	assign #T_INV  canu = !capy;
 	assign #T_INV  bepe = !boro;
-	assign #T_INV  cuso = cuno; /* takes !q output of tffd */
+	assign #T_INV  cuso = !(!cuno);
 	assign nch1_amp_en = hoca;
 
 	logic cala, comy, cyte, dyru, doka;
@@ -143,7 +143,7 @@ module channel1(
 	assign #T_NAND buge = !(nff10_d2 && nff10_d1 && nff10_d0);
 	assign #T_AND  copy = copa && caja && byra;
 	assign #T_NOR  atat = !(bexa || apu_reset);
-	assign #T_INV  adad = BYTE; /* takes !q output of dffr */
+	assign #T_INV  adad = !(!BYTE);
 	assign #T_NOR  epuk = !(apu_reset || adad);
 	assign #T_NOR  evol = !(bexa || fyte);
 	assign #T_NOR  egyp = !(nfemu || dyfa_1mhz);

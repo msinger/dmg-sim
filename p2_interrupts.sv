@@ -60,11 +60,11 @@ module interrupts(
 	assign #T_NAND pyhu = !(rotu && lesa && d[2]);
 	assign #T_AND  pyga = rake && lesa && nreset2;
 	assign #T_INV  pola = !nff0f_rd;
-	assign #T_TRI  nela = pola ? maty : 'z; /* takes !q output of dlatch */
-	assign #T_TRI  pado = pola ? nejy : 'z; /* takes !q output of dlatch */
-	assign #T_TRI  pegy = pola ? nuty : 'z; /* takes !q output of dlatch */
-	assign #T_TRI  nabo = pola ? mopo : 'z; /* takes !q output of dlatch */
-	assign #T_TRI  rova = pola ? pavy : 'z; /* takes !q output of dlatch */
+	assign #T_TRI  nela = pola ? !(!maty) : 'z;
+	assign #T_TRI  pado = pola ? !(!nejy) : 'z;
+	assign #T_TRI  pegy = pola ? !(!nuty) : 'z;
+	assign #T_TRI  nabo = pola ? !(!mopo) : 'z;
+	assign #T_TRI  rova = pola ? !(!pavy) : 'z;
 	assign cpu_irq0_trig = lope;
 	assign cpu_irq3_trig = ubul;
 	assign cpu_irq4_trig = ulak;

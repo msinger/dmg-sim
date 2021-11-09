@@ -66,14 +66,14 @@ module dma(
 	dff dff_nydo(loru, d[3], nydo); // check edge
 	dff dff_poku(loru, d[6], poku); // check edge
 	dff dff_maru(loru, d[7], maru); // check edge
-	assign #T_TRI  poly = pusy ? nafa : 'z; /* takes !q output of dff */
-	assign #T_TRI  pare = pusy ? nygy : 'z; /* takes !q output of dff */
-	assign #T_TRI  rema = pusy ? para : 'z; /* takes !q output of dff */
-	assign #T_TRI  rofo = pusy ? pyne : 'z; /* takes !q output of dff */
-	assign #T_TRI  raly = pusy ? pula : 'z; /* takes !q output of dff */
-	assign #T_TRI  pane = pusy ? nydo : 'z; /* takes !q output of dff */
-	assign #T_TRI  resu = pusy ? poku : 'z; /* takes !q output of dff */
-	assign #T_TRI  nuvy = pusy ? maru : 'z; /* takes !q output of dff */
+	assign #T_TRI  poly = pusy ? !(!nafa) : 'z;
+	assign #T_TRI  pare = pusy ? !(!nygy) : 'z;
+	assign #T_TRI  rema = pusy ? !(!para) : 'z;
+	assign #T_TRI  rofo = pusy ? !(!pyne) : 'z;
+	assign #T_TRI  raly = pusy ? !(!pula) : 'z;
+	assign #T_TRI  pane = pusy ? !(!nydo) : 'z;
+	assign #T_TRI  resu = pusy ? !(!poku) : 'z;
+	assign #T_TRI  nuvy = pusy ? !(!maru) : 'z;
 	assign #T_TRI  evax = !ahoc ? !nafa : 'z;
 	assign #T_TRI  exyf = !ahoc ? !nygy : 'z;
 	assign #T_TRI  eraf = !ahoc ? !para : 'z;
