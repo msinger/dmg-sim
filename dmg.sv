@@ -314,13 +314,9 @@ module dmg;
 	assign mcs_in = !nmcs;
 
 	/* not yet generated signals */
-	logic ff40_d7 = 0;
-	logic ff46 = 0;
-	logic ff40_d4 = 0;
 	logic amab = 0;
 	logic tacu = 0;
 	logic tuvo = 0;
-	logic acyl = 0;
 	logic xyso = 0;
 	logic texy = 0;
 	logic myma = 1;
@@ -342,10 +338,28 @@ module dmg;
 	logic npyzo = 1;
 	logic npozo = 1;
 	logic nrawu = 1;
-	logic int_vbl_buf = 0;
-	logic int_stat = 0;
+	assign wuvu_nq = 0;
+	assign fepo = 0;
+	assign tofu = 0;
+	assign avap = 0;
+	assign pova = 0;
+	assign acyl = 0;
+	assign atej = 0;
+	assign clkpipe = 0;
+	logic ff40_d4 = 0;
+	logic ff40_d7 = 0;
+	assign ff45_d0 = 0;
+	assign ff45_d1 = 0;
+	assign ff45_d2 = 0;
+	assign ff45_d3 = 0;
+	assign ff45_d4 = 0;
+	assign ff45_d5 = 0;
+	assign ff45_d6 = 0;
+	assign ff45_d7 = 0;
+	logic ff46 = 0;
+	assign ff41 = 0;
 
-	logic clk1;
+	logic clk1, clk2, clk4, clk5;
 
 	logic cpu_wr, cpu_wr2;
 	logic cpu_rd, cpu_rd2;
@@ -372,7 +386,8 @@ module dmg;
 	assign nt1 = !t1;
 	assign nt2 = !t2;
 
-	logic nreset2, nreset6;
+	logic nreset2, nreset6, reset7, nreset7, nreset8, nreset9;
+	logic reset_video, nreset_video, reset_video2, nreset_video2, reset_video3;
 	logic nphi_out, phi_out, dova_phi;
 
 	logic nsout, sin_a, sin_b, sin_in, sin_d, sck_a, sck_dir, sck_in, sck_d;
@@ -414,11 +429,13 @@ module dmg;
 	logic nch4_active, nch4_amp_en;
 	logic _16384hz, _65536hz, _262144hz;
 
-	// TODO: lula controlls direction of external D0-7 pins?
+	logic talu, xyvo, nnype, wodu, napo, PURE, sela, nxymu;
+	logic wuvu_nq, fepo, tofu, avap, pova, acyl, atej;
 
 	logic ffxx, nffxx, nfexxffxx, a00_07, saro;
 	logic ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a;
 	logic ff1b, ff1c, ff1d, ff1e, ff20, ff21, ff22, ff23, ff24, ff25;
+	logic ff41;
 	logic nff10_d0, nff10_d1, nff10_d2, nff10_d3, nff10_d4, nff10_d5, nff10_d6;
 	logic ff11_d6, ff11_d7, nff11_d6, nff11_d7;
 	logic ff12_d0, ff12_d1, ff12_d2, ff12_d3, ff12_d4, ff12_d5, ff12_d6, ff12_d7;
@@ -437,6 +454,13 @@ module dmg;
 	logic nff22_d0, nff22_d1, nff22_d2, ff22_d3, nff22_d3, ff22_d4, nff22_d4;
 	logic ff22_d5, nff22_d5, ff22_d6, nff22_d6, ff22_d7;
 	logic ff23_d6, ff23_d7, rst_ff23_d7;
+	logic ff45_d0, ff45_d1, ff45_d2, ff45_d3, ff45_d4, ff45_d5, ff45_d6, ff45_d7;
+
+	logic l113, int_vbl, int_vbl_buf, int_stat, clkpipe;
+
+	logic pin_cpg, cp;
+
+	logic [7:0] v, h, nh;
 
 	logic [10:0] acc_d;
 	logic [3:0]  wave_play_d;
@@ -478,6 +502,7 @@ module dmg;
 	channel3       p18_channel3(.*);
 	ch4_regs       p19_ch4_regs(.*);
 	channel4       p20_channel4(.*);
+	video_control  p21_video_control(.*);
 	vram_interface p25_vram_interface(.*);
 
 	/* for convinience */

@@ -4,8 +4,9 @@ module clocks_reset(
 		input logic clkin_a, clkin_b,
 		input logic reset,
 
-		output logic nreset2, nreset6,
-		output logic clk1,
+		output logic nreset2, nreset6, reset7, nreset7, nreset8, nreset9,
+		output logic reset_video, nreset_video, reset_video2, nreset_video2, reset_video3,
+		output logic clk1, clk2, clk4, clk5,
 		output logic nphi_out, phi_out, dova_phi,
 
 		inout tri logic [7:0] d,
@@ -49,7 +50,7 @@ module clocks_reset(
 	assign #T_INV  atal = !avet;
 	assign atal_4mhz = atal;
 
-	logic azof, zaxy, zeme, alet, lape, tava, atag, amuk, clk2, clk4, clk5;
+	logic azof, zaxy, zeme, alet, lape, tava, atag, amuk;
 	assign #T_INV  azof = !atal;
 	assign #T_INV  zaxy = !azof;
 	assign #T_INV  zeme = !zaxy;
@@ -74,7 +75,7 @@ module clocks_reset(
 	assign apuv_4mhz = apuv;
 	assign cery_2mhz = cery;
 
-	logic dula, cunu, xore, walu, wesy, xebe, reset7, nreset7, nreset8, nreset9;
+	logic dula, cunu, xore, walu, wesy, xebe;
 	assign #T_INV  dula = !nreset2;
 	assign #T_INV  cunu = !dula;
 	assign #T_INV  xore = !cunu;
@@ -87,7 +88,7 @@ module clocks_reset(
 	assign nreset8 = walu;
 	assign nreset9 = wesy;
 
-	logic xodo, xapo, pyry, atar, lyha, lyfe, reset_video, nreset_video, reset_video2, nreset_video2, reset_video3;
+	logic xodo, xapo, pyry, atar, lyha, lyfe;
 	assign #T_NAND xodo = !(ff40_d7 && nreset7);
 	assign #T_INV  xapo = !xodo;
 	assign #T_INV  pyry = !xapo;
