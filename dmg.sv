@@ -356,8 +356,6 @@ module dmg;
 	assign ff45_d5 = 0;
 	assign ff45_d6 = 0;
 	assign ff45_d7 = 0;
-	logic ff46 = 0;
-	assign ff41 = 0;
 
 	logic clk1, clk2, clk4, clk5;
 
@@ -435,7 +433,8 @@ module dmg;
 	logic ffxx, nffxx, nfexxffxx, a00_07, saro;
 	logic ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a;
 	logic ff1b, ff1c, ff1d, ff1e, ff20, ff21, ff22, ff23, ff24, ff25;
-	logic ff41;
+	logic ff40, ff41, ff42, ff43, ff44, ff45;
+	logic ff46, ff47, ff48, ff49, ff4a, ff4b;
 	logic nff10_d0, nff10_d1, nff10_d2, nff10_d3, nff10_d4, nff10_d5, nff10_d6;
 	logic ff11_d6, ff11_d7, nff11_d6, nff11_d7;
 	logic ff12_d0, ff12_d1, ff12_d2, ff12_d3, ff12_d4, ff12_d5, ff12_d6, ff12_d7;
@@ -503,6 +502,7 @@ module dmg;
 	ch4_regs       p19_ch4_regs(.*);
 	channel4       p20_channel4(.*);
 	video_control  p21_video_control(.*);
+	ppu_decode     p22_ppu_decode(.*);
 	vram_interface p25_vram_interface(.*);
 
 	/* for convinience */
