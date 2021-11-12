@@ -346,16 +346,6 @@ module dmg;
 	assign acyl = 0;
 	assign atej = 0;
 	assign clkpipe = 0;
-	logic ff40_d4 = 0;
-	logic ff40_d7 = 0;
-	assign ff45_d0 = 0;
-	assign ff45_d1 = 0;
-	assign ff45_d2 = 0;
-	assign ff45_d3 = 0;
-	assign ff45_d4 = 0;
-	assign ff45_d5 = 0;
-	assign ff45_d6 = 0;
-	assign ff45_d7 = 0;
 
 	logic clk1, clk2, clk4, clk5;
 
@@ -429,6 +419,7 @@ module dmg;
 
 	logic talu, xyvo, nnype, wodu, napo, PURE, sela, nxymu;
 	logic wuvu_nq, fepo, tofu, avap, pova, acyl, atej;
+	logic waru, xare;
 
 	logic ffxx, nffxx, nfexxffxx, a00_07, saro;
 	logic ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a;
@@ -453,7 +444,12 @@ module dmg;
 	logic nff22_d0, nff22_d1, nff22_d2, ff22_d3, nff22_d3, ff22_d4, nff22_d4;
 	logic ff22_d5, nff22_d5, ff22_d6, nff22_d6, ff22_d7;
 	logic ff23_d6, ff23_d7, rst_ff23_d7;
+	logic ff40_d0, ff40_d1, ff40_d2, ff40_d3, ff40_d4, ff40_d5, ff40_d6, ff40_d7;
+	logic ff42_d0, ff42_d1, ff42_d2, ff42_d3, ff42_d4, ff42_d5, ff42_d6, ff42_d7;
+	logic ff43_d0, ff43_d1, ff43_d2, ff43_d3, ff43_d4, ff43_d5, ff43_d6, ff43_d7;
 	logic ff45_d0, ff45_d1, ff45_d2, ff45_d3, ff45_d4, ff45_d5, ff45_d6, ff45_d7;
+	logic ff4a_d0, ff4a_d1, ff4a_d2, ff4a_d3, ff4a_d4, ff4a_d5, ff4a_d6, ff4a_d7;
+	logic ff4b_d0, ff4b_d1, ff4b_d2, ff4b_d3, ff4b_d4, ff4b_d5, ff4b_d6, ff4b_d7;
 
 	logic l113, int_vbl, int_vbl_buf, int_stat, clkpipe;
 
@@ -503,6 +499,7 @@ module dmg;
 	channel4       p20_channel4(.*);
 	video_control  p21_video_control(.*);
 	ppu_decode     p22_ppu_decode(.*);
+	video_regs     p23_video_regs(.*);
 	vram_interface p25_vram_interface(.*);
 
 	/* for convinience */
