@@ -323,13 +323,9 @@ module dmg;
 	logic lena = 0;
 	logic xymu = 0;
 	logic leko = 0;
-	logic xuha = 0;
 	logic vyno = 0;
 	logic vujo = 0;
 	logic vymu = 0;
-	logic neta = 0;
-	logic pore = 0;
-	logic potu = 0;
 	logic npyju = 1;
 	logic npowy = 1;
 	logic npoju = 1;
@@ -349,6 +345,19 @@ module dmg;
 	assign myvo = 0;
 	assign sylo = 0;
 	assign roxy = 0;
+	assign pore = 0;
+	assign potu = 0;
+	assign neta = 0;
+	assign xuha = 0;
+	assign depo = 0;
+	assign lesy = 0;
+	assign lota = 0;
+	assign lyku = 0;
+	assign roby = 0;
+	assign tyta = 0;
+	assign tyco = 0;
+	assign soka = 0;
+	assign xovu = 0;
 
 	logic clk1, clk2, clk4, clk5;
 
@@ -424,6 +433,8 @@ module dmg;
 	logic wuvu_nq, fepo, tofu, avap, pova, acyl, atej;
 	logic waru, xare, mosu, lyry, myvo, sylo, roxy;
 	logic loby, nyka, pory, tomu, poky, roxo, segu;
+	logic pore, potu, neta, xuha, depo, lesy, lota;
+	logic lyku, roby, tyta, tyco, soka, xovu, vava;
 
 	logic ffxx, nffxx, nfexxffxx, a00_07, saro;
 	logic ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a;
@@ -507,6 +518,7 @@ module dmg;
 	video_regs     p23_video_regs(.*);
 	lcd_control    p24_lcd_control(.*);
 	vram_interface p25_vram_interface(.*);
+	background     p26_background(.*);
 	palettes       p36_palettes(.*);
 
 	/* for convinience */

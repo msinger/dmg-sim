@@ -24,6 +24,7 @@ p22_ppu_decode.sv \
 p23_video_regs.sv \
 p24_lcd_control.sv \
 p25_vram_interface.sv \
+p26_background.sv \
 p36_palettes.sv
 
 DMG_DEPENDENCIES = \
