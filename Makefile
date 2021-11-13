@@ -22,6 +22,7 @@ p20_channel4.sv \
 p21_video_control.sv \
 p22_ppu_decode.sv \
 p23_video_regs.sv \
+p24_lcd_control.sv \
 p25_vram_interface.sv
 
 DMG_DEPENDENCIES = \

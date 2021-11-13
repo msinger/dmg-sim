@@ -340,12 +340,15 @@ module dmg;
 	logic nrawu = 1;
 	assign wuvu_nq = 0;
 	assign fepo = 0;
-	assign tofu = 0;
 	assign avap = 0;
 	assign pova = 0;
 	assign acyl = 0;
 	assign atej = 0;
-	assign clkpipe = 0;
+	assign mosu = 0;
+	assign lyry = 0;
+	assign myvo = 0;
+	assign sylo = 0;
+	assign roxy = 0;
 
 	logic clk1, clk2, clk4, clk5;
 
@@ -419,7 +422,8 @@ module dmg;
 
 	logic talu, xyvo, nnype, wodu, napo, PURE, sela, nxymu;
 	logic wuvu_nq, fepo, tofu, avap, pova, acyl, atej;
-	logic waru, xare;
+	logic waru, xare, mosu, lyry, myvo, sylo, roxy;
+	logic loby, nyka, pory, tomu, poky, roxo, segu;
 
 	logic ffxx, nffxx, nfexxffxx, a00_07, saro;
 	logic ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a;
@@ -453,7 +457,7 @@ module dmg;
 
 	logic l113, int_vbl, int_vbl_buf, int_stat, clkpipe;
 
-	logic pin_cpg, cp;
+	logic pin_cpg, cp, pin_cpl, pin_fr, pin_st, pin_s;
 
 	logic [7:0] v, h, nh;
 
@@ -500,6 +504,7 @@ module dmg;
 	video_control  p21_video_control(.*);
 	ppu_decode     p22_ppu_decode(.*);
 	video_regs     p23_video_regs(.*);
+	lcd_control    p24_lcd_control(.*);
 	vram_interface p25_vram_interface(.*);
 
 	/* for convinience */
