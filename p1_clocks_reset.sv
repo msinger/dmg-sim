@@ -181,7 +181,6 @@ module clocks_reset(
 	assign nreset_div = ufol;
 
 	logic tama, unyk, tero, uner, ufor, ukup, uvyn, tama16384;
-	logic _32768hz, _131072hz, _524288hz;
 	dffr_bp dffr_tama(!unyk,    nreset_div, !tama, tama);
 	dffr_bp dffr_unyk(!tero,    nreset_div, !unyk, unyk);
 	dffr_bp dffr_tero(!uner,    nreset_div, !tero, tero);
@@ -191,11 +190,8 @@ module clocks_reset(
 	assign #T_INV  uvyn = !tama;
 	assign tama16384 = !tama;
 	assign _16384hz  = uvyn;
-	assign _32768hz  = unyk;
 	assign _65536hz  = tero;
-	assign _131072hz = uner;
 	assign _262144hz = ufor;
-	assign _524288hz = ukup;
 
 	logic ulur, ugot, tulu, tugo, tofe, teru, sola, subu, teka, uket, upof;
 	logic umek, urek, utok, sapy, umer, rave, ryso, udor;
@@ -238,7 +234,6 @@ module clocks_reset(
 	assign d = { tatu, sawa, sepu, upug, tuse, temu, taku, tawu };
 
 	logic atus, coke, bara, caru, bylu, bure, fyne, culo, apef, gale, beze, bule, gexy, cofu, baru, horu, bufy, byfe;
-	logic _512hz, _256hz, _128hz;
 	dffr_bp dffr_bara(coke,  atus, umer,  bara); // check edge
 	dffr_bp dffr_caru(bure,  atus, !caru, caru); // check edge
 	dffr_bp dffr_bylu(!caru, atus, !bylu, bylu); // check edge
@@ -257,22 +252,17 @@ module clocks_reset(
 	assign #T_INV  bufy = !cofu;
 	assign #T_INV  baru = !bule;
 	assign #T_INV  byfe = !baru;
-	assign _512hz = bara;
-	assign _256hz = caru;
-	assign _128hz = bylu;
 	assign horu_512hz = horu;
 	assign bufy_256hz = bufy;
 	assign byfe_128hz = byfe;
 
-	logic bopo, atyk, avok, bavu, jeso, hama, _2097152hz, _1048576hz;
+	logic bopo, atyk, avok, bavu, jeso, hama;
 	dffr_bp dffr_atyk(aryf_4mhz, bopo,        !atyk, atyk); // check edge
 	dffr_bp dffr_avok(!atyk,     bopo,        !avok, avok); // check edge
 	dffr_bp dffr_jeso(bavu,      napu_reset5, !jeso, jeso); // check edge
 	assign #T_INV  bopo = !apu_reset;
 	assign #T_INV  bavu = !avok;
 	assign #T_INV  hama = !(!jeso);
-	assign _2097152hz = atyk;
-	assign _1048576hz = avok;
 	assign jeso_512k = jeso;
 	assign hama_512k = hama;
 

@@ -460,6 +460,7 @@ module dmg;
 	logic pin_cpg, cp, pin_cpl, pin_fr, pin_st, pin_s;
 
 	logic [7:0] v, h, nh;
+	logic [7:0] bgp_d, obp0_d, obp1_d;
 
 	logic [10:0] acc_d;
 	logic [3:0]  wave_play_d;
@@ -506,6 +507,7 @@ module dmg;
 	video_regs     p23_video_regs(.*);
 	lcd_control    p24_lcd_control(.*);
 	vram_interface p25_vram_interface(.*);
+	palettes       p36_palettes(.*);
 
 	/* for convinience */
 	logic [15:0] div16;
