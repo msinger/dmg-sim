@@ -321,7 +321,6 @@ module dmg;
 	logic texy = 0;
 	logic myma = 1;
 	logic lena = 0;
-	logic xymu = 0;
 	logic leko = 0;
 	logic vyno = 0;
 	logic vujo = 0;

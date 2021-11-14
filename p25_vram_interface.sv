@@ -21,7 +21,7 @@ module vram_interface(
 
 		input logic t1_nt2, dma_run, mopa_nphi, nfexxffxx, nreset6, cpu_rd_sync, vram_to_oam, dma_addr_ext, ff40_d4,
 
-		input  logic from_cpu3, roru, lula, bedo, saro, tacu, tuvo, acyl, xyso, texo, abuz, texy, myma, lena, xymu, leko,
+		input  logic from_cpu3, roru, lula, bedo, saro, tacu, tuvo, acyl, xyso, texo, abuz, texy, myma, lena, nxymu, leko,
 		input  logic xuha, vyno, vujo, vymu, neta, pore, potu, npyju, npowy, npoju, npulo, npoxa, npyzo, npozo, nrawu,
 		output logic cota, wuko, syro
 	);
@@ -122,7 +122,7 @@ module vram_interface(
 	assign #T_INV  ruvy = !sale;
 	assign #T_NOR  sutu = !(lena || vram_to_oam || texy || sere);
 	assign #T_NAND sohy = !(tyjy && sere);
-	assign #T_INV  ropy = !xymu;
+	assign #T_INV  ropy = !nxymu;
 	assign #T_AND  sere = tole && ropy;
 	assign #T_AND  sazo = ruvy && sere;
 	assign #T_INV  ryje = !sazo;
@@ -192,7 +192,7 @@ module vram_interface(
 	assign d[2] = sedu;
 
 	logic xane, xedu, xeca, xybo, rysu, ruse, rumo, xyne, xoba, xody, ryna, rese, xaky, xopo, xuxu;
-	assign #T_NOR  xane = !(vram_to_oam || xymu);
+	assign #T_NOR  xane = !(vram_to_oam || nxymu);
 	assign #T_INV  xedu = !xane;
 	assign #T_TRI  xeca = !xedu ? !a[4]  : 'z;
 	assign #T_TRI  xybo = !xedu ? !a[7]  : 'z;
