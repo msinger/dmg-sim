@@ -20,14 +20,14 @@ module wave_ram(
 	logic bezu, desa, bava, bune, bade, baty, desy, dugu;
 	logic bepa, bora, cevo, cuvo, begu, budy, cesy, cyfo;
 	logic copo, cuzo, dazy, date;
-	dffr_a dffr_bepa(coju, acor, wave_rd_d[7], bepa); // check clk edge
-	dffr_a dffr_bora(baja, acor, wave_rd_d[6], bora); // check clk edge
-	dffr_a dffr_cevo(bufe, acor, wave_rd_d[5], cevo); // check clk edge
-	dffr_a dffr_cuvo(beka, acor, wave_rd_d[4], cuvo); // check clk edge
-	dffr_a dffr_begu(coju, acor, wave_rd_d[3], begu); // check clk edge
-	dffr_a dffr_budy(baja, acor, wave_rd_d[2], budy); // check clk edge
-	dffr_a dffr_cesy(bufe, acor, wave_rd_d[1], cesy); // check clk edge
-	dffr_a dffr_cyfo(beka, acor, wave_rd_d[0], cyfo); // check clk edge
+	dffr_a dffr_bepa(!butu_512khz, acor, wave_rd_d[7], bepa);
+	dffr_a dffr_bora(!butu_512khz, acor, wave_rd_d[6], bora);
+	dffr_a dffr_cevo(!butu_512khz, acor, wave_rd_d[5], cevo);
+	dffr_a dffr_cuvo(!butu_512khz, acor, wave_rd_d[4], cuvo);
+	dffr_a dffr_begu(!butu_512khz, acor, wave_rd_d[3], begu);
+	dffr_a dffr_budy(!butu_512khz, acor, wave_rd_d[2], budy);
+	dffr_a dffr_cesy(!butu_512khz, acor, wave_rd_d[1], cesy);
+	dffr_a dffr_cyfo(!butu_512khz, acor, wave_rd_d[0], cyfo);
 	assign #T_INV  beka = !butu_512khz;
 	assign #T_INV  coju = !butu_512khz;
 	assign #T_INV  baja = !butu_512khz;
@@ -58,10 +58,10 @@ module wave_ram(
 
 	logic abur, bama, aruc, bory, beta, azet, busa, cozy, azor, buku, boxo;
 	logic boru, bano, atur, azus, aler, butu;
-	dffr_bp dffr_azet(aruc,      bama, azus, azet); // check clk edge
-	dffr_bp dffr_busa(amuk_4mhz, bama, gase, busa); // check clk edge
-	dffr_bp dffr_bano(cozy,      bama, busa, bano); // check clk edge
-	dffr_bp dffr_azus(amuk_4mhz, bama, bano, azus); // check clk edge
+	dffr_bp dffr_azet(aruc,      bama, azus, azet);
+	dffr_bp dffr_busa(amuk_4mhz, bama, gase, busa);
+	dffr_bp dffr_bano(cozy,      bama, busa, bano);
+	dffr_bp dffr_azus(amuk_4mhz, bama, bano, azus);
 	assign #T_INV  abur = !buke;
 	assign #T_INV  bama = !apu_reset;
 	assign #T_INV  aruc = !amuk_4mhz;

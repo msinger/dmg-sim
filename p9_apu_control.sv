@@ -24,8 +24,8 @@ module apu_control(
 	);
 
 	logic ajer, bata, calo, dyfa, najer_2mhz;
-	dffr_bp dffr_ajer(apuv_4mhz, napu_reset3, !ajer, ajer); // check edge
-	dffr_bp dffr_calo(bata,      napu_reset,  !calo, calo); // check edge
+	dffr_bp dffr_ajer(apuv_4mhz, napu_reset3, !ajer, ajer);
+	dffr_bp dffr_calo(bata,      napu_reset,  !calo, calo);
 	assign #T_INV  bata = !ajer_2mhz;
 	assign #T_INV  dyfa = !(!calo);
 	assign ajer_2mhz  = ajer;
@@ -48,10 +48,10 @@ module apu_control(
 
 	logic kydu, jure, hapo, gufo, jyro, kuby, keba, hawu, hada, hope, bopy, bowy, baza, cely, cone;
 	logic kepy, etuc, foku, efop, fero, edek;
-	dffr_bp dffr_hada(hawu,       gufo,        d[7], hada); // check edge
-	dffr_bp dffr_bowy(bopy,       kepy,        d[5], bowy); // check edge
-	dffr_bp dffr_baza(najer_2mhz, napu_reset3, bowy, baza); // check edge
-	dffr_a  dffr_fero(foku,       kepy,        efop, fero); // check edge
+	dffr_bp dffr_hada(hawu,       gufo,        d[7], hada);
+	dffr_bp dffr_bowy(bopy,       kepy,        d[5], bowy);
+	dffr_bp dffr_baza(najer_2mhz, napu_reset3, bowy, baza);
+	dffr_a  dffr_fero(!etuc,      kepy,        efop, fero);
 	assign #T_INV  kydu = !ncpu_rd;
 	assign #T_NAND jure = !(kydu && ff26);
 	assign #T_NAND hawu = !(ff26 && apu_wr);
@@ -78,14 +78,14 @@ module apu_control(
 	logic aguz, byma, befu, adak, bosu, baxy, bubu, bowe, ataf;
 	logic bedu, cozu, bumo, byre, apos, ager, byga, apeg;
 	logic atum, bocy, arux, amad, axem, avud, awed, akod;
-	dffr_a dffr_bedu(bubu, jyro, d[7], bedu); // check edge
-	dffr_a dffr_cozu(bubu, jyro, d[6], cozu); // check edge
-	dffr_a dffr_bumo(bubu, jyro, d[5], bumo); // check edge
-	dffr_a dffr_byre(bubu, jyro, d[4], byre); // check edge
-	dffr_a dffr_apos(ataf, jyro, d[3], apos); // check edge
-	dffr_a dffr_ager(ataf, jyro, d[2], ager); // check edge
-	dffr_a dffr_byga(ataf, jyro, d[1], byga); // check edge
-	dffr_a dffr_apeg(ataf, jyro, d[0], apeg); // check edge
+	dffr_a dffr_bedu(!baxy, jyro, d[7], bedu);
+	dffr_a dffr_cozu(!baxy, jyro, d[6], cozu);
+	dffr_a dffr_bumo(!baxy, jyro, d[5], bumo);
+	dffr_a dffr_byre(!baxy, jyro, d[4], byre);
+	dffr_a dffr_apos(!bowe, jyro, d[3], apos);
+	dffr_a dffr_ager(!bowe, jyro, d[2], ager);
+	dffr_a dffr_byga(!bowe, jyro, d[1], byga);
+	dffr_a dffr_apeg(!bowe, jyro, d[0], apeg);
 	assign #T_INV  aguz = !cpu_rd;
 	assign #T_INV  byma = !ff24;
 	assign #T_NOR  befu = !(aguz || byma);
@@ -116,14 +116,14 @@ module apu_control(
 	logic gepa, hefa, gumu, bupo, bono, byfa;
 	logic bogu, bafo, atuf, anev, bepu, befo, bume, bofa;
 	logic capu, caga, boca, buzu, cere, cada, cavu, cudu;
-	dffr_a dffr_bogu(bono, jyro, d[1], bogu); // check edge
-	dffr_a dffr_bafo(bono, jyro, d[2], bafo); // check edge
-	dffr_a dffr_atuf(bono, jyro, d[3], atuf); // check edge
-	dffr_a dffr_anev(bono, jyro, d[0], anev); // check edge
-	dffr_a dffr_bepu(byfa, jyro, d[7], bepu); // check edge
-	dffr_a dffr_befo(byfa, jyro, d[6], befo); // check edge
-	dffr_a dffr_bume(byfa, jyro, d[4], bume); // check edge
-	dffr_a dffr_bofa(byfa, jyro, d[5], bofa); // check edge
+	dffr_a dffr_bogu(!bono, jyro, d[1], bogu);
+	dffr_a dffr_bafo(!bono, jyro, d[2], bafo);
+	dffr_a dffr_atuf(!bono, jyro, d[3], atuf);
+	dffr_a dffr_anev(!bono, jyro, d[0], anev);
+	dffr_a dffr_bepu(!byfa, jyro, d[7], bepu);
+	dffr_a dffr_befo(!byfa, jyro, d[6], befo);
+	dffr_a dffr_bume(!byfa, jyro, d[4], bume);
+	dffr_a dffr_bofa(!byfa, jyro, d[5], bofa);
 	assign #T_INV  gepa = !ff25;
 	assign #T_NOR  hefa = !(ncpu_rd || gepa);
 	assign #T_INV  gumu = !hefa;

@@ -95,7 +95,7 @@ module vram_interface(
 	assign #T_INV  cota = !bycu;
 
 	logic tefa, sose, tuca, tuja, tegu, tavy, sycy, soto, tuto, sudo, tefy, sale, tyjy, tole;
-	dffr_bp dffr_soto(sycy, nreset6, !soto, soto); // check edge
+	dffr_bp dffr_soto(sycy, nreset6, !soto, soto);
 	assign #T_INV  syro = !nfexxffxx;
 	assign #T_NOR  tefa = !(syro || texo);
 	assign #T_AND  sose = a[15] && tefa;

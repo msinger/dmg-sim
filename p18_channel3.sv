@@ -27,13 +27,13 @@ module channel3(
 	logic fety, foto, etan, gyry, dero, jeco, hony, geno;
 	logic efar, erus, efuz, exel, efal, bole, agyl, afum, axol;
 	logic fapy, faro, fote, fana, fera;
-	dffr_bp dffr_huno(jyfo,  gafu, !huno, huno); // check clk edge
-	dffr_bp dffr_fety(!efal, gyry, !fety, fety); // check clk edge
-	dffr_bp dffr_efar(dero,  etan, !efar, efar); // check clk edge
-	dffr_bp dffr_erus(!efar, etan, !erus, erus); // check clk edge
-	dffr_bp dffr_efuz(!erus, etan, !efuz, efuz); // check clk edge
-	dffr_bp dffr_exel(!efuz, etan, !exel, exel); // check clk edge
-	dffr_bp dffr_efal(!exel, etan, !efal, efal); // check clk edge
+	dffr_bp dffr_huno(jyfo,  gafu, !huno, huno);
+	dffr_bp dffr_fety(!efal, gyry, !fety, fety);
+	dffr_bp dffr_efar(dero,  etan, !efar, efar);
+	dffr_bp dffr_erus(!efar, etan, !erus, erus);
+	dffr_bp dffr_efuz(!erus, etan, !efuz, efuz);
+	dffr_bp dffr_exel(!efuz, etan, !exel, exel);
+	dffr_bp dffr_efal(!exel, etan, !efal, efal);
 	tffd tffd_kutu(juty, kyko, ff1d_d0, kutu);
 	tffd tffd_kupe(kutu, kyko, ff1d_d1, kupe);
 	tffd tffd_kunu(kupe, kyko, ff1d_d2, kunu);
@@ -94,7 +94,7 @@ module channel3(
 	assign d[4] = fera;
 
 	logic gedo, fygo, fozu, ezas, calu, doru, davo, coka, ered;
-	dffr_bp dffr_davo(ajer_2mhz, calu, doru, davo); // check clk edge
+	dffr_bp dffr_davo(ajer_2mhz, calu, doru, davo);
 	nor_srlatch latch_fozu(gara, fygo, fozu,);
 	assign #T_AND  gedo = fexu && ff1e_d6;
 	assign #T_OR   fygo = apu_reset || gedo || nff1a_d7;
@@ -108,7 +108,7 @@ module channel3(
 
 	logic guda, fexu, gepy, genu, falu;
 	logic gevo, fory, gatu, gapo, gemo, foro, fave, fyru;
-	dffr_bp dffr_fexu(!fyru, guda, !fexu, fexu); // check clk edge
+	dffr_bp dffr_fexu(!fyru, guda, !fexu, fexu);
 	tffd tffd_gevo(genu, ff1b_wr2, d[0], gevo);
 	tffd tffd_fory(gevo, ff1b_wr2, d[1], fory);
 	tffd tffd_gatu(fory, ff1b_wr2, d[2], gatu);

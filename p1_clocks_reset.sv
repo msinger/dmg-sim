@@ -234,9 +234,9 @@ module clocks_reset(
 	assign d = { tatu, sawa, sepu, upug, tuse, temu, taku, tawu };
 
 	logic atus, coke, bara, caru, bylu, bure, fyne, culo, apef, gale, beze, bule, gexy, cofu, baru, horu, bufy, byfe;
-	dffr_bp dffr_bara(coke,  atus, umer,  bara); // check edge
-	dffr_bp dffr_caru(bure,  atus, !caru, caru); // check edge
-	dffr_bp dffr_bylu(!caru, atus, !bylu, bylu); // check edge
+	dffr_bp dffr_bara(coke,  atus, umer,  bara);
+	dffr_bp dffr_caru(bure,  atus, !caru, caru);
+	dffr_bp dffr_bylu(!caru, atus, !bylu, bylu);
 	assign #T_INV  atus = !apu_reset;
 	assign #T_INV  coke = !ajer_2mhz;
 	assign #T_INV  bure = !(!bara);
@@ -257,9 +257,9 @@ module clocks_reset(
 	assign byfe_128hz = byfe;
 
 	logic bopo, atyk, avok, bavu, jeso, hama;
-	dffr_bp dffr_atyk(aryf_4mhz, bopo,        !atyk, atyk); // check edge
-	dffr_bp dffr_avok(!atyk,     bopo,        !avok, avok); // check edge
-	dffr_bp dffr_jeso(bavu,      napu_reset5, !jeso, jeso); // check edge
+	dffr_bp dffr_atyk(aryf_4mhz, bopo,        !atyk, atyk);
+	dffr_bp dffr_avok(!atyk,     bopo,        !avok, avok);
+	dffr_bp dffr_jeso(bavu,      napu_reset5, !jeso, jeso);
 	assign #T_INV  bopo = !apu_reset;
 	assign #T_INV  bavu = !avok;
 	assign #T_INV  hama = !(!jeso);

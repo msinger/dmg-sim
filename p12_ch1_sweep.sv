@@ -28,50 +28,50 @@ module ch1_sweep(
 	logic beku, agez, elux, exac, fedo, fude, jota, jolu, goga, jefa, fabu;
 	logic culu, dozy, cale, dyme, fure, goly, kefe, hefy, gopo, gela, gylo;
 	logic deva, eter, defa, edok, epyr, gele, jete, jape, hele, hopa, hora;
-	dffsr dffsr_axan(ch1_freq_upd1, afeg, apaj, coru, axan); // check clk edge
-	dffsr dffsr_evab(ch1_freq_upd1, budo, bovu, dule, evab); // check clk edge
-	dffsr dffsr_dygy(ch1_freq_upd1, bugu, boxu, dyxe, dygy); // check clk edge
-	dffsr dffsr_hopo(ch1_freq_upd2, etol, esel, etek, hopo); // check clk edge
-	dffsr dffsr_hyxu(ch1_freq_upd2, eler, eluf, fego, hyxu); // check clk edge
-	dffsr dffsr_holu(ch1_freq_upd2, kypa, kaju, geva, holu); // check clk edge
-	dffsr dffsr_fely(ch1_freq_upd2, kovu, kapo, hexo, fely); // check clk edge
-	dffsr dffsr_edul(ch1_freq_upd2, gope, gamo, jory, edul); // check clk edge
-	dffsr dffsr_havo(ch1_freq_upd2, golo, gyfu, jule, havo); // check clk edge
-	dffsr dffsr_jyka(ch1_freq_upd2, geta, gato, halu, jyka); // check clk edge
-	dffsr dffsr_hyka(ch1_freq_upd2, gylu, efor, guxa, hyka); // check clk edge
-	dffsr dffsr_beku(becy,          beju, avuf,   '0, beku); // check clk edge
-	dffsr dffsr_agez(becy,          beso, afux, beku, agez); // check clk edge
-	dffsr dffsr_elux(becy,          bege, agor, agez, elux); // check clk edge
-	dffsr dffsr_exac(becy,          dace, bewo, elux, exac); // check clk edge
-	dffsr dffsr_fedo(ejyb,          ekem, enok, exac, fedo); // check clk edge
-	dffsr dffsr_fude(ejyb,          govo, ezuk, fedo, fude); // check clk edge
-	dffsr dffsr_jota(ejyb,          kola, kybo, fude, jota); // check clk edge
-	dffsr dffsr_jolu(ejyb,          kyry, keto, jota, jolu); // check clk edge
-	dffsr dffsr_goga(ch1_shift_clk, hawy, hyvu, jolu, goga); // check clk edge
-	dffsr dffsr_jefa(ch1_shift_clk, hola, hobu, goga, jefa); // check clk edge
-	dffsr dffsr_fabu(ch1_shift_clk, hozu, jado, jefa, fabu); // check clk edge
-	dffr_c dffr_doly(adad, kyly, axan, doly); // check clk edge
-	dffr_c dffr_dofy(adad, kyly, evab, dofy); // check clk edge
-	dffr_c dffr_dexe(adad, kyly, dygy, dexe); // check clk edge
-	dffr_c dffr_dele(adad, kyly, hopo, dele); // check clk edge
-	dffr_c dffr_exap(adad, kyly, hyxu, exap); // check clk edge
-	dffr_c dffr_faxo(adad, kyly, holu, faxo); // check clk edge
-	dffr_c dffr_gyme(adad, kyly, fely, gyme); // check clk edge
-	dffr_c dffr_jyme(adad, kyly, edul, jyme); // check clk edge
-	dffr_c dffr_kare(adad, kyly, havo, kare); // check clk edge
-	dffr_c dffr_jode(adad, kyly, jyka, jode); // check clk edge
-	dffr_c dffr_galo(adad, kyly, hyka, galo); // check clk edge
-	dffr_c dffr_deva(adad, kyly, culu, deva); // check clk edge
-	dffr_c dffr_eter(adad, kyly, dozy, eter); // check clk edge
-	dffr_c dffr_defa(adad, kyly, cale, defa); // check clk edge
-	dffr_c dffr_edok(adad, kyly, dyme, edok); // check clk edge
-	dffr_c dffr_epyr(adad, kyly, fure, epyr); // check clk edge
-	dffr_c dffr_gele(adad, kyly, goly, gele); // check clk edge
-	dffr_c dffr_jete(adad, kyly, kefe, jete); // check clk edge
-	dffr_c dffr_jape(adad, kyly, hefy, jape); // check clk edge
-	dffr_c dffr_hele(adad, kyly, gopo, hele); // check clk edge
-	dffr_c dffr_hopa(adad, kyly, gela, hopa); // check clk edge
-	dffr_c dffr_hora(adad, kyly, gylo, hora); // check clk edge
+	dffsr dffsr_axan(ch1_freq_upd1, afeg, apaj, coru, axan);
+	dffsr dffsr_evab(ch1_freq_upd1, budo, bovu, dule, evab);
+	dffsr dffsr_dygy(ch1_freq_upd1, bugu, boxu, dyxe, dygy);
+	dffsr dffsr_hopo(ch1_freq_upd2, etol, esel, etek, hopo);
+	dffsr dffsr_hyxu(ch1_freq_upd2, eler, eluf, fego, hyxu);
+	dffsr dffsr_holu(ch1_freq_upd2, kypa, kaju, geva, holu);
+	dffsr dffsr_fely(ch1_freq_upd2, kovu, kapo, hexo, fely);
+	dffsr dffsr_edul(ch1_freq_upd2, gope, gamo, jory, edul);
+	dffsr dffsr_havo(ch1_freq_upd2, golo, gyfu, jule, havo);
+	dffsr dffsr_jyka(ch1_freq_upd2, geta, gato, halu, jyka);
+	dffsr dffsr_hyka(ch1_freq_upd2, gylu, efor, guxa, hyka);
+	dffsr dffsr_beku(becy,          beju, avuf,   '0, beku);
+	dffsr dffsr_agez(becy,          beso, afux, beku, agez);
+	dffsr dffsr_elux(becy,          bege, agor, agez, elux);
+	dffsr dffsr_exac(becy,          dace, bewo, elux, exac);
+	dffsr dffsr_fedo(ejyb,          ekem, enok, exac, fedo);
+	dffsr dffsr_fude(ejyb,          govo, ezuk, fedo, fude);
+	dffsr dffsr_jota(ejyb,          kola, kybo, fude, jota);
+	dffsr dffsr_jolu(ejyb,          kyry, keto, jota, jolu);
+	dffsr dffsr_goga(ch1_shift_clk, hawy, hyvu, jolu, goga);
+	dffsr dffsr_jefa(ch1_shift_clk, hola, hobu, goga, jefa);
+	dffsr dffsr_fabu(ch1_shift_clk, hozu, jado, jefa, fabu);
+	dffr_c dffr_doly(adad, kyly, axan, doly);
+	dffr_c dffr_dofy(adad, kyly, evab, dofy);
+	dffr_c dffr_dexe(adad, kyly, dygy, dexe);
+	dffr_c dffr_dele(adad, kyly, hopo, dele);
+	dffr_c dffr_exap(adad, kyly, hyxu, exap);
+	dffr_c dffr_faxo(adad, kyly, holu, faxo);
+	dffr_c dffr_gyme(adad, kyly, fely, gyme);
+	dffr_c dffr_jyme(adad, kyly, edul, jyme);
+	dffr_c dffr_kare(adad, kyly, havo, kare);
+	dffr_c dffr_jode(adad, kyly, jyka, jode);
+	dffr_c dffr_galo(adad, kyly, hyka, galo);
+	dffr_c dffr_deva(adad, kyly, culu, deva);
+	dffr_c dffr_eter(adad, kyly, dozy, eter);
+	dffr_c dffr_defa(adad, kyly, cale, defa);
+	dffr_c dffr_edok(adad, kyly, dyme, edok);
+	dffr_c dffr_epyr(adad, kyly, fure, epyr);
+	dffr_c dffr_gele(adad, kyly, goly, gele);
+	dffr_c dffr_jete(adad, kyly, kefe, jete);
+	dffr_c dffr_jape(adad, kyly, hefy, jape);
+	dffr_c dffr_hele(adad, kyly, gopo, hele);
+	dffr_c dffr_hopa(adad, kyly, gela, hopa);
+	dffr_c dffr_hora(adad, kyly, gylo, hora);
 	assign #T_AND  deby = apu_wr && ff14;
 	assign #T_NAND depu = !(apu_wr && ff13);
 	assign #T_INV  dyla = !depu;

@@ -29,21 +29,21 @@ module channel2(
 	logic buwe, azeg, atep, caza, byho, bufo, bodo, cemo, cemo_1mhz, buta, nbuta, cama;
 	logic fopy, etup, faru, gafa, fena, fomy, fete, feno;
 	logic dome, cyse, bonu, emyr, erat, fyre, gufy, amov, asog, anyv, anan;
-	dffr_bp dffr_jyna(hota,       katy,        !jyna,   jyna); // check clk edge
-	dffr_bp dffr_gyko(galu,       gyre,        !gyko,   gyko); // check clk edge
-	dffr_bp dffr_jopa(horu_512hz, hafe,        kyvo,    jopa); // check clk edge
-	dffr_bp dffr_hepo(jopa,       hypa,        gufy,    hepo); // check clk edge
-	dffr_bp dffr_dope(dova_phi,   cywu,        ff19_d7, dope); // check clk edge
-	dffr_bp dffr_elox(cemo_1mhz,  doxa,        ndala,   elox); // check clk edge
-	dffr_bp dffr_dory(cemo_1mhz,  cexe,        elox,    dory); // check clk edge
-	dffr_bp dffr_cyre(akyd_nq,    beny,        !cyre,   cyre); // check clk edge
-	dffr_bp dffr_cano(cule,       napu_reset2, !cano,   cano); // check clk edge
-	dffr_b  dffr_cagy(!cano,      napu_reset2, !cagy,   cagy); // check clk edge
-	dffr_b  dffr_dyve(!cagy,      napu_reset2, !dyve,   dyve); // check clk edge
-	dffr_bp dffr_atep(azeg,       buwe,        !atep,   atep); // check clk edge
-	dffr_bp dffr_caza(cemo,       cexe,        dory_q,  caza); // check clk edge
-	dffr_bp dffr_cemo(bufo,       byho,        !cemo,   cemo); // check clk edge
-	dffr_bp dffr_dome(davu,       napu_reset2, exes,    dome); // check clk edge
+	dffr_bp dffr_jyna(hota,       katy,        !jyna,   jyna);
+	dffr_bp dffr_gyko(galu,       gyre,        !gyko,   gyko);
+	dffr_bp dffr_jopa(horu_512hz, hafe,        kyvo,    jopa);
+	dffr_bp dffr_hepo(jopa,       hypa,        gufy,    hepo);
+	dffr_bp dffr_dope(dova_phi,   cywu,        ff19_d7, dope);
+	dffr_bp dffr_elox(cemo_1mhz,  doxa,        ndala,   elox);
+	dffr_bp dffr_dory(cemo_1mhz,  cexe,        elox,    dory);
+	dffr_bp dffr_cyre(akyd_nq,    beny,        !cyre,   cyre);
+	dffr_bp dffr_cano(cule,       napu_reset2, !cano,   cano);
+	dffr_b  dffr_cagy(!cano,      napu_reset2, !cagy,   cagy);
+	dffr_b  dffr_dyve(!cagy,      napu_reset2, !dyve,   dyve);
+	dffr_bp dffr_atep(azeg,       buwe,        !atep,   atep);
+	dffr_bp dffr_caza(cemo,       cexe,        dory_q,  caza);
+	dffr_bp dffr_cemo(bufo,       byho,        !cemo,   cemo);
+	dffr_bp dffr_dome(davu,       napu_reset2, exes,    dome);
 	tffd tffd_jore(kene, jake,   nff17_d0, jore);
 	tffd tffd_jona(jore, jake,   nff17_d1, jona);
 	tffd tffd_jevy(jona, jake,   nff17_d2, jevy);

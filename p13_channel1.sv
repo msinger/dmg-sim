@@ -20,7 +20,7 @@ module channel1(
 
 	logic boro, boka, cory, cero, capy, cyfa, hoca, bone, bery, femy, gepu, gexu, bugy, canu, bepe, cuso;
 	logic bacy, cavy, bovy, cuno, cura, eram;
-	dffr_bp dffr_cero(!eram, cory, !cero, cero); // check clk edge
+	dffr_bp dffr_cero(!eram, cory, !cero, cero);
 	tffd tffd_bacy(canu, bugy, d[0], bacy);
 	tffd tffd_cavy(bacy, bugy, d[1], cavy);
 	tffd tffd_bovy(cavy, bugy, d[2], bovy);
@@ -45,7 +45,7 @@ module channel1(
 	assign nch1_amp_en = hoca;
 
 	logic cala, comy, cyte, dyru, doka;
-	dffr_bp dffr_comy(cala, dyru, !comy, comy); // check clk edge
+	dffr_bp dffr_comy(cala, dyru, !comy, comy);
 	assign #T_INV  cala = !copu;
 	assign #T_INV  cyte = !comy;
 	assign #T_INV  cope = !cyte;
@@ -53,7 +53,7 @@ module channel1(
 	assign #T_AND  doka = comy && dyfa_1mhz;
 
 	logic dafa, cymu, bave, caxy, cypu, cupo, bury, coze, bexa;
-	dffr_bp dffr_bexa(ajer_2mhz, bury, coze, bexa); // check clk edge
+	dffr_bp dffr_bexa(ajer_2mhz, bury, coze, bexa);
 	tffd tffd_caxy(cypu, cymu, nff10_d6, caxy);
 	tffd tffd_cypu(cupo, cymu, nff10_d5, cypu);
 	tffd tffd_cupo(cate, cymu, nff10_d4, cupo);
@@ -68,15 +68,15 @@ module channel1(
 	logic hufu, hano, hake, koru, jade, kyno, kezu;
 	logic cyto, cara, duwo, cowe, boto;
 	logic hesu, heto, hyto, jufy, hevo, hoko, hemy, hafo, aceg, agof, ason, amop;
-	dffr_bp dffr_kaly(jone,       kado,        !kaly,       kaly); // check clk edge
-	dffr_bp dffr_kozy(horu_512hz, koro,        kote,        kozy); // check clk edge
-	dffr_bp dffr_fare(dyfa_1mhz,  erum,        ch1_restart, fare); // check clk edge
-	dffr_bp dffr_fyte(dyfa_1mhz,  erum,        fare,        fyte); // check clk edge
-	dffr_a  dffr_dupe(doge,       dado,        d[7],        dupe); // check clk edge
-	dffr_bp dffr_ezec(dova_phi,   duka,        dupe,        ezec); // check clk edge
-	dffr_bp dffr_feku(dyfa_1mhz,  eget,        nfyfo,       feku); // check clk edge
-	dffr_bp dffr_kyno(kozy,       koru,        jade,        kyno); // check clk edge
-	dffr_bp dffr_duwo(cope,       napu_reset6, ch1_bit,     duwo); // check clk edge
+	dffr_bp dffr_kaly(jone,       kado,        !kaly,       kaly);
+	dffr_bp dffr_kozy(horu_512hz, koro,        kote,        kozy);
+	dffr_bp dffr_fare(dyfa_1mhz,  erum,        ch1_restart, fare);
+	dffr_bp dffr_fyte(dyfa_1mhz,  erum,        fare,        fyte);
+	dffr_a  dffr_dupe(doge,       dado,        d[7],        dupe);
+	dffr_bp dffr_ezec(dova_phi,   duka,        dupe,        ezec);
+	dffr_bp dffr_feku(dyfa_1mhz,  eget,        nfyfo,       feku);
+	dffr_bp dffr_kyno(kozy,       koru,        jade,        kyno);
+	dffr_bp dffr_duwo(cope,       napu_reset6, ch1_bit,     duwo);
 	tffd tffd_jova(jola, kuxu,        nff12_d0, jova);
 	tffd tffd_kenu(jova, kuxu,        nff12_d1, kenu);
 	tffd tffd_kera(kenu, kuxu,        nff12_d2, kera);
@@ -133,7 +133,7 @@ module channel1(
 
 	logic dacu, cylu, copa, caja, byra, buge, copy, atat, BYTE, epuk, evol, femu, nfemu, egyp, cele, dody, egor, dapu;
 	logic nno_sweep;
-	dffr_bp dffr_byte(ajer_2mhz, atat, copy, BYTE); // check clk edge
+	dffr_bp dffr_byte(ajer_2mhz, atat, copy, BYTE);
 	tffd tffd_copa(dapu, cylu, nff10_d0, copa);
 	tffd tffd_caja(copa, cylu, nff10_d1, caja);
 	tffd tffd_byra(caja, cylu, nff10_d2, byra);
@@ -156,9 +156,9 @@ module channel1(
 
 	logic dajo, esut, eros, dape, duvo, ezoz, enek, codo, coso, cava, cevu, caxo, duna;
 	logic ch1_bit;
-	dffr_bp dffr_esut(dajo,  napu_reset6, !esut, esut); // check clk edge
-	dffr_b  dffr_eros(!esut, napu_reset6, !eros, eros); // check clk edge
-	dffr_b  dffr_dape(!eros, napu_reset6, !dape, dape); // check clk edge
+	dffr_bp dffr_esut(dajo,  napu_reset6, !esut, esut);
+	dffr_b  dffr_eros(!esut, napu_reset6, !eros, eros);
+	dffr_b  dffr_dape(!eros, napu_reset6, !dape, dape);
 	assign #T_INV  dajo = !cope;
 	assign #T_INV  duvo = !esut;
 	assign #T_AND  ezoz = dape && eros;

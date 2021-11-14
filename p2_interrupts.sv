@@ -14,10 +14,10 @@ module interrupts(
 	);
 
 	logic kery, batu, awob, acef, agem, apug, asok, int_jp;
-	dffr_bp dffr_batu(boga1mhz, nreset2, kery, batu); // check clk edge
-	dffr_bp dffr_acef(boga1mhz, nreset2, batu, acef); // check clk edge
-	dffr_bp dffr_agem(boga1mhz, nreset2, acef, agem); // check clk edge
-	dffr_bp dffr_apug(boga1mhz, nreset2, agem, apug); // check clk edge
+	dffr_bp dffr_batu(boga1mhz, nreset2, kery, batu);
+	dffr_bp dffr_acef(boga1mhz, nreset2, batu, acef);
+	dffr_bp dffr_agem(boga1mhz, nreset2, acef, agem);
+	dffr_bp dffr_apug(boga1mhz, nreset2, agem, apug);
 	dlatch latch_awob(boga1mhz, kery, awob);
 	assign #T_OR   kery = p13_c || p12_c || p11_c || p10_c;
 	assign #T_AND  asok = apug && batu;

@@ -15,13 +15,13 @@ module serial_link(
 
 	logic uwam, ucom, coty, cave, dawa, etaf, culy, caro, eluv, core, _8192hz;
 	logic kexu, jago, kujo, edyl, cafa, cylo, cyde, caly, coba, caby, nser_tick;
-	dffr_bp dffr_coty(_16384hz, uwam,    !coty, coty); // check clk edge
-	dffr_bp dffr_etaf(uwam,     caby,    d[7],  etaf); // check clk edge
-	dffr_bp dffr_culy(uwam,     nreset2, d[0],  culy); // check clk edge
-	dffr_bp dffr_cafa(dawa,     caro,    !cafa, cafa); // check clk edge
-	dffr_bp dffr_cylo(!cafa,    caro,    !cylo, cylo); // check clk edge
-	dffr_bp dffr_cyde(!cylo,    caro,    !cyde, cyde); // check clk edge
-	dffr_bp dffr_caly(!cyde,    caro,    !caly, caly); // check clk edge
+	dffr_bp dffr_coty(_16384hz, uwam,    !coty, coty);
+	dffr_bp dffr_etaf(uwam,     caby,    d[7],  etaf);
+	dffr_bp dffr_culy(uwam,     nreset2, d[0],  culy);
+	dffr_bp dffr_cafa(dawa,     caro,    !cafa, cafa);
+	dffr_bp dffr_cylo(!cafa,    caro,    !cylo, cylo);
+	dffr_bp dffr_cyde(!cylo,    caro,    !cyde, cyde);
+	dffr_bp dffr_caly(!cyde,    caro,    !caly, caly);
 	assign #T_NAND uwam = !(tovy_na0 && a[1] && cpu_wr && sano);
 	assign #T_AND  ucom = sano && cpu_rd && a[1] && tovy_na0;
 	assign #T_MUXI cave = !(culy ? coty : sck_in);
@@ -47,15 +47,15 @@ module serial_link(
 	logic sare, sefy, sano, urys, daku, epyt, deho, dawe, cage, ufeg;
 	logic cohy, dumo, dybo, daju, dyly, ehuj, efak, eguv, cufu, docu, dela, dyge, dola, elok, edel, efef;
 	logic cuba, degu, dyra, dojo, dovu, ejab, erod, eder, cugy, dude, detu, daso, dame, evok, efab, etak, elys;
-	dffsr dffsr_cuba(dawe, cufu, cohy, cage, cuba); // check clk edge
-	dffsr dffsr_degu(dawe, docu, dumo, cuba, degu); // check clk edge
-	dffsr dffsr_dyra(dawe, dela, dybo, degu, dyra); // check clk edge
-	dffsr dffsr_dojo(dawe, dyge, daju, dyra, dojo); // check clk edge
-	dffsr dffsr_dovu(epyt, dola, dyly, dojo, dovu); // check clk edge
-	dffsr dffsr_ejab(epyt, elok, ehuj, dovu, ejab); // check clk edge
-	dffsr dffsr_erod(epyt, edel, efak, ejab, erod); // check clk edge
-	dffsr dffsr_eder(epyt, efef, eguv, erod, eder); // check clk edge
-	dffr_bp dffr_elys(nser_tick, nreset2, eder, elys); // check clk edge
+	dffsr dffsr_cuba(dawe, cufu, cohy, cage, cuba);
+	dffsr dffsr_degu(dawe, docu, dumo, cuba, degu);
+	dffsr dffsr_dyra(dawe, dela, dybo, degu, dyra);
+	dffsr dffsr_dojo(dawe, dyge, daju, dyra, dojo);
+	dffsr dffsr_dovu(epyt, dola, dyly, dojo, dovu);
+	dffsr dffsr_ejab(epyt, elok, ehuj, dovu, ejab);
+	dffsr dffsr_erod(epyt, edel, efak, ejab, erod);
+	dffsr dffsr_eder(epyt, efef, eguv, erod, eder);
+	dffr_bp dffr_elys(nser_tick, nreset2, eder, elys);
 	assign #T_NOR  sare = !(a[7] || a[6] || a[5] || a[4] || a[3]);
 	assign #T_INV  sefy = !a[2];
 	assign #T_AND  sano = sefy && sare && ffxx;

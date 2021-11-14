@@ -26,14 +26,14 @@ module joypad_io(
 	logic kyme, kuko, keru, jale, kore, jeva, kywe, kena, kory, kale, kyhu, kasy;
 	logic byzo, kolo, keja, kevu, kapa, jeku, kuve, kema, kuro, kely, cofy, karu, koce, cudy;
 	logic kura, cela, jute, kecy, kole, kybu, kyto, kabu;
-	dffr_bp dffr_kyme(ff00wr, nreset2, d[3], kyme); // check clk edge
-	dffr_bp dffr_kuko(ff00wr, nreset2, d[6], kuko); // check clk edge
-	dffr_bp dffr_keru(ff00wr, nreset2, d[7], keru); // check clk edge
-	dffr_bp dffr_jale(ff00wr, nreset2, d[2], jale); // check clk edge
-	dffr_bp dffr_kely(ff00wr, nreset2, d[4], kely); // check clk edge
-	dffr_bp dffr_cofy(ff00wr, nreset2, d[5], cofy); // check clk edge
-	dffr_bp dffr_jute(ff00wr, nreset2, d[0], jute); // check clk edge
-	dffr_bp dffr_kecy(ff00wr, nreset2, d[1], kecy); // check clk edge
+	dffr_bp dffr_kyme(ff00wr, nreset2, d[3], kyme);
+	dffr_bp dffr_kuko(ff00wr, nreset2, d[6], kuko);
+	dffr_bp dffr_keru(ff00wr, nreset2, d[7], keru);
+	dffr_bp dffr_jale(ff00wr, nreset2, d[2], jale);
+	dffr_bp dffr_kely(ff00wr, nreset2, d[4], kely);
+	dffr_bp dffr_cofy(ff00wr, nreset2, d[5], cofy);
+	dffr_bp dffr_jute(ff00wr, nreset2, d[0], jute);
+	dffr_bp dffr_kecy(ff00wr, nreset2, d[1], kecy);
 	dlatch latch_kolo(byzo, p13_c, kolo);
 	dlatch latch_keja(byzo, p12_c, keja);
 	dlatch latch_kevu(byzo, p10_c, kevu);

@@ -17,8 +17,8 @@ module ch2_regs(
 	);
 
 	logic agyn, asyp, bygo, coro, bacu, budu, bamy, bera, ceka, cecy;
-	dffr_a dffr_bamy(budu, napu_reset2, d[7], bamy); // check clk edge
-	dffr_a dffr_bera(budu, napu_reset2, d[6], bera); // check clk edge
+	dffr_a dffr_bamy(!bacu, napu_reset2, d[7], bamy);
+	dffr_a dffr_bera(!bacu, napu_reset2, d[6], bera);
 	assign #T_NAND agyn = !(apu_wr && ff16);
 	assign #T_INV  asyp = !agyn;
 	assign #T_NOR  beny = !(asyp || apu_reset || elox_q);
@@ -38,9 +38,9 @@ module ch2_regs(
 
 	logic kypu, jenu, kysa, jupy, jany, jefu;
 	logic ff19_d0, ff19_d1, ff19_d2;
-	dffr_a dffr_jupy(kysa, kypu, d[2], jupy); // check clk edge
-	dffr_a dffr_jany(kysa, kypu, d[1], jany); // check clk edge
-	dffr_a dffr_jefu(kysa, kypu, d[0], jefu); // check clk edge
+	dffr_a dffr_jupy(!jenu, kypu, d[2], jupy);
+	dffr_a dffr_jany(!jenu, kypu, d[1], jany);
+	dffr_a dffr_jefu(!jenu, kypu, d[0], jefu);
 	assign #T_INV  kypu = !apu_reset;
 	assign #T_AND  jenu = ff19 && apu_wr;
 	assign #T_INV  kysa = !jenu;
@@ -51,14 +51,14 @@ module ch2_regs(
 	logic enuf, jybu, fyry, guru, gure, gexa, gere, jede;
 	logic gata, fore, gage, gura, gufe, hava, hore, hyfu;
 	logic hupe, gene, hyry, horo, here, havu, hyre, huvu;
-	dffr_a dffr_gata(enuf, jybu, d[4], gata); // check clk edge
-	dffr_a dffr_fore(enuf, jybu, d[3], fore); // check clk edge
-	dffr_a dffr_gage(enuf, jybu, d[7], gage); // check clk edge
-	dffr_a dffr_gura(enuf, jybu, d[6], gura); // check clk edge
-	dffr_a dffr_gufe(enuf, jybu, d[5], gufe); // check clk edge
-	dffr_a dffr_hava(jede, jybu, d[2], hava); // check clk edge
-	dffr_a dffr_hore(jede, jybu, d[1], hore); // check clk edge
-	dffr_a dffr_hyfu(jede, jybu, d[0], hyfu); // check clk edge
+	dffr_a dffr_gata(!enuf, jybu, d[4], gata);
+	dffr_a dffr_fore(!enuf, jybu, d[3], fore);
+	dffr_a dffr_gage(!enuf, jybu, d[7], gage);
+	dffr_a dffr_gura(!enuf, jybu, d[6], gura);
+	dffr_a dffr_gufe(!enuf, jybu, d[5], gufe);
+	dffr_a dffr_hava(!gere, jybu, d[2], hava);
+	dffr_a dffr_hore(!gere, jybu, d[1], hore);
+	dffr_a dffr_hyfu(!gere, jybu, d[0], hyfu);
 	assign #T_AND  enuf = ff17 && apu_wr;
 	assign #T_INV  jybu = !apu_reset;
 	assign #T_INV  fyry = !ff17;
@@ -102,15 +102,15 @@ module ch2_regs(
 	logic fava, fajy, fegu, fose, gero, gaky, gadu, gazo;
 	logic foge, fape, deta, gote, etap, hypo;
 	logic gala, hero, hepu, hevy, jeke, jaro, huna;
-	dffr_a dffr_fofe(esur, hude, d[0], fofe); // check clk edge
-	dffr_a dffr_fova(esur, hude, d[1], fova); // check clk edge
-	dffr_a dffr_fedy(esur, hude, d[2], fedy); // check clk edge
-	dffr_a dffr_fome(esur, hude, d[3], fome); // check clk edge
-	dffr_a dffr_fora(esur, hude, d[4], fora); // check clk edge
-	dffr_a dffr_goda(fyxo, hude, d[5], goda); // check clk edge
-	dffr_a dffr_gumy(fyxo, hude, d[6], gumy); // check clk edge
-	dffr_a dffr_gupu(fyxo, hude, d[7], gupu); // check clk edge
-	dffr_a dffr_etap(deta, dera, d[7], etap); // check clk edge
+	dffr_a dffr_fofe(!dosa, hude, d[0], fofe);
+	dffr_a dffr_fova(!dosa, hude, d[1], fova);
+	dffr_a dffr_fedy(!dosa, hude, d[2], fedy);
+	dffr_a dffr_fome(!dosa, hude, d[3], fome);
+	dffr_a dffr_fora(!dosa, hude, d[4], fora);
+	dffr_a dffr_goda(!exuc, hude, d[5], goda);
+	dffr_a dffr_gumy(!exuc, hude, d[6], gumy);
+	dffr_a dffr_gupu(!exuc, hude, d[7], gupu);
+	dffr_a dffr_etap(deta,  dera, d[7], etap);
 	tffd tffd_done(doca, cogu, fofe,    done);
 	tffd tffd_dynu(done, cogu, fova,    dynu);
 	tffd tffd_ezof(dynu, cogu, fedy,    ezof);
@@ -157,7 +157,7 @@ module ch2_regs(
 	assign d[0]      = huna;
 
 	logic gado, huma, evyf, fazo, emer, gojy;
-	dffr_a dffr_emer(evyf, fazo, d[6], emer); // check clk edge
+	dffr_a dffr_emer(evyf, fazo, d[6], emer);
 	assign #T_INV  gado = !ncpu_rd;
 	assign #T_NAND huma = !(ff19 && gado);
 	assign #T_NAND evyf = !(anuj && ff19);

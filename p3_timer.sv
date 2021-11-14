@@ -12,9 +12,9 @@ module timer(
 	);
 
 	logic sara, sora, uvyr, ubot, sabo, samy, sopu, ukap, teko, supe, rote, ryla, tecy, sogu;
-	dffr_bp dffr_sabo(sara, nreset2, d[2], sabo); // check clk edge
-	dffr_bp dffr_samy(sara, nreset2, d[1], samy); // check clk edge
-	dffr_bp dffr_sopu(sara, nreset2, d[0], sopu); // check clk edge
+	dffr_bp dffr_sabo(sara, nreset2, d[2], sabo);
+	dffr_bp dffr_samy(sara, nreset2, d[1], samy);
+	dffr_bp dffr_sopu(sara, nreset2, d[0], sopu);
 	assign #T_NAND sara = !(a[0] && a[1] && cpu_wr && ff04_ff07);
 	assign #T_AND  sora = ff04_ff07 && cpu_rd && a[1] && a[0];
 	assign #T_INV  uvyr = !_65536hz;
@@ -40,8 +40,8 @@ module timer(
 	tffd tffd_rage(ruby, mexu, rugy, rage);
 	tffd tffd_peda(rage, mexu, pyma, peda);
 	tffd tffd_nuga(peda, mexu, pagu, nuga);
-	dffr_bp dffr_nydu(boga1mhz, mugy,    nuga, nydu); // check clk edge
-	dffr_bp dffr_moba(boga1mhz, nreset2, mery, moba); // check clk edge
+	dffr_bp dffr_nydu(boga1mhz, mugy,    nuga, nydu);
+	dffr_bp dffr_moba(boga1mhz, nreset2, mery, moba);
 	assign #T_OR   muzu = from_cpu5 || tope;
 	assign #T_INV  meke = !int_timer;
 	assign #T_NAND mexu = !(muzu && nreset2 && meke);
@@ -69,14 +69,14 @@ module timer(
 	logic tovy, tuby, tyju, tope, mulo;
 	logic peto, muru, nyke, seta, sabu, tyru, sufy, tyva, reva, nola, pyre, sapu, sete, supo, sotu, salu;
 	logic refu, nyku, petu, rato, roke, sala, syru, soce, pyma, nada, nero, pagu, puxy, rolu, rugy, repa;
-	dffr_bp dffr_peto(tyju, nreset2, d[6], peto); // check clk edge
-	dffr_bp dffr_muru(tyju, nreset2, d[2], muru); // check clk edge
-	dffr_bp dffr_nyke(tyju, nreset2, d[1], nyke); // check clk edge
-	dffr_bp dffr_seta(tyju, nreset2, d[7], seta); // check clk edge
-	dffr_bp dffr_sabu(tyju, nreset2, d[0], sabu); // check clk edge
-	dffr_bp dffr_tyru(tyju, nreset2, d[4], tyru); // check clk edge
-	dffr_bp dffr_sufy(tyju, nreset2, d[5], sufy); // check clk edge
-	dffr_bp dffr_tyva(tyju, nreset2, d[3], tyva); // check clk edge
+	dffr_bp dffr_peto(tyju, nreset2, d[6], peto);
+	dffr_bp dffr_muru(tyju, nreset2, d[2], muru);
+	dffr_bp dffr_nyke(tyju, nreset2, d[1], nyke);
+	dffr_bp dffr_seta(tyju, nreset2, d[7], seta);
+	dffr_bp dffr_sabu(tyju, nreset2, d[0], sabu);
+	dffr_bp dffr_tyru(tyju, nreset2, d[4], tyru);
+	dffr_bp dffr_sufy(tyju, nreset2, d[5], sufy);
+	dffr_bp dffr_tyva(tyju, nreset2, d[3], tyva);
 	assign #T_INV  tovy = !a[0];
 	assign #T_AND  tuby = ff04_ff07 && cpu_rd && a[1] && tovy;
 	assign #T_NAND tyju = !(tovy && a[1] && cpu_wr && ff04_ff07);
