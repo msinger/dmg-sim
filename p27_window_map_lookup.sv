@@ -111,7 +111,7 @@ module window_map_lookup(
 	nor_srlatch latch_rejo(sary, repu, rejo,);
 	nor_srlatch latch_pynu(nunu, xofo, pynu,);
 	nor_srlatch latch_roxy(paha, pova, roxy,);
-	assign #T_OR   repu = int_vbl && reset_video2;
+	assign #T_OR   repu = int_vbl || reset_video2;
 	assign #T_XNOR nezo = ff4b_d4 == h[4];
 	assign #T_XNOR nory = ff4b_d5 == h[5];
 	assign #T_XNOR nono = ff4b_d6 == h[6];
