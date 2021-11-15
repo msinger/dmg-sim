@@ -26,6 +26,7 @@ p24_lcd_control.sv \
 p25_vram_interface.sv \
 p26_background.sv \
 p27_window_map_lookup.sv \
+p28_oam.sv \
 p36_palettes.sv
 
 DMG_DEPENDENCIES = \

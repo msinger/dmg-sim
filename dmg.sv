@@ -292,6 +292,7 @@ module dmg;
 	tri0 logic [15:0] a;
 	tri0 logic [7:0]  md, oam_a_nd, oam_b_nd;
 	tri0 logic [12:0] nma;
+	logic      [7:0]  oam_a;
 
 	/* Icarus doesn't support trireg, so we do it like this: */
 	logic [7:0] d_cap = 'z;
@@ -314,12 +315,9 @@ module dmg;
 	assign mcs_in = !nmcs;
 
 	/* not yet generated signals */
-	logic amab = 0;
 	logic tacu = 0;
-	logic tuvo = 0;
 	logic xyso = 0;
 	logic texy = 0;
-	logic leko = 0;
 	logic npyju = 1;
 	logic npowy = 1;
 	logic npoju = 1;
@@ -331,7 +329,6 @@ module dmg;
 	assign wuvu_nq = 0;
 	assign fepo = 0;
 	assign avap = 0;
-	assign acyl = 0;
 	assign atej = 0;
 	assign sylo = 0;
 	assign depo = 0;
@@ -344,8 +341,20 @@ module dmg;
 	assign soka = 0;
 	assign xovu = 0;
 	assign wuty = 0;
+	assign xupy = 0;
+	assign catu = 0;
+	assign tuvo = 0;
+	assign tyfo_nq = 0;
+	assign xoce = 0;
+	assign abez = 0;
+	assign weza = 0;
+	assign wuco = 0;
+	assign wyda = 0;
+	assign zysu = 0;
+	assign wyse = 0;
+	assign wuzy = 0;
 
-	logic clk1, clk2, clk4, clk5;
+	logic clk1, clk2, clk3, clk4, clk5;
 
 	logic cpu_wr, cpu_wr2;
 	logic cpu_rd, cpu_rd2;
@@ -422,7 +431,11 @@ module dmg;
 	logic pore, potu, neta, xuha, depo, lesy, lota;
 	logic lyku, roby, tyta, tyco, soka, xovu, vava;
 	logic wuty, seca, nyxu, vyno, vujo, vymu, mofu;
-	logic lena, nydy, myma;
+	logic lena, nydy, myma, xupy, catu, tuvo, tyfo_nq;
+	logic xoce, abez, weza, wuco, wyda, zysu, wyse, wuzy;
+	logic anom, feto, besu, amab, azyb, byva, leko;
+
+	logic oam_clk, oam_a_cpu_nrd, oam_b_cpu_nrd, oam_a_ncs, oam_b_ncs;
 
 	logic ffxx, nffxx, nfexxffxx, a00_07, saro;
 	logic ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a;
@@ -508,6 +521,7 @@ module dmg;
 	vram_interface         p25_vram_interface(.*);
 	background             p26_background(.*);
 	window_map_lookup      p27_window_map_lookup(.*);
+	oam                    p28_oam(.*);
 	palettes               p36_palettes(.*);
 
 	/* for convinience */
