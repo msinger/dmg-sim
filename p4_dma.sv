@@ -10,7 +10,7 @@ module dma(
 
 		input  logic amab, phi_out,
 		output logic wyja, caty, dma_run, mopa_nphi,
-		output logic vram_to_oam, dma_addr_ext, oam_addr_dma
+		output logic vram_to_oam, dma_addr_ext, oam_addr_ndma
 	);
 
 	logic decy, maka, naxy, powu, luvy, molu, nygo, pusy, lavy, loru, lyxe, nlyxe, lupa, ahoc, loko, lapa, meta;
@@ -50,11 +50,11 @@ module dma(
 	assign #T_NOR  muda = !(dma_a[13] || dma_a[14] || lebu);
 	assign #T_NAND muho = !(matu && muda);
 	assign #T_INV  lufa = !muho;
-	assign mopa_nphi    = mopa;
-	assign dma_run      = matu;
-	assign dma_addr_ext = luma;
-	assign oam_addr_dma = duga;
-	assign vram_to_oam  = lufa;
+	assign mopa_nphi     = mopa;
+	assign dma_run       = matu;
+	assign dma_addr_ext  = luma;
+	assign oam_addr_ndma = duga;
+	assign vram_to_oam   = lufa;
 
 	logic nafa, nygy, para, pyne, pula, nydo, poku, maru, poly, pare, rema, rofo, raly, pane, resu, nuvy;
 	logic evax, exyf, eraf, duve, fusy;

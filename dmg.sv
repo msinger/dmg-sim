@@ -386,7 +386,7 @@ module dmg;
 	assign p12_c  = !p12;
 	assign p13_c  = !p13;
 
-	logic dma_run, vram_to_oam, dma_addr_ext, oam_addr_dma;
+	logic dma_run, vram_to_oam, dma_addr_ext, oam_addr_ndma;
 	logic caty, wyja, mopa_nphi;
 	logic tovy_na0, tola_na1;
 
