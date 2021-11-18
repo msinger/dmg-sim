@@ -334,12 +334,6 @@ module dmg;
 	assign tyco = 0;
 	assign soka = 0;
 	assign xovu = 0;
-	assign weza = 0;
-	assign wuco = 0;
-	assign wyda = 0;
-	assign zysu = 0;
-	assign wyse = 0;
-	assign wuzy = 0;
 	assign ynaz = 0;
 	assign ykok = 0;
 	assign zure = 0;
@@ -362,10 +356,6 @@ module dmg;
 	assign cogy = 0;
 	assign yzos = 0;
 	assign baxo = 0;
-	assign wenu = 0;
-	assign cucu = 0;
-	assign cuca = 0;
-	assign cega = 0;
 
 	logic clk1, clk2, clk3, clk4, clk5;
 
@@ -547,6 +537,7 @@ module dmg;
 	window_map_lookup      p27_window_map_lookup(.*);
 	oam                    p28_oam(.*);
 	sprite_control         p29_sprite_control(.*);
+	sprite_store           p30_sprite_store(.*);
 	palettes               p36_palettes(.*);
 
 	/* for convinience */
