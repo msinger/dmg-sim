@@ -69,7 +69,7 @@ module ch1_regs(
 
 	logic buda, bale, bage, camy, boko, bytu;
 	dffr_a dffr_boko(bage, camy, d[6], boko);
-	assign #T_INV  buda = !cpu_rd;
+	assign #T_INV  buda = !ncpu_rd;
 	assign #T_NAND bale = !(buda && ff14);
 	assign #T_NAND bage = !(anuj && ff14);
 	assign #T_INV  camy = !apu_reset;
