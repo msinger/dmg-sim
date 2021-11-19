@@ -110,12 +110,35 @@ module channel2(
 	assign #T_AND  asog = fomy && bonu;
 	assign #T_AND  anyv = fete && bonu;
 	assign #T_AND  anan = feno && bonu;
+	assign #T_OR   deme = cyre || bufy_256hz || nff19_d6;
+	assign #T_AND  dora = cyre && ff19_d6;
+	assign #T_NOR  fute = !(ff17_d3 || ff17_d4 || ff17_d5 || ff17_d6 || ff17_d7);
+	assign #T_INV  dyro = !deme;
+	assign #T_OR   esyk = apu_reset || dora || fute;
+	assign #T_NAND ares = !(fute && apu_reset);
+	assign #T_INV  defu = !dane;
+	assign #T_INV  bymo = !nff16_wr;
+	assign #T_INV  aget = !nff16_wr;
+	assign #T_INV  buko = !(!came);
+	assign #T_INV  cule = !davu;
+	assign #T_AND  dymu = dyve && cagy;
+	assign #T_INV  duge = !cano;
+	assign #T_INV  dare = !dymu;
+	assign #T_AND  egog = dymu && duge;
+	assign #T_NOR  domo = !(ff16_d6 || ff16_d7);
+	assign #T_NOR  dyta = !(nff16_d6 || ff16_d7);
+	assign #T_NOR  doju = !(ff16_d6 || nff16_d7);
+	assign #T_NOR  dove = !(nff16_d6 || nff16_d7);
+	assign #T_AOI  exes = !((egog && domo) || (dymu && dyta) || (dyve && doju) || (dare && dove));
 	assign elox_q     = elox;
 	assign dory_q     = dory;
+	assign akyd_nq    = !akyd;
 	assign cemo_1mhz  = cemo;
 	assign ch2_out[3] = amov;
 	assign ch2_out[2] = asog;
 	assign ch2_out[1] = anyv;
 	assign ch2_out[0] = anan;
+	assign nch2_amp_en = fute;
+	assign nch2_active = defu;
 
 endmodule
