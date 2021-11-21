@@ -98,7 +98,7 @@ module channel1(
 	assign #T_NOR  kaza = !(ch1_restart || kozy);
 	assign #T_INV  kuxu = !kaza;
 	assign #T_NOR  koma = !(ff12_d0 || ff12_d1 || ff12_d2);
-	assign #T_AND  kake = kozy && koma && kezu;
+	assign #T_OR   kake = kozy || koma || kezu;
 	assign #T_INV  erum = !apu_reset;
 	assign #T_NOR  eget = !(apu_reset || fare);
 	assign #T_NAND doge = !(apu_wr && ff14);
@@ -108,8 +108,8 @@ module channel1(
 	assign #T_OR   keko = apu_reset || feku;
 	assign #T_OR   kaba = apu_reset || feku;
 	assign #T_INV  kyly = !kaba;
-	assign #T_NAND hufu = !(nff12_d3 && hafo && hemy && hoko && hevo);
-	assign #T_NOR  hano = !(nff12_d3 || hafo || hemy || hoko || hevo);
+	assign #T_NAND hufu = !(ff12_d3 && hafo && hemy && hoko && hevo);
+	assign #T_NOR  hano = !(ff12_d3 || hafo || hemy || hoko || hevo);
 	assign #T_INV  hake = !hufu;
 	assign #T_NOR  koru = !(ch1_restart || apu_reset);
 	assign #T_OR   jade = hake || hano;
