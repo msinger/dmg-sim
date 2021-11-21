@@ -224,6 +224,22 @@ module dmg;
 		@(posedge cpu_clkin_t2);
 	endtask
 
+	task automatic write_snd_file_header(input int f, samplerate, channels);
+		$fwrite(f, ".snd");
+		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, 8'd32);
+		$fwrite(f, "%c%c%c%c", 8'hff, 8'hff, 8'hff, 8'hff);
+		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, 8'h02);
+		$fwrite(f, "%c", (samplerate >> 24) & 8'hff);
+		$fwrite(f, "%c", (samplerate >> 16) & 8'hff);
+		$fwrite(f, "%c", (samplerate >> 8) & 8'hff);
+		$fwrite(f, "%c", samplerate & 8'hff);
+		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, channels & 8'hff);
+		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, 8'h00);
+		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, 8'h00);
+	endtask
+
+	int fch[1:4];
+
 	initial begin
 		$dumpfile("dmg.vcd");
 		$dumpvars(0, dmg);
@@ -251,9 +267,22 @@ module dmg;
 		cyc(64);
 		nrst = 1;
 
+		for (int i = 1; i <= 4; i++) begin
+			string filename;
+			$sformat(filename, "ch%0d.snd", i);
+			fch[i] = $fopen(filename, "wb");
+			write_snd_file_header(fch[i], 65536, 1);
+		end
+
 		fork
 			begin :tick_tick
-				forever cyc(16);
+				forever begin
+					cyc(64);
+					$fwrite(fch[1], "%c", { 1'b0, ch1_out, 3'b0 });
+					$fwrite(fch[2], "%c", { 1'b0, ch2_out, 3'b0 });
+					$fwrite(fch[3], "%c", { 1'b0, wave_dac_d, 3'b0 });
+					$fwrite(fch[4], "%c", { 1'b0, ch4_out, 3'b0 });
+				end
 			end
 
 			begin
