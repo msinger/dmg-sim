@@ -96,10 +96,11 @@ module channel2(
 	assign #T_INV  bodo = !caza;
 	assign #T_NOR  cama = !(cemo || nbuta);
 	assign #T_INV  doca = !cama;
-	assign #T_AOI  fopy = !((fomy && ff17_d3) || (!fomy && nff17_d3));
-	assign #T_AOI  etup = !((fete && ff17_d3) || (!fete && nff17_d3));
-	assign #T_AOI  faru = !((feno && ff17_d3) || (!feno && nff17_d3));
-	assign #T_AOI  gafa = !((hofo && ff17_d3) || (hofo && nff17_d3));
+	// TODO: Cells look like other AOI cells, but this only works when they are AO:
+	assign #T_AO   fopy = (fomy && ff17_d3) || (!fomy && nff17_d3);
+	assign #T_AO   etup = (fete && ff17_d3) || (!fete && nff17_d3);
+	assign #T_AO   faru = (feno && ff17_d3) || (!feno && nff17_d3);
+	assign #T_AO   gafa = (hofo && ff17_d3) || (hofo && nff17_d3);
 	assign #T_AND  cyse = dane && dome;
 	assign #T_OR   bonu = cyse || net03;
 	assign #T_NOR  emyr = !(ff17_d3 || feno || fete || fomy || fena);

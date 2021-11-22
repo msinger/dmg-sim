@@ -116,10 +116,11 @@ module channel1(
 	assign #T_INV  cara = !cyto;
 	assign #T_AND  cowe = cyto && duwo;
 	assign #T_OR   boto = cowe || net03;
-	assign #T_AOI  hesu = !((ff12_d3 && hoko) || (!hoko && nff12_d3));
-	assign #T_AOI  heto = !((ff12_d3 && hemy) || (!hemy && nff12_d3));
-	assign #T_AOI  hyto = !((ff12_d3 && hafo) || (!hafo && nff12_d3));
-	assign #T_AOI  jufy = !((ff12_d3 && kake) || (kake && nff12_d3));
+	// TODO: Cells look like other AOI cells, but this only works when they are AO:
+	assign #T_AO   hesu = (ff12_d3 && hoko) || (!hoko && nff12_d3);
+	assign #T_AO   heto = (ff12_d3 && hemy) || (!hemy && nff12_d3);
+	assign #T_AO   hyto = (ff12_d3 && hafo) || (!hafo && nff12_d3);
+	assign #T_AO   jufy = (ff12_d3 && kake) || (kake && nff12_d3);
 	assign #T_AND  aceg = hevo && boto;
 	assign #T_AND  agof = hoko && boto;
 	assign #T_AND  ason = hemy && boto;
