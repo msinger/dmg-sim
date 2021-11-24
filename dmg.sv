@@ -534,8 +534,11 @@ module dmg;
 
 	logic [7:0] wave_ram[0:15];
 	initial foreach (wave_ram[i]) wave_ram[i] = $random;
-	always_ff @(negedge nwave_ram_wr) if (!wave_ram_ctrl1) wave_ram[wave_a] <= d;
-	always_ff @(negedge atok) if (!wave_ram_ctrl1) wave_rd_d <= wave_ram[wave_a];
+	always_ff @(posedge nwave_ram_wr) if (!wave_ram_ctrl1) wave_ram[wave_a] <= d;
+	always_latch if (!wave_ram_ctrl1 && !atok) wave_rd_d = wave_ram[wave_a];
+	// TODO: The very first sample (high nibble of FF30) gets skipped when CH3 is started. Check if this is correct.
+	// TODO: When reading the next byte from wave RAM (for example FF31), the previous sample (high nibble of FF30)
+	//       gets output for a very short time before the next sample (high nibble of FF31) gets output. Check if correct.
 
 	clocks_reset           p1_clocks_reset(.*);
 	interrupts             p2_interrupts(.*);
