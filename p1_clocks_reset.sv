@@ -28,9 +28,9 @@ module clocks_reset(
 
 		input  logic apu_reset,
 		input  logic napu_reset5,
+		input  logic ajer_2mhz,
 		output logic apuv_4mhz, amuk_4mhz,
-		input  logic ajer_2mhz, cery_2mhz,
-		output logic boga1mhz, bavu_1mhz,
+		output logic boga1mhz, bavu_1mhz, cery_2mhz,
 		output logic byfe_128hz,
 		output logic bufy_256hz,
 		output logic horu_512hz,
