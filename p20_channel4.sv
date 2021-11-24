@@ -168,7 +168,7 @@ module channel4(
 	assign #T_INV  juwa = !gena;
 	assign #T_INV  kony = !kyku;
 	assign #T_INV  kanu = !kony;
-	assign #T_OR   hyno = jyfu || jyre || jyco;
+	assign #T_AND  hyno = jyfu && jyre && jyco;
 	assign #T_INV  gyba = !bavu_1mhz;
 	assign #T_AND  cary = bavu_1mhz && gary;
 	assign #T_NOR  gofu = !(ch4_restart || gary);
