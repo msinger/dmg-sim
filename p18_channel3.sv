@@ -59,7 +59,7 @@ module channel3(
 	assign #T_INV  jera = !hera;
 	assign #T_INV  kese = !(!keno);
 	assign #T_AND  foto = fety && gase;
-	assign #T_OR   etan = gara || fety;
+	assign #T_NOR  etan = !(gara || fety);
 	assign #T_NOR  gyry = !(apu_reset || gara || foto);
 	assign #T_INV  dero = !gase;
 	assign #T_INV  jeco = !ncpu_rd;
