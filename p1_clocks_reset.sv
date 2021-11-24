@@ -263,6 +263,7 @@ module clocks_reset(
 	assign #T_INV  bopo = !apu_reset;
 	assign #T_INV  bavu = !avok;
 	assign #T_INV  hama = !(!jeso);
+	assign bavu_1mhz = bavu;
 	assign jeso_512k = jeso;
 	assign hama_512k = hama;
 
