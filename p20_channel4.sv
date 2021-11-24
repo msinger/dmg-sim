@@ -47,10 +47,10 @@ module channel4(
 	assign #T_NOR  etar = !(ff22_d6 || nff22_d5 || ff22_d4);
 	assign #T_NOR  ever = !(ff22_d6 || ff22_d5 || nff22_d4);
 	assign #T_NOR  etov = !(ff22_d6 || ff22_d5 || ff22_d4);
-	assign #T_AOI  etyr = !((esep && dudu) || (dere && etat) || (dota && fura) ||
-	                        (erut && etar) || (dete && ever) || (dose && etov));
-	assign #T_AOI  elyx = !((demo && emof) || (doke && elar) || (dale && dudu) || (dure && etat));
-	assign #T_AOI  dary = !((epor && fura) || (ezef && etar) || (deko && ever) || (cexo && etov));
+	assign #T_AO   etyr = (esep && dudu) || (dere && etat) || (dota && fura) ||
+	                      (erut && etar) || (dete && ever) || (dose && etov);
+	assign #T_AO   elyx = (demo && emof) || (doke && elar) || (dale && dudu) || (dure && etat);
+	assign #T_AO   dary = (epor && fura) || (ezef && etar) || (deko && ever) || (cexo && etov);
 	assign #T_OR   eryf = dary || elyx;
 	assign #T_MUX  feme = ff22_d7 ? etyr : eryf;
 	assign #T_MUX  ezul = dyry ? feme : lfsr_out;
@@ -83,10 +83,10 @@ module channel4(
 	tffd tffd_fyro(elaf, ch4_restart, ff21_d7, fyro);
 	nor_srlatch latch_erox(fyno, enur, erox,);
 	assign #T_OR   felo = ch4_eg_tick || ch4_eg_disable || erox;
-	assign #T_AOI  fole = !((felo && ff21_d3) || (felo && nff21_d3));
-	assign #T_AOI  etef = !((feko && ff21_d3) || (!feko && nff21_d3));
-	assign #T_AOI  edyf = !((faty && ff21_d3) || (!faty && nff21_d3));
-	assign #T_AOI  elaf = !((feru && ff21_d3) || (!feru && nff21_d3));
+	assign #T_AO   fole = (felo && ff21_d3) || (felo && nff21_d3);
+	assign #T_AO   etef = (feko && ff21_d3) || (!feko && nff21_d3);
+	assign #T_AO   edyf = (faty && ff21_d3) || (!faty && nff21_d3);
+	assign #T_AO   elaf = (feru && ff21_d3) || (!feru && nff21_d3);
 	assign #T_AND  akof = feko && ch4_bit;
 	assign #T_AND  byzy = faty && ch4_bit;
 	assign #T_AND  apyr = feru && ch4_bit;
@@ -177,7 +177,7 @@ module channel4(
 	assign #T_OR   gepo = ch4_restart || apu_reset;
 	assign #T_INV  goge = !gepo;
 	assign #T_INV  jyja = !ch4_lfsr_clk1;
-	assign #T_AOI  kavu = !((joto && ff22_d3) || (nff22_d3 && juxe));
+	assign #T_AO   kavu = (joto && ff22_d3) || (nff22_d3 && juxe);
 	assign #T_NAND game = !(gena && hezu);
 	assign #T_XNOR hura = hyro == hezu;
 	assign rst_ff23_d7 = guzy;

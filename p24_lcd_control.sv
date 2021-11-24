@@ -25,8 +25,8 @@ module lcd_control(
 	assign #T_INV  umob = !nff04_d0;
 	assign #T_INV  usec = !nff04_d1;
 	assign #T_INV  kedy = !ff40_d7;
-	assign #T_AOI  kahe = !((ff40_d7 && kasa) || (kedy && umob));
-	assign #T_AOI  kupa = !((ff40_d7 && kebo) || (kedy && usec));
+	assign #T_AO   kahe = (ff40_d7 && kasa) || (kedy && umob);
+	assign #T_AO   kupa = (ff40_d7 && kebo) || (kedy && usec);
 	assign #T_INV  kymo = !kahe;
 	assign #T_INV  kofo = !kupa;
 	assign pin_cpl = kymo;

@@ -95,7 +95,7 @@ module video_control(
 	assign #T_INV  vypu = !tolu;
 	assign #T_AND  sepa = cpu_wr2 && ff41;
 	assign #T_INV  ryve = !sepa;
-	assign #T_AOI  suko = !((rugu && ropo) || (refe && int_oam) || (rufo && int_vbl) || (roxe && int_hbl));
+	assign #T_AO   suko = (rugu && ropo) || (refe && int_oam) || (rufo && int_vbl) || (roxe && int_hbl);
 	assign #T_INV  tuva = !suko;
 	assign #T_INV  voty = !tuva;
 	assign #T_OR   wego = tofu || voga;

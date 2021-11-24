@@ -126,9 +126,9 @@ module channel3(
 	assign #T_NOR  goka = !(nff1c_d6 || ff1c_d5);
 	assign #T_NOR  gemy = !(nff1c_d6 || nff1c_d5);
 	assign #T_NOR  gege = !(ff1c_d6 || nff1c_d5);
-	assign #T_AOI  ezag = !((wave_play_d[0] && gege) || (wave_play_d[1] && goka) || (wave_play_d[2] && gemy));
-	assign #T_AOI  evug = !((wave_play_d[1] && gege) || (wave_play_d[2] && goka) || (wave_play_d[3] && gemy));
-	assign #T_AOI  doky = !((gege && wave_play_d[2]) || (wave_play_d[3] && gemy));
+	assign #T_AO   ezag = (wave_play_d[0] && gege) || (wave_play_d[1] && goka) || (wave_play_d[2] && gemy);
+	assign #T_AO   evug = (wave_play_d[1] && gege) || (wave_play_d[2] && goka) || (wave_play_d[3] && gemy);
+	assign #T_AO   doky = (gege && wave_play_d[2]) || (wave_play_d[3] && gemy);
 	assign #T_AND  dore = wave_play_d[3] && gege;
 	assign #T_AND  bary = ch3_active && ezag;
 	assign #T_AND  byka = ch3_active && evug;

@@ -69,7 +69,7 @@ module oam(
 	assign #T_NAND bota = !(bofe && saro && cpu_rd2);
 	assign #T_INV  xupa = !wuje;
 	assign #T_INV  xuca = !waru;
-	assign #T_AOI  apag = !((xupa && amab) || (ajuj && adah));
+	assign #T_AO   apag = (xupa && amab) || (ajuj && adah);
 	assign #T_AND  asyt = ajep && xuja && bota;
 	assign #T_INV  azul = !apag;
 	assign #T_INV  bode = !asyt;

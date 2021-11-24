@@ -96,7 +96,6 @@ module channel2(
 	assign #T_INV  bodo = !caza;
 	assign #T_NOR  cama = !(cemo || nbuta);
 	assign #T_INV  doca = !cama;
-	// TODO: Cells look like other AOI cells, but this only works when they are AO:
 	assign #T_AO   fopy = (fomy && ff17_d3) || (!fomy && nff17_d3);
 	assign #T_AO   etup = (fete && ff17_d3) || (!fete && nff17_d3);
 	assign #T_AO   faru = (feno && ff17_d3) || (!feno && nff17_d3);
@@ -130,7 +129,7 @@ module channel2(
 	assign #T_NOR  dyta = !(nff16_d6 || ff16_d7);
 	assign #T_NOR  doju = !(ff16_d6 || nff16_d7);
 	assign #T_NOR  dove = !(nff16_d6 || nff16_d7);
-	assign #T_AOI  exes = !((egog && domo) || (dymu && dyta) || (dyve && doju) || (dare && dove));
+	assign #T_AO   exes = (egog && domo) || (dymu && dyta) || (dyve && doju) || (dare && dove);
 	assign elox_q     = elox;
 	assign dory_q     = dory;
 	assign akyd_nq    = !akyd;

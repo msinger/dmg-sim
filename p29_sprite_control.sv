@@ -199,7 +199,7 @@ module sprite_control(
 	assign #T_TRI  abem = !abon ? !xuqu : 'z;
 	assign #T_TRI  dyso = !abon ? !0 : 'z;
 	assign #T_INV  fufo = !ff40_d2;
-	assign #T_AOI  gejy = !((!xuso && fufo) || (ff40_d2 && wago));
+	assign #T_AO   gejy = (!xuso && fufo) || (ff40_d2 && wago);
 	assign #T_TRI  famu = !abon ? !gejy : 'z;
 	assign d[1] = xele;
 	assign d[2] = ypon;
