@@ -8,7 +8,7 @@ module background(
 		input  logic ff40_d3, clkpipe,
 		input  logic ff42_d0, ff42_d1, ff42_d2, ff42_d3, ff42_d4, ff42_d5, ff42_d6, ff42_d7,
 		input  logic ff43_d0, ff43_d1, ff43_d2, ff43_d3, ff43_d4, ff43_d5, ff43_d6, ff43_d7,
-		input  logic pore, potu, neta, xuha, depo, lesy, lota, lyku, roby, tyta, tyco, soka, xovu,
+		input  logic pore, potu, neta, xuha, ndepo, lesy, lota, lyku, roby, tyta, tyco, soka, xovu,
 		output logic vava
 	);
 
@@ -87,29 +87,29 @@ module background(
 	dffsr dffsr_woda(clkpipe, xely, wuja, xete, woda);
 	dffsr dffsr_vumo(clkpipe, tyko, tena, woda, vumo);
 	dffsr dffsr_vava(clkpipe, tuwu, wubu, vumo, vava);
-	assign #T_INV  xoga = !depo;
-	assign #T_INV  xura = !depo;
-	assign #T_INV  tajo = !depo;
-	assign #T_INV  xenu = !depo;
-	assign #T_INV  xyke = !depo;
-	assign #T_INV  xaba = !depo;
-	assign #T_INV  tafu = !depo;
-	assign #T_INV  xuho = !depo;
-	assign #T_NAND tede = !(depo && lesy);
+	assign #T_INV  xoga = !ndepo;
+	assign #T_INV  xura = !ndepo;
+	assign #T_INV  tajo = !ndepo;
+	assign #T_INV  xenu = !ndepo;
+	assign #T_INV  xyke = !ndepo;
+	assign #T_INV  xaba = !ndepo;
+	assign #T_INV  tafu = !ndepo;
+	assign #T_INV  xuho = !ndepo;
+	assign #T_NAND tede = !(ndepo && lesy);
 	assign #T_NAND woka = !(xoga && lesy);
-	assign #T_NAND xala = !(depo && lota);
+	assign #T_NAND xala = !(ndepo && lota);
 	assign #T_NAND wede = !(xura && lota);
-	assign #T_NAND tyra = !(depo && lyku);
+	assign #T_NAND tyra = !(ndepo && lyku);
 	assign #T_NAND tufo = !(tajo && lyku);
-	assign #T_NAND xyru = !(depo && roby);
+	assign #T_NAND xyru = !(ndepo && roby);
 	assign #T_NAND wevo = !(xenu && roby);
-	assign #T_NAND xuku = !(depo && tyta);
+	assign #T_NAND xuku = !(ndepo && tyta);
 	assign #T_NAND wedy = !(xyke && tyta);
-	assign #T_NAND xely = !(depo && tyco);
+	assign #T_NAND xely = !(ndepo && tyco);
 	assign #T_NAND wuja = !(xaba && tyco);
-	assign #T_NAND tyko = !(depo && soka);
+	assign #T_NAND tyko = !(ndepo && soka);
 	assign #T_NAND tena = !(tafu && soka);
-	assign #T_NAND tuwu = !(depo && xovu);
+	assign #T_NAND tuwu = !(ndepo && xovu);
 	assign #T_NAND wubu = !(xuho && xovu);
 
 endmodule

@@ -11,7 +11,7 @@ module sprite_control(
 
 		input  logic nxymu, ynaz, ykok, zure, ywos, ekes, cehu, ewam, cyvy, zako, xeba,
 		input  logic ylev, ytub, feha, dama, cyco, daje, ydot, ywap, fyma, cogy, byva,
-		input  logic cota, yzos, sela, xyvo, anom, feto, seca, baxo, azyb,
+		input  logic cota, nyzos, sela, xyvo, anom, feto, seca, nbaxo, azyb,
 		input  logic wenu, cucu, cuca, cega, besu,
 		output logic fepo, fado, deny, gugy, xyme, gygy, gowo, gyma, fame, dydo, furo,
 		output logic wuty, dosy, wuzo, gafy, xaho, ejad, wunu, wupa, gamy, doku, dyna,
@@ -187,7 +187,7 @@ module sprite_control(
 	assign #T_OR   govu = ff40_d2 || gyky;
 	assign #T_NAND wota = !(gace && guvu && gyda && gewy && wuhu_c && govu);
 	assign #T_INV  gese = !wota;
-	assign #T_INV  wuky = !yzos;
+	assign #T_INV  wuky = !nyzos;
 	assign #T_XOR  wago = wuky != wenu;
 	assign #T_XOR  cyvu = wuky != cucu;
 	assign #T_XOR  bore = wuky != cuca;
@@ -274,7 +274,7 @@ module sprite_control(
 	assign #T_AND  topu = tuly && sycu;
 	assign #T_AND  raca = vonu && sycu;
 	assign #T_INV  xefy = !wuty;
-	assign #T_AND  xono = baxo && texy;
+	assign #T_AND  xono = nbaxo && texy;
 	assign #T_NAND toma = !(clk4 && tame);
 	assign #T_INV  vywa = !topu;
 	assign #T_INV  peby = !raca;
