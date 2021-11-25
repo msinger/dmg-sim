@@ -19,6 +19,8 @@ module apu_control(
 		output logic fero_q, cate, gaxo,
 
 		output logic [3:0] lmixer, rmixer,
+		output logic [2:0] nlvolume, nrvolume,
+		output logic       vin_l_ena, vin_r_ena,
 
 		input logic nch1_active, nch2_active, nch3_active, nch4_active
 	);
@@ -112,6 +114,14 @@ module apu_control(
 	assign d[2]    = avud;
 	assign d[1]    = awed;
 	assign d[0]    = akod;
+	assign vin_r_ena   = bedu;
+	assign nrvolume[2] = !cozu;
+	assign nrvolume[1] = !bumo;
+	assign nrvolume[0] = !byre;
+	assign vin_l_ena   = apos;
+	assign nlvolume[2] = !ager;
+	assign nlvolume[1] = !byga;
+	assign nlvolume[0] = !apeg;
 
 	logic gepa, hefa, gumu, bupo, bono, byfa;
 	logic bogu, bafo, atuf, anev, bepu, befo, bume, bofa;

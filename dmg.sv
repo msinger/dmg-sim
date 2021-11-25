@@ -224,11 +224,11 @@ module dmg;
 		@(posedge cpu_clkin_t2);
 	endtask
 
-	task automatic write_snd_file_header(input int f, samplerate, channels);
+	task automatic write_snd_file_header(input int f, samplerate, channels, bit bit16);
 		$fwrite(f, ".snd");
 		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, 8'd32);
 		$fwrite(f, "%c%c%c%c", 8'hff, 8'hff, 8'hff, 8'hff);
-		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, 8'h02);
+		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, bit16 ? 8'h03 : 8'h02);
 		$fwrite(f, "%c", (samplerate >> 24) & 8'hff);
 		$fwrite(f, "%c", (samplerate >> 16) & 8'hff);
 		$fwrite(f, "%c", (samplerate >> 8) & 8'hff);
@@ -239,6 +239,7 @@ module dmg;
 	endtask
 
 	int fch[1:4];
+	int fmix;
 
 	initial begin
 		$dumpfile("dmg.vcd");
@@ -271,17 +272,24 @@ module dmg;
 			string filename;
 			$sformat(filename, "ch%0d.snd", i);
 			fch[i] = $fopen(filename, "wb");
-			write_snd_file_header(fch[i], 65536, 1);
+			write_snd_file_header(fch[i], 65536, 1, 0);
 		end
+		fmix = $fopen("out.snd", "wb");
+		write_snd_file_header(fmix, 65536, 2, 1);
 
 		fork
 			begin :tick_tick
+				int tmp;
 				forever begin
 					cyc(64);
 					$fwrite(fch[1], "%c", { 1'b0, ch1_out, 3'b0 });
 					$fwrite(fch[2], "%c", { 1'b0, ch2_out, 3'b0 });
 					$fwrite(fch[3], "%c", { 1'b0, wave_dac_d, 3'b0 });
 					$fwrite(fch[4], "%c", { 1'b0, ch4_out, 3'b0 });
+					tmp = $rtoi(lout_pin * 32767.0);
+					$fwrite(fmix, "%c%c", { 1'b0, tmp[14:8] }, tmp[7:0]);
+					tmp = $rtoi(rout_pin * 32767.0);
+					$fwrite(fmix, "%c%c", { 1'b0, tmp[14:8] }, tmp[7:0]);
 				end
 			end
 
@@ -521,9 +529,39 @@ module dmg;
 	logic [3:0]  wave_play_d;
 	logic        wave_ram_rd;
 
-	/* connections to audio DAC */
+	/* connections to analog parts */
 	logic [3:0] lmixer, rmixer;
 	logic [3:0] ch1_out, ch2_out, wave_dac_d, ch4_out;
+	logic [2:0] nlvolume, nrvolume;
+	logic       vin_l_ena, vin_r_ena;
+
+	/* simulate analog input */
+	real vin_pin;
+	assign vin_pin = 0.0;
+
+	/* simulate analog parts */
+	real ch1_fp, ch2_fp, ch3_fp, ch4_fp;
+	real lvol_fp, rvol_fp;
+	real lmix, rmix;
+	real lout_pin, rout_pin;
+	assign ch1_fp = $itor(ch1_out) / 15.0;
+	assign ch2_fp = $itor(ch2_out) / 15.0;
+	assign ch3_fp = $itor(wave_dac_d) / 15.0;
+	assign ch4_fp = $itor(ch4_out) / 15.0;
+	assign lvol_fp = $itor(~nlvolume) / 7.0;
+	assign rvol_fp = $itor(~nrvolume) / 7.0;
+	assign lmix = (lmixer[0] ? ch1_fp * 0.7 : 0.0) +
+	              (lmixer[1] ? ch2_fp * 0.7 : 0.0) +
+	              (lmixer[2] ? ch3_fp * 0.7 : 0.0) +
+	              (lmixer[3] ? ch4_fp * 0.7 : 0.0) +
+	              (vin_l_ena ? vin_pin * 0.7 : 0.0);
+	assign rmix = (rmixer[0] ? ch1_fp * 0.7 : 0.0) +
+	              (rmixer[1] ? ch2_fp * 0.7 : 0.0) +
+	              (rmixer[2] ? ch3_fp * 0.7 : 0.0) +
+	              (rmixer[3] ? ch4_fp * 0.7 : 0.0) +
+	              (vin_r_ena ? vin_pin * 0.7 : 0.0);
+	assign lout_pin = (lmix * lvol_fp > 1.0) ? 1.0 : (lmix * lvol_fp);
+	assign rout_pin = (rmix * rvol_fp > 1.0) ? 1.0 : (rmix * rvol_fp);
 
 	/* connections to wave RAM */
 	logic [7:0] wave_rd_d;      /* data output (data input is directly connected to common d[7:0]) */
