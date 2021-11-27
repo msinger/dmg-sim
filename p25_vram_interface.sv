@@ -22,7 +22,7 @@ module vram_interface(
 		input logic t1_nt2, dma_run, mopa_nphi, nfexxffxx, nreset6, cpu_rd_sync, vram_to_oam, dma_addr_ext, ff40_d4,
 
 		input  logic from_cpu3, roru, lula, bedo, saro, tacu, tuvo, acyl, xyso, texo, abuz, texy, myma, lena, nxymu, leko,
-		input  logic xuha, vyno, vujo, vymu, neta, pore, potu, npyju, npowy, npoju, npulo, npoxa, npyzo, npozo, nrawu,
+		input  logic xuha, vyno, vujo, vymu, neta, pore, potu, pyju, powy, poju, pulo, poxa, pyzo, pozo, rawu,
 		output logic cota, wuko, syro
 	);
 
@@ -406,16 +406,16 @@ module vram_interface(
 	assign md_out[7] = rady;
 
 	logic vuza, vury, tobo, suvo, reso, roha, rusa, vejy, sezu, vapy;
-	assign #T_NOR  vuza = !(ff40_d4 || npyju);
+	assign #T_NOR  vuza = !(ff40_d4 || pyju);
 	assign #T_TRI  vury = neta ? !vuza  : 'z;
-	assign #T_TRI  tobo = neta ? !npyju : 'z;
-	assign #T_TRI  suvo = neta ? !npowy : 'z;
-	assign #T_TRI  reso = neta ? !npoju : 'z;
-	assign #T_TRI  roha = neta ? !npulo : 'z;
-	assign #T_TRI  rusa = neta ? !npoxa : 'z;
-	assign #T_TRI  vejy = neta ? !npyzo : 'z;
-	assign #T_TRI  sezu = neta ? !npozo : 'z;
-	assign #T_TRI  vapy = neta ? !nrawu : 'z;
+	assign #T_TRI  tobo = neta ? !pyju : 'z;
+	assign #T_TRI  suvo = neta ? !powy : 'z;
+	assign #T_TRI  reso = neta ? !poju : 'z;
+	assign #T_TRI  roha = neta ? !pulo : 'z;
+	assign #T_TRI  rusa = neta ? !poxa : 'z;
+	assign #T_TRI  vejy = neta ? !pyzo : 'z;
+	assign #T_TRI  sezu = neta ? !pozo : 'z;
+	assign #T_TRI  vapy = neta ? !rawu : 'z;
 	assign nma[12] = vury;
 	assign nma[11] = tobo;
 	assign nma[10] = suvo;

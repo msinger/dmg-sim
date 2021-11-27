@@ -352,14 +352,6 @@ module dmg;
 	assign mcs_in = !nmcs;
 
 	/* not yet generated signals */
-	logic npyju = 1;
-	logic npowy = 1;
-	logic npoju = 1;
-	logic npulo = 1;
-	logic npoxa = 1;
-	logic npyzo = 1;
-	logic npozo = 1;
-	logic nrawu = 1;
 	assign atej = 0;
 	assign sylo = 0;
 	assign lesy = 0;
@@ -462,6 +454,7 @@ module dmg;
 	logic feka, xyha, yfag, cexu, akol, bymy, fuxu, enob, geny;
 	logic weme, wufa, faka, cyla, dymo, bucy, wofo, wylu, ewot;
 	logic asys, ahof, byvy, ngomo, nbaxo, nyzos, ndepo;
+	logic rawu, pyzo, pulo, powy, pozo, poxa, poju, pyju;
 
 	logic oam_clk, oam_a_cpu_nrd, oam_b_cpu_nrd, oam_a_ncs, oam_b_ncs;
 
@@ -496,6 +489,7 @@ module dmg;
 	logic ff4b_d0, ff4b_d1, ff4b_d2, ff4b_d3, ff4b_d4, ff4b_d5, ff4b_d6, ff4b_d7;
 
 	logic l113, int_vbl, int_vbl_buf, int_stat, clkpipe;
+	logic bg_pix_a_7, bg_pix_b_7;
 
 	logic pin_cpg, cp, pin_cpl, pin_fr, pin_st, pin_s;
 
@@ -586,6 +580,7 @@ module dmg;
 	sprite_control         p29_sprite_control(.*);
 	sprite_store           p30_sprite_store(.*);
 	sprite_x_matchers      p31_sprite_x_matchers(.*);
+	bg_pixel_shifter       p32_bg_pixel_shifter(.*);
 	palettes               p36_palettes(.*);
 
 	/* for convinience */

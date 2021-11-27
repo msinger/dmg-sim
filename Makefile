@@ -30,6 +30,7 @@ p28_oam.sv \
 p29_sprite_control.sv \
 p30_sprite_store.sv \
 p31_sprite_x_matchers.sv \
+p32_bg_pixel_shifter.sv \
 p36_palettes.sv
 
 DMG_DEPENDENCIES = \
