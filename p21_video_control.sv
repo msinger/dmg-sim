@@ -48,10 +48,10 @@ module video_control(
 	assign #T_INV  tocu = !saxo;
 	assign #T_INV  vepe = !typo;
 	assign #T_INV  vuty = !vyzo;
-	assign #T_INV  tuju = !telu;
-	assign #T_INV  tafy = !sude;
-	assign #T_INV  tuda = !taha;
-	assign #T_INV  vate = !tyry;
+	assign #T_INV  tuju = !tyry;
+	assign #T_INV  tafy = !taha;
+	assign #T_INV  tuda = !sude;
+	assign #T_INV  vate = !telu;
 	assign #T_NAND voku = !(tuju && tafy && tuda && vate && vuty && vepe && tocu);
 	assign #T_NAND tozu = !(tuju && tafy && tuda && vate && vyzo && typo && saxo);
 	assign #T_NAND tece = !(tuju && taha && tuda && telu && vyzo && vepe && saxo);
