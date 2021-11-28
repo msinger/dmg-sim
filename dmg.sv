@@ -354,7 +354,6 @@ module dmg;
 	/* not yet generated signals */
 	assign atej = 0;
 	assign sylo = 0;
-	assign nbgpixel = 1;
 
 	logic clk1, clk2, clk3, clk4, clk5;
 
@@ -487,7 +486,7 @@ module dmg;
 	logic [7:0] spr_pix_a, spr_pix_b;
 	logic       nbgpixel, nobp0pixel, nobp1pixel;
 
-	logic pin_cpg, cp, pin_cpl, pin_fr, pin_st, pin_s;
+	logic pin_cpg, cp, pin_cpl, pin_fr, pin_st, pin_s, nld0, nld1;
 
 	logic [7:0] v, h, nh;
 	logic [7:0] bgp_d, obp0_d, obp1_d;
@@ -579,6 +578,7 @@ module dmg;
 	bg_pixel_shifter       p32_bg_pixel_shifter(.*);
 	sprite_pixel_shifter   p33_sprite_pixel_shifter(.*);
 	sprite_palette_shifter p34_sprite_palette_shifter(.*);
+	pixel_mux              p35_pixel_mux(.*);
 	palettes               p36_palettes(.*);
 
 	/* for convinience */
