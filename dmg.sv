@@ -354,14 +354,7 @@ module dmg;
 	/* not yet generated signals */
 	assign atej = 0;
 	assign sylo = 0;
-	assign lesy = 0;
-	assign lota = 0;
-	assign lyku = 0;
-	assign roby = 0;
-	assign tyta = 0;
-	assign tyco = 0;
-	assign soka = 0;
-	assign xovu = 0;
+	assign nbgpixel = 1;
 
 	logic clk1, clk2, clk3, clk4, clk5;
 
@@ -489,7 +482,10 @@ module dmg;
 	logic ff4b_d0, ff4b_d1, ff4b_d2, ff4b_d3, ff4b_d4, ff4b_d5, ff4b_d6, ff4b_d7;
 
 	logic l113, int_vbl, int_vbl_buf, int_stat, clkpipe;
-	logic bg_pix_a_7, bg_pix_b_7;
+
+	logic       bg_pix_a_7, bg_pix_b_7;
+	logic [7:0] spr_pix_a, spr_pix_b;
+	logic       nbgpixel, nobp0pixel, nobp1pixel;
 
 	logic pin_cpg, cp, pin_cpl, pin_fr, pin_st, pin_s;
 
@@ -581,6 +577,8 @@ module dmg;
 	sprite_store           p30_sprite_store(.*);
 	sprite_x_matchers      p31_sprite_x_matchers(.*);
 	bg_pixel_shifter       p32_bg_pixel_shifter(.*);
+	sprite_pixel_shifter   p33_sprite_pixel_shifter(.*);
+	sprite_palette_shifter p34_sprite_palette_shifter(.*);
 	palettes               p36_palettes(.*);
 
 	/* for convinience */
