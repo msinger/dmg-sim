@@ -92,6 +92,22 @@ module dmg;
 	assign (pull1, highz0) p12  = !p12_b;
 	assign (pull1, highz0) p13  = !p13_b;
 
+	logic cpg;      /* CPG pin */
+	logic cp;       /* CP pin */
+	logic cpl;      /* CPL pin */
+	logic fr;       /* FR pin */
+	logic st;       /* ST pin */
+	logic s;        /* S pin */
+	logic ld0, ld1; /* LD0, LD1 pins (pixel data) */
+	assign cpg = !npin_cpg;
+	assign cp  = !ncp;
+	assign cpl = !npin_cpl;
+	assign fr  = !npin_fr;
+	assign st  = !npin_st;
+	assign s   = !npin_s;
+	assign ld0 = !nld0;
+	assign ld1 = !nld1;
+
 	task automatic xi_tick();
 		#122ns xo = xo_ena ? !xi : 0;
 	endtask
@@ -481,7 +497,7 @@ module dmg;
 	logic [7:0] spr_pix_a, spr_pix_b;
 	logic       nbgpixel, nobp0pixel, nobp1pixel;
 
-	logic pin_cpg, cp, pin_cpl, pin_fr, pin_st, pin_s, nld0, nld1;
+	logic npin_cpg, ncp, npin_cpl, npin_fr, npin_st, npin_s, nld0, nld1;
 
 	logic [7:0] v, h, nh;
 	logic [7:0] bgp_d, obp0_d, obp1_d;

@@ -10,7 +10,7 @@ module lcd_control(
 		input  logic l113, nxymu, mosu, lyry, myvo, sylo, fepo, wodu, napo, PURE, avap, roxy, nnype,
 		output logic loby, nyka, pory, tomu, poky, roxo, segu, tofu,
 
-		output logic pin_cpl, pin_fr, pin_st, pin_s,
+		output logic npin_cpl, npin_fr, npin_st, npin_s,
 		output logic clkpipe
 	);
 
@@ -29,8 +29,8 @@ module lcd_control(
 	assign #T_AO   kupa = (ff40_d7 && kebo) || (kedy && usec);
 	assign #T_INV  kymo = !kahe;
 	assign #T_INV  kofo = !kupa;
-	assign pin_cpl = kymo;
-	assign pin_fr  = kofo;
+	assign npin_cpl = kymo;
+	assign npin_fr  = kofo;
 
 	logic nafy, pygo, socy, vybo, tyfa, paho, pome, sacu, ruju, pofy, ruze;
 	dffr_bp dffr_nyka(clk2, nafy,  lyry, nyka);
@@ -53,12 +53,12 @@ module lcd_control(
 	assign #T_INV  pofy = !ruju;
 	assign #T_INV  ruze = !pofy;
 	assign clkpipe = sacu;
-	assign pin_st  = ruze;
+	assign npin_st  = ruze;
 
 	logic neru, meda, mure;
 	dffr_bp dffr_meda(nnype, nreset_video2, neru, meda);
 	assign #T_NOR  neru = !(v[7] || v[4] || v[3] || v[0] || v[1] || v[2] || v[5] || v[6]);
 	assign #T_INV  mure = !meda;
-	assign pin_s = mure;
+	assign npin_s = mure;
 
 endmodule

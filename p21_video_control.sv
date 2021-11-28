@@ -13,7 +13,7 @@ module video_control(
 		input  logic ff45_d0, ff45_d1, ff45_d2, ff45_d3, ff45_d4, ff45_d5, ff45_d6, ff45_d7,
 		input  logic ff41,
 
-		output logic pin_cpg, cp
+		output logic npin_cpg, ncp
 	);
 
 	logic syfu, tery, tucy, tyku, rasy, reda, tyde, ryme, sovu, subo, rape, paly;
@@ -62,7 +62,7 @@ module video_control(
 	assign #T_OR   ryno = rutu || sygu;
 	assign #T_INV  pogu = !ryno;
 	assign l113    = rutu;
-	assign pin_cpg = pogu;
+	assign npin_cpg = pogu;
 
 	logic nype, popu, xugu, xena, xano, paru, tolu, tapa, taru, vypu;
 	logic sepa, ryve, rugu, refe, ropo, rufo, roxe, suko, tuva, voty;
@@ -122,7 +122,7 @@ module video_control(
 	assign int_hbl     = taru;
 	assign int_vbl_buf = vypu;
 	assign int_stat    = voty;
-	assign cp = rypo;
+	assign ncp = rypo;
 	assign d[3] = puzo;
 	assign d[5] = sasy;
 	assign d[4] = pofo;
