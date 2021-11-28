@@ -15,7 +15,7 @@ module window_map_lookup(
 		input  logic wuty, tomu, fepo, atej, talu, avap, segu, wuko, pory, nxymu, poky,
 		input  logic nyka, roxo, loby,
 		output logic lyry, seca, mosu, nyxu, pore, vyno, vujo, vymu, pova, roxy, mofu,
-		output logic myvo, lena, potu, neta, nydy, xuha, myma
+		output logic myvo, lena, potu, neta, nydy, xuha, myma, sylo
 	);
 
 	logic veku, taka, tuku, sowo, teky, sobu, suda, rosy, ryce;
@@ -78,7 +78,7 @@ module window_map_lookup(
 	logic puky, nufa, nogy, nuko, nopa, nuny, nyfo;
 	logic roco, pyco, mehe, nunu, pynu, nocu, wazy, syny;
 	logic paha, paso, pecu, ryku, roga, rubu, roze, suha, syby, sozu, rone;
-	logic moxe, pohu, nyze, puxa, puku, rydy, pany, ryfa, sovy, sylo, romo;
+	logic moxe, pohu, nyze, puxa, puku, rydy, pany, ryfa, sovy, romo;
 	logic rene, tuxy, suvu, seko, suzu, tave, tevo, vetu, xahy, xofo, xaco;
 	logic tufu, taxa, tozo, tate, teke;
 	logic wyka, wody, wobo, wyko, xolo;

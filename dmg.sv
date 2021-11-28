@@ -351,12 +351,7 @@ module dmg;
 	assign mwr_in = !nmwr;
 	assign mcs_in = !nmcs;
 
-	/* not yet generated signals */
-	assign atej = 0;
-	assign sylo = 0;
-
 	logic clk1, clk2, clk3, clk4, clk5;
-
 	logic cpu_wr, cpu_wr2;
 	logic cpu_rd, cpu_rd2;
 	logic cpu_rd_sync; /* this is wrongly labeled in the schematics; it is actually WR sync */

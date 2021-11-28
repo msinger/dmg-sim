@@ -13,7 +13,7 @@ module oam(
 
 		input  logic xupy, avap, catu, nxymu, mopa_nphi, saro, tuvo, tyfo_nq, caty, xoce, waru, xare, abez,
 		input  logic weza, wuco, wyda, zysu, wyse, wuzy, wyja,
-		output logic anom, feto, besu, acyl, amab, azyb, byva, leko
+		output logic anom, feto, besu, acyl, amab, azyb, byva, leko, atej
 	);
 
 	logic yfel, wewy, goso, elyn, faha, fony, gava;
@@ -26,7 +26,7 @@ module oam(
 	assign #T_AND  feto = yfel && wewy && fony && goso;
 	assign #T_OR   gava = feto || xupy;
 
-	logic awoh, abaf, anel, byha, atej, amyg, abak;
+	logic awoh, abaf, anel, byha, amyg, abak;
 	dffr_bp dffr_anel(awoh, abez, catu, anel);
 	assign #T_INV  awoh = !xupy;
 	assign #T_INV  abaf = !catu;
