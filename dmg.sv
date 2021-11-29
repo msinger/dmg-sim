@@ -50,12 +50,16 @@ module dmg;
 	assign                 d_pin = d_pin_ext;
 	assign                 d_pin = d_pin_drv;
 
-	tri logic [7:0] md_pin; /* MD0-MD7 pins */
+	tri logic [7:0] md_pin;     /* MD0-MD7 pins */
+	logic     [7:0] md_pin_ext; /* Value driven externally onto the pins if not 'z */
+	logic     [7:0] md_pin_drv; /* Value driven internally onto the pins if not 'z */
 	generate
 		for (genvar i = 0; i < 8; i++)
-			assign md_pin[i] = bidir_out(md_out[i], md_a[i]);
+			assign md_pin_drv[i] = bidir_out(md_out[i], md_a[i]);
 	endgenerate
 	assign (pull1, highz0) md_pin = {8{!md_b}};
+	assign                 md_pin = md_pin_ext;
+	assign                 md_pin = md_pin_drv;
 
 	tri logic [15:0] a_pin; /* A0-A15 pins */
 	generate
@@ -343,9 +347,8 @@ module dmg;
 
 	tri logic  [7:0]  d;
 	tri0 logic [15:0] a;
-	tri0 logic [7:0]  md, oam_a_nd, oam_b_nd;
+	tri0 logic [7:0]  md;
 	tri0 logic [12:0] nma;
-	logic      [7:0]  oam_a;
 
 	/* Icarus doesn't support trireg, so we do it like this: */
 	logic [7:0] d_cap = 'z;
@@ -407,6 +410,7 @@ module dmg;
 	assign p12_c  = !p12;
 	assign p13_c  = !p13;
 
+	logic oam_a_cpu_nrd, oam_b_cpu_nrd;
 	logic dma_run, vram_to_oam, dma_addr_ext, oam_addr_ndma;
 	logic caty, wyja, mopa_nphi;
 	logic tovy_na0, tola_na1;
@@ -458,8 +462,6 @@ module dmg;
 	logic weme, wufa, faka, cyla, dymo, bucy, wofo, wylu, ewot;
 	logic asys, ahof, byvy, ngomo, nbaxo, nyzos, ndepo;
 	logic rawu, pyzo, pulo, powy, pozo, poxa, poju, pyju;
-
-	logic oam_clk, oam_a_cpu_nrd, oam_b_cpu_nrd, oam_a_ncs, oam_b_ncs;
 
 	logic ffxx, nffxx, nfexxffxx, a00_07, saro;
 	logic ff10, ff11, ff12, ff13, ff14, ff16, ff17, ff18, ff19, ff1a;
@@ -554,6 +556,25 @@ module dmg;
 	// TODO: The very first sample (high nibble of FF30) gets skipped when CH3 is started. Check if this is correct.
 	// TODO: When reading the next byte from wave RAM (for example FF31), the previous sample (high nibble of FF30)
 	//       gets output for a very short time before the next sample (high nibble of FF31) gets output. Check if correct.
+
+	/* connections to OAM RAM */
+	tri logic [7:0] oam_a_nd, oam_b_nd;      /* ~data I/O */
+	logic     [7:0] oam_a;                   /* address (except bit 0) */
+	logic     oam_a_ncs, oam_b_ncs;          /* !WR */
+	logic     oam_clk;                       /* !OE */
+
+	logic [7:0] oam_a_ram[0:79], oam_b_ram[0:79];
+	initial foreach (oam_a_ram[i]) oam_a_ram[i] = $random;
+	initial foreach (oam_b_ram[i]) oam_b_ram[i] = $random;
+	always_ff @(posedge oam_a_ncs) oam_a_ram[oam_a[6:1]] <= oam_a_nd;
+	always_ff @(posedge oam_b_ncs) oam_b_ram[oam_a[6:1]] <= oam_b_nd;
+	assign oam_a_nd = (!oam_clk) ? oam_a_ram[oam_a[6:1]] : 'z;
+	assign oam_b_nd = (!oam_clk) ? oam_b_ram[oam_a[6:1]] : 'z;
+
+	logic [7:0] video_ram[0:8191];
+	initial foreach (video_ram[i]) video_ram[i] = $random;
+	always_ff @(posedge nmwr) if (!nmcs) video_ram[ma_pin] <= md_pin;
+	assign md_pin_ext = (!nmcs && !nmoe) ? video_ram[ma_pin] : 'z;
 
 	clocks_reset           p1_clocks_reset(.*);
 	interrupts             p2_interrupts(.*);
