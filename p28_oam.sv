@@ -193,7 +193,7 @@ module oam(
 	assign #T_INV  yfot = !oam_na[2];
 	assign #T_INV  zyfo = !oam_na[1];
 	assign #T_INV  geka = !oam_na[0];
-	assign #T_AND  mynu = cpu_rd2 && caty;
+	assign #T_NAND mynu = !(cpu_rd2 && caty);
 	assign #T_INV  leko = !mynu;
 	assign #T_INV  wafo = !geka;
 	assign #T_AND  guko = wafo && amab && leko;
