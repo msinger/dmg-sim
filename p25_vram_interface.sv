@@ -89,9 +89,9 @@ module vram_interface(
 	logic cufe, vape, aver, xujy, bycu;
 	assign #T_AOI  cufe = !((saro && dma_run) || mopa_nphi);
 	assign #T_AND  vape = tacu && tuvo;
-	assign #T_AND  aver = acyl && xyso;
+	assign #T_NAND aver = !(acyl && xyso);
 	assign #T_INV  xujy = !vape;
-	assign #T_NOR  bycu = !(cufe || xujy || aver);
+	assign #T_NAND bycu = !(cufe && xujy && aver);
 	assign #T_INV  cota = !bycu;
 
 	logic tefa, sose, tuca, tuja, tegu, tavy, sycy, soto, tuto, sudo, tefy, sale, tyjy, tole;
