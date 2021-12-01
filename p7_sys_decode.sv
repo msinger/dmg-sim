@@ -125,7 +125,7 @@ module sys_decode(
 	assign #T_NAND wale = !(a[0] && a[1] && a[2] && a[3] && a[4] && a[5] && a[6]);
 	assign #T_NAND woly = !(wale && a[7] && ffxx);
 	assign #T_INV  wuta = !woly;
-	assign hram_cs = woly;
+	assign hram_cs = wuta;
 
 	logic tona, syke, bako, tuna, rycu, rope, soha;
 	assign #T_INV  tona = !a[8];
