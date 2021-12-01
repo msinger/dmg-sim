@@ -377,8 +377,9 @@ module sprite_store(
 	/* Icarus doesn't support trireg, so we do it like this: */
 	tri logic weza_tri, wuco_tri, wyda_tri, zysu_tri, wyse_tri, wuzy_tri;
 	tri logic wenu_tri, cucu_tri, cuca_tri, cega_tri;
-	logic     weza_cap = 'z, wuco_cap = 'z, wyda_cap = 'z, zysu_cap = 'z, wyse_cap = 'z, wuzy_cap = 'z;
-	logic     wenu_cap = 'z, cucu_cap = 'z, cuca_cap = 'z, cega_cap = 'z;
+	logic     weza_cap = $random, wuco_cap = $random, wyda_cap = $random, zysu_cap = $random;
+	logic     wyse_cap = $random, wuzy_cap = $random;
+	logic     wenu_cap = $random, cucu_cap = $random, cuca_cap = $random, cega_cap = $random;
 	always @(weza_tri) weza_cap = weza_tri;
 	always @(wuco_tri) wuco_cap = wuco_tri;
 	always @(wyda_tri) wyda_cap = wyda_tri;

@@ -250,7 +250,7 @@ module oam(
 	assign oam_b_ncs = zofe;
 
 	/* Icarus doesn't support trireg, so we do it like this: */
-	logic [7:0] oam_na_cap = 'z;
+	logic [7:0] oam_na_cap = $random;
 	always @(oam_na) oam_na_cap = oam_na;
 	assign (weak1, weak0) oam_na = oam_na_cap;
 
