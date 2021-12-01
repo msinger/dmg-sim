@@ -335,6 +335,8 @@ module dmg;
 
 				/* TODO: Address lines must not change when accessing boot ROM or video RAM, but they do. */
 
+				/* TODO: LAVO makes short-circuit on data bus when reading from boot ROM */
+
 				nop;
 				nop;
 
@@ -380,7 +382,7 @@ module dmg;
 	logic ff04_ff07, nff0f_rd, nff0f_wr, ff00wr, ff00rd;
 	logic nff04_d0, nff04_d1;
 	logic apu_wr, ncpu_rd;
-	logic hram_cs, boot_cs, cs_out;
+	logic cs_out;
 	logic to_cpu, to_cpu2;
 	logic from_cpu5; /* this is wrongly labeled in the schematics; it is actually a CPU input */
 
@@ -584,6 +586,21 @@ module dmg;
 	initial foreach (video_ram[i]) video_ram[i] = $random;
 	always_ff @(posedge nmwr) if (!nmcs) video_ram[ma_pin] <= $isunknown(md_pin) ? $random : md_pin;
 	assign md_pin_ext = (!nmcs && !nmoe) ? video_ram[ma_pin] : 'z;
+
+	/* connection to HRAM */
+	logic hram_cs; /* CS */
+
+	logic [7:0] hram[0:127];
+	initial foreach (hram[i]) hram[i] = $random;
+	always_ff @(negedge cpu_wr) if (hram_cs) hram[a[6:0]] <= $isunknown(d) ? $random : d;
+	assign d = (hram_cs && cpu_rd) ? hram[a[6:0]] : 'z;
+
+	/* connection to boot ROM */
+	logic boot_cs; /* OE */
+
+	logic [7:0] brom[0:255];
+	initial foreach (brom[i]) brom[i] = '0;
+	assign d = boot_cs ? brom[a[7:0]] : 'z;
 
 	clocks_reset           p1_clocks_reset(.*);
 	interrupts             p2_interrupts(.*);
