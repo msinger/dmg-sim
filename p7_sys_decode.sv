@@ -149,7 +149,7 @@ module sys_decode(
 	assign #T_NAND tuge = !(tyro && tufa && ffxx && cpu_wr);
 	assign #T_TRI  sypu = texe ? !(!tepu) : 'z;
 	assign #T_INV  tera = !tepu;
-	assign #T_INV  yaza = nt1_t2;
+	assign #T_INV  yaza = !nt1_t2;
 	assign #T_AND  tutu = tera && tulo;
 	assign #T_AND  yula = yaza && tutu && cpu_rd;
 	assign #T_NOR  tulo = !(a[15] || a[14] || a[13] || a[12] || a[11] || a[10] || a[9] || a[8]);
