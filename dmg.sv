@@ -193,9 +193,8 @@ module dmg;
 	assign cpu_raw_wr = !reset && !cpu_in_t12 && write_cycle && cpu_clkin_t3 && !cpu_clkin_t2;
 
 	/* CPU must raise cpu_out_r7 during mem cycles that are targeting external busses. It must not
-	 * raise it when accessing FExx and FFxx (cpu_in_r4). */
-	// TODO: Figure out if 00xx while boot ROM is visible (cpu_in_r5) is also an exception.
-	assign cpu_out_r7 = !reset && !cpu_in_t12 && mem_cycle && !cpu_in_r4;
+	 * raise it when accessing FExx and FFxx (cpu_in_r4) or 00xx while boot ROM is visible (cpu_in_r5). */
+	assign cpu_out_r7 = !reset && !cpu_in_t12 && mem_cycle && !cpu_in_r4 && !cpu_in_r5;
 
 	logic read_cycle;
 	logic write_cycle;
