@@ -322,6 +322,21 @@ module dmg;
 				nop;
 				nop;
 
+				write('hff80, 'h12);
+				write('hff81, 'h34);
+				write('hff82, 'h56);
+				write('hff83, 'h78);
+				write('hfffe, 'hab);
+				write('hffff, 'hcd);
+				write('h0000, 'hef);
+				read('hff80, 'h56);
+				read('hff81, 'h56);
+				read('hff82, 'h56);
+				read('hff83, 'h56);
+				read('hfffe, 'h56);
+				read('hffff, 'h56);
+				read('h0000, 'h56);
+
 				read('hff00, 'h56);
 				read('h1000, 'h56);
 				read('hff00, 'h56);
@@ -332,9 +347,68 @@ module dmg;
 				write('h4321, 'h56);
 				read('h8aaa, 'h56);
 
-				/* TODO: Address lines must not change when accessing boot ROM or video RAM, but they do. */
+				write('hff26, 'h80);
 
-				/* TODO: LAVO makes short-circuit on data bus when reading from boot ROM */
+				begin
+					int j;
+					j = 'h01;
+					for (int i = 'hff30; i < 'hff40; i++) begin
+						write(i, j);
+						j += 'h22;
+					end
+				end
+
+				write('hfe00, 'ha4);
+				write('hfe01, 'hb5);
+				write('hfe02, 'hc6);
+				write('hfe03, 'hd7);
+				write('h8000, 'h4a);
+				write('h8001, 'h5b);
+				write('h8002, 'h6c);
+				write('h8003, 'h7d);
+				read('hfe00, 'h56);
+				read('hfe01, 'h56);
+				read('hfe02, 'h56);
+				read('hfe03, 'h56);
+				read('h8000, 'h56);
+				read('h8001, 'h56);
+				read('h8002, 'h56);
+				read('h8003, 'h56);
+				write('hff40, 'h83);
+
+				write('hff10, 'h00);
+				write('hff11, 'h80);
+				write('hff12, 'hf3);
+				write('hff16, 'h80);
+				write('hff17, 'hf3);
+				write('hff1a, 'h80);
+				write('hff1b, 'h00);
+				write('hff1c, 'h20);
+				write('hff20, 'h00);
+				write('hff21, 'hf3);
+				write('hff25, 'hff);
+				write('hff24, 'h77);
+				write('hff13, 'h83);
+				write('hff14, 'h87);
+				write('hff18, 'h83);
+				write('hff19, 'h87);
+				write('hff22, 'h13);
+				write('hff23, 'h80);
+				write('hff1d, 'h83);
+				write('hff1e, 'h87);
+				for (int i = 0; i < 100000; i++)
+					nop();
+				write('hff13, 'hc1);
+				write('hff14, 'h87);
+				write('hff18, 'hc1);
+				write('hff19, 'h87);
+				write('hff1d, 'hc1);
+				write('hff1e, 'h87);
+
+				for (int i = 0; i < 1000000; i++)
+					nop();
+
+				/* TODO: Address lines must not change when accessing boot ROM or video RAM, but they do. */
 
 				nop;
 				nop;
