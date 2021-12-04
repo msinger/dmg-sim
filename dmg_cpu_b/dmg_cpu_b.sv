@@ -6,7 +6,91 @@ parameter bit dffra_inv_clk = 0; /* DFFR Variant A clock input is inverted? */
 parameter bit dffrc_inv_clk = 0; /* DFFR Variant C clock input is inverted? */
 parameter bit xi_in_inv     = 1; /* XI clock input is inverting? */
 
-module dmg;
+module dmg_cpu_b(
+		/* External pins of the DMG CPU B chip */
+		input  logic            xi,         /* Pin 74        - XI clock input pin */
+		output logic            xo,         /* Pin 73        - XO clock output pin */
+		input  logic            t1, t2,     /* Pin 77, 76    - T1, T2 test pins */
+		input  logic            nrst,       /* Pin 71        - !RST reset pin */
+		output logic            phi,        /* Pin 75        - PHI pin */
+		inout  tri logic        nrd,        /* Pin 79        - !RD pin */
+		inout  tri logic        nwr,        /* Pin 78        - !WR pin */
+		output logic            ncs,        /* Pin 80        - !CS pin */
+		inout  tri logic        nmoe,       /* Pin 45        - !MOE pin */
+		inout  tri logic        nmwr,       /* Pin 49        - !MWR pin */
+		inout  tri logic        nmcs,       /* Pin 43        - !MCS pin */
+		inout  tri logic [7:0]  d_pin,      /* Pin 17-24     - D0-D7 pins */
+		inout  tri logic [7:0]  md_pin,     /* Pin 33, 31-25 - MD0-MD7 pins */
+		inout  tri logic [15:0] a_pin,      /* Pin 1-16      - A0-A15 pins */
+		output logic     [12:0] ma_pin,     /* Pin 34-42     - MA0-MA12 pins */
+		output logic            sout,       /* Pin 70        - SOUT pin */
+		inout  tri logic        sin,        /* Pin 69        - SIN pin */
+		inout  tri logic        sck,        /* Pin 68        - SCK pin */
+		inout  tri logic        p10,        /* Pin 67        - P10 pin */
+		inout  tri logic        p11,        /* Pin 66        - P11 pin */
+		inout  tri logic        p12,        /* Pin 65        - P12 pin */
+		inout  tri logic        p13,        /* Pin 64        - P13 pin */
+		output tri logic        p14,        /* Pin 63        - P14 pin */
+		output tri logic        p15,        /* Pin 62        - P15 pin */
+		output logic            cpg,        /* Pin 52        - CPG pin */
+		output logic            cp,         /* Pin 53        - CP pin */
+		output logic            cpl,        /* Pin 55        - CPL pin */
+		output logic            fr,         /* Pin 56        - FR pin */
+		output logic            st,         /* Pin 54        - ST pin */
+		output logic            s,          /* Pin 57        - S pin */
+		output logic            ld0, ld1,   /* Pin 51, 50    - LD0, LD1 pins (pixel data) */
+		output real             lout, rout, /* Pin 60, 59    - Left and right audio out channels */
+		input  real             vin,        /* Pin 61        - Cartridge audio input */
+
+		/* Unbonded I/O pads of the DMG CPU B chip */
+		input  logic unbonded_pad0,  /* Unbonded input pad between pin 11 (A10) and 12 (A11) */
+		output logic unbonded_pad1,  /* Unbonded output pad between pin 51 (LD0) and 52 (CPG) */
+
+		/* Internal connections to SM83 CPU core
+		 * Numbered like here: http://iceboy.a-singer.de/doc/dmg_cpu_connections.html */
+		input  logic            cpu_out_t1,    /* CPU out T1  - Goes to unbonded pin; Some test pin? */
+		output logic            cpu_clkin_t2,  /* CPU in  T2  - 1 MiHz clock; complement of T3 */
+		output logic            cpu_clkin_t3,  /* CPU in  T3  - 1 MiHz clock; complement of T2 */
+		output logic            cpu_clkin_t4,  /* CPU in  T4  - 1 MiHz clock; complement of T5 */
+		output logic            cpu_clkin_t5,  /* CPU in  T5  - 1 MiHz clock; complement of T4 */
+		output logic            cpu_clkin_t6,  /* CPU in  T6  - 1 MiHz clock; complement of T7 */
+		output logic            cpu_clkin_t7,  /* CPU in  T7  - 1 MiHz clock; complement of T6 */
+		output logic            cpu_clkin_t8,  /* CPU in  T8  - 1 MiHz clock */
+		output logic            cpu_clkin_t9,  /* CPU in  T9  - 1 MiHz clock; complement of T10 */
+		output logic            cpu_clkin_t10, /* CPU in  T10 - 1 MiHz clock; complement of T9 */
+		input  logic            cpu_clk_ena,   /* CPU out T11 - Enable clocks; active-high */
+		output logic            cpu_in_t12,    /* CPU in  T12 - Synchonous reset; active-high */
+		output logic            cpu_in_t13,    /* CPU in  T13 - Asynchonous reset; active-high */
+		input  logic            cpu_xo_ena,    /* CPU out T14 - Enable crystal oscillator; active-high */
+		output logic            cpu_in_t15,    /* CPU in  T15 - Crystal oscillator stable; active-high */
+		output logic            cpu_in_t16,    /* CPU in  T16 - Goes to unbonded pin; Some test pin? */
+		input  logic            cpu_raw_rd,    /* CPU out R1  - Memory read signal; active-high */
+		input  logic            cpu_raw_wr,    /* CPU out R2  - Memory write signal; active-high */
+		output logic            cpu_in_r3,     /* CPU in  R3  - High when T1=1 T2=0 */
+		output logic            cpu_in_r4,     /* CPU in  R4  - High when address is 0xFExx or 0xFFxx */
+		output logic            cpu_in_r5,     /* CPU in  R5  - High when address is 0x00xx and boot ROM is still visible */
+		output logic            cpu_in_r6,     /* CPU in  R6  - High when T1=0 T2=1 */
+		input  logic            cpu_out_r7,    /* CPU out R7  - External memory request; active-high */
+		input  logic            cpu_irq0_ack,  /* CPU out R14 - IRQ0 acknowledge; active-high */
+		output logic            cpu_irq0_trig, /* CPU in  R15 - IRQ0 trigger; active-high */
+		input  logic            cpu_irq1_ack,  /* CPU out R16 - IRQ1 acknowledge; active-high */
+		output logic            cpu_irq1_trig, /* CPU in  R17 - IRQ1 trigger; active-high */
+		input  logic            cpu_irq2_ack,  /* CPU out R18 - IRQ2 acknowledge; active-high */
+		output logic            cpu_irq2_trig, /* CPU in  R19 - IRQ2 trigger; active-high */
+		input  logic            cpu_irq3_ack,  /* CPU out R20 - IRQ3 acknowledge; active-high */
+		output logic            cpu_irq3_trig, /* CPU in  R21 - IRQ3 trigger; active-high */
+		input  logic            cpu_irq4_ack,  /* CPU out R22 - IRQ4 acknowledge; active-high */
+		output logic            cpu_irq4_trig, /* CPU in  R23 - IRQ4 trigger; active-high */
+		input  logic            cpu_irq5_ack,  /* CPU out R24 - IRQ5 acknowledge; active-high */
+		output logic            cpu_irq5_trig, /* CPU in  R25 - IRQ5 trigger; active-high */
+		input  logic            cpu_irq6_ack,  /* CPU out R26 - IRQ6 acknowledge; active-high */
+		output logic            cpu_irq6_trig, /* CPU in  R27 - IRQ6 trigger; active-high */
+		input  logic            cpu_irq7_ack,  /* CPU out R28 - IRQ7 acknowledge; active-high */
+		output logic            cpu_irq7_trig, /* CPU in  R29 - IRQ7 trigger; active-high */
+		inout  tri logic [7:0]  cpu_d,         /* CPU I/O B1-B8  */
+		input  tri logic [15:0] cpu_a,         /* CPU out B9-B24 */
+		output logic            cpu_wakeup     /* CPU in  B25 - Wake from STOP mode; active-high */
+	);
 
 	function automatic logic bidir_out(input logic drv_low, ndrv_high);
 		if ($isunknown(drv_low) || $isunknown(ndrv_high))
@@ -19,72 +103,44 @@ module dmg;
 			bidir_out = 'z;
 	endfunction
 
-	logic xo, xi; /* XI, XO clock pins */
-	logic t1, t2; /* T1, T2 test pins */
-	logic nrst;   /* !RST reset pin */
-	logic phi;    /* PHI pin */
-	logic nrd;    /* !RD pin */
-	logic nwr;    /* !WR pin */
-	logic ncs;    /* !CS pin */
-	assign xi  = xo;
 	assign phi = !nphi_out;
 	assign nrd = bidir_out(rd_c, rd_a);
 	assign nwr = bidir_out(wr_c, wr_a);
 	assign ncs = !cs_out;
 
-	tri logic nmoe; /* !MOE pin */
-	tri logic nmwr; /* !MWR pin */
-	tri logic nmcs; /* !MCS pin */
 	assign nmoe = bidir_out(moe_d, moe_a);
 	assign nmwr = bidir_out(mwr_d, mwr_a);
 	assign nmcs = bidir_out(mcs_d, mcs_a);
 
-	tri logic [7:0] d_pin;          /* D0-D7 pins */
-	logic     [7:0] d_pin_ext = 'z; /* Value driven externally onto the pins if not 'z */
-	logic     [7:0] d_pin_drv;      /* Value driven internally onto the pins if not 'z */
+	logic [7:0] d_pin_drv; /* Value driven internally onto the data pins if not 'z */
 	generate
 		for (genvar i = 0; i < 8; i++)
 			assign d_pin_drv[i] = bidir_out(d_d[i], d_a[i]);
 	endgenerate
 	assign (pull1, highz0) d_pin = {8{!lula}};
-	assign                 d_pin = d_pin_ext;
 	assign                 d_pin = d_pin_drv;
 
-	tri logic [7:0] md_pin;     /* MD0-MD7 pins */
-	logic     [7:0] md_pin_ext; /* Value driven externally onto the pins if not 'z */
-	logic     [7:0] md_pin_drv; /* Value driven internally onto the pins if not 'z */
+	logic [7:0] md_pin_drv; /* Value driven internally onto the pins if not 'z */
 	generate
 		for (genvar i = 0; i < 8; i++)
 			assign md_pin_drv[i] = bidir_out(md_out[i], md_a[i]);
 	endgenerate
 	assign (pull1, highz0) md_pin = {8{!md_b}};
-	assign                 md_pin = md_pin_ext;
 	assign                 md_pin = md_pin_drv;
 
-	tri logic [15:0] a_pin; /* A0-A15 pins */
 	generate
 		for (genvar i = 0; i < 16; i++)
 			assign a_pin[i] = bidir_out(a_d[i], a_a[i]);
 	endgenerate
 
-	logic [12:0] ma_pin; /* MA0-MA12 pins */
 	assign ma_pin = ~nma_out;
 
-	logic     sout; /* SOUT pin */
-	tri logic sin;  /* SIN pin */
-	tri logic sck;  /* SCK pin */
 	assign                 sout = nsout;
 	assign                 sin  = bidir_out(sin_d, sin_a);
 	assign                 sck  = bidir_out(sck_d, sck_a);
 	assign (pull1, highz0) sin  = !sin_b;
 	assign (pull1, highz0) sck  = !sck_dir;
 
-	tri logic p10; /* P10 pin */
-	tri logic p11; /* P11 pin */
-	tri logic p12; /* P12 pin */
-	tri logic p13; /* P13 pin */
-	logic     p14; /* P14 pin */
-	logic     p15; /* P15 pin */
 	assign                 p10  = bidir_out(p10_d, p10_a);
 	assign                 p11  = bidir_out(p11_d, p11_a);
 	assign                 p12  = bidir_out(p12_d, p12_a);
@@ -96,13 +152,6 @@ module dmg;
 	assign (pull1, highz0) p12  = !p12_b;
 	assign (pull1, highz0) p13  = !p13_b;
 
-	logic cpg;      /* CPG pin */
-	logic cp;       /* CP pin */
-	logic cpl;      /* CPL pin */
-	logic fr;       /* FR pin */
-	logic st;       /* ST pin */
-	logic s;        /* S pin */
-	logic ld0, ld1; /* LD0, LD1 pins (pixel data) */
 	assign cpg = !npin_cpg;
 	assign cp  = !ncp;
 	assign cpl = !npin_cpl;
@@ -112,56 +161,10 @@ module dmg;
 	assign ld0 = !nld0;
 	assign ld1 = !nld1;
 
-	task automatic xi_tick();
-		#122ns xo = xo_ena ? !xi : 0;
-	endtask
+	assign cpu_in_t13 = reset;
+	assign cpu_in_r3  = t1_nt2;
+	assign cpu_in_r6  = nt1_t2;
 
-	task automatic cyc(input int num);
-		int i;
-		if (xi)
-			xi_tick();
-		for (i = 0; i < num * 2; i++)
-			xi_tick();
-	endtask
-
-	/* CPU I/Os labeled like here: http://iceboy.a-singer.de/doc/dmg_cpu_connections.html */
-	logic cpu_out_t1;     /* CPU out T1  */
-	logic cpu_clkin_t2;   /* CPU in  T2  */
-	logic cpu_clkin_t3;   /* CPU in  T3  */
-	logic cpu_clkin_t4;   /* CPU in  T4  */
-	logic cpu_clkin_t5;   /* CPU in  T5  */
-	logic cpu_clkin_t6;   /* CPU in  T6  */
-	logic cpu_clkin_t7;   /* CPU in  T7  */
-	logic cpu_clkin_t8;   /* CPU in  T8  */
-	logic cpu_clkin_t9;   /* CPU in  T9  */
-	logic cpu_clkin_t10;  /* CPU in  T10 */
-	logic cpu_clk_ena;    /* CPU out T11 */
-	logic cpu_in_t12;     /* CPU in  T12 */
-	logic reset;          /* CPU in  T13  (inverted !RST pin) */
-	logic xo_ena;         /* CPU out T14 */
-	logic cpu_in_t15;     /* CPU in  T15 */
-	logic cpu_in_t16 = 1; /* CPU in  T16 */
-	logic cpu_raw_rd;     /* CPU out R1  */
-	logic cpu_raw_wr;     /* CPU out R2  */
-	logic t1_nt2;         /* CPU in  R3  */
-	logic cpu_in_r4;      /* CPU in  R4  */
-	logic cpu_in_r5;      /* CPU in  R5  */
-	logic nt1_t2;         /* CPU in  R6  */
-	logic cpu_out_r7;     /* CPU out R7  */
-	logic cpu_irq0_ack;   /* CPU out R14 */
-	logic cpu_irq0_trig;  /* CPU in  R15 */
-	logic cpu_irq1_ack;   /* CPU out R16 */
-	logic cpu_irq1_trig;  /* CPU in  R17 */
-	logic cpu_irq2_ack;   /* CPU out R18 */
-	logic cpu_irq2_trig;  /* CPU in  R19 */
-	logic cpu_irq3_ack;   /* CPU out R20 */
-	logic cpu_irq3_trig;  /* CPU in  R21 */
-	logic cpu_irq4_ack;   /* CPU out R22 */
-	logic cpu_irq4_trig;  /* CPU in  R23 */
-	logic [7:0]  cpu_d;   /* CPU I/O B1-B8  */
-	logic [15:0] cpu_a;   /* CPU out B9-B24 */
-	logic        cpu_drv_d, cpu_drv_a;
-	logic cpu_wakeup;     /* CPU in  B25 */
 	assign cpu_clkin_t2  = to_cpu;
 	assign cpu_clkin_t3  = bedo;
 	assign cpu_clkin_t4  = beko;
@@ -175,250 +178,13 @@ module dmg;
 	assign cpu_in_t15    = taba;
 	assign cpu_in_r4     = syro;
 	assign cpu_in_r5     = tutu;
-	assign reset         = !nrst;
-	assign d             = cpu_drv_d ? cpu_d : 'z;
-	assign a             = cpu_drv_a ? cpu_a : 'z;
+	assign d             = cpu_d;
+	assign a             = cpu_a;
 	assign cpu_wakeup    = to_cpu2;
-
-	/* CPU must not drive data bus when cpu_clkin_t3 (BEDO) is low or cpu_clkin_t2 (BOWA) is high,
-	 * otherwise it collides with 0xff driven on the right side of page 5. */
-	assign cpu_drv_d = !reset && !cpu_in_t12 && cpu_raw_wr && cpu_clkin_t3 && !cpu_clkin_t2;
-
-	assign cpu_raw_rd = !reset && !cpu_in_t12 && read_cycle;
-
-	/* CPU must release WR when cpu_clkin_t3 (BEDO) is low or cpu_clkin_t2 (BOWA) is high. This
-	 * allows the RD signal to be asserted between the cycles for half a tick, like it is seen
-	 * on the cartridge connector. */
-	// TODO: Figure out if cpu_out_r7 (FROM_CPU4) has to do the same thing.
-	assign cpu_raw_wr = !reset && !cpu_in_t12 && write_cycle && cpu_clkin_t3 && !cpu_clkin_t2;
-
-	/* CPU must raise cpu_out_r7 during mem cycles that are targeting external busses. It must not
-	 * raise it when accessing FExx and FFxx (cpu_in_r4) or 00xx while boot ROM is visible (cpu_in_r5). */
-	assign cpu_out_r7 = !reset && !cpu_in_t12 && mem_cycle && !cpu_in_r4 && !cpu_in_r5;
-
-	logic read_cycle;
-	logic write_cycle;
-	logic mem_cycle;
-
-	task automatic write(input logic [15:0] adr, logic [7:0] data);
-		@(posedge cpu_clkin_t3);
-		mem_cycle   = 1;
-		cpu_a       = adr;
-		cpu_d       = '1;
-		write_cycle = 1;
-		@(posedge cpu_clkin_t5);
-		cpu_d       = data;
-		@(posedge cpu_clkin_t2);
-		write_cycle = 0;
-		mem_cycle   = 0;
-		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
-			cpu_a[15:8] = 0;
-	endtask
-
-	task automatic read(input logic [15:0] adr, logic [7:0] data);
-		@(posedge cpu_clkin_t3);
-		mem_cycle    = 1;
-		cpu_a        = adr;
-		read_cycle   = 1;
-		fork
-			begin :drive_data_after_chip_select
-				@(negedge ncs, negedge a_pin[15]); /* Wait for any of the two chip selects */
-				#4ns
-				d_pin_ext    = data;
-			end
-			begin
-				@(posedge cpu_clkin_t2);
-				d_pin_ext    = 'z;
-				read_cycle   = 0;
-				mem_cycle    = 0;
-				if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
-					cpu_a[15:8] = 0;
-				disable drive_data_after_chip_select;
-			end
-		join
-	endtask
-
-	task automatic nop;
-		@(posedge cpu_clkin_t3);
-		@(posedge cpu_clkin_t2);
-	endtask
-
-	task automatic write_snd_file_header(input int f, samplerate, channels, bit bit16);
-		$fwrite(f, ".snd");
-		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, 8'd32);
-		$fwrite(f, "%c%c%c%c", 8'hff, 8'hff, 8'hff, 8'hff);
-		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, bit16 ? 8'h03 : 8'h02);
-		$fwrite(f, "%c", (samplerate >> 24) & 8'hff);
-		$fwrite(f, "%c", (samplerate >> 16) & 8'hff);
-		$fwrite(f, "%c", (samplerate >> 8) & 8'hff);
-		$fwrite(f, "%c", samplerate & 8'hff);
-		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, channels & 8'hff);
-		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, 8'h00);
-		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, 8'h00);
-	endtask
-
-	int fch[1:4];
-	int fmix;
-
-	initial begin
-		$dumpfile("dmg.vcd");
-		$dumpvars(0, dmg);
-
-		t1   = 0;
-		t2   = 0;
-		xo   = 0;
-		nrst = 0;
-
-		cpu_out_t1   = 0;
-		cpu_clk_ena  = 0;
-		xo_ena       = 1;
-		read_cycle   = 0;
-		write_cycle  = 0;
-		mem_cycle    = 0;
-		cpu_irq0_ack = 0;
-		cpu_irq1_ack = 0;
-		cpu_irq2_ack = 0;
-		cpu_irq3_ack = 0;
-		cpu_irq4_ack = 0;
-		cpu_d        = 0;
-		cpu_drv_a    = 1;
-		cpu_a        = 0;
-
-		cyc(64);
-		nrst = 1;
-
-		for (int i = 1; i <= 4; i++) begin
-			string filename;
-			$sformat(filename, "ch%0d.snd", i);
-			fch[i] = $fopen(filename, "wb");
-			write_snd_file_header(fch[i], 65536, 1, 0);
-		end
-		fmix = $fopen("out.snd", "wb");
-		write_snd_file_header(fmix, 65536, 2, 1);
-
-		fork
-			begin :tick_tick
-				int tmp;
-				forever begin
-					cyc(64);
-					$fwrite(fch[1], "%c", { 1'b0, ch1_out, 3'b0 });
-					$fwrite(fch[2], "%c", { 1'b0, ch2_out, 3'b0 });
-					$fwrite(fch[3], "%c", { 1'b0, wave_dac_d, 3'b0 });
-					$fwrite(fch[4], "%c", { 1'b0, ch4_out, 3'b0 });
-					tmp = $rtoi(lout_pin * 32767.0);
-					$fwrite(fmix, "%c%c", { 1'b0, tmp[14:8] }, tmp[7:0]);
-					tmp = $rtoi(rout_pin * 32767.0);
-					$fwrite(fmix, "%c%c", { 1'b0, tmp[14:8] }, tmp[7:0]);
-				end
-			end
-
-			begin
-				/* CPU needs to wait for cpu_in_t15 before enabling cpu_clk_ena, otherwise
-				 * peripheral resets won't deassert. */
-				while (!cpu_clk_ena) @(posedge cpu_clkin_t10)
-					if (cpu_in_t15)
-						cpu_clk_ena = 1;
-
-				nop;
-				nop;
-
-				write('hff80, 'h12);
-				write('hff81, 'h34);
-				write('hff82, 'h56);
-				write('hff83, 'h78);
-				write('hfffe, 'hab);
-				write('hffff, 'hcd);
-				write('h0000, 'hef);
-				read('hff80, 'h56);
-				read('hff81, 'h56);
-				read('hff82, 'h56);
-				read('hff83, 'h56);
-				read('hfffe, 'h56);
-				read('hffff, 'h56);
-				read('h0000, 'h56);
-
-				read('hff00, 'h56);
-				read('h1000, 'h56);
-				read('hff00, 'h56);
-				write('hff00, 'h56);
-				read('h0055, 'h56);
-				write('h00aa, 'h56);
-				read('h1234, 'h56);
-				write('h4321, 'h56);
-				read('h8aaa, 'h56);
-
-				write('hff26, 'h80);
-
-				begin
-					int j;
-					j = 'h01;
-					for (int i = 'hff30; i < 'hff40; i++) begin
-						write(i, j);
-						j += 'h22;
-					end
-				end
-
-				write('hfe00, 'ha4);
-				write('hfe01, 'hb5);
-				write('hfe02, 'hc6);
-				write('hfe03, 'hd7);
-				write('h8000, 'h4a);
-				write('h8001, 'h5b);
-				write('h8002, 'h6c);
-				write('h8003, 'h7d);
-				read('hfe00, 'h56);
-				read('hfe01, 'h56);
-				read('hfe02, 'h56);
-				read('hfe03, 'h56);
-				read('h8000, 'h56);
-				read('h8001, 'h56);
-				read('h8002, 'h56);
-				read('h8003, 'h56);
-				write('hff40, 'h83);
-
-				write('hff10, 'h00);
-				write('hff11, 'h80);
-				write('hff12, 'hf3);
-				write('hff16, 'h80);
-				write('hff17, 'hf3);
-				write('hff1a, 'h80);
-				write('hff1b, 'h00);
-				write('hff1c, 'h20);
-				write('hff20, 'h00);
-				write('hff21, 'hf3);
-				write('hff25, 'hff);
-				write('hff24, 'h77);
-				write('hff13, 'h83);
-				write('hff14, 'h87);
-				write('hff18, 'h83);
-				write('hff19, 'h87);
-				write('hff22, 'h13);
-				write('hff23, 'h80);
-				write('hff1d, 'h83);
-				write('hff1e, 'h87);
-				for (int i = 0; i < 100000; i++)
-					nop();
-				write('hff13, 'hc1);
-				write('hff14, 'h87);
-				write('hff18, 'hc1);
-				write('hff19, 'h87);
-				write('hff1d, 'hc1);
-				write('hff1e, 'h87);
-
-				for (int i = 0; i < 1000000; i++)
-					nop();
-
-				/* TODO: Address lines must not change when accessing boot ROM or video RAM, but they do. */
-
-				nop;
-				nop;
-
-				disable tick_tick;
-			end
-		join
-
-		$finish;
-	end
+	assign cpu_in_t16    = !unbonded_pad0;
+	assign cpu_irq5_trig = 0;
+	assign cpu_irq6_trig = 0;
+	assign cpu_irq7_trig = 0;
 
 	tri logic  [7:0]  d;
 	tri0 logic [15:0] a;
@@ -459,9 +225,14 @@ module dmg;
 	logic to_cpu, to_cpu2;
 	logic from_cpu5; /* this is wrongly labeled in the schematics; it is actually a CPU input */
 
+	logic reset;
+	assign reset = !nrst;
+
 	logic clkin_a, clkin_b;
-	assign clkin_a = xo_ena;
+	assign clkin_a = cpu_xo_ena;
 	assign clkin_b = xi_in_inv ? !xi : xi;
+
+	assign xo = cpu_xo_ena ? !xi : 0;
 
 	logic from_cpu3, from_cpu4, from_cpu6, clk_from_cpu;
 	assign from_cpu3    = cpu_raw_wr;
@@ -498,6 +269,7 @@ module dmg;
 	logic int_serial, int_timer;
 	logic ser_out;
 
+	logic t1_nt2, nt1_t2;
 	logic apu_reset, net03;
 	logic napu_reset, napu_reset2, napu_reset4, napu_reset5, napu_reset6;
 	logic apuv_4mhz, amuk_4mhz;
@@ -591,15 +363,10 @@ module dmg;
 	logic [2:0] nlvolume, nrvolume;
 	logic       vin_l_ena, vin_r_ena;
 
-	/* simulate analog input */
-	real vin_pin;
-	assign vin_pin = 0.0;
-
 	/* simulate analog parts */
 	real ch1_fp, ch2_fp, ch3_fp, ch4_fp;
 	real lvol_fp, rvol_fp;
 	real lmix, rmix;
-	real lout_pin, rout_pin;
 	assign ch1_fp = $itor(ch1_out) / 15.0;
 	assign ch2_fp = $itor(ch2_out) / 15.0;
 	assign ch3_fp = $itor(wave_dac_d) / 15.0;
@@ -610,14 +377,14 @@ module dmg;
 	              (lmixer[1] ? ch2_fp * 0.7 : 0.0) +
 	              (lmixer[2] ? ch3_fp * 0.7 : 0.0) +
 	              (lmixer[3] ? ch4_fp * 0.7 : 0.0) +
-	              (vin_l_ena ? vin_pin * 0.7 : 0.0);
+	              (vin_l_ena ? vin * 0.7 : 0.0);
 	assign rmix = (rmixer[0] ? ch1_fp * 0.7 : 0.0) +
 	              (rmixer[1] ? ch2_fp * 0.7 : 0.0) +
 	              (rmixer[2] ? ch3_fp * 0.7 : 0.0) +
 	              (rmixer[3] ? ch4_fp * 0.7 : 0.0) +
-	              (vin_r_ena ? vin_pin * 0.7 : 0.0);
-	assign lout_pin = (lmix * lvol_fp > 1.0) ? 1.0 : (lmix * lvol_fp);
-	assign rout_pin = (rmix * rvol_fp > 1.0) ? 1.0 : (rmix * rvol_fp);
+	              (vin_r_ena ? vin * 0.7 : 0.0);
+	assign lout = (lmix * lvol_fp > 1.0) ? 1.0 : (lmix * lvol_fp);
+	assign rout = (rmix * rvol_fp > 1.0) ? 1.0 : (rmix * rvol_fp);
 
 	/* connections to wave RAM */
 	logic [7:0] wave_rd_d = $random; /* data output (data input is directly connected to common d[7:0]) */
@@ -654,11 +421,6 @@ module dmg;
 	always_ff @(posedge oam_b_ncs) oam_b_ram[oam_a[6:1]] <= $isunknown(oam_b_nd) ? $random : oam_b_nd;
 	assign oam_a_nd = (!oam_clk && oam_a[6:1] < 80) ? oam_a_ram[oam_a[6:1]] : 'z;
 	assign oam_b_nd = (!oam_clk && oam_a[6:1] < 80) ? oam_b_ram[oam_a[6:1]] : 'z;
-
-	logic [7:0] video_ram[0:8191];
-	initial foreach (video_ram[i]) video_ram[i] = $random;
-	always_ff @(posedge nmwr) if (!nmcs) video_ram[ma_pin] <= $isunknown(md_pin) ? $random : md_pin;
-	assign md_pin_ext = (!nmcs && !nmoe) ? video_ram[ma_pin] : 'z;
 
 	/* connection to HRAM */
 	logic hram_cs; /* CS */
