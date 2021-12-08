@@ -53,7 +53,7 @@ module lcd_control(
 	assign #T_INV  pofy = !ruju;
 	assign #T_INV  ruze = !pofy;
 	assign clkpipe = sacu;
-	assign npin_st  = ruze;
+	assign npin_st = ruze;
 
 	logic neru, meda, mure;
 	dffr_bp dffr_meda(nnype, nreset_video2, neru, meda);
