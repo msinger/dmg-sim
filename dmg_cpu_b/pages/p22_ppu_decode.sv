@@ -33,7 +33,7 @@ module ppu_decode(
 	assign #T_NAND wage = !(wero && wado && wesa && xusy && wepo);
 	assign #T_NAND webu = !(wero && xola && wesa && xusy && xera);
 	assign #T_NAND vama = !(wero && wado && xeno && xusy && wepo);
-	assign #T_NAND wybo = !(wero && wado && xeno && walo && xera);
+	assign #T_NAND wybo = !(wero && wado && wesa && walo && xera);
 	assign #T_INV  xayo = !weta;
 	assign #T_INV  xogy = !wyle;
 	assign #T_INV  voca = !woru;
