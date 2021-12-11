@@ -54,6 +54,18 @@ dmg_cpu_b/dmg_cpu_b.sv \
 $(DMG_CPU_B_CELLS) \
 $(DMG_CPU_B_PAGES)
 
+SM83 = \
+sm83/sm83.sv \
+sm83/sm83_adr_inc.sv \
+sm83/sm83_alu.sv \
+sm83/sm83_alu_control.sv \
+sm83/sm83_alu_flags.sv \
+sm83/sm83_control.sv \
+sm83/sm83_decode.sv \
+sm83/sm83_int.sv \
+sm83/sm83_io.sv \
+sm83/sm83_sequencer.sv
+
 TIMESCALE = timescale.f
 
 IVERILOG = iverilog
@@ -61,10 +73,10 @@ IVERILOG_FLAGS = -g2012 -f $(TIMESCALE) -pfileline=1
 VVP = vvp
 VVP_FLAGS = -N
 
-all: dmg_cpu_b_test.vcd
+all: dmg_cpu_b_test.vcd dmg_cpu_b_gameboy.vcd
 
 clean:
-	rm -f dmg_cpu_b_test.vcd dmg_cpu_b_test
+	rm -f dmg_cpu_b_test.vcd dmg_cpu_b_test.vvp dmg_cpu_b_gameboy.vcd dmg_cpu_b_gameboy.vvp
 
 .PHONY: all clean
 
@@ -72,4 +84,10 @@ dmg_cpu_b_test.vvp: dmg_cpu_b_test.sv $(DMG_CPU_B) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ dmg_cpu_b_test.sv $(DMG_CPU_B)
 
 dmg_cpu_b_test.vcd: dmg_cpu_b_test.vvp
+	$(VVP) $(VVP_FLAGS) $<
+
+dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(TIMESCALE)
+	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83)
+
+dmg_cpu_b_gameboy.vcd: dmg_cpu_b_gameboy.vvp
 	$(VVP) $(VVP_FLAGS) $<
