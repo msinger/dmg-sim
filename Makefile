@@ -57,7 +57,7 @@ $(DMG_CPU_B_PAGES)
 TIMESCALE = timescale.f
 
 IVERILOG = iverilog
-IVERILOG_FLAGS = -g2012 -f $(TIMESCALE)
+IVERILOG_FLAGS = -g2012 -f $(TIMESCALE) -pfileline=1 
 VVP = vvp
 VVP_FLAGS = -N
 
