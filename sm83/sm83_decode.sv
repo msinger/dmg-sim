@@ -2,341 +2,268 @@
 
 (* nolatches *)
 module sm83_decode(
-		input  logic [WORD_SIZE-1:0] opcode,
-		input  logic                 bank_cb,
+		input  logic [7:0] opcode,
+		input  logic       bank_cb,
 
-		input  logic                 in_alu,
+		input  logic       in_alu,
 
-		output logic                 add_r,      /* ADD/ADC/SUB/SBC/AND/XOR/OR/CP r/(HL) */
-		output logic                 add_hl,     /* ADD/ADC/SUB/SBC/AND/XOR/OR/CP (HL) */
-		output logic                 add_n,      /* ADD/ADC/SUB/SBC/AND/XOR/OR/CP n */
-		output logic                 add_x,      /* ADD r/(HL)/n */
-		output logic                 adc_x,      /* ADC r/(HL)/n */
-		output logic                 sub_x,      /* SUB r/(HL)/n */
-		output logic                 sbc_x,      /* SBC r/(HL)/n */
-		output logic                 and_x,      /* AND r/(HL)/n */
-		output logic                 xor_x,      /* XOR r/(HL)/n */
-		output logic                 or_x,       /* OR r/(HL)/n */
-		output logic                 cp_x,       /* CP r/(HL)/n */
-		output logic                 inc_m,      /* INC/DEC r/(HL) */
-		output logic                 inc_hl,     /* INC/DEC (HL) */
-		output logic                 dec_m,      /* DEC r/(HL) */
-		output logic                 rxxa,       /* RLCA/RLA/RRCA/RRA */
-		output logic                 daa,        /* DAA */
-		output logic                 cpl,        /* CPL */
-		output logic                 scf,        /* SCF */
-		output logic                 ccf,        /* CCF */
-		output logic                 add_hl_ss,  /* ADD HL, ss */
-		output logic                 add_sp_e,   /* ADD SP, e */
-		output logic                 inc_ss,     /* INC/DEC ss */
-		output logic                 ld_r_r,     /* LD r, r  ~or~  LD r, (HL)  ~or~  LD (HL), r  (~or~  HALT) */
-		output logic                 ld_r_hl,    /* LD r, (HL)  (~or~  HALT) */
-		output logic                 ld_hl_r,    /* LD (HL), r  (~or~  HALT) */
-		output logic                 ld_r_n,     /* LD r, n  ~or~  LD (HL), n */
-		output logic                 ld_hl_n,    /* LD (HL), n */
-		output logic                 ld_xx_a,    /* LD (BC/DE), A  ~or~  LD A, (BC/DE) */
-		output logic                 ld_hl_a,    /* LD (HLI/HLD), A  ~or~  LD A, (HLI/HLD) */
-		output logic                 ld_x_dir,   /* LD (BC/DE), A  ~or~  LD (HLI/HLD), A */
-		output logic                 ldx_nn_a,   /* LDX (nn), A  ~or~  LDX A, (nn) */
-		output logic                 ld_n_a,     /* LD (n), A  ~or~  LD A, (n) */
-		output logic                 ld_c_a,     /* LD (C), A  ~or~  LD A, (C) */
-		output logic                 ld_n_dir,   /* LD (n), A  ~or~  LD (C), A  ~or~  LDX (nn), A  (~or~  ADD SP, e) */
-		output logic                 ld_dd_nn,   /* LD dd, nn */
-		output logic                 ld_sp_hl,   /* LD SP, HL */
-		output logic                 ld_nn_sp,   /* LD (nn), SP */
-		output logic                 ldhl_sp_e,  /* LDHL SP, e */
-		output logic                 push_pop,   /* PUSH/POP qq */
-		output logic                 push_qq,    /* PUSH qq */
-		output logic                 jp_nn,      /* JP nn */
-		output logic                 jp_cc_nn,   /* JP cc, nn */
-		output logic                 jp_hl,      /* JP (HL) */
-		output logic                 jr_e,       /* JR e */
-		output logic                 jr_cc_e,    /* JR cc, e */
-		output logic                 call_nn,    /* CALL nn */
-		output logic                 call_cc_nn, /* CALL cc, nn */
-		output logic                 ret,        /* RET */
-		output logic                 reti,       /* RETI */
-		output logic                 ret_cc,     /* RET cc */
-		output logic                 rst_t,      /* RST t */
-		output logic                 nop,        /* NOP */
-		output logic                 stop,       /* STOP */
-		output logic                 halt,       /* HALT */
-		output logic                 di_ei,      /* DI/EI */
-		output logic                 prefix_cb,  /* Prefix CB */
-		output logic                 rlc_m,      /* RLC/RRC/RL/RR/SLA/SRA/SWAP/SRL r/(HL) */
-		output logic                 swap_m,     /* SWAP r/(HL) */
-		output logic                 bit_b_m,    /* BIT b, r/(HL) */
-		output logic                 res_b_m,    /* RES b, r/(HL) */
-		output logic                 set_b_m,    /* SET b, r/(HL) */
-		output logic                 cb_hl       /* RLC/RRC/RL/RR/SLA/SRA/SWAP/SRL (HL)  ~or~  BIT/RES/SET b, (HL) */
+		output logic       add_r,      /* ADD/ADC/SUB/SBC/AND/XOR/OR/CP r/(HL) */
+		output logic       add_hl,     /* ADD/ADC/SUB/SBC/AND/XOR/OR/CP (HL) */
+		output logic       add_n,      /* ADD/ADC/SUB/SBC/AND/XOR/OR/CP n */
+		output logic       add_x,      /* ADD r/(HL)/n */
+		output logic       adc_x,      /* ADC r/(HL)/n */
+		output logic       sub_x,      /* SUB r/(HL)/n */
+		output logic       sbc_x,      /* SBC r/(HL)/n */
+		output logic       and_x,      /* AND r/(HL)/n */
+		output logic       xor_x,      /* XOR r/(HL)/n */
+		output logic       or_x,       /* OR r/(HL)/n */
+		output logic       cp_x,       /* CP r/(HL)/n */
+		output logic       inc_m,      /* INC/DEC r/(HL) */
+		output logic       inc_hl,     /* INC/DEC (HL) */
+		output logic       dec_m,      /* DEC r/(HL) */
+		output logic       rxxa,       /* RLCA/RLA/RRCA/RRA */
+		output logic       daa,        /* DAA */
+		output logic       cpl,        /* CPL */
+		output logic       scf,        /* SCF */
+		output logic       ccf,        /* CCF */
+		output logic       add_hl_ss,  /* ADD HL, ss */
+		output logic       add_sp_e,   /* ADD SP, e */
+		output logic       inc_ss,     /* INC/DEC ss */
+		output logic       ld_r_r,     /* LD r, r  ~or~  LD r, (HL)  ~or~  LD (HL), r  (~or~  HALT) */
+		output logic       ld_r_hl,    /* LD r, (HL)  (~or~  HALT) */
+		output logic       ld_hl_r,    /* LD (HL), r  (~or~  HALT) */
+		output logic       ld_r_n,     /* LD r, n  ~or~  LD (HL), n */
+		output logic       ld_hl_n,    /* LD (HL), n */
+		output logic       ld_xx_a,    /* LD (BC/DE), A  ~or~  LD A, (BC/DE) */
+		output logic       ld_hl_a,    /* LD (HLI/HLD), A  ~or~  LD A, (HLI/HLD) */
+		output logic       ld_x_dir,   /* LD (BC/DE), A  ~or~  LD (HLI/HLD), A */
+		output logic       ldx_nn_a,   /* LDX (nn), A  ~or~  LDX A, (nn) */
+		output logic       ld_n_a,     /* LD (n), A  ~or~  LD A, (n) */
+		output logic       ld_c_a,     /* LD (C), A  ~or~  LD A, (C) */
+		output logic       ld_n_dir,   /* LD (n), A  ~or~  LD (C), A  ~or~  LDX (nn), A  (~or~  ADD SP, e) */
+		output logic       ld_dd_nn,   /* LD dd, nn */
+		output logic       ld_sp_hl,   /* LD SP, HL */
+		output logic       ld_nn_sp,   /* LD (nn), SP */
+		output logic       ldhl_sp_e,  /* LDHL SP, e */
+		output logic       push_pop,   /* PUSH/POP qq */
+		output logic       push_qq,    /* PUSH qq */
+		output logic       jp_nn,      /* JP nn */
+		output logic       jp_cc_nn,   /* JP cc, nn */
+		output logic       jp_hl,      /* JP (HL) */
+		output logic       jr_e,       /* JR e */
+		output logic       jr_cc_e,    /* JR cc, e */
+		output logic       call_nn,    /* CALL nn */
+		output logic       call_cc_nn, /* CALL cc, nn */
+		output logic       ret,        /* RET */
+		output logic       reti,       /* RETI */
+		output logic       ret_cc,     /* RET cc */
+		output logic       rst_t,      /* RST t */
+		output logic       nop,        /* NOP */
+		output logic       stop,       /* STOP */
+		output logic       halt,       /* HALT */
+		output logic       di_ei,      /* DI/EI */
+		output logic       prefix_cb,  /* Prefix CB */
+		output logic       rlc_m,      /* RLC/RRC/RL/RR/SLA/SRA/SWAP/SRL r/(HL) */
+		output logic       swap_m,     /* SWAP r/(HL) */
+		output logic       bit_b_m,    /* BIT b, r/(HL) */
+		output logic       res_b_m,    /* RES b, r/(HL) */
+		output logic       set_b_m,    /* SET b, r/(HL) */
+		output logic       cb_hl       /* RLC/RRC/RL/RR/SLA/SRA/SWAP/SRL (HL)  ~or~  BIT/RES/SET b, (HL) */
 	);
 
-	localparam int WORD_SIZE = 8;
+	/* ALU operation */
+	assign add_x = in_alu && opcode[5:3] == 0; /* ADD r/(HL)/n */
+	assign adc_x = in_alu && opcode[5:3] == 1; /* ADC r/(HL)/n */
+	assign sub_x = in_alu && opcode[5:3] == 2; /* SUB r/(HL)/n */
+	assign sbc_x = in_alu && opcode[5:3] == 3; /* SBC r/(HL)/n */
+	assign and_x = in_alu && opcode[5:3] == 4; /* AND r/(HL)/n */
+	assign xor_x = in_alu && opcode[5:3] == 5; /* XOR r/(HL)/n */
+	assign or_x  = in_alu && opcode[5:3] == 6; /* OR  r/(HL)/n */
+	assign cp_x  = in_alu && opcode[5:3] == 7; /* CP  r/(HL)/n */
 
-	always_comb begin
-		add_r      = 0;
-		add_hl     = 0;
-		add_n      = 0;
-		add_x      = 0;
-		adc_x      = 0;
-		sub_x      = 0;
-		sbc_x      = 0;
-		and_x      = 0;
-		xor_x      = 0;
-		or_x       = 0;
-		cp_x       = 0;
-		inc_m      = 0;
-		inc_hl     = 0;
-		dec_m      = 0;
-		rxxa       = 0;
-		daa        = 0;
-		cpl        = 0;
-		scf        = 0;
-		ccf        = 0;
-		add_hl_ss  = 0;
-		add_sp_e   = 0;
-		inc_ss     = 0;
-		ld_r_r     = 0;
-		ld_r_hl    = 0;
-		ld_hl_r    = 0;
-		ld_r_n     = 0;
-		ld_hl_n    = 0;
-		ld_xx_a    = 0;
-		ld_hl_a    = 0;
-		ld_x_dir   = 0;
-		ldx_nn_a   = 0;
-		ld_n_a     = 0;
-		ld_c_a     = 0;
-		ld_n_dir   = 0;
-		ld_dd_nn   = 0;
-		ld_sp_hl   = 0;
-		ld_nn_sp   = 0;
-		ldhl_sp_e  = 0;
-		push_pop   = 0;
-		push_qq    = 0;
-		jp_nn      = 0;
-		jp_cc_nn   = 0;
-		jp_hl      = 0;
-		jr_e       = 0;
-		jr_cc_e    = 0;
-		call_nn    = 0;
-		call_cc_nn = 0;
-		ret        = 0;
-		reti       = 0;
-		ret_cc     = 0;
-		rst_t      = 0;
-		nop        = 0;
-		stop       = 0;
-		halt       = 0;
-		di_ei      = 0;
-		prefix_cb  = 0;
-		rlc_m      = 0;
-		swap_m     = 0;
-		bit_b_m    = 0;
-		res_b_m    = 0;
-		set_b_m    = 0;
-		cb_hl      = 0;
+	/* 8 bit arithmetic */
+	assign add_r  = !bank_cb && opcode[7:6] == 2;  /* ADD/ADC/SUB/SBC/AND/XOR/OR/CP r/(HL) */
+	assign add_hl = !bank_cb && (opcode == 'h86 || /* ADD (HL) */
+	                             opcode == 'h96 || /* SUB (HL) */
+	                             opcode == 'ha6 || /* AND (HL) */
+	                             opcode == 'hb6 || /* OR (HL) */
+	                             opcode == 'h8e || /* ADC (HL) */
+	                             opcode == 'h9e || /* SBC (HL) */
+	                             opcode == 'hae || /* XOR (HL) */
+	                             opcode == 'hbe);  /* CP (HL) */
+	assign add_n  = !bank_cb && (opcode == 'hc6 || /* ADD n */
+	                             opcode == 'hd6 || /* SUB n */
+	                             opcode == 'he6 || /* AND n */
+	                             opcode == 'hf6 || /* OR n */
+	                             opcode == 'hce || /* ADC n */
+	                             opcode == 'hde || /* SBC n */
+	                             opcode == 'hee || /* XOR n */
+	                             opcode == 'hfe);  /* CP n */
+	assign inc_m  = !bank_cb && (opcode == 'h04 || /* INC B */
+	                             opcode == 'h14 || /* INC D */
+	                             opcode == 'h24 || /* INC H */
+	                             opcode == 'h34 || /* INC (HL) */
+	                             opcode == 'h0c || /* INC C */
+	                             opcode == 'h1c || /* INC E */
+	                             opcode == 'h2c || /* INC L */
+	                             opcode == 'h3c || /* INC A */
+	                             opcode == 'h05 || /* DEC B */
+	                             opcode == 'h15 || /* DEC D */
+	                             opcode == 'h25 || /* DEC H */
+	                             opcode == 'h35 || /* DEC (HL) */
+	                             opcode == 'h0d || /* DEC C */
+	                             opcode == 'h1d || /* DEC E */
+	                             opcode == 'h2d || /* DEC L */
+	                             opcode == 'h3d);  /* DEC A */
+	assign inc_hl = !bank_cb && (opcode == 'h34 || /* INC (HL) */
+	                             opcode == 'h35);  /* DEC (HL) */
+	assign dec_m  = !bank_cb && (opcode == 'h05 || /* DEC B */
+	                             opcode == 'h15 || /* DEC D */
+	                             opcode == 'h25 || /* DEC H */
+	                             opcode == 'h35 || /* DEC (HL) */
+	                             opcode == 'h0d || /* DEC C */
+	                             opcode == 'h1d || /* DEC E */
+	                             opcode == 'h2d || /* DEC L */
+	                             opcode == 'h3d);  /* DEC A */
+	assign rxxa   = !bank_cb && (opcode == 'h07 || /* RLCA */
+	                             opcode == 'h17 || /* RLA */
+	                             opcode == 'h0f || /* RRCA */
+	                             opcode == 'h1f);  /* RRA */
+	assign daa    = !bank_cb &&  opcode == 'h27;   /* DAA */
+	assign cpl    = !bank_cb &&  opcode == 'h2f;   /* CPL */
+	assign scf    = !bank_cb &&  opcode == 'h37;   /* SCF */
+	assign ccf    = !bank_cb &&  opcode == 'h3f;   /* CCF */
 
-		if (in_alu) unique case (opcode[5:3])
-			0: add_x = 1; /* ADD r/(HL)/n */
-			1: adc_x = 1; /* ADC r/(HL)/n */
-			2: sub_x = 1; /* SUB r/(HL)/n */
-			3: sbc_x = 1; /* SBC r/(HL)/n */
-			4: and_x = 1; /* AND r/(HL)/n */
-			5: xor_x = 1; /* XOR r/(HL)/n */
-			6: or_x  = 1; /* OR r/(HL)/n */
-			7: cp_x  = 1; /* CP r/(HL)/n */
-		endcase
+	/* 16 bit arithmetic */
+	assign add_hl_ss = !bank_cb && (opcode == 'h09 || /* ADD HL, BC */
+	                                opcode == 'h19 || /* ADD HL, DE */
+	                                opcode == 'h29 || /* ADD HL, HL */
+	                                opcode == 'h39);  /* ADD HL, SP */
+	assign add_sp_e  = !bank_cb &&  opcode == 'he8;   /* ADD SP, e */
+	assign inc_ss    = !bank_cb && (opcode == 'h03 || /* INC BC */
+	                                opcode == 'h13 || /* INC DE */
+	                                opcode == 'h23 || /* INC HL */
+	                                opcode == 'h33 || /* INC SP */
+	                                opcode == 'h0b || /* DEC BC */
+	                                opcode == 'h1b || /* DEC DE */
+	                                opcode == 'h2b || /* DEC HL */
+	                                opcode == 'h3b);  /* DEC SP */
 
-		unique case (1)
-			default: begin /* unprefixed instructions */
-				/* 8 bit arithmetic */
-				if (opcode[7:6] == 2) add_r    = 1; /* ADD/ADC/SUB/SBC/AND/XOR/OR/CP r/(HL) */
-				if (opcode == 'h86) add_hl     = 1; /* ADD (HL) */
-				if (opcode == 'h96) add_hl     = 1; /* SUB (HL) */
-				if (opcode == 'ha6) add_hl     = 1; /* AND (HL) */
-				if (opcode == 'hb6) add_hl     = 1; /* OR (HL) */
-				if (opcode == 'h8e) add_hl     = 1; /* ADC (HL) */
-				if (opcode == 'h9e) add_hl     = 1; /* SBC (HL) */
-				if (opcode == 'hae) add_hl     = 1; /* XOR (HL) */
-				if (opcode == 'hbe) add_hl     = 1; /* CP (HL) */
-				if (opcode == 'hc6) add_n      = 1; /* ADD n */
-				if (opcode == 'hd6) add_n      = 1; /* SUB n */
-				if (opcode == 'he6) add_n      = 1; /* AND n */
-				if (opcode == 'hf6) add_n      = 1; /* OR n */
-				if (opcode == 'hce) add_n      = 1; /* ADC n */
-				if (opcode == 'hde) add_n      = 1; /* SBC n */
-				if (opcode == 'hee) add_n      = 1; /* XOR n */
-				if (opcode == 'hfe) add_n      = 1; /* CP n */
-				if (opcode == 'h04) inc_m      = 1; /* INC B */
-				if (opcode == 'h14) inc_m      = 1; /* INC D */
-				if (opcode == 'h24) inc_m      = 1; /* INC H */
-				if (opcode == 'h34) inc_m      = 1; /* INC (HL) */
-				if (opcode == 'h0c) inc_m      = 1; /* INC C */
-				if (opcode == 'h1c) inc_m      = 1; /* INC E */
-				if (opcode == 'h2c) inc_m      = 1; /* INC L */
-				if (opcode == 'h3c) inc_m      = 1; /* INC A */
-				if (opcode == 'h05) inc_m      = 1; /* DEC B */
-				if (opcode == 'h15) inc_m      = 1; /* DEC D */
-				if (opcode == 'h25) inc_m      = 1; /* DEC H */
-				if (opcode == 'h35) inc_m      = 1; /* DEC (HL) */
-				if (opcode == 'h0d) inc_m      = 1; /* DEC C */
-				if (opcode == 'h1d) inc_m      = 1; /* DEC E */
-				if (opcode == 'h2d) inc_m      = 1; /* DEC L */
-				if (opcode == 'h3d) inc_m      = 1; /* DEC A */
-				if (opcode == 'h34) inc_hl     = 1; /* INC (HL) */
-				if (opcode == 'h35) inc_hl     = 1; /* DEC (HL) */
-				if (opcode == 'h05) dec_m      = 1; /* DEC B */
-				if (opcode == 'h15) dec_m      = 1; /* DEC D */
-				if (opcode == 'h25) dec_m      = 1; /* DEC H */
-				if (opcode == 'h35) dec_m      = 1; /* DEC (HL) */
-				if (opcode == 'h0d) dec_m      = 1; /* DEC C */
-				if (opcode == 'h1d) dec_m      = 1; /* DEC E */
-				if (opcode == 'h2d) dec_m      = 1; /* DEC L */
-				if (opcode == 'h3d) dec_m      = 1; /* DEC A */
-				if (opcode == 'h07) rxxa       = 1; /* RLCA */
-				if (opcode == 'h17) rxxa       = 1; /* RLA */
-				if (opcode == 'h0f) rxxa       = 1; /* RRCA */
-				if (opcode == 'h1f) rxxa       = 1; /* RRA */
-				if (opcode == 'h27) daa        = 1; /* DAA */
-				if (opcode == 'h2f) cpl        = 1; /* CPL */
-				if (opcode == 'h37) scf        = 1; /* SCF */
-				if (opcode == 'h3f) ccf        = 1; /* CCF */
+	/* 8 bit loads */
+	assign ld_r_r   = !bank_cb && opcode[7:6] == 1;  /* LD r, r  ~or~  LD r, (HL)  ~or~  LD (HL), r  (~or~  HALT) */
+	assign ld_r_hl  = !bank_cb && (opcode == 'h46 || /* LD B, (HL) */
+	                               opcode == 'h56 || /* LD D, (HL) */
+	                               opcode == 'h66 || /* LD H, (HL) */
+	                               opcode == 'h4e || /* LD C, (HL) */
+	                               opcode == 'h5e || /* LD E, (HL) */
+	                               opcode == 'h6e || /* LD L, (HL) */
+	                               opcode == 'h7e);  /* LD A, (HL) */
+	assign ld_hl_r  = !bank_cb && (opcode == 'h70 || /* LD (HL), B */
+	                               opcode == 'h71 || /* LD (HL), C */
+	                               opcode == 'h72 || /* LD (HL), D */
+	                               opcode == 'h73 || /* LD (HL), E */
+	                               opcode == 'h74 || /* LD (HL), H */
+	                               opcode == 'h75 || /* LD (HL), L */
+	                               opcode == 'h77);  /* LD (HL), A */
+	assign ld_r_n   = !bank_cb && (opcode == 'h06 || /* LD B, n */
+	                               opcode == 'h16 || /* LD D, n */
+	                               opcode == 'h26 || /* LD H, n */
+	                               opcode == 'h36 || /* LD (HL), n */
+	                               opcode == 'h0e || /* LD C, n */
+	                               opcode == 'h1e || /* LD E, n */
+	                               opcode == 'h2e || /* LD L, n */
+	                               opcode == 'h3e);  /* LD A, n */
+	assign ld_hl_n  = !bank_cb &&  opcode == 'h36;   /* LD (HL), n */
+	assign ld_xx_a  = !bank_cb && (opcode == 'h02 || /* LD (BC), A */
+	                               opcode == 'h12 || /* LD (DE), A */
+	                               opcode == 'h0a || /* LD A, (BC) */
+	                               opcode == 'h1a);  /* LD A, (DE) */
+	assign ld_hl_a  = !bank_cb && (opcode == 'h22 || /* LD (HLI), A */
+	                               opcode == 'h32 || /* LD (HLD), A */
+	                               opcode == 'h2a || /* LD A, (HLI) */
+	                               opcode == 'h3a);  /* LD A, (HLD) */
+	assign ld_x_dir = !bank_cb && (opcode == 'h02 || /* LD (BC), A */
+	                               opcode == 'h12 || /* LD (DE), A */
+	                               opcode == 'h22 || /* LD (HLI), A */
+	                               opcode == 'h32);  /* LD (HLD), A */
+	assign ldx_nn_a = !bank_cb && (opcode == 'hea || /* LDX (nn), A */
+	                               opcode == 'hfa);  /* LDX A, (nn) */
+	assign ld_n_a   = !bank_cb && (opcode == 'he0 || /* LD (n), A */
+	                               opcode == 'hf0);  /* LD A, (n) */
+	assign ld_c_a   = !bank_cb && (opcode == 'he2 || /* LD (C), A */
+	                               opcode == 'hf2);  /* LD A, (C) */
+	assign ld_n_dir = !bank_cb && (opcode == 'he0 || /* LD (n), A */
+	                               opcode == 'he2 || /* LD (C), A */
+	                               opcode == 'he8 || /* ADD SP, e (just for simplifying logic) */
+	                               opcode == 'hea);  /* LDX (nn), A */
 
-				/* 16 bit arithmetic */
-				if (opcode == 'h09) add_hl_ss  = 1; /* ADD HL, BC */
-				if (opcode == 'h19) add_hl_ss  = 1; /* ADD HL, DE */
-				if (opcode == 'h29) add_hl_ss  = 1; /* ADD HL, HL */
-				if (opcode == 'h39) add_hl_ss  = 1; /* ADD HL, SP */
-				if (opcode == 'he8) add_sp_e   = 1; /* ADD SP, e */
-				if (opcode == 'h03) inc_ss     = 1; /* INC BC */
-				if (opcode == 'h13) inc_ss     = 1; /* INC DE */
-				if (opcode == 'h23) inc_ss     = 1; /* INC HL */
-				if (opcode == 'h33) inc_ss     = 1; /* INC SP */
-				if (opcode == 'h0b) inc_ss     = 1; /* DEC BC */
-				if (opcode == 'h1b) inc_ss     = 1; /* DEC DE */
-				if (opcode == 'h2b) inc_ss     = 1; /* DEC HL */
-				if (opcode == 'h3b) inc_ss     = 1; /* DEC SP */
+	/* 16 bit loads */
+	assign ld_dd_nn  = !bank_cb && (opcode == 'h01 || /* LD BC, nn */
+	                                opcode == 'h11 || /* LD DE, nn */
+	                                opcode == 'h21 || /* LD HL, nn */
+	                                opcode == 'h31);  /* LD SP, nn */
+	assign ld_sp_hl  = !bank_cb &&  opcode == 'hf9;   /* LD SP, HL */
+	assign ld_nn_sp  = !bank_cb &&  opcode == 'h08;   /* LD (nn), SP */
+	assign ldhl_sp_e = !bank_cb &&  opcode == 'hf8;   /* LDHL SP, e */
+	assign push_pop  = !bank_cb && (opcode == 'hc1 || /* POP BC */
+	                                opcode == 'hd1 || /* POP DE */
+	                                opcode == 'he1 || /* POP HL */
+	                                opcode == 'hf1 || /* POP AF */
+	                                opcode == 'hc5 || /* PUSH BC */
+	                                opcode == 'hd5 || /* PUSH DE */
+	                                opcode == 'he5 || /* PUSH HL */
+	                                opcode == 'hf5);  /* PUSH AF */
+	assign push_qq   = !bank_cb && (opcode == 'hc5 || /* PUSH BC */
+	                                opcode == 'hd5 || /* PUSH DE */
+	                                opcode == 'he5 || /* PUSH HL */
+	                                opcode == 'hf5);  /* PUSH AF */
 
-				/* 8 bit loads */
-				if (opcode[7:6] == 1) ld_r_r   = 1; /* LD r, r  ~or~  LD r, (HL)  ~or~  LD (HL), r  (~or~  HALT) */
-				if (opcode == 'h46) ld_r_hl    = 1; /* LD B, (HL) */
-				if (opcode == 'h56) ld_r_hl    = 1; /* LD D, (HL) */
-				if (opcode == 'h66) ld_r_hl    = 1; /* LD H, (HL) */
-				if (opcode == 'h4e) ld_r_hl    = 1; /* LD C, (HL) */
-				if (opcode == 'h5e) ld_r_hl    = 1; /* LD E, (HL) */
-				if (opcode == 'h6e) ld_r_hl    = 1; /* LD L, (HL) */
-				if (opcode == 'h7e) ld_r_hl    = 1; /* LD A, (HL) */
-				if (opcode == 'h70) ld_hl_r    = 1; /* LD (HL), B */
-				if (opcode == 'h71) ld_hl_r    = 1; /* LD (HL), C */
-				if (opcode == 'h72) ld_hl_r    = 1; /* LD (HL), D */
-				if (opcode == 'h73) ld_hl_r    = 1; /* LD (HL), E */
-				if (opcode == 'h74) ld_hl_r    = 1; /* LD (HL), H */
-				if (opcode == 'h75) ld_hl_r    = 1; /* LD (HL), L */
-				if (opcode == 'h77) ld_hl_r    = 1; /* LD (HL), A */
-				if (opcode == 'h06) ld_r_n     = 1; /* LD B, n */
-				if (opcode == 'h16) ld_r_n     = 1; /* LD D, n */
-				if (opcode == 'h26) ld_r_n     = 1; /* LD H, n */
-				if (opcode == 'h36) ld_r_n     = 1; /* LD (HL), n */
-				if (opcode == 'h0e) ld_r_n     = 1; /* LD C, n */
-				if (opcode == 'h1e) ld_r_n     = 1; /* LD E, n */
-				if (opcode == 'h2e) ld_r_n     = 1; /* LD L, n */
-				if (opcode == 'h3e) ld_r_n     = 1; /* LD A, n */
-				if (opcode == 'h36) ld_hl_n    = 1; /* LD (HL), n */
-				if (opcode == 'h02) ld_xx_a    = 1; /* LD (BC), A */
-				if (opcode == 'h12) ld_xx_a    = 1; /* LD (DE), A */
-				if (opcode == 'h0a) ld_xx_a    = 1; /* LD A, (BC) */
-				if (opcode == 'h1a) ld_xx_a    = 1; /* LD A, (DE) */
-				if (opcode == 'h22) ld_hl_a    = 1; /* LD (HLI), A */
-				if (opcode == 'h32) ld_hl_a    = 1; /* LD (HLD), A */
-				if (opcode == 'h2a) ld_hl_a    = 1; /* LD A, (HLI) */
-				if (opcode == 'h3a) ld_hl_a    = 1; /* LD A, (HLD) */
-				if (opcode == 'h02) ld_x_dir   = 1; /* LD (BC), A */
-				if (opcode == 'h12) ld_x_dir   = 1; /* LD (DE), A */
-				if (opcode == 'h22) ld_x_dir   = 1; /* LD (HLI), A */
-				if (opcode == 'h32) ld_x_dir   = 1; /* LD (HLD), A */
-				if (opcode == 'hea) ldx_nn_a   = 1; /* LDX (nn), A */
-				if (opcode == 'hfa) ldx_nn_a   = 1; /* LDX A, (nn) */
-				if (opcode == 'he0) ld_n_a     = 1; /* LD (n), A */
-				if (opcode == 'hf0) ld_n_a     = 1; /* LD A, (n) */
-				if (opcode == 'he2) ld_c_a     = 1; /* LD (C), A */
-				if (opcode == 'hf2) ld_c_a     = 1; /* LD A, (C) */
-				if (opcode == 'he0) ld_n_dir   = 1; /* LD (n), A */
-				if (opcode == 'he2) ld_n_dir   = 1; /* LD (C), A */
-				if (opcode == 'he8) ld_n_dir   = 1; /* ADD SP, e (just for simplifying logic) */
-				if (opcode == 'hea) ld_n_dir   = 1; /* LDX (nn), A */
+	/* jumps */
+	assign jp_nn      = !bank_cb &&  opcode == 'hc3;   /* JP nn */
+	assign jp_cc_nn   = !bank_cb && (opcode == 'hc2 || /* JP NZ, nn */
+	                                 opcode == 'hd2 || /* JP NC, nn */
+	                                 opcode == 'hca || /* JP Z, nn */
+	                                 opcode == 'hda);  /* JP C, nn */
+	assign jp_hl      = !bank_cb &&  opcode == 'he9;   /* JP (HL) */
+	assign jr_e       = !bank_cb &&  opcode == 'h18;   /* JR e */
+	assign jr_cc_e    = !bank_cb && (opcode == 'h20 || /* JR NZ, e */
+	                                 opcode == 'h30 || /* JR NC, e */
+	                                 opcode == 'h28 || /* JR Z, e */
+	                                 opcode == 'h38);  /* JR C, e */
+	assign call_nn    = !bank_cb &&  opcode == 'hcd;   /* CALL nn */
+	assign call_cc_nn = !bank_cb && (opcode == 'hc4 || /* CALL NZ, nn */
+	                                 opcode == 'hd4 || /* CALL NC, nn */
+	                                 opcode == 'hcc || /* CALL Z, nn */
+	                                 opcode == 'hdc);  /* CALL C, nn */
+	assign ret        = !bank_cb &&  opcode == 'hc9;   /* RET */
+	assign reti       = !bank_cb &&  opcode == 'hd9;   /* RETI */
+	assign ret_cc     = !bank_cb && (opcode == 'hc0 || /* RET NZ */
+	                                 opcode == 'hd0 || /* RET NC */
+	                                 opcode == 'hc8 || /* RET Z */
+	                                 opcode == 'hd8);  /* RET C */
+	assign rst_t      = !bank_cb && (opcode == 'hc7 || /* RST 00h */
+	                                 opcode == 'hcf || /* RST 08h */
+	                                 opcode == 'hd7 || /* RST 10h */
+	                                 opcode == 'hdf || /* RST 18h */
+	                                 opcode == 'he7 || /* RST 20h */
+	                                 opcode == 'hef || /* RST 28h */
+	                                 opcode == 'hf7 || /* RST 30h */
+	                                 opcode == 'hff);  /* RST 38h */
 
-				/* 16 bit loads */
-				if (opcode == 'h01) ld_dd_nn   = 1; /* LD BC, nn */
-				if (opcode == 'h11) ld_dd_nn   = 1; /* LD DE, nn */
-				if (opcode == 'h21) ld_dd_nn   = 1; /* LD HL, nn */
-				if (opcode == 'h31) ld_dd_nn   = 1; /* LD SP, nn */
-				if (opcode == 'hf9) ld_sp_hl   = 1; /* LD SP, HL */
-				if (opcode == 'h08) ld_nn_sp   = 1; /* LD (nn), SP */
-				if (opcode == 'hf8) ldhl_sp_e  = 1; /* LDHL SP, e */
-				if (opcode == 'hc1) push_pop   = 1; /* POP BC */
-				if (opcode == 'hd1) push_pop   = 1; /* POP DE */
-				if (opcode == 'he1) push_pop   = 1; /* POP HL */
-				if (opcode == 'hf1) push_pop   = 1; /* POP AF */
-				if (opcode == 'hc5) push_pop   = 1; /* PUSH BC */
-				if (opcode == 'hd5) push_pop   = 1; /* PUSH DE */
-				if (opcode == 'he5) push_pop   = 1; /* PUSH HL */
-				if (opcode == 'hf5) push_pop   = 1; /* PUSH AF */
-				if (opcode == 'hc5) push_qq    = 1; /* PUSH BC */
-				if (opcode == 'hd5) push_qq    = 1; /* PUSH DE */
-				if (opcode == 'he5) push_qq    = 1; /* PUSH HL */
-				if (opcode == 'hf5) push_qq    = 1; /* PUSH AF */
+	/* misc */
+	assign nop       = !bank_cb &&  opcode == 'h00;   /* NOP */
+	assign stop      = !bank_cb &&  opcode == 'h10;   /* STOP */
+	assign halt      = !bank_cb &&  opcode == 'h76;   /* HALT */
+	assign di_ei     = !bank_cb && (opcode == 'hf3 || /* DI */
+	                                opcode == 'hfb);  /* EI */
+	assign prefix_cb = !bank_cb &&  opcode == 'hcb;   /* Prefix CB */
 
-				/* jumps */
-				if (opcode == 'hc3) jp_nn      = 1; /* JP nn */
-				if (opcode == 'hc2) jp_cc_nn   = 1; /* JP NZ, nn */
-				if (opcode == 'hd2) jp_cc_nn   = 1; /* JP NC, nn */
-				if (opcode == 'hca) jp_cc_nn   = 1; /* JP Z, nn */
-				if (opcode == 'hda) jp_cc_nn   = 1; /* JP C, nn */
-				if (opcode == 'he9) jp_hl      = 1; /* JP (HL) */
-				if (opcode == 'h18) jr_e       = 1; /* JR e */
-				if (opcode == 'h20) jr_cc_e    = 1; /* JR NZ, e */
-				if (opcode == 'h30) jr_cc_e    = 1; /* JR NC, e */
-				if (opcode == 'h28) jr_cc_e    = 1; /* JR Z, e */
-				if (opcode == 'h38) jr_cc_e    = 1; /* JR C, e */
-				if (opcode == 'hcd) call_nn    = 1; /* CALL nn */
-				if (opcode == 'hc4) call_cc_nn = 1; /* CALL NZ, nn */
-				if (opcode == 'hd4) call_cc_nn = 1; /* CALL NC, nn */
-				if (opcode == 'hcc) call_cc_nn = 1; /* CALL Z, nn */
-				if (opcode == 'hdc) call_cc_nn = 1; /* CALL C, nn */
-				if (opcode == 'hc9) ret        = 1; /* RET */
-				if (opcode == 'hd9) reti       = 1; /* RETI */
-				if (opcode == 'hc0) ret_cc     = 1; /* RET NZ */
-				if (opcode == 'hd0) ret_cc     = 1; /* RET NC */
-				if (opcode == 'hc8) ret_cc     = 1; /* RET Z */
-				if (opcode == 'hd8) ret_cc     = 1; /* RET C */
-				if (opcode == 'hc7) rst_t      = 1; /* RST 00h */
-				if (opcode == 'hcf) rst_t      = 1; /* RST 08h */
-				if (opcode == 'hd7) rst_t      = 1; /* RST 10h */
-				if (opcode == 'hdf) rst_t      = 1; /* RST 18h */
-				if (opcode == 'he7) rst_t      = 1; /* RST 20h */
-				if (opcode == 'hef) rst_t      = 1; /* RST 28h */
-				if (opcode == 'hf7) rst_t      = 1; /* RST 30h */
-				if (opcode == 'hff) rst_t      = 1; /* RST 38h */
-
-				/* misc */
-				if (opcode == 'h00) nop        = 1; /* NOP */
-				if (opcode == 'h10) stop       = 1; /* STOP */
-				if (opcode == 'h76) halt       = 1; /* HALT */
-				if (opcode == 'hf3) di_ei      = 1; /* DI */
-				if (opcode == 'hfb) di_ei      = 1; /* EI */
-				if (opcode == 'hcb) prefix_cb  = 1; /* Prefix CB */
-			end
-
-			bank_cb: begin /* CB prefixed instructions */
-				if (opcode[7:6] == 0) rlc_m    = 1; /* RLC/RRC/RL/RR/SLA/SRA/SWAP/SRL r/(HL) */
-				if (opcode[7:3] == 6) swap_m   = 1; /* SWAP r/(HL) */
-				if (opcode[7:6] == 1) bit_b_m  = 1; /* BIT b, r/(HL) */
-				if (opcode[7:6] == 2) res_b_m  = 1; /* RES b, r/(HL) */
-				if (opcode[7:6] == 3) set_b_m  = 1; /* SET b, r/(HL) */
-				if (opcode[2:0] == 6) cb_hl    = 1; /* RLC/RRC/RL/RR/SLA/SRA/SWAP/SRL (HL)  ~or~  BIT/RES/SET b, (HL) */
-			end
-		endcase
-	end
+	/* CB prefixed instructions */
+	assign rlc_m   = bank_cb && opcode[7:6] == 0; /* RLC/RRC/RL/RR/SLA/SRA/SWAP/SRL r/(HL) */
+	assign swap_m  = bank_cb && opcode[7:3] == 6; /* SWAP r/(HL) */
+	assign bit_b_m = bank_cb && opcode[7:6] == 1; /* BIT b, r/(HL) */
+	assign res_b_m = bank_cb && opcode[7:6] == 2; /* RES b, r/(HL) */
+	assign set_b_m = bank_cb && opcode[7:6] == 3; /* SET b, r/(HL) */
+	assign cb_hl   = bank_cb && opcode[2:0] == 6; /* RLC/RRC/RL/RR/SLA/SRA/SWAP/SRL (HL)  ~or~  BIT/RES/SET b, (HL) */
 
 endmodule

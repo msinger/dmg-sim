@@ -14,28 +14,7 @@ module sm83(
 		output logic                 p_wr, n_wr,
 
 		input  logic [NUM_IRQS-1:0]  irq,
-		output logic [NUM_IRQS-1:0]  iack,
-
-		output logic [15:0] dbg_pc,
-		output logic [15:0] dbg_wz,
-		output logic [15:0] dbg_sp,
-		output logic [15:0] dbg_bc,
-		output logic [15:0] dbg_de,
-		output logic [15:0] dbg_hl,
-		output logic [15:0] dbg_af,
-		output logic        dbg_ime,
-		output logic [7:0]  dbg_alu_op_a,
-		output logic [7:0]  dbg_opcode,
-		output logic        dbg_bank_cb,
-		output logic [3:0]  dbg_t,
-		output logic [5:0]  dbg_m,
-		output logic [15:0] dbg_al,
-		output logic [7:0]  dbg_dl,
-		output logic        dbg_mread,
-		output logic        dbg_mwrite,
-		output logic        dbg_ifetch,
-		input  logic        dbg_halt,
-		input  logic        dbg_no_inc
+		output logic [NUM_IRQS-1:0]  iack
 	);
 
 	localparam int WORD_SIZE = 8;
@@ -111,9 +90,7 @@ module sm83(
 		.zero(alu_zero), .carry(alu_carry), .sign(alu_sign),
 
 		.shift_dbh(alu_shift_dbh), .shift_dbl(alu_shift_dbl),
-		.daa_l_gt_9(alu_daa_lgt9), .daa_h_gt_9(alu_daa_hgt9), .daa_h_eq_9(alu_daa_heq9),
-
-		.dbg_alu_op_a
+		.daa_l_gt_9(alu_daa_lgt9), .daa_h_gt_9(alu_daa_hgt9), .daa_h_eq_9(alu_daa_heq9)
 	);
 
 	sm83_alu_control alu_control(
@@ -319,23 +296,6 @@ module sm83(
 		if (reset)
 			reg_pc <= 0;
 	end
-
-	assign dbg_pc = reg_pc;
-	assign dbg_wz = reg_wz;
-	assign dbg_sp = reg_sp;
-	assign dbg_bc = reg_bc;
-	assign dbg_de = reg_de;
-	assign dbg_hl = reg_hl;
-	assign dbg_af = reg_af & 'hfff0;
-	assign dbg_ime = 0;
-	assign dbg_opcode = opcode;
-	assign dbg_bank_cb = bank_cb;
-	assign dbg_t = { t4, t3, t2, t1 };
-	assign dbg_m = { m6, m5, m4, m3, m2, m1 };
-	assign dbg_al = al_out;
-	assign dbg_dl = io_din;
-	assign dbg_mread = ctl_mread;
-	assign dbg_mwrite = ctl_mwrite;
 
 	assign iack = 0;
 endmodule
