@@ -1,24 +1,19 @@
 `default_nettype none
 
 (* nolatches *)
-module sm83_adr_inc
-	#(
-		parameter int ADR_WIDTH = 16
-	) (
-		input  logic                   clk, reset,
+module sm83_adr_inc(
+		input  logic        clk, reset,
 
-		input  logic [ADR_WIDTH-1:0]   ain,
-		output logic [ADR_WIDTH-1:0]   aout,
-		output logic [ADR_WIDTH-1:0]   apin,
+		input  logic [15:0] ain,
+		output logic [15:0] aout,
+		output logic [15:0] apin,
 
-		input  logic                   ctl_al_we, ctl_al_hi_ff,
-		input  logic                   ctl_inc_dec, ctl_inc_cy,
-		input  logic                   ctl_inc_oe
+		input  logic        ctl_al_we, ctl_al_hi_ff,
+		input  logic        ctl_inc_dec, ctl_inc_cy,
+		input  logic        ctl_inc_oe
 	);
 
-	localparam int WORD_SIZE = ADR_WIDTH / 2;
-
-	typedef logic [WORD_SIZE-1:0] word_t;
+	typedef logic [7:0] word_t;
 
 	typedef struct packed {
 		word_t hi;
@@ -46,21 +41,26 @@ module sm83_adr_inc
 	endcase
 
 	always_comb begin
-		adr = al;
+		adr_t nadr;
+
+		nadr = al;
 
 		if (ctl_al_we) unique case (1)
-			ctl_inc_oe:   adr.hi = inc.hi;
-			ctl_al_hi_ff: adr.hi = 'hff;
-			default:      adr.hi = bus.hi;
+			ctl_inc_oe:   nadr.hi = inc.hi;
+			ctl_al_hi_ff: nadr.hi = 'hff;
+			default:      nadr.hi = bus.hi;
 		endcase
 
 		if (ctl_al_we) unique case (1)
-			ctl_inc_oe: adr.lo = inc.lo;
-			default:    adr.lo = bus.lo;
+			ctl_inc_oe: nadr.lo = inc.lo;
+			default:    nadr.lo = bus.lo;
 		endcase
+
+		adr = nadr;
 	end
 
 	always_comb begin
+		adr_t        ninc;
 		logic [14:0] dec;
 		logic        cy, acc0, acc1, acc2;
 
@@ -70,21 +70,23 @@ module sm83_adr_inc
 		acc1 = &dec[11:7]  && acc0;
 		acc2 = &dec[14:12] && acc1;
 
-		inc2b(al[1:0],   dec[1:0],   cy, inc[1:0],   cy);
-		inc2b(al[3:2],   dec[3:2],   cy, inc[3:2],   cy);
-		inc2b(al[5:4],   dec[5:4],   cy, inc[5:4],   cy);
-		inc[6]  = al[6]  != cy;
-		cy      = acc0;
+		inc2b(al[1:0],   dec[1:0],   cy, ninc[1:0],   cy);
+		inc2b(al[3:2],   dec[3:2],   cy, ninc[3:2],   cy);
+		inc2b(al[5:4],   dec[5:4],   cy, ninc[5:4],   cy);
+		ninc[6]  = al[6]  != cy;
+		cy       = acc0;
 
-		inc2b(al[8:7],   dec[8:7],   cy, inc[8:7],   cy);
-		inc2b(al[10:9],  dec[10:9],  cy, inc[10:9],  cy);
-		inc[11] = al[11] != cy;
-		cy      = acc1;
+		inc2b(al[8:7],   dec[8:7],   cy, ninc[8:7],   cy);
+		inc2b(al[10:9],  dec[10:9],  cy, ninc[10:9],  cy);
+		ninc[11] = al[11] != cy;
+		cy       = acc1;
 
-		inc2b(al[13:12], dec[13:12], cy, inc[13:12], cy);
-		inc[14] = al[14] != cy;
-		cy      = acc2;
+		inc2b(al[13:12], dec[13:12], cy, ninc[13:12], cy);
+		ninc[14] = al[14] != cy;
+		cy       = acc2;
 
-		inc[15] = al[15] != cy;
+		ninc[15] = al[15] != cy;
+
+		inc = ninc;
 	end
 endmodule
