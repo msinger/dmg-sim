@@ -9,9 +9,8 @@ module sm83(
 		output logic [ADR_WIDTH-1:0] adr,
 		input  logic [WORD_SIZE-1:0] din,
 		output logic [WORD_SIZE-1:0] dout,
-		output logic                 lh,         /* data latch hold */
-		output logic                 p_rd, n_rd, /* invert rd for data output enable */
-		output logic                 p_wr, n_wr,
+		output logic                 rd,
+		output logic                 wr,
 
 		input  logic [NUM_IRQS-1:0]  irq,
 		output logic [NUM_IRQS-1:0]  iack
@@ -50,11 +49,10 @@ module sm83(
 		.aout(adr), .ain(apin),
 		.dout(io_din), .din(io_dout),
 		.ext_dout(dout), .ext_din(din),
-		.ext_data_lh(lh),
 		.apin_we(ctl_io_adr_we),
 		.dl_we(ctl_io_data_we),
 
-		.n_rd, .p_rd, .n_wr, .p_wr,
+		.rd, .wr,
 
 		.opcode, .bank_cb,
 		.ctl_ir_we, .ctl_ir_bank_we, .ctl_ir_bank_cb_set,

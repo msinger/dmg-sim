@@ -18,12 +18,10 @@ module sm83_io
 		input  logic [WORD_SIZE-1:0]   din,
 		output logic [WORD_SIZE-1:0]   ext_dout,
 		input  logic [WORD_SIZE-1:0]   ext_din,
-		output logic                   ext_data_lh,
 		input  logic                   apin_we,
 		input  logic                   dl_we,
 
-		output logic                   n_rd, p_rd,
-		output logic                   n_wr, p_wr,
+		output logic                   rd, wr,
 
 		output logic [WORD_SIZE-1:0]   opcode,
 		output logic                   bank_cb,
@@ -33,8 +31,6 @@ module sm83_io
 		input  logic                   ctl_zero_data_oe
 	);
 
-	logic rd_seq, wr_seq;
-
 	always_ff @(posedge clk) begin
 		/* read or write sequence should only be triggered right before next cycle */
 		assume (t4 || !mread);
@@ -42,40 +38,20 @@ module sm83_io
 		/* only one sequence can be triggered at a time */
 		assume (!mread || !mwrite);
 
-		if (t4) begin
-			rd_seq <= mread;
-			wr_seq <= mwrite;
-		end else begin
-			rd_seq <= rd_seq | mread;
-			wr_seq <= wr_seq | mwrite;
-		end
-
 		if (reset) begin
-			rd_seq <= 0;
-			wr_seq <= 0;
+			rd <= 0;
+			wr <= 0;
+		end else if (t4) begin
+			rd <= mread;
+			wr <= mwrite;
+		end else begin
+			rd <= rd || mread;
+			wr <= wr || mwrite;
 		end
 	end
 
-	always_comb begin
-		ext_data_lh = 0;
-		n_rd        = 1;
-		p_rd        = 1;
-		n_wr        = 0;
-		p_wr        = 0;
-
-		unique0 case (1)
-			rd_seq:
-				ext_data_lh = t3; /* posedge */
-
-			wr_seq: if (!reset) begin
-				n_rd = 0;
-				p_rd = t4;
-				n_wr = t3;
-				p_wr = t2 || t3;
-				/* Data is output as long as p_wr is on. Switches at posedge only. */
-			end
-		endcase
-	end
+	initial rd = 0;
+	initial wr = 0;
 
 	always_ff @(posedge clk) begin
 		/* Zero upper address lines after each memory cycle */
@@ -86,36 +62,45 @@ module sm83_io
 			aout <= ain;
 	end
 
+	initial aout = 0;
+
 	logic [WORD_SIZE-1:0] data, data_t4;
 	always_ff @(posedge clk) priority case (1)
 		ctl_zero_data_oe || dl_we: unique case (1)
 			ctl_zero_data_oe: data <= 0;
 			dl_we:            data <= din;
 		endcase
-		rd_seq && t4:         data <= ext_din;
+		rd && t4:             data <= ext_din;
 		default:              data <= dout;
 	endcase
 	always_comb priority case (1)
 		ctl_zero_data_oe: data_t4 = 0;
 		default:          data_t4 = ext_din;
 	endcase
-	assign dout = rd_seq && t4 ? data_t4 : data;
+	assign dout = rd && t4 ? data_t4 : data;
 	assign ext_dout = data;
+
+	initial data    = 0;
+	initial data_t4 = 0;
 
 	logic [WORD_SIZE-1:0] opcode_r;
 	always_ff @(posedge clk) begin
 		/* instruction register should only be written during a read at T4 */
-		assume ((t4 && rd_seq) || !ctl_ir_we || ctl_zero_data_oe);
-		if (ctl_ir_we)
-			opcode_r <= data_t4;
-		if (ctl_ir_bank_we)
-			bank_cb  <= ctl_ir_bank_cb_set;
+		assume ((t4 && rd) || !ctl_ir_we || ctl_zero_data_oe);
 		if (reset) begin
 			opcode_r <= 0;
 			bank_cb  <= 0;
+		end else begin
+			if (ctl_ir_we)
+				opcode_r <= data_t4;
+			if (ctl_ir_bank_we)
+				bank_cb  <= ctl_ir_bank_cb_set;
 		end
 	end
 	assign opcode = ctl_ir_we ? data_t4 : opcode_r;
+
+	initial bank_cb  = 0;
+	initial opcode_r = 0;
 
 	/* Don't run into illegal instructions */
 	assume property (bank_cb || opcode != 'hd3);
