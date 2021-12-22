@@ -25,6 +25,6 @@ module sm83_sequencer(
 	end
 
 	assume property ($onehot({ m1, m2, m3, m4, m5, m6 }));
-	assume property ($onehot({ t1, t2, t3, t4 }));
+	assume property ($onehot({ t1, t2, t3, t4 }) || reset);
 
 endmodule

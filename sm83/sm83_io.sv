@@ -105,7 +105,7 @@ module sm83_io
 	logic [WORD_SIZE-1:0] opcode_r;
 	always_ff @(posedge clk) begin
 		/* instruction register should only be written during a read at T4 */
-		assume ((t4 && rd_seq) || !ctl_ir_we);
+		assume ((t4 && rd_seq) || !ctl_ir_we || ctl_zero_data_oe);
 		if (ctl_ir_we)
 			opcode_r <= data_t4;
 		if (ctl_ir_bank_we)
