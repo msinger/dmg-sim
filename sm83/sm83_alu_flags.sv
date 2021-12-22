@@ -62,9 +62,7 @@ module sm83_alu_flags
 	assign dout[WORD_SIZE-5:0] = 0;
 
 	always_ff @(posedge clk) if (zero_we) begin
-`ifdef FORMAL
 		assume (flags_bus != flags_alu);
-`endif
 		unique case (1)
 			flags_bus: zero <= din[Z];
 			flags_alu: zero <= zero_in;
@@ -73,9 +71,7 @@ module sm83_alu_flags
 	end
 
 	always_ff @(posedge clk) if (neg_we) begin
-`ifdef FORMAL
 		assume (flags_bus != flags_alu);
-`endif
 		unique case (1)
 			flags_bus: neg <= din[N];
 			flags_alu: neg <= sign_in;
@@ -87,9 +83,7 @@ module sm83_alu_flags
 	logic hc_reg, sec_c_reg, pri_c_we;
 
 	function automatic logic write_carry(input int bitnum);
-`ifdef FORMAL
 		assume (flags_bus != flags_alu);
-`endif
 		unique case (1)
 			flags_bus: write_carry = din[bitnum];
 			flags_alu: write_carry = carry_in;

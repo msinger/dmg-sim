@@ -69,7 +69,7 @@ sm83/sm83_sequencer.sv
 TIMESCALE = timescale.f
 
 IVERILOG = iverilog
-IVERILOG_FLAGS = -g2012 -f $(TIMESCALE) -pfileline=1 
+IVERILOG_FLAGS = -g2012 -f $(TIMESCALE) -pfileline=1 -gsupported-assertions
 VVP = vvp
 VVP_FLAGS = -N
 

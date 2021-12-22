@@ -172,9 +172,7 @@ module sm83(
 	                                                input logic [WORD_SIZE-1:0] in4,
 	                                                input logic [WORD_SIZE-1:0] in5,
 	                                                input logic [WORD_SIZE-1:0] in6);
-`ifdef FORMAL
 		assume ($onehot0(sel));
-`endif
 		unique case (1)
 			sel[0]: db_mux = in0;
 			sel[1]: db_mux = in1;

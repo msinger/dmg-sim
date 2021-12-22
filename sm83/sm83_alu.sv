@@ -96,9 +96,7 @@ module sm83_alu
 	word_t shifted;
 
 	/* shift_l and shift_r must not be set at the same time */
-`ifdef FORMAL
 	assume property (!shift_l || !shift_r);
-`endif
 	always_comb unique casez ({ shift_l, shift_r })
 		'b 00: shifted = din;                              /* no shift */
 		'b ?1: shifted = { shift_in, din[WORD_SIZE-1:1] }; /* right shift */
@@ -114,9 +112,7 @@ module sm83_alu
 	word_t bus;
 
 	/* only one of *_oe can be set at the same time */
-`ifdef FORMAL
 	assume property ($onehot0({ result_oe, shift_oe, op_a_oe, bs_oe }));
-`endif
 	always_comb unique casez ({ result_oe, shift_oe, op_a_oe, bs_oe })
 		'b 1???: bus = result;
 		'b ?1??: bus = shifted;
@@ -126,9 +122,7 @@ module sm83_alu
 	endcase
 
 	/* only one of load_a* can be set at the same time */
-`ifdef FORMAL
 	assume property ($onehot0({ load_a, load_a_zero }));
-`endif
 	always_ff @(negedge clk) if (load_a || load_a_zero) unique case (1)
 		load_a:      op_a.l <= bus.l;
 		load_a_zero: op_a.l <= 0;
@@ -139,9 +133,7 @@ module sm83_alu
 	endcase
 
 	/* only one of load_b* can be set at the same time */
-`ifdef FORMAL
 	assume property ($onehot0({ load_b, load_b_zero }));
-`endif
 	always_ff @(negedge clk) if (load_b || load_b_zero) unique case (1)
 		load_b:      op_b.l <= bus.l;
 		load_b_zero: op_b.l <= 0;

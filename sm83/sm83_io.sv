@@ -36,13 +36,11 @@ module sm83_io
 	logic rd_seq, wr_seq;
 
 	always_ff @(posedge clk) begin
-`ifdef FORMAL
 		/* read or write sequence should only be triggered right before next cycle */
 		assume (t4 || !mread);
 		assume (t4 || !mwrite);
 		/* only one sequence can be triggered at a time */
 		assume (!mread || !mwrite);
-`endif
 
 		if (t4) begin
 			rd_seq <= mread;
@@ -106,10 +104,8 @@ module sm83_io
 
 	logic [WORD_SIZE-1:0] opcode_r;
 	always_ff @(posedge clk) begin
-`ifdef FORMAL
 		/* instruction register should only be written during a read at T4 */
 		assume ((t4 && rd_seq) || !ctl_ir_we);
-`endif
 		if (ctl_ir_we)
 			opcode_r <= data_t4;
 		if (ctl_ir_bank_we)
@@ -121,7 +117,6 @@ module sm83_io
 	end
 	assign opcode = ctl_ir_we ? data_t4 : opcode_r;
 
-`ifdef FORMAL
 	/* Don't run into illegal instructions */
 	assume property (bank_cb || opcode != 'hd3);
 	assume property (bank_cb || opcode != 'hdb);
@@ -134,6 +129,5 @@ module sm83_io
 	assume property (bank_cb || opcode != 'hf4);
 	assume property (bank_cb || opcode != 'hfc);
 	assume property (bank_cb || opcode != 'hfd);
-`endif
 
 endmodule
