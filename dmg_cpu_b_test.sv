@@ -190,7 +190,7 @@ module dmg_cpu_b_test;
 		int fmix, fvid;
 		int sample_idx;
 
-		$dumpfile("dmg_cpu_b_test.vcd");
+		$dumpfile("dmg_cpu_b_test.lxt");
 		$dumpvars(0, dmg_cpu_b_test);
 
 		xi        = 0;

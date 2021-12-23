@@ -39,7 +39,7 @@ module dmg_cpu_b_gameboy;
 
 	program test;
 		initial begin
-			$dumpfile("dmg_cpu_b_gameboy.vcd");
+			$dumpfile("dmg_cpu_b_gameboy.lxt");
 			$dumpvars(0, dmg_cpu_b_gameboy);
 
 			din <= 0;
