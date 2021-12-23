@@ -69,7 +69,7 @@ module sm83_alu_flags(
 	end
 
 	always_ff @(posedge clk) if (neg_we) begin
-		assume (flags_bus != flags_alu);
+		assume (neg_clr || neg_set || flags_bus != flags_alu);
 		if (neg_clr)
 			neg <= 0;
 		else if (neg_set)
