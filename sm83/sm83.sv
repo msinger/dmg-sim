@@ -21,7 +21,6 @@ module sm83(
 	localparam int NUM_IRQS  = WORD_SIZE;
 
 	typedef logic [WORD_SIZE-1:0] word_t;
-	typedef logic [NUM_IRQS-1:0]  irq_t;
 
 	typedef struct packed {
 		word_t hi;
@@ -41,7 +40,7 @@ module sm83(
 	word_t opcode;
 	logic  bank_cb;
 
-	sm83_io #(.ADR_WIDTH(ADR_WIDTH), .WORD_SIZE(WORD_SIZE)) io(
+	sm83_io io(
 		.clk, .reset,
 		.t1, .t2, .t3, .t4,
 		.mread(ctl_mread), .mwrite(ctl_mwrite),
@@ -66,7 +65,7 @@ module sm83(
 	logic alu_fl_zero, alu_fl_carry, alu_fl_pri_carry, alu_fl_half_carry, alu_fl_daa_carry, alu_fl_neg;
 	logic alu_cond_result;
 
-	sm83_alu #(.ALU_WIDTH(WORD_SIZE / 2)) alu(
+	sm83_alu alu(
 		.clk,
 		.din (alu_din), .dout(alu_dout),
 
@@ -108,7 +107,7 @@ module sm83(
 		.daa_carry_out(alu_ct_daa_carry)
 	);
 
-	sm83_alu_flags #(.WORD_SIZE(WORD_SIZE)) alu_flags(
+	sm83_alu_flags alu_flags(
 		.clk,
 		.din(alu_fl_din), .dout(alu_fl_dout),
 
@@ -130,7 +129,7 @@ module sm83(
 		.neg(alu_fl_neg), .carry(alu_fl_carry), .pri_carry(alu_fl_pri_carry)
 	);
 
-	sm83_adr_inc #(.ADR_WIDTH(ADR_WIDTH)) adr_inc(
+	sm83_adr_inc adr_inc(
 		.clk, .reset,
 		.ain(al_in), .aout(al_out), .apin,
 
@@ -202,6 +201,14 @@ module sm83(
 
 	reg_t reg_bc, reg_de, reg_hl, reg_af, reg_sp, reg_wz, reg_pc;
 	reg_t reg_gp2sys, reg_sys2gp;
+
+	initial reg_bc = 0;
+	initial reg_de = 0;
+	initial reg_hl = 0;
+	initial reg_af = 0;
+	initial reg_sp = 0;
+	initial reg_wz = 0;
+	initial reg_pc = 0;
 
 	/* common data bus matrix */
 	logic [1:0] dbc_sel;
@@ -283,16 +290,18 @@ module sm83(
 	assign al_in.hi      = db_mux(abh_sel, reg_pc.hi, reg_sp.hi, reg_gp2sys.hi,        'x, 'x, 'x, 'x);
 
 	always_ff @(posedge clk) begin
-		if (ctl_reg_sys_lo_we && ctl_reg_sys_lo_sel) begin
-			if (ctl_reg_pc_sel) reg_pc.lo <= ab.lo;
-			if (ctl_reg_sp_sel) reg_sp.lo <= ab.lo;
-		end
-		if (ctl_reg_sys_hi_we && ctl_reg_sys_hi_sel) begin
-			if (ctl_reg_pc_sel) reg_pc.hi <= ab.hi;
-			if (ctl_reg_sp_sel) reg_sp.hi <= ab.hi;
-		end
 		if (reset)
 			reg_pc <= 0;
+		else begin
+			if (ctl_reg_sys_lo_we && ctl_reg_sys_lo_sel) begin
+				if (ctl_reg_pc_sel) reg_pc.lo <= ab.lo;
+				if (ctl_reg_sp_sel) reg_sp.lo <= ab.lo;
+			end
+			if (ctl_reg_sys_hi_we && ctl_reg_sys_hi_sel) begin
+				if (ctl_reg_pc_sel) reg_pc.hi <= ab.hi;
+				if (ctl_reg_sp_sel) reg_sp.hi <= ab.hi;
+			end
+		end
 	end
 
 	assign iack = 0;

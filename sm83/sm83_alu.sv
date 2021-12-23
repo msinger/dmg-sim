@@ -72,11 +72,13 @@ module sm83_alu
 	hword_t core_op_a, core_op_b, core_result;
 
 	always_comb begin
-		logic c;
+		hword_t r;
+		logic   c;
 		c = carry_in;
 		for (int i = 0; i < ALU_WIDTH; i++)
-			alu_slice(core_op_a[i], core_op_b[i], c, core_result[i], c);
-		carry = c;
+			alu_slice(core_op_a[i], core_op_b[i], c, r[i], c);
+		core_result = r;
+		carry       = c;
 	end
 
 	word_t op_a, op_b;
@@ -129,6 +131,7 @@ module sm83_alu
 		load_a:      op_a.h <= bus.h;
 		load_a_zero: op_a.h <= 0;
 	endcase
+	initial op_a = 0;
 
 	/* only one of load_b* can be set at the same time */
 	assume property ($onehot0({ load_b, load_b_zero }));
@@ -140,6 +143,7 @@ module sm83_alu
 		load_b:      op_b.h <= bus.h;
 		load_b_zero: op_b.h <= 0;
 	endcase
+	initial op_b = 0;
 
 	assign daa_l_gt_9 = op_a.l > 9;
 	assign daa_h_gt_9 = op_a.h > 9;
@@ -147,6 +151,7 @@ module sm83_alu
 
 	hword_t res_lo;
 	always_ff @(posedge clk) if (op_low) res_lo <= core_result;
+	initial res_lo = 0;
 
 	word_t result;
 	assign result = { core_result, res_lo };

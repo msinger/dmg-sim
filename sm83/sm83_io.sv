@@ -1,35 +1,33 @@
 `default_nettype none
 
 (* nolatches *)
-module sm83_io
-	#(
-		parameter int ADR_WIDTH = 16,
-		parameter int WORD_SIZE = 8
-	) (
-		input  logic                   clk, reset,
-		input  logic                   t1, t2, t3, t4,
-		input  logic                   mread,
-		input  logic                   mwrite,
+module sm83_io(
+		input  logic        clk, reset,
+		input  logic        t1, t2, t3, t4,
+		input  logic        mread,
+		input  logic        mwrite,
 
-		output logic [ADR_WIDTH-1:0]   aout,
-		input  logic [ADR_WIDTH-1:0]   ain,
+		output logic [15:0] aout,
+		input  logic [15:0] ain,
 
-		output logic [WORD_SIZE-1:0]   dout,
-		input  logic [WORD_SIZE-1:0]   din,
-		output logic [WORD_SIZE-1:0]   ext_dout,
-		input  logic [WORD_SIZE-1:0]   ext_din,
-		input  logic                   apin_we,
-		input  logic                   dl_we,
+		output logic [7:0]  dout,
+		input  logic [7:0]  din,
+		output logic [7:0]  ext_dout,
+		input  logic [7:0]  ext_din,
+		input  logic        apin_we,
+		input  logic        dl_we,
 
-		output logic                   rd, wr,
+		output logic        rd, wr,
 
-		output logic [WORD_SIZE-1:0]   opcode,
-		output logic                   bank_cb,
-		input  logic                   ctl_ir_we,
-		input  logic                   ctl_ir_bank_we,
-		input  logic                   ctl_ir_bank_cb_set,
-		input  logic                   ctl_zero_data_oe
+		output logic [7:0]  opcode,
+		output logic        bank_cb,
+		input  logic        ctl_ir_we,
+		input  logic        ctl_ir_bank_we,
+		input  logic        ctl_ir_bank_cb_set,
+		input  logic        ctl_zero_data_oe
 	);
+
+	typedef logic [7:0] word_t;
 
 	always_ff @(posedge clk) begin
 		/* read or write sequence should only be triggered right before next cycle */
@@ -56,7 +54,7 @@ module sm83_io
 	always_ff @(posedge clk) begin
 		/* Zero upper address lines after each memory cycle */
 		if (t4)
-			aout[ADR_WIDTH-1:8] <= 0;
+			aout[15:8] <= 0;
 
 		if (apin_we)
 			aout <= ain;
@@ -64,7 +62,7 @@ module sm83_io
 
 	initial aout = 0;
 
-	logic [WORD_SIZE-1:0] data, data_t4;
+	word_t data, data_t4;
 	always_ff @(posedge clk) priority case (1)
 		ctl_zero_data_oe || dl_we: unique case (1)
 			ctl_zero_data_oe: data <= 0;
@@ -83,7 +81,7 @@ module sm83_io
 	initial data    = 0;
 	initial data_t4 = 0;
 
-	logic [WORD_SIZE-1:0] opcode_r;
+	word_t opcode_r;
 	always_ff @(posedge clk) begin
 		/* instruction register should only be written during a read at T4 */
 		assume ((t4 && rd) || !ctl_ir_we || ctl_zero_data_oe);

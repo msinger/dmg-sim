@@ -7,77 +7,77 @@
 `default_nettype none
 
 (* nolatches *)
-module sm83_alu_flags
-	#(
-		parameter int WORD_SIZE = 8
-	) (
-		input  logic                   clk,
+module sm83_alu_flags(
+		input  logic       clk,
 
-		output logic [WORD_SIZE-1:0]   dout,             /* Flags output to data bus. */
-		input  logic [WORD_SIZE-1:0]   din,              /* Flags input from data bus. */
+		output logic [7:0] dout,             /* Flags output to data bus. */
+		input  logic [7:0] din,              /* Flags input from data bus. */
 
-		input  logic                   flags_bus,        /* Get in flags from din. */
-		input  logic                   flags_alu,        /* Get in flags from ALU. */
+		input  logic       flags_bus,        /* Get in flags from din. */
+		input  logic       flags_alu,        /* Get in flags from ALU. */
 
-		input  logic                   zero_we,          /* Update zero flag. */
-		input  logic                   zero_clr,         /* Clear zero flag on update. */
-		input  logic                   half_carry_we,    /* Update half carry flag. */
-		input  logic                   half_carry_set,   /* Output 1 for half carry flag. */
-		input  logic                   half_carry_cpl,   /* Invert half carry output. */
-		input  logic                   daa_carry_we,     /* Update half carry flag for DAA. */
-		input  logic                   neg_we,           /* Update subtract flag. Can receive sign flag from ALU. */
-		input  logic                   neg_set,          /* Set subtract flag on update. */
-		input  logic                   neg_clr,          /* Clear subtract flag on update. */
-		input  logic                   carry_we,         /* Update primary carry flag. */
-		input  logic                   sec_carry_we,     /* Update secondary carry flag and prevent update on primary. */
-		input  logic                   sec_carry_sh,     /* Secondary carry stores shift out carry on update. */
-		input  logic                   sec_carry_daa,    /* Secondary carry stores DAA carry on update. */
-		input  logic                   sec_carry_sel,    /* Select secondary carry reg for carry output. */
-		input  logic                   carry_set,        /* Output 1 for carry flag. */
-		input  logic                   carry_cpl,        /* Invert carry flag output. */
+		input  logic       zero_we,          /* Update zero flag. */
+		input  logic       zero_clr,         /* Clear zero flag on update. */
+		input  logic       half_carry_we,    /* Update half carry flag. */
+		input  logic       half_carry_set,   /* Output 1 for half carry flag. */
+		input  logic       half_carry_cpl,   /* Invert half carry output. */
+		input  logic       daa_carry_we,     /* Update half carry flag for DAA. */
+		input  logic       neg_we,           /* Update subtract flag. Can receive sign flag from ALU. */
+		input  logic       neg_set,          /* Set subtract flag on update. */
+		input  logic       neg_clr,          /* Clear subtract flag on update. */
+		input  logic       carry_we,         /* Update primary carry flag. */
+		input  logic       sec_carry_we,     /* Update secondary carry flag and prevent update on primary. */
+		input  logic       sec_carry_sh,     /* Secondary carry stores shift out carry on update. */
+		input  logic       sec_carry_daa,    /* Secondary carry stores DAA carry on update. */
+		input  logic       sec_carry_sel,    /* Select secondary carry reg for carry output. */
+		input  logic       carry_set,        /* Output 1 for carry flag. */
+		input  logic       carry_cpl,        /* Invert carry flag output. */
 
-		input  logic                   zero_in,          /* Zero flag from ALU. */
-		input  logic                   carry_in,         /* Carry flag from ALU. */
-		input  logic                   shift_out_in,     /* Shift out from ALU control. */
-		input  logic                   daa_carry_in,     /* DAA carry from ALU control. */
-		input  logic                   sign_in,          /* Sign flag from ALU. */
+		input  logic       zero_in,          /* Zero flag from ALU. */
+		input  logic       carry_in,         /* Carry flag from ALU. */
+		input  logic       shift_out_in,     /* Shift out from ALU control. */
+		input  logic       daa_carry_in,     /* DAA carry from ALU control. */
+		input  logic       sign_in,          /* Sign flag from ALU. */
 
-		output logic                   zero,             /* Zero flag output. */
-		output logic                   half_carry,       /* Half carry output. */
-		output logic                   daa_carry,        /* Output of half carry for DAA. */
-		output logic                   neg,              /* Subtract flag output. */
-		output logic                   carry,            /* Carry output. */
-		output logic                   pri_carry         /* Output of carry directly from primary carry reg. */
+		output logic       zero,             /* Zero flag output. */
+		output logic       half_carry,       /* Half carry output. */
+		output logic       daa_carry,        /* Output of half carry for DAA. */
+		output logic       neg,              /* Subtract flag output. */
+		output logic       carry,            /* Carry output. */
+		output logic       pri_carry         /* Output of carry directly from primary carry reg. */
 	);
 
-	localparam int Z = WORD_SIZE - 1;
-	localparam int N = WORD_SIZE - 2;
-	localparam int H = WORD_SIZE - 3;
-	localparam int C = WORD_SIZE - 4;
+	localparam int Z = 7;
+	localparam int N = 6;
+	localparam int H = 5;
+	localparam int C = 4;
 
-	assign dout[Z]             = zero;
-	assign dout[N]             = neg;
-	assign dout[H]             = half_carry;
-	assign dout[C]             = carry;
-	assign dout[WORD_SIZE-5:0] = 0;
+	assign dout[Z]   = zero;
+	assign dout[N]   = neg;
+	assign dout[H]   = half_carry;
+	assign dout[C]   = carry;
+	assign dout[3:0] = 0;
 
 	always_ff @(posedge clk) if (zero_we) begin
 		assume (flags_bus != flags_alu);
-		unique case (1)
+		if (zero_clr)
+			zero <= 0;
+		else unique case (1)
 			flags_bus: zero <= din[Z];
 			flags_alu: zero <= zero_in;
 		endcase
-		if (zero_clr) zero <= 0;
 	end
 
 	always_ff @(posedge clk) if (neg_we) begin
 		assume (flags_bus != flags_alu);
-		unique case (1)
+		if (neg_clr)
+			neg <= 0;
+		else if (neg_set)
+			neg <= 1;
+		else unique case (1)
 			flags_bus: neg <= din[N];
 			flags_alu: neg <= sign_in;
 		endcase
-		if (neg_set) neg <= 1;
-		if (neg_clr) neg <= 0;
 	end
 
 	logic hc_reg, sec_c_reg, pri_c_we;
@@ -96,23 +96,32 @@ module sm83_alu_flags
 		'b10: sec_c_reg <= daa_carry_in;
 		'b11: sec_c_reg <= 0; /* TODO: check if this case actually gets selected by CPU control */
 	endcase
+	initial sec_c_reg = 0;
 
 	assign pri_c_we = carry_we && !sec_carry_we; /* TODO: check if this ever happens that carry_we and sec_carry_we are true at the same time */
 
 	always_ff @(posedge clk) if (half_carry_we) hc_reg    <= write_carry(H);
 	always_ff @(posedge clk) if (daa_carry_we)  daa_carry <= write_carry(H);
 	always_ff @(posedge clk) if (pri_c_we)      pri_carry <= write_carry(C);
+	initial hc_reg    = 0;
+	initial daa_carry = 0;
+	initial pri_carry = 0;
 
 	always_comb begin
-		carry      = carry_set;
-		half_carry = half_carry_set || hc_reg;
+		logic c, hc;
+
+		c  = carry_set;
+		hc = half_carry_set || hc_reg;
 
 		if (sec_carry_sel)
-			carry |= sec_c_reg;
+			c |= sec_c_reg;
 		else
-			carry |= pri_carry;
+			c |= pri_carry;
 
-		if (carry_cpl)      carry      = !carry;
-		if (half_carry_cpl) half_carry = !half_carry;
+		if (carry_cpl)      c  = !c;
+		if (half_carry_cpl) hc = !hc;
+
+		carry      = c;
+		half_carry = hc;
 	end
 endmodule
