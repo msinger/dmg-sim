@@ -66,6 +66,10 @@ sm83/sm83_int.sv \
 sm83/sm83_io.sv \
 sm83/sm83_sequencer.sv
 
+AV_DUMP = \
+snd_dump.sv \
+vid_dump.sv
+
 TIMESCALE = timescale.f
 
 IVERILOG = iverilog
@@ -79,12 +83,12 @@ all: dmg_cpu_b_test.lxt dmg_cpu_b_gameboy.lxt
 .PRECIOUS: dmg_cpu_b_test.lxt dmg_cpu_b_gameboy.lxt
 
 clean:
-	rm -f dmg_cpu_b_test.lxt dmg_cpu_b_test.vvp dmg_cpu_b_gameboy.lxt dmg_cpu_b_gameboy.vvp
+	rm -f dmg_cpu_b_test*.lxt dmg_cpu_b_test.vvp dmg_cpu_b_gameboy*.lxt dmg_cpu_b_gameboy.vvp
 
 .PHONY: all clean
 
-dmg_cpu_b_test.vvp: dmg_cpu_b_test.sv $(DMG_CPU_B) $(TIMESCALE)
-	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ dmg_cpu_b_test.sv $(DMG_CPU_B)
+dmg_cpu_b_test.vvp: dmg_cpu_b_test.sv $(DMG_CPU_B) $(AV_DUMP) $(TIMESCALE)
+	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_test.sv $(DMG_CPU_B)
 
 dmg_cpu_b_test.lxt: dmg_cpu_b_test.vvp
 	$(VVP) $(VVP_FLAGS) $< $(VVP_DUMP_FLAGS)

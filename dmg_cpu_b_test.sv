@@ -2,6 +2,11 @@
 
 module dmg_cpu_b_test;
 
+	import snd_dump::write_header;
+	import snd_dump::write_bit4_as_int8;
+	import snd_dump::write_real_as_int16;
+	vid_dump vdump(.*, .t(sample_idx));
+
 	/* Clock (crystal) pins */
 	logic xi, xo;
 
@@ -171,24 +176,11 @@ module dmg_cpu_b_test;
 		@(posedge cpu_clkin_t2);
 	endtask
 
-	task automatic write_snd_file_header(input int f, samplerate, channels, bit bit16);
-		$fwrite(f, ".snd");
-		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, 8'd32);
-		$fwrite(f, "%c%c%c%c", 8'hff, 8'hff, 8'hff, 8'hff);
-		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, bit16 ? 8'h03 : 8'h02);
-		$fwrite(f, "%c", (samplerate >> 24) & 8'hff);
-		$fwrite(f, "%c", (samplerate >> 16) & 8'hff);
-		$fwrite(f, "%c", (samplerate >> 8) & 8'hff);
-		$fwrite(f, "%c", samplerate & 8'hff);
-		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, channels & 8'hff);
-		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, 8'h00);
-		$fwrite(f, "%c%c%c%c", 8'h00, 8'h00, 8'h00, 8'h00);
-	endtask
+	int sample_idx;
 
 	initial begin :test
 		int fch[1:4];
 		int fmix, fvid;
-		int sample_idx;
 
 		$dumpfile("dmg_cpu_b_test.lxt");
 		$dumpvars(0, dmg_cpu_b_test);
@@ -221,110 +213,30 @@ module dmg_cpu_b_test;
 			string filename;
 			$sformat(filename, "dmg_cpu_b_test_ch%0d.snd", i);
 			fch[i] = $fopen(filename, "wb");
-			write_snd_file_header(fch[i], 65536, 1, 0);
+			write_header(fch[i], 65536, 1, 0);
 		end
 		fmix = $fopen("dmg_cpu_b_test.snd", "wb");
-		write_snd_file_header(fmix, 65536, 2, 1);
+		write_header(fmix, 65536, 2, 1);
 		fvid = $fopen("dmg_cpu_b_test.vid", "wb");
 
 		sample_idx = 0;
 
 		fork
 			begin :tick_tick
-				int tmp;
 				forever begin
 					cyc(64);
-					$fwrite(fch[1], "%c", { 1'b0, dmg.ch1_out, 3'b0 });
-					$fwrite(fch[2], "%c", { 1'b0, dmg.ch2_out, 3'b0 });
-					$fwrite(fch[3], "%c", { 1'b0, dmg.wave_dac_d, 3'b0 });
-					$fwrite(fch[4], "%c", { 1'b0, dmg.ch4_out, 3'b0 });
-					tmp = $rtoi(lout * 32767.0);
-					$fwrite(fmix, "%c%c", { 1'b0, tmp[14:8] }, tmp[7:0]);
-					tmp = $rtoi(rout * 32767.0);
-					$fwrite(fmix, "%c%c", { 1'b0, tmp[14:8] }, tmp[7:0]);
+					write_bit4_as_int8(fch[1], dmg.ch1_out);
+					write_bit4_as_int8(fch[2], dmg.ch2_out);
+					write_bit4_as_int8(fch[3], dmg.wave_dac_d);
+					write_bit4_as_int8(fch[4], dmg.ch4_out);
+					write_real_as_int16(fmix, lout);
+					write_real_as_int16(fmix, rout);
 					sample_idx++;
 				end
 			end
 
 			begin :video_dump
-				bit [1:0] line[0:159];
-				int       pxidx, lineidx;
-				bit       dis;
-
-				pxidx   = 0;
-				lineidx = 0;
-				dis     = 1;
-
-				forever fork :video_event
-					begin
-						@(posedge s);
-						lineidx = 0;
-						/* Vertical sync:
-						 *   4 byte little endian timestamp + "V" */
-						$fwrite(fvid, "%c%c%c%cV", sample_idx[7:0], sample_idx[15:8], sample_idx[23:16], sample_idx[31:24]);
-						disable video_event;
-					end
-
-					begin
-						@(negedge cp);
-						if (pxidx < 160) /* Still space in line buffer? */
-							line[pxidx] = { ld1, ld0 };
-						if (pxidx < 161)
-							pxidx++;
-						if (st) /* Horizontal sync active at pixel clock edge? */
-							pxidx = 0;
-						disable video_event;
-					end
-
-					begin :video_latch
-						int  j;
-						byte pxout;
-						@(posedge cpl);
-						if (pxidx < 160) /* Still space in line buffer? */
-							line[pxidx] = { ld1, ld0 };
-						if (pxidx < 161)
-							pxidx++;
-						if (dis || lineidx >= 144)
-							disable video_event;
-						/* Latch line:
-						 *   4 byte little endian timestamp + "L" + 40 bytes pixel data
-						 *  or
-						 *   4 byte little endian timestamp + "l" + 40 bytes pixel data
-						 *  depending on current direction */
-						if (fr)
-							$fwrite(fvid, "%c%c%c%cL", sample_idx[7:0], sample_idx[15:8], sample_idx[23:16], sample_idx[31:24]);
-						else
-							$fwrite(fvid, "%c%c%c%cl", sample_idx[7:0], sample_idx[15:8], sample_idx[23:16], sample_idx[31:24]);
-						j     = 0;
-						pxout = 0;
-						for (int i = 0; i < 160; i++) begin
-							if (pxidx)
-								pxout = (pxout & ~(3 << ((i & 3) * 2))) | (line[j] << ((i & 3) * 2));
-							j++;
-							if (j >= pxidx) /* Repeat available pixels if less than 160 are in buffer */
-								j = 0;
-							if (&i[1:0])
-								$fwrite(fvid, "%c", pxout);
-						end
-						lineidx++;
-						disable video_event;
-					end
-
-					begin
-						@(negedge cpl);
-						if (!cpg && !dis) begin
-							/* Disable display:
-							 *   4 byte little endian timestamp + "D" */
-							$fwrite(fvid, "%c%c%c%cD", sample_idx[7:0], sample_idx[15:8], sample_idx[23:16], sample_idx[31:24]);
-							dis = 1;
-						end else if (cpg && dis) begin
-							/* Enable display:
-							 *   4 byte little endian timestamp + "E" */
-							$fwrite(fvid, "%c%c%c%cE", sample_idx[7:0], sample_idx[15:8], sample_idx[23:16], sample_idx[31:24]);
-							dis = 0;
-						end
-					end
-				join
+				vdump.video_dump_loop(fvid);
 			end
 
 			begin
