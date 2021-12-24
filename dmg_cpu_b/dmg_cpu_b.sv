@@ -87,7 +87,7 @@ module dmg_cpu_b(
 		output logic            cpu_irq6_trig, /* CPU in  R27 - IRQ6 trigger; active-high */
 		input  logic            cpu_irq7_ack,  /* CPU out R28 - IRQ7 acknowledge; active-high */
 		output logic            cpu_irq7_trig, /* CPU in  R29 - IRQ7 trigger; active-high */
-		inout  tri logic [7:0]  cpu_d,         /* CPU I/O B1-B8  */
+		inout  tri logic [7:0]  d,             /* CPU I/O B1-B8  */
 		input  tri logic [15:0] cpu_a,         /* CPU out B9-B24 */
 		output logic            cpu_wakeup     /* CPU in  B25 - Wake from STOP mode; active-high */
 	);
@@ -178,7 +178,6 @@ module dmg_cpu_b(
 	assign cpu_in_t15    = taba;
 	assign cpu_in_r4     = syro;
 	assign cpu_in_r5     = tutu;
-	assign d             = cpu_d;
 	assign a             = cpu_a;
 	assign cpu_wakeup    = to_cpu2;
 	assign cpu_in_t16    = !unbonded_pad0;
@@ -186,7 +185,6 @@ module dmg_cpu_b(
 	assign cpu_irq6_trig = 0;
 	assign cpu_irq7_trig = 0;
 
-	tri logic  [7:0]  d;
 	tri0 logic [15:0] a;
 	tri logic  [7:0]  md;
 	tri0 logic [12:0] nma;

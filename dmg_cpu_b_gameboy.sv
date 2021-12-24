@@ -78,7 +78,7 @@ module dmg_cpu_b_gameboy;
 	logic cpu_irq6_trig;    /* CPU in  R27 - IRQ6 trigger; active-high */
 	logic cpu_irq7_ack;     /* CPU out R28 - IRQ7 acknowledge; active-high */
 	logic cpu_irq7_trig;    /* CPU in  R29 - IRQ7 trigger; active-high */
-	tri logic [7:0]  cpu_d; /* CPU I/O B1-B8  */
+	tri logic [7:0]  d;     /* CPU I/O B1-B8  */
 	tri logic [15:0] cpu_a; /* CPU out B9-B24 */
 	logic cpu_wakeup;       /* CPU in  B25 - Wake from STOP mode; active-high */
 
@@ -119,6 +119,12 @@ module dmg_cpu_b_gameboy;
 
 	assign ncyc = !dmg.p1_clocks_reset.adyk && !dmg.p1_clocks_reset.alef;
 	assign irq  = 0;
+	assign cpu_a = adr;
+	assign d     = wr ? dout : 'z;
+	assign din   = d;
+	assign cpu_raw_rd = rd;
+	assign cpu_raw_wr = wr;
+	assign cpu_out_r7 = (cpu_raw_rd || cpu_raw_wr) && !cpu_in_r4 && !cpu_in_r5;
 
 	program test;
 		int sample_idx;
@@ -147,7 +153,6 @@ module dmg_cpu_b_gameboy;
 
 			clk   = 0;
 			reset = 1;
-			din   = 0;
 
 			cpu_out_t1   = 0;
 			cpu_clk_ena  = 0;

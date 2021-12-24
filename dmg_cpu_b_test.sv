@@ -78,7 +78,7 @@ module dmg_cpu_b_test;
 	logic cpu_irq6_trig;    /* CPU in  R27 - IRQ6 trigger; active-high */
 	logic cpu_irq7_ack;     /* CPU out R28 - IRQ7 acknowledge; active-high */
 	logic cpu_irq7_trig;    /* CPU in  R29 - IRQ7 trigger; active-high */
-	tri logic [7:0]  cpu_d; /* CPU I/O B1-B8  */
+	tri logic [7:0]  d;     /* CPU I/O B1-B8  */
 	tri logic [15:0] cpu_a; /* CPU out B9-B24 */
 	logic cpu_wakeup;       /* CPU in  B25 - Wake from STOP mode; active-high */
 
@@ -127,7 +127,7 @@ module dmg_cpu_b_test;
 	assign cpu_a = cpu_drv_a ? cpu_a_out : 'z;
 
 	logic [7:0] cpu_d_out;
-	assign cpu_d = cpu_drv_d ? cpu_d_out : 'z;
+	assign d = cpu_drv_d ? cpu_d_out : 'z;
 
 	logic [7:0] d_pin_drv;
 	assign d_pin = d_pin_drv;
