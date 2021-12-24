@@ -2,6 +2,107 @@
 
 module dmg_cpu_b_gameboy;
 
+	import snd_dump::write_header;
+	import snd_dump::write_bit4_as_int8;
+	import snd_dump::write_real_as_int16;
+	vid_dump vdump(.*, .t(test.sample_idx));
+
+	/* Clock (crystal) pins */
+	logic xi, xo;
+
+	/* External cartridge bus */
+	logic            nrst;
+	logic            phi;
+	logic            nrd, nwr, ncs;
+	tri logic [15:0] a_pin;
+	tri logic [7:0]  d_pin;
+
+	/* External video bus */
+	logic            nmoe, nmwr, nmcs;
+	logic     [12:0] ma_pin;
+	tri logic [7:0]  md_pin;
+
+	/* Serial link port pins */
+	logic     sout;
+	tri logic sin;
+	tri logic sck;
+
+	/* Button pins */
+	tri logic p10, p11, p12, p13;
+	logic     p14, p15;
+
+	/* Display pins */
+	logic cpg, cp, cpl, fr, st, s;
+	logic ld0, ld1;
+
+	/* Audio pins */
+	real lout, rout;
+
+	/* Connections to SM83 CPU core */
+	logic cpu_out_t1;       /* CPU out T1  - Goes to unbonded pin; Some test pin? */
+	logic cpu_clkin_t2;     /* CPU in  T2  - 1 MiHz clock; complement of T3 */
+	logic cpu_clkin_t3;     /* CPU in  T3  - 1 MiHz clock; complement of T2 */
+	logic cpu_clkin_t4;     /* CPU in  T4  - 1 MiHz clock; complement of T5 */
+	logic cpu_clkin_t5;     /* CPU in  T5  - 1 MiHz clock; complement of T4 */
+	logic cpu_clkin_t6;     /* CPU in  T6  - 1 MiHz clock; complement of T7 */
+	logic cpu_clkin_t7;     /* CPU in  T7  - 1 MiHz clock; complement of T6 */
+	logic cpu_clkin_t8;     /* CPU in  T8  - 1 MiHz clock */
+	logic cpu_clkin_t9;     /* CPU in  T9  - 1 MiHz clock; complement of T10 */
+	logic cpu_clkin_t10;    /* CPU in  T10 - 1 MiHz clock; complement of T9 */
+	logic cpu_clk_ena;      /* CPU out T11 - Enable clocks; active-high */
+	logic cpu_in_t12;       /* CPU in  T12 - Synchonous reset; active-high */
+	logic cpu_in_t13;       /* CPU in  T13 - Asynchonous reset; active-high */
+	logic cpu_xo_ena;       /* CPU out T14 - Enable crystal oscillator; active-high */
+	logic cpu_in_t15;       /* CPU in  T15 - Crystal oscillator stable; active-high */
+	logic cpu_in_t16;       /* CPU in  T16 - Goes to unbonded pin; Some test pin? */
+	logic cpu_raw_rd;       /* CPU out R1  - Memory read signal; active-high */
+	logic cpu_raw_wr;       /* CPU out R2  - Memory write signal; active-high */
+	logic cpu_in_r3;        /* CPU in  R3  - High when T1=1 T2=0 */
+	logic cpu_in_r4;        /* CPU in  R4  - High when address is 0xFExx or 0xFFxx */
+	logic cpu_in_r5;        /* CPU in  R5  - High when address is 0x00xx and boot ROM is still visible */
+	logic cpu_in_r6;        /* CPU in  R6  - High when T1=0 T2=1 */
+	logic cpu_out_r7;       /* CPU out R7  - External memory request; active-high */
+	logic cpu_irq0_ack;     /* CPU out R14 - IRQ0 acknowledge; active-high */
+	logic cpu_irq0_trig;    /* CPU in  R15 - IRQ0 trigger; active-high */
+	logic cpu_irq1_ack;     /* CPU out R16 - IRQ1 acknowledge; active-high */
+	logic cpu_irq1_trig;    /* CPU in  R17 - IRQ1 trigger; active-high */
+	logic cpu_irq2_ack;     /* CPU out R18 - IRQ2 acknowledge; active-high */
+	logic cpu_irq2_trig;    /* CPU in  R19 - IRQ2 trigger; active-high */
+	logic cpu_irq3_ack;     /* CPU out R20 - IRQ3 acknowledge; active-high */
+	logic cpu_irq3_trig;    /* CPU in  R21 - IRQ3 trigger; active-high */
+	logic cpu_irq4_ack;     /* CPU out R22 - IRQ4 acknowledge; active-high */
+	logic cpu_irq4_trig;    /* CPU in  R23 - IRQ4 trigger; active-high */
+	logic cpu_irq5_ack;     /* CPU out R24 - IRQ5 acknowledge; active-high */
+	logic cpu_irq5_trig;    /* CPU in  R25 - IRQ5 trigger; active-high */
+	logic cpu_irq6_ack;     /* CPU out R26 - IRQ6 acknowledge; active-high */
+	logic cpu_irq6_trig;    /* CPU in  R27 - IRQ6 trigger; active-high */
+	logic cpu_irq7_ack;     /* CPU out R28 - IRQ7 acknowledge; active-high */
+	logic cpu_irq7_trig;    /* CPU in  R29 - IRQ7 trigger; active-high */
+	tri logic [7:0]  cpu_d; /* CPU I/O B1-B8  */
+	tri logic [15:0] cpu_a; /* CPU out B9-B24 */
+	logic cpu_wakeup;       /* CPU in  B25 - Wake from STOP mode; active-high */
+
+	dmg_cpu_b dmg(.*, .t1('0), .t2('0), .vin(0.0), .unbonded_pad0('1), .unbonded_pad1());
+
+	task automatic xi_tick();
+		/* Simulate the 4 MiHz crystal that is attached to the XI and XO pins */
+		#122ns xi = xo;
+
+		clk = xi;
+	endtask
+
+	task automatic cyc(input int num);
+		if (xi)
+			xi_tick();
+		repeat (num * 2)
+			xi_tick();
+	endtask
+
+	logic [7:0] video_ram[0:8191];
+	initial foreach (video_ram[i]) video_ram[i] = $random;
+	always_ff @(posedge nmwr) if (!nmcs) video_ram[ma_pin] <= $isunknown(md_pin) ? $random : md_pin;
+	assign md_pin = (!nmcs && !nmoe) ? video_ram[ma_pin] : 'z;
+
 	logic           clk;
 	logic           reset;
 	logic           ncyc;
@@ -16,52 +117,93 @@ module dmg_cpu_b_gameboy;
 
 	sm83 cpu(.*);
 
-	initial clk   <= 0;
-	initial reset <= 1;
-	initial ncyc  <= 0;
-	initial din   <= 0;
-
-	task cyc;
-		#122ns clk <= 0;
-		#122ns clk <= 1;
-	endtask
-
-	task mcyc;
-		ncyc = 1;
-		cyc;
-		ncyc = 0;
-		cyc;
-		cyc;
-		cyc;
-	endtask
-
-	assign irq = 0;
+	assign ncyc = !dmg.p1_clocks_reset.adyk && !dmg.p1_clocks_reset.alef;
+	assign irq  = 0;
 
 	program test;
+		int sample_idx;
+
 		initial begin
+			int fch[1:4];
+			int fmix, fvid;
+
 			$dumpfile("dmg_cpu_b_gameboy.lxt");
 			$dumpvars(0, dmg_cpu_b_gameboy);
 
-			din <= 0;
-			reset <= 1;
-			mcyc;
-			reset <= 0;
-			din <= 0;
-			mcyc;
-			mcyc;
-			din <= 'h3e;
-			mcyc;
-			din <= 'h01;
-			mcyc;
-			din <= 'h2e;
-			mcyc;
-			din <= 'h01;
-			mcyc;
-			din <= 'h85;
-			mcyc;
-			din <= 0;
-			mcyc;
-			mcyc;
+			for (int i = 1; i <= 4; i++) begin
+				string filename;
+				$sformat(filename, "dmg_cpu_b_gameboy_ch%0d.snd", i);
+				fch[i] = $fopen(filename, "wb");
+				write_header(fch[i], 65536, 1, 0);
+			end
+			fmix = $fopen("dmg_cpu_b_gameboy.snd", "wb");
+			write_header(fmix, 65536, 2, 1);
+			fvid = $fopen("dmg_cpu_b_gameboy.vid", "wb");
+
+			sample_idx = 0;
+
+			xi   = 0;
+			nrst = 0;
+
+			clk   = 0;
+			reset = 1;
+			din   = 0;
+
+			cpu_out_t1   = 0;
+			cpu_clk_ena  = 0;
+			cpu_xo_ena   = 1;
+			cpu_irq0_ack = 0;
+			cpu_irq1_ack = 0;
+			cpu_irq2_ack = 0;
+			cpu_irq3_ack = 0;
+			cpu_irq4_ack = 0;
+			cpu_irq5_ack = 0;
+			cpu_irq6_ack = 0;
+			cpu_irq7_ack = 0;
+
+			cyc(64);
+			nrst = 1;
+
+			fork
+				begin :tick_tick
+					forever begin
+						cyc(64);
+						write_bit4_as_int8(fch[1], dmg.ch1_out);
+						write_bit4_as_int8(fch[2], dmg.ch2_out);
+						write_bit4_as_int8(fch[3], dmg.wave_dac_d);
+						write_bit4_as_int8(fch[4], dmg.ch4_out);
+						write_real_as_int16(fmix, lout);
+						write_real_as_int16(fmix, rout);
+						sample_idx++;
+					end
+				end
+
+				begin :video_dump
+					vdump.video_dump_loop(fvid);
+				end
+
+				begin
+					/* CPU needs to wait for cpu_in_t15 before enabling cpu_clk_ena, otherwise
+					 * peripheral resets won't deassert. */
+					while (!cpu_clk_ena) @(posedge cpu_clkin_t10)
+						if (cpu_in_t15)
+							cpu_clk_ena = 1;
+
+					@(posedge cpu_clkin_t3);
+					@(posedge cpu_clkin_t2);
+					reset = 0;
+
+					repeat (10000) begin
+						@(posedge cpu_clkin_t3);
+						@(posedge cpu_clkin_t2);
+					end
+
+					disable tick_tick;
+					disable video_dump;
+				end
+			join
+
+			$finish;
 		end
 	endprogram
 

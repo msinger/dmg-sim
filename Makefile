@@ -93,8 +93,8 @@ dmg_cpu_b_test.vvp: dmg_cpu_b_test.sv $(DMG_CPU_B) $(AV_DUMP) $(TIMESCALE)
 dmg_cpu_b_test.lxt: dmg_cpu_b_test.vvp
 	$(VVP) $(VVP_FLAGS) $< $(VVP_DUMP_FLAGS)
 
-dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(TIMESCALE)
-	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83)
+dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(AV_DUMP) $(TIMESCALE)
+	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83)
 
 dmg_cpu_b_gameboy.lxt: dmg_cpu_b_gameboy.vvp
 	$(VVP) $(VVP_FLAGS) $< $(VVP_DUMP_FLAGS)

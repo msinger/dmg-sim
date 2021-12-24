@@ -5,7 +5,7 @@ module dmg_cpu_b_test;
 	import snd_dump::write_header;
 	import snd_dump::write_bit4_as_int8;
 	import snd_dump::write_real_as_int16;
-	vid_dump vdump(.*, .t(sample_idx));
+	vid_dump vdump(.*, .t(test.sample_idx));
 
 	/* Clock (crystal) pins */
 	logic xi, xo;
@@ -90,10 +90,9 @@ module dmg_cpu_b_test;
 	endtask
 
 	task automatic cyc(input int num);
-		int i;
 		if (xi)
 			xi_tick();
-		for (i = 0; i < num * 2; i++)
+		repeat (num * 2)
 			xi_tick();
 	endtask
 
@@ -176,186 +175,188 @@ module dmg_cpu_b_test;
 		@(posedge cpu_clkin_t2);
 	endtask
 
-	int sample_idx;
+	program test;
+		int sample_idx;
 
-	initial begin :test
-		int fch[1:4];
-		int fmix, fvid;
+		initial begin
+			int fch[1:4];
+			int fmix, fvid;
 
-		$dumpfile("dmg_cpu_b_test.lxt");
-		$dumpvars(0, dmg_cpu_b_test);
+			$dumpfile("dmg_cpu_b_test.lxt");
+			$dumpvars(0, dmg_cpu_b_test);
 
-		xi        = 0;
-		nrst      = 0;
-		d_pin_drv = 'z;
-
-		cpu_out_t1   = 0;
-		cpu_clk_ena  = 0;
-		cpu_xo_ena   = 1;
-		read_cycle   = 0;
-		write_cycle  = 0;
-		mem_cycle    = 0;
-		cpu_irq0_ack = 0;
-		cpu_irq1_ack = 0;
-		cpu_irq2_ack = 0;
-		cpu_irq3_ack = 0;
-		cpu_irq4_ack = 0;
-		cpu_irq5_ack = 0;
-		cpu_irq6_ack = 0;
-		cpu_irq7_ack = 0;
-		cpu_d_out    = 0;
-		cpu_a_out    = 0;
-
-		cyc(64);
-		nrst = 1;
-
-		for (int i = 1; i <= 4; i++) begin
-			string filename;
-			$sformat(filename, "dmg_cpu_b_test_ch%0d.snd", i);
-			fch[i] = $fopen(filename, "wb");
-			write_header(fch[i], 65536, 1, 0);
-		end
-		fmix = $fopen("dmg_cpu_b_test.snd", "wb");
-		write_header(fmix, 65536, 2, 1);
-		fvid = $fopen("dmg_cpu_b_test.vid", "wb");
-
-		sample_idx = 0;
-
-		fork
-			begin :tick_tick
-				forever begin
-					cyc(64);
-					write_bit4_as_int8(fch[1], dmg.ch1_out);
-					write_bit4_as_int8(fch[2], dmg.ch2_out);
-					write_bit4_as_int8(fch[3], dmg.wave_dac_d);
-					write_bit4_as_int8(fch[4], dmg.ch4_out);
-					write_real_as_int16(fmix, lout);
-					write_real_as_int16(fmix, rout);
-					sample_idx++;
-				end
+			for (int i = 1; i <= 4; i++) begin
+				string filename;
+				$sformat(filename, "dmg_cpu_b_test_ch%0d.snd", i);
+				fch[i] = $fopen(filename, "wb");
+				write_header(fch[i], 65536, 1, 0);
 			end
+			fmix = $fopen("dmg_cpu_b_test.snd", "wb");
+			write_header(fmix, 65536, 2, 1);
+			fvid = $fopen("dmg_cpu_b_test.vid", "wb");
 
-			begin :video_dump
-				vdump.video_dump_loop(fvid);
-			end
+			sample_idx = 0;
 
-			begin
-				/* CPU needs to wait for cpu_in_t15 before enabling cpu_clk_ena, otherwise
-				 * peripheral resets won't deassert. */
-				while (!cpu_clk_ena) @(posedge cpu_clkin_t10)
-					if (cpu_in_t15)
-						cpu_clk_ena = 1;
+			xi        = 0;
+			nrst      = 0;
+			d_pin_drv = 'z;
 
-				nop;
-				nop;
+			cpu_out_t1   = 0;
+			cpu_clk_ena  = 0;
+			cpu_xo_ena   = 1;
+			read_cycle   = 0;
+			write_cycle  = 0;
+			mem_cycle    = 0;
+			cpu_irq0_ack = 0;
+			cpu_irq1_ack = 0;
+			cpu_irq2_ack = 0;
+			cpu_irq3_ack = 0;
+			cpu_irq4_ack = 0;
+			cpu_irq5_ack = 0;
+			cpu_irq6_ack = 0;
+			cpu_irq7_ack = 0;
+			cpu_d_out    = 0;
+			cpu_a_out    = 0;
 
-				write('hff80, 'h12);
-				write('hff81, 'h34);
-				write('hff82, 'h56);
-				write('hff83, 'h78);
-				write('hfffe, 'hab);
-				write('hffff, 'hcd);
-				write('h0000, 'hef);
-				read('hff80, 'h56);
-				read('hff81, 'h56);
-				read('hff82, 'h56);
-				read('hff83, 'h56);
-				read('hfffe, 'h56);
-				read('hffff, 'h56);
-				read('h0000, 'h56);
+			cyc(64);
+			nrst = 1;
 
-				read('hff00, 'h56);
-				read('h1000, 'h56);
-				read('hff00, 'h56);
-				write('hff00, 'h56);
-				read('h0055, 'h56);
-				write('h00aa, 'h56);
-				read('h1234, 'h56);
-				write('h4321, 'h56);
-				read('h8aaa, 'h56);
-
-				write('hff26, 'h80);
-
-				begin
-					int j;
-					j = 'h01;
-					for (int i = 'hff30; i < 'hff40; i++) begin
-						write(i, j);
-						j += 'h22;
+			fork
+				begin :tick_tick
+					forever begin
+						cyc(64);
+						write_bit4_as_int8(fch[1], dmg.ch1_out);
+						write_bit4_as_int8(fch[2], dmg.ch2_out);
+						write_bit4_as_int8(fch[3], dmg.wave_dac_d);
+						write_bit4_as_int8(fch[4], dmg.ch4_out);
+						write_real_as_int16(fmix, lout);
+						write_real_as_int16(fmix, rout);
+						sample_idx++;
 					end
 				end
 
-				write('hfe00, 'ha4);
-				write('hfe01, 'hb5);
-				write('hfe02, 'hc6);
-				write('hfe03, 'hd7);
-				write('h8000, 'h4a);
-				write('h8001, 'h5b);
-				write('h8002, 'h6c);
-				write('h8003, 'h7d);
-				read('hfe00, 'h56);
-				read('hfe01, 'h56);
-				read('hfe02, 'h56);
-				read('hfe03, 'h56);
-				read('h8000, 'h56);
-				read('h8001, 'h56);
-				read('h8002, 'h56);
-				read('h8003, 'h56);
+				begin :video_dump
+					vdump.video_dump_loop(fvid);
+				end
 
-				for (int i = 0; i < 160; i++)
-					write('hfe00 + i, 0);
-				for (int i = 0; i < 8192; i++)
-					write('h8000 + i, 0);
+				begin
+					/* CPU needs to wait for cpu_in_t15 before enabling cpu_clk_ena, otherwise
+					 * peripheral resets won't deassert. */
+					while (!cpu_clk_ena) @(posedge cpu_clkin_t10)
+						if (cpu_in_t15)
+							cpu_clk_ena = 1;
 
-				write('hff47, 'he4);
-				write('hff48, 'he4);
-				write('hff49, 'h1b);
-				write('hff40, 'h83);
+					nop;
+					nop;
 
-				write('hff10, 'h00);
-				write('hff11, 'h80);
-				write('hff12, 'hf3);
-				write('hff16, 'h80);
-				write('hff17, 'hf3);
-				write('hff1a, 'h80);
-				write('hff1b, 'h00);
-				write('hff1c, 'h20);
-				write('hff20, 'h00);
-				write('hff21, 'hf3);
-				write('hff25, 'hff);
-				write('hff24, 'h77);
-				write('hff13, 'h83);
-				write('hff14, 'h87);
-				write('hff18, 'h83);
-				write('hff19, 'h87);
-				write('hff22, 'h13);
-				write('hff23, 'h80);
-				write('hff1d, 'h83);
-				write('hff1e, 'h87);
-				for (int i = 0; i < 100000; i++)
-					nop();
-				write('hff13, 'hc1);
-				write('hff14, 'h87);
-				write('hff18, 'hc1);
-				write('hff19, 'h87);
-				write('hff1d, 'hc1);
-				write('hff1e, 'h87);
+					write('hff80, 'h12);
+					write('hff81, 'h34);
+					write('hff82, 'h56);
+					write('hff83, 'h78);
+					write('hfffe, 'hab);
+					write('hffff, 'hcd);
+					write('h0000, 'hef);
+					read('hff80, 'h56);
+					read('hff81, 'h56);
+					read('hff82, 'h56);
+					read('hff83, 'h56);
+					read('hfffe, 'h56);
+					read('hffff, 'h56);
+					read('h0000, 'h56);
 
-				for (int i = 0; i < 1000000; i++)
-					nop();
+					read('hff00, 'h56);
+					read('h1000, 'h56);
+					read('hff00, 'h56);
+					write('hff00, 'h56);
+					read('h0055, 'h56);
+					write('h00aa, 'h56);
+					read('h1234, 'h56);
+					write('h4321, 'h56);
+					read('h8aaa, 'h56);
 
-				/* TODO: Address lines must change when accessing 0xFExx or 0xFFxx */
+					write('hff26, 'h80);
 
-				nop;
-				nop;
+					begin
+						int j;
+						j = 'h01;
+						for (int i = 'hff30; i < 'hff40; i++) begin
+							write(i, j);
+							j += 'h22;
+						end
+					end
 
-				disable tick_tick;
-				disable video_dump;
-			end
-		join
+					write('hfe00, 'ha4);
+					write('hfe01, 'hb5);
+					write('hfe02, 'hc6);
+					write('hfe03, 'hd7);
+					write('h8000, 'h4a);
+					write('h8001, 'h5b);
+					write('h8002, 'h6c);
+					write('h8003, 'h7d);
+					read('hfe00, 'h56);
+					read('hfe01, 'h56);
+					read('hfe02, 'h56);
+					read('hfe03, 'h56);
+					read('h8000, 'h56);
+					read('h8001, 'h56);
+					read('h8002, 'h56);
+					read('h8003, 'h56);
 
-		$finish;
-	end
+					for (int i = 0; i < 160; i++)
+						write('hfe00 + i, 0);
+					for (int i = 0; i < 8192; i++)
+						write('h8000 + i, 0);
+
+					write('hff47, 'he4);
+					write('hff48, 'he4);
+					write('hff49, 'h1b);
+					write('hff40, 'h83);
+
+					write('hff10, 'h00);
+					write('hff11, 'h80);
+					write('hff12, 'hf3);
+					write('hff16, 'h80);
+					write('hff17, 'hf3);
+					write('hff1a, 'h80);
+					write('hff1b, 'h00);
+					write('hff1c, 'h20);
+					write('hff20, 'h00);
+					write('hff21, 'hf3);
+					write('hff25, 'hff);
+					write('hff24, 'h77);
+					write('hff13, 'h83);
+					write('hff14, 'h87);
+					write('hff18, 'h83);
+					write('hff19, 'h87);
+					write('hff22, 'h13);
+					write('hff23, 'h80);
+					write('hff1d, 'h83);
+					write('hff1e, 'h87);
+					for (int i = 0; i < 100000; i++)
+						nop();
+					write('hff13, 'hc1);
+					write('hff14, 'h87);
+					write('hff18, 'hc1);
+					write('hff19, 'h87);
+					write('hff1d, 'hc1);
+					write('hff1e, 'h87);
+
+					for (int i = 0; i < 1000000; i++)
+						nop();
+
+					/* TODO: Address lines must change when accessing 0xFExx or 0xFFxx */
+
+					nop;
+					nop;
+
+					disable tick_tick;
+					disable video_dump;
+				end
+			join
+
+			$finish;
+		end
+	endprogram
 
 endmodule
 
