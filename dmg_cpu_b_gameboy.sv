@@ -127,7 +127,7 @@ module dmg_cpu_b_gameboy;
 			int fch[1:4];
 			int fmix, fvid;
 
-			$dumpfile("dmg_cpu_b_gameboy.lxt");
+			$dumpfile("dmg_cpu_b_gameboy.vcd");
 			$dumpvars(0, dmg_cpu_b_gameboy);
 
 			for (int i = 1; i <= 4; i++) begin

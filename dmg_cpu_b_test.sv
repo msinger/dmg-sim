@@ -182,7 +182,7 @@ module dmg_cpu_b_test;
 			int fch[1:4];
 			int fmix, fvid;
 
-			$dumpfile("dmg_cpu_b_test.lxt");
+			$dumpfile("dmg_cpu_b_test.vcd");
 			$dumpvars(0, dmg_cpu_b_test);
 
 			for (int i = 1; i <= 4; i++) begin

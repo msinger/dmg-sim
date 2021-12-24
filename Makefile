@@ -76,25 +76,25 @@ IVERILOG = iverilog
 IVERILOG_FLAGS = -g2012 -f $(TIMESCALE) -pfileline=1 -gsupported-assertions
 VVP = vvp
 VVP_FLAGS = -N
-VVP_DUMP_FLAGS = -lxt2
+VVP_DUMP_FLAGS = -vcd
 
-all: dmg_cpu_b_test.lxt dmg_cpu_b_gameboy.lxt
+all: dmg_cpu_b_test.vcd dmg_cpu_b_gameboy.vcd
 
-.PRECIOUS: dmg_cpu_b_test.lxt dmg_cpu_b_gameboy.lxt
+.PRECIOUS: dmg_cpu_b_test.vcd dmg_cpu_b_gameboy.vcd
 
 clean:
-	rm -f dmg_cpu_b_test*.lxt dmg_cpu_b_test.vvp dmg_cpu_b_gameboy*.lxt dmg_cpu_b_gameboy.vvp
+	rm -f dmg_cpu_b_test.vcd dmg_cpu_b_test.vvp dmg_cpu_b_gameboy.vcd dmg_cpu_b_gameboy.vvp
 
 .PHONY: all clean
 
 dmg_cpu_b_test.vvp: dmg_cpu_b_test.sv $(DMG_CPU_B) $(AV_DUMP) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_test.sv $(DMG_CPU_B)
 
-dmg_cpu_b_test.lxt: dmg_cpu_b_test.vvp
+dmg_cpu_b_test.vcd: dmg_cpu_b_test.vvp
 	$(VVP) $(VVP_FLAGS) $< $(VVP_DUMP_FLAGS)
 
 dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(AV_DUMP) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83)
 
-dmg_cpu_b_gameboy.lxt: dmg_cpu_b_gameboy.vvp
+dmg_cpu_b_gameboy.vcd: dmg_cpu_b_gameboy.vvp
 	$(VVP) $(VVP_FLAGS) $< $(VVP_DUMP_FLAGS)
