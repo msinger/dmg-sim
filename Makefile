@@ -107,6 +107,7 @@ VVP_FLAGS = -N
 
 DUMP = fst
 CH_DUMP =
+BOOTROM = DMG_ROM.bin
 
 ifeq ($(DUMP),vcd)
 VVP_DUMP_FLAGS = -vcd +DUMPFILE=$1.vcd
@@ -141,7 +142,8 @@ sim-test $(DMG_CPU_B_TEST_VVP_OUT): dmg_cpu_b_test.vvp
 	$(VVP) $(VVP_FLAGS) $< $(call VVP_DUMP_FLAGS,dmg_cpu_b_test) \
 	                       $(call VVP_CH_DUMP_FLAGS,dmg_cpu_b_test) \
 	                       $(call VVP_SND_DUMP_FLAGS,dmg_cpu_b_test) \
-	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_test)
+	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_test) \
+	                       +BOOTROM=$(BOOTROM)
 
 dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(AV_DUMP) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83)
@@ -150,4 +152,6 @@ sim-gameboy $(DMG_CPU_B_GAMEBOY_VVP_OUT): dmg_cpu_b_gameboy.vvp
 	$(VVP) $(VVP_FLAGS) $< $(call VVP_DUMP_FLAGS,dmg_cpu_b_gameboy) \
 	                       $(call VVP_CH_DUMP_FLAGS,dmg_cpu_b_gameboy) \
 	                       $(call VVP_SND_DUMP_FLAGS,dmg_cpu_b_gameboy) \
-	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_gameboy)
+	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       +BOOTROM=$(BOOTROM)
+

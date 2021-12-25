@@ -432,7 +432,25 @@ module dmg_cpu_b(
 	logic boot_cs; /* OE */
 
 	logic [7:0] brom[0:255];
-	initial foreach (brom[i]) brom[i] = '0;
+	initial begin
+		string bootrom_file;
+		int f, _;
+
+		bootrom_file = "";
+		_ = $value$plusargs("BOOTROM=%s", bootrom_file);
+
+		f = 0;
+		if (bootrom_file != "") begin
+			f = $fopen(bootrom_file, "rb");
+			if (!f)
+				$error("Failed to open boot ROM file %s for reading. Using all-zero boot ROM.", bootrom_file);
+		end
+		if (f) begin
+			_ = $fread(brom, f);
+			$fclose(f);
+		end else
+			foreach (brom[i]) brom[i] = '0;
+	end
 	assign d = boot_cs ? brom[a[7:0]] : 'z;
 
 	clocks_reset           p1_clocks_reset(.*);
