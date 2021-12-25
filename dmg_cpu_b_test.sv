@@ -327,10 +327,10 @@ module dmg_cpu_b_test;
 					read('h8002, 'h56);
 					read('h8003, 'h56);
 
-					for (int i = 0; i < 160; i++)
-						write('hfe00 + i, 0);
-					for (int i = 0; i < 8192; i++)
-						write('h8000 + i, 0);
+//					for (int i = 0; i < 160; i++)
+//						write('hfe00 + i, 0);
+//					for (int i = 0; i < 8192; i++)
+//						write('h8000 + i, 0);
 
 					write('hff47, 'he4);
 					write('hff48, 'he4);
@@ -366,6 +366,14 @@ module dmg_cpu_b_test;
 					write('hff1d, 'hc1);
 					write('hff1e, 'h87);
 
+					for (int j = 0; j < 10; j++) begin
+						for (int i = 0; i < 22000; i++)
+							nop();
+						write('hff42, j);
+						for (int i = 0; i < 22000; i++)
+							nop();
+						write('hff43, j);
+					end
 					for (int i = 0; i < 1000000; i++)
 						nop();
 

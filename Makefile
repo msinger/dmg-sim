@@ -82,7 +82,8 @@ dmg_cpu_b_test.vid
 
 DMG_CPU_B_TEST_OUT = \
 dmg_cpu_b_test.vvp \
-$(DMG_CPU_B_TEST_VVP_OUT)
+$(DMG_CPU_B_TEST_VVP_OUT) \
+dmg_cpu_b_test.mkv
 
 DMG_CPU_B_GAMEBOY_VVP_OUT = \
 dmg_cpu_b_gameboy.vcd \
@@ -96,7 +97,8 @@ dmg_cpu_b_gameboy.vid
 
 DMG_CPU_B_GAMEBOY_OUT = \
 dmg_cpu_b_gameboy.vvp \
-$(DMG_CPU_B_GAMEBOY_VVP_OUT)
+$(DMG_CPU_B_GAMEBOY_VVP_OUT) \
+dmg_cpu_b_gameboy.mkv
 
 TIMESCALE = timescale.f
 
@@ -104,6 +106,9 @@ IVERILOG = iverilog
 IVERILOG_FLAGS = -g2012 -f $(TIMESCALE) -pfileline=1 -gsupported-assertions
 VVP = vvp
 VVP_FLAGS = -N
+
+CC = gcc
+CFLAGS = -std=c99
 
 DUMP = fst
 CH_DUMP =
@@ -131,7 +136,7 @@ VVP_VID_DUMP_FLAGS = +VID_FILE=$1.vid
 all: sim-test sim-gameboy
 
 clean:
-	rm -f $(DMG_CPU_B_TEST_OUT) $(DMG_CPU_B_GAMEBOY_OUT)
+	rm -f $(DMG_CPU_B_TEST_OUT) $(DMG_CPU_B_GAMEBOY_OUT) mkvid/mkimgs
 
 .PHONY: all clean sim-test sim-gameboy
 
@@ -145,6 +150,9 @@ sim-test $(DMG_CPU_B_TEST_VVP_OUT): dmg_cpu_b_test.vvp
 	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_test) \
 	                       +BOOTROM=$(BOOTROM)
 
+dmg_cpu_b_test.mkv: mkvid/mkimgs mkvid/mkvid.sh dmg_cpu_b_test.vid dmg_cpu_b_test.snd
+	mkvid/mkvid.sh dmg_cpu_b_test
+
 dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(AV_DUMP) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83)
 
@@ -155,3 +163,8 @@ sim-gameboy $(DMG_CPU_B_GAMEBOY_VVP_OUT): dmg_cpu_b_gameboy.vvp
 	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_gameboy) \
 	                       +BOOTROM=$(BOOTROM)
 
+dmg_cpu_b_gameboy.mkv: mkvid/mkimgs mkvid/mkvid.sh dmg_cpu_b_gameboy.vid dmg_cpu_b_gameboy.snd
+	mkvid/mkvid.sh dmg_cpu_b_gameboy
+
+mkvid/mkimgs: mkvid/mkimgs.c
+	$(CC) $(CFLAGS) -o $@ $^

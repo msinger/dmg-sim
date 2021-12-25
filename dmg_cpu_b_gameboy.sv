@@ -223,7 +223,7 @@ module dmg_cpu_b_gameboy;
 					@(posedge cpu_clkin_t2);
 					reset = 0;
 
-					repeat (10000) begin
+					repeat (6000000) begin
 						@(posedge cpu_clkin_t3);
 						@(posedge cpu_clkin_t2);
 					end
