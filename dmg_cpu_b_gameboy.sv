@@ -130,7 +130,8 @@ module dmg_cpu_b_gameboy;
 		int sample_idx;
 
 		initial begin
-			string dumpfile;
+			string dumpfile, ch_file, snd_file, vid_file;
+			bit dump_channels, dump_sound, dump_video;
 			int _;
 			int fch[1:4];
 			int fmix, fvid;
@@ -138,18 +139,33 @@ module dmg_cpu_b_gameboy;
 			dumpfile = "";
 			_ = $value$plusargs("DUMPFILE=%s", dumpfile);
 
+			ch_file = "";
+			_ = $value$plusargs("CH_FILE=%s", ch_file);
+			dump_channels = ch_file != "";
+
+			snd_file = "";
+			_ = $value$plusargs("SND_FILE=%s", snd_file);
+			dump_sound = snd_file != "";
+
+			vid_file = "";
+			_ = $value$plusargs("VID_FILE=%s", vid_file);
+			dump_video = vid_file != "";
+
 			$dumpfile(dumpfile);
 			$dumpvars(0, dmg_cpu_b_gameboy);
 
-			for (int i = 1; i <= 4; i++) begin
+			if (dump_channels) for (int i = 1; i <= 4; i++) begin
 				string filename;
-				$sformat(filename, "dmg_cpu_b_gameboy_ch%0d.snd", i);
+				$sformat(filename, ch_file, i);
 				fch[i] = $fopen(filename, "wb");
 				write_header(fch[i], 65536, 1, 0);
 			end
-			fmix = $fopen("dmg_cpu_b_gameboy.snd", "wb");
-			write_header(fmix, 65536, 2, 1);
-			fvid = $fopen("dmg_cpu_b_gameboy.vid", "wb");
+			if (dump_sound) begin
+				fmix = $fopen(snd_file, "wb");
+				write_header(fmix, 65536, 2, 1);
+			end
+			if (dump_video)
+				fvid = $fopen(vid_file, "wb");
 
 			sample_idx = 0;
 
@@ -178,17 +194,21 @@ module dmg_cpu_b_gameboy;
 				begin :tick_tick
 					forever begin
 						cyc(64);
-						write_bit4_as_int8(fch[1], dmg.ch1_out);
-						write_bit4_as_int8(fch[2], dmg.ch2_out);
-						write_bit4_as_int8(fch[3], dmg.wave_dac_d);
-						write_bit4_as_int8(fch[4], dmg.ch4_out);
-						write_real_as_int16(fmix, lout);
-						write_real_as_int16(fmix, rout);
+						if (dump_channels) begin
+							write_bit4_as_int8(fch[1], dmg.ch1_out);
+							write_bit4_as_int8(fch[2], dmg.ch2_out);
+							write_bit4_as_int8(fch[3], dmg.wave_dac_d);
+							write_bit4_as_int8(fch[4], dmg.ch4_out);
+						end
+						if (dump_sound) begin
+							write_real_as_int16(fmix, lout);
+							write_real_as_int16(fmix, rout);
+						end
 						sample_idx++;
 					end
 				end
 
-				begin :video_dump
+				if (dump_video) begin :video_dump
 					vdump.video_dump_loop(fvid);
 				end
 

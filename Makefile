@@ -106,6 +106,7 @@ VVP = vvp
 VVP_FLAGS = -N
 
 DUMP = fst
+CH_DUMP =
 
 ifeq ($(DUMP),vcd)
 VVP_DUMP_FLAGS = -vcd +DUMPFILE=$1.vcd
@@ -113,9 +114,18 @@ else
 ifeq ($(DUMP),fst)
 VVP_DUMP_FLAGS = -fst-speed +DUMPFILE=$1.fst
 else
-VVP_DUMP_FLAGS = -none +DUMPFILE=
+VVP_DUMP_FLAGS = -none
 endif
 endif
+
+ifdef CH_DUMP
+VVP_CH_DUMP_FLAGS = +CH_FILE=$1_ch%0d.snd
+else
+VVP_CH_DUMP_FLAGS =
+endif
+
+VVP_SND_DUMP_FLAGS = +SND_FILE=$1.snd
+VVP_VID_DUMP_FLAGS = +VID_FILE=$1.vid
 
 all: sim-test sim-gameboy
 
@@ -128,10 +138,16 @@ dmg_cpu_b_test.vvp: dmg_cpu_b_test.sv $(DMG_CPU_B) $(AV_DUMP) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_test.sv $(DMG_CPU_B)
 
 sim-test $(DMG_CPU_B_TEST_VVP_OUT): dmg_cpu_b_test.vvp
-	$(VVP) $(VVP_FLAGS) $< $(call VVP_DUMP_FLAGS,dmg_cpu_b_test)
+	$(VVP) $(VVP_FLAGS) $< $(call VVP_DUMP_FLAGS,dmg_cpu_b_test) \
+	                       $(call VVP_CH_DUMP_FLAGS,dmg_cpu_b_test) \
+	                       $(call VVP_SND_DUMP_FLAGS,dmg_cpu_b_test) \
+	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_test)
 
 dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(AV_DUMP) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83)
 
 sim-gameboy $(DMG_CPU_B_GAMEBOY_VVP_OUT): dmg_cpu_b_gameboy.vvp
-	$(VVP) $(VVP_FLAGS) $< $(call VVP_DUMP_FLAGS,dmg_cpu_b_gameboy)
+	$(VVP) $(VVP_FLAGS) $< $(call VVP_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       $(call VVP_CH_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       $(call VVP_SND_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_gameboy)
