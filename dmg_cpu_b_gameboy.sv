@@ -130,10 +130,15 @@ module dmg_cpu_b_gameboy;
 		int sample_idx;
 
 		initial begin
+			string dumpfile;
+			int _;
 			int fch[1:4];
 			int fmix, fvid;
 
-			$dumpfile("dmg_cpu_b_gameboy.vcd");
+			dumpfile = "";
+			_ = $value$plusargs("DUMPFILE=%s", dumpfile);
+
+			$dumpfile(dumpfile);
 			$dumpvars(0, dmg_cpu_b_gameboy);
 
 			for (int i = 1; i <= 4; i++) begin

@@ -70,31 +70,68 @@ AV_DUMP = \
 snd_dump.sv \
 vid_dump.sv
 
+DMG_CPU_B_TEST_VVP_OUT = \
+dmg_cpu_b_test.vcd \
+dmg_cpu_b_test.fst \
+dmg_cpu_b_test.snd \
+dmg_cpu_b_test_ch1.snd \
+dmg_cpu_b_test_ch2.snd \
+dmg_cpu_b_test_ch3.snd \
+dmg_cpu_b_test_ch4.snd \
+dmg_cpu_b_test.vid
+
+DMG_CPU_B_TEST_OUT = \
+dmg_cpu_b_test.vvp \
+$(DMG_CPU_B_TEST_VVP_OUT)
+
+DMG_CPU_B_GAMEBOY_VVP_OUT = \
+dmg_cpu_b_gameboy.vcd \
+dmg_cpu_b_gameboy.fst \
+dmg_cpu_b_gameboy.snd \
+dmg_cpu_b_gameboy_ch1.snd \
+dmg_cpu_b_gameboy_ch2.snd \
+dmg_cpu_b_gameboy_ch3.snd \
+dmg_cpu_b_gameboy_ch4.snd \
+dmg_cpu_b_gameboy.vid
+
+DMG_CPU_B_GAMEBOY_OUT = \
+dmg_cpu_b_gameboy.vvp \
+$(DMG_CPU_B_GAMEBOY_VVP_OUT)
+
 TIMESCALE = timescale.f
 
 IVERILOG = iverilog
 IVERILOG_FLAGS = -g2012 -f $(TIMESCALE) -pfileline=1 -gsupported-assertions
 VVP = vvp
 VVP_FLAGS = -N
-VVP_DUMP_FLAGS = -vcd
 
-all: dmg_cpu_b_test.vcd dmg_cpu_b_gameboy.vcd
+DUMP = fst
 
-.PRECIOUS: dmg_cpu_b_test.vcd dmg_cpu_b_gameboy.vcd
+ifeq ($(DUMP),vcd)
+VVP_DUMP_FLAGS = -vcd +DUMPFILE=$1.vcd
+else
+ifeq ($(DUMP),fst)
+VVP_DUMP_FLAGS = -fst-speed +DUMPFILE=$1.fst
+else
+VVP_DUMP_FLAGS = -none +DUMPFILE=
+endif
+endif
+
+all: sim-test sim-gameboy
 
 clean:
-	rm -f dmg_cpu_b_test.vcd dmg_cpu_b_test.vvp dmg_cpu_b_gameboy.vcd dmg_cpu_b_gameboy.vvp
+	rm -f $(DMG_CPU_B_TEST_OUT) $(DMG_CPU_B_GAMEBOY_OUT)
 
-.PHONY: all clean
+.PHONY: all clean sim-test sim-gameboy
 
 dmg_cpu_b_test.vvp: dmg_cpu_b_test.sv $(DMG_CPU_B) $(AV_DUMP) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_test.sv $(DMG_CPU_B)
 
-dmg_cpu_b_test.vcd: dmg_cpu_b_test.vvp
-	$(VVP) $(VVP_FLAGS) $< $(VVP_DUMP_FLAGS)
+sim-test $(DMG_CPU_B_TEST_VVP_OUT): dmg_cpu_b_test.vvp
+	$(VVP) $(VVP_FLAGS) $< $(call VVP_DUMP_FLAGS,dmg_cpu_b_test)
 
 dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(AV_DUMP) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83)
 
-dmg_cpu_b_gameboy.vcd: dmg_cpu_b_gameboy.vvp
-	$(VVP) $(VVP_FLAGS) $< $(VVP_DUMP_FLAGS)
+sim-gameboy $(DMG_CPU_B_GAMEBOY_VVP_OUT): dmg_cpu_b_gameboy.vvp
+	$(VVP) $(VVP_FLAGS) $< $(call VVP_DUMP_FLAGS,dmg_cpu_b_gameboy)
