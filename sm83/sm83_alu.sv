@@ -84,13 +84,15 @@ module sm83_alu
 	word_t op_a, op_b;
 
 	always_comb unique case (1)
-		op_low:  core_op_a = op_a.l;
-		!op_low: core_op_a = op_a.h;
+		op_low:             core_op_a = op_a.l;
+		!op_low:            core_op_a = op_a.h;
+		$isunknown(op_low): core_op_a = 'x;
 	endcase
 
 	always_comb unique case (1)
-		!op_b_high: core_op_b = negate ? ~op_b.l : op_b.l;
-		op_b_high:  core_op_b = negate ? ~op_b.h : op_b.h;
+		!op_b_high:            core_op_b = negate ? ~op_b.l : op_b.l;
+		op_b_high:             core_op_b = negate ? ~op_b.h : op_b.h;
+		$isunknown(op_b_high): core_op_b = 'x;
 	endcase
 
 	word_t shifted;
@@ -101,6 +103,8 @@ module sm83_alu
 		'b 00: shifted = din;                              /* no shift */
 		'b ?1: shifted = { shift_in, din[WORD_SIZE-1:1] }; /* right shift */
 		'b 1?: shifted = { din[WORD_SIZE-2:0], shift_in }; /* left shift */
+		'b x?,
+		'b ?x: shifted = 'x;
 	endcase
 
 	assign shift_dbh = din[WORD_SIZE-1];
@@ -118,7 +122,11 @@ module sm83_alu
 		'b ?1??: bus = shifted;
 		'b ??1?: bus = op_a;
 		'b ???1: bus = op_bs;
-		'b 0000: bus = 'x;
+		'b 0000,
+		'b x???,
+		'b ?x??,
+		'b ??x?,
+		'b ???x: bus = 'x;
 	endcase
 
 	/* only one of load_a* can be set at the same time */

@@ -147,14 +147,14 @@ module sm83(
 	                                                input logic [WORD_SIZE-1:0] in5,
 	                                                input logic [WORD_SIZE-1:0] in6);
 		unique case (1)
-			sel[0]: db_mux = in0;
-			sel[1]: db_mux = in1;
-			sel[2]: db_mux = in2;
-			sel[3]: db_mux = in3;
-			sel[4]: db_mux = in4;
-			sel[5]: db_mux = in5;
-			sel[6]: db_mux = in6;
-			!sel:   db_mux = 'x;
+			sel[0]:                db_mux = in0;
+			sel[1]:                db_mux = in1;
+			sel[2]:                db_mux = in2;
+			sel[3]:                db_mux = in3;
+			sel[4]:                db_mux = in4;
+			sel[5]:                db_mux = in5;
+			sel[6]:                db_mux = in6;
+			!sel, $isunknown(sel): db_mux = 'x;
 		endcase
 	endfunction
 
