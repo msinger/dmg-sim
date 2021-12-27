@@ -117,14 +117,53 @@ module dmg_cpu_b_gameboy;
 
 	sm83 cpu(.*);
 
-	assign ncyc = !dmg.p1_clocks_reset.adyk && !dmg.p1_clocks_reset.alef;
-	assign irq  = 0;
-	assign cpu_a = adr;
-	assign d     = wr ? dout : 'z;
-	assign din   = d;
-	assign cpu_raw_rd = rd;
-	assign cpu_raw_wr = wr;
+	assign ncyc       = !dmg.p1_clocks_reset.adyk && !dmg.p1_clocks_reset.alef;
+	assign irq        = 0;
+	assign cpu_a      = cpu_a_out;
+	assign d          = cpu_drv_d ? cpu_d_out : 'z;
+	assign din        = d;
 	assign cpu_out_r7 = (cpu_raw_rd || cpu_raw_wr) && !cpu_in_r4 && !cpu_in_r5;
+
+	logic        cpu_drv_d;
+	logic [7:0]  cpu_d_out;
+	logic [15:0] cpu_a_out;
+
+	initial cpu_a_out  = 0;
+	initial cpu_raw_rd = 0;
+	initial cpu_raw_wr = 0;
+
+	/* CPU must not drive data bus when cpu_clkin_t3 (BEDO) is low or cpu_clkin_t2 (BOWA) is high,
+	 * otherwise it collides with 0xff driven on the right side of page 5. */
+	assign cpu_drv_d = cpu_raw_wr && cpu_clkin_t3 && !cpu_clkin_t2;
+
+	always @(posedge cpu_clkin_t3) if (rd && !cpu_in_t12 && !cpu_in_t13) begin :read_cycle
+		cpu_a_out  <= adr;
+		cpu_raw_rd <= 1;
+		@(posedge cpu_clkin_t2);
+		cpu_raw_rd <= 0;
+		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
+			cpu_a_out[15:8] <= 0;
+	end
+
+	always @(posedge cpu_clkin_t3) if (wr && !cpu_in_t12 && !cpu_in_t13) begin :write_cycle
+		cpu_a_out  <= adr;
+		cpu_d_out  <= '1;
+		cpu_raw_wr <= 1;
+		@(posedge cpu_clkin_t5);
+		cpu_d_out  <= dout;
+		@(posedge cpu_clkin_t2);
+		cpu_raw_wr <= 0;
+		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
+			cpu_a_out[15:8] <= 0;
+	end
+
+	always @(posedge cpu_clkin_t10, posedge cpu_in_t12, posedge cpu_in_t13) if (cpu_in_t12 || cpu_in_t13) begin
+		disable read_cycle;
+		disable write_cycle;
+		cpu_raw_rd <= 0;
+		cpu_raw_wr <= 0;
+		cpu_a_out  <= 0;
+	end
 
 	program test;
 		int sample_idx;
