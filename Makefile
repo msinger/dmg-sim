@@ -113,6 +113,7 @@ CFLAGS = -std=c99
 DUMP = fst
 CH_DUMP =
 BOOTROM = DMG_ROM.bin
+ROM =
 
 ifeq ($(DUMP),vcd)
 VVP_DUMP_FLAGS = -vcd +DUMPFILE=$1.vcd
@@ -161,7 +162,8 @@ sim-gameboy $(DMG_CPU_B_GAMEBOY_VVP_OUT): dmg_cpu_b_gameboy.vvp
 	                       $(call VVP_CH_DUMP_FLAGS,dmg_cpu_b_gameboy) \
 	                       $(call VVP_SND_DUMP_FLAGS,dmg_cpu_b_gameboy) \
 	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_gameboy) \
-	                       +BOOTROM=$(BOOTROM)
+	                       +BOOTROM="$(BOOTROM)" \
+	                       +ROM="$(ROM)"
 
 dmg_cpu_b_gameboy.mkv: mkvid/mkimgs mkvid/mkvid.sh dmg_cpu_b_gameboy.vid dmg_cpu_b_gameboy.snd
 	mkvid/mkvid.sh dmg_cpu_b_gameboy

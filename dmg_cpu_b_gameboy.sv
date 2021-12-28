@@ -103,6 +103,36 @@ module dmg_cpu_b_gameboy;
 	always_ff @(posedge nmwr) if (!nmcs) video_ram[ma_pin] <= $isunknown(md_pin) ? $random : md_pin;
 	assign md_pin = (!nmcs && !nmoe) ? video_ram[ma_pin] : 'z;
 
+	logic [7:0] work_ram[0:8191];
+	initial foreach (work_ram[i]) work_ram[i] = $random;
+	always_ff @(posedge nwr) if (!ncs && a_pin[14]) work_ram[a_pin[12:0]] <= $isunknown(d_pin) ? $random : d_pin;
+	assign d_pin = (!ncs && a_pin[14] && !nrd) ? work_ram[a_pin[12:0]] : 'z;
+
+	bit         has_rom;
+	logic [7:0] cart_rom[0:32767];
+	assign d_pin = (has_rom && !a_pin[15] && !nrd) ? cart_rom[a_pin[14:0]] : 'z;
+	initial begin
+		string rom_file;
+		int f, _;
+
+		has_rom = 0;
+
+		rom_file = "";
+		_ = $value$plusargs("ROM=%s", rom_file);
+
+		f = 0;
+		if (rom_file != "") begin
+			f = $fopen(rom_file, "rb");
+			if (!f)
+				$error("Failed to open cartridge ROM file %s for reading.", rom_file);
+		end
+		if (f) begin
+			_ = $fread(cart_rom, f);
+			$fclose(f);
+			has_rom = 1;
+		end
+	end
+
 	logic           clk;
 	logic           reset;
 	logic           ncyc;
