@@ -200,10 +200,13 @@ module dmg_cpu_b_gameboy;
 
 		initial begin
 			string dumpfile, ch_file, snd_file, vid_file;
-			bit dump_channels, dump_sound, dump_video;
-			int _;
-			int fch[1:4];
-			int fmix, fvid;
+			string time_str, prev_time_str;
+			real   sim_seconds;
+			int    _;
+			int    fch[1:4];
+			int    fmix, fvid;
+			int    sim_mcycs;
+			bit    dump_channels, dump_sound, dump_video;
 
 			dumpfile = "";
 			_ = $value$plusargs("DUMPFILE=%s", dumpfile);
@@ -219,6 +222,11 @@ module dmg_cpu_b_gameboy;
 			vid_file = "";
 			_ = $value$plusargs("VID_FILE=%s", vid_file);
 			dump_video = vid_file != "";
+
+			sim_seconds = 6.0; /* Enough time for the boot ROM */
+			_ = $value$plusargs("SECS=%f", sim_seconds);
+
+			sim_mcycs = $rtoi(sim_seconds * 1048576.0);
 
 			$dumpfile(dumpfile);
 			$dumpvars(0, dmg_cpu_b_gameboy);
@@ -292,7 +300,19 @@ module dmg_cpu_b_gameboy;
 					@(posedge cpu_clkin_t2);
 					reset = 0;
 
-					repeat (6000000) begin
+					$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
+					$display("System reset done -- will simulate %s seconds", time_str);
+					prev_time_str = time_str;
+
+					while (sim_mcycs) begin
+						sim_mcycs--;
+						if (sim_mcycs % 131072) begin
+							$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
+							if (time_str != prev_time_str && time_str != "0.0") begin
+								$display("%s seconds remaining", time_str);
+								prev_time_str = time_str;
+							end
+						end
 						@(posedge cpu_clkin_t3);
 						@(posedge cpu_clkin_t2);
 					end
