@@ -98,6 +98,7 @@ module sm83(
 		.shift(ctl_alu_shift),
 		.shift_dbh(alu_shift_dbh), .shift_dbl(alu_shift_dbl),
 		.zero(alu_fl_zero), .carry(alu_fl_carry), .pri_carry(alu_fl_pri_carry), .daa_carry(alu_fl_daa_carry),
+		.daa_neg(alu_fl_neg),
 		.cond_we(ctl_alu_cond_we),
 
 		.daa_l_gt_9(alu_daa_lgt9), .daa_h_gt_9(alu_daa_hgt9), .daa_h_eq_9(alu_daa_heq9),
