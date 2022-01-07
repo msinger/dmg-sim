@@ -1,6 +1,5 @@
 `default_nettype none
 
-(* nolatches *)
 module sm83_sequencer(
 		input  logic clk, reset, ncyc,
 		input  logic set_m1,

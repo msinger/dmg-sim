@@ -6,7 +6,6 @@
 
 `default_nettype none
 
-(* nolatches *)
 module sm83_alu
 	#(
 		parameter int ALU_WIDTH = 4
@@ -61,13 +60,13 @@ module sm83_alu
 		hword_t l;
 	} word_t;
 
-	task automatic alu_slice(input  logic a, b, c_in,
-	                         output logic r,    c_out);
-		logic nc;
-		nc    = !(((a | b) & c_in) | (a & b) | force_carry);
-		r     = (a & b & c_in) | ((a | b | c_in) & (ignore_carry | nc));
-		c_out = !(no_carry_out | nc);
-	endtask
+	function automatic logic [1:0] alu_slice(logic a, b, c_in);
+		logic nc, r, c_out;
+		nc        = !(((a | b) & c_in) | (a & b) | force_carry);
+		r         = (a & b & c_in) | ((a | b | c_in) & (ignore_carry | nc));
+		c_out     = !(no_carry_out | nc);
+		alu_slice = { c_out, r };
+	endfunction
 
 	hword_t core_op_a, core_op_b, core_result;
 
@@ -76,7 +75,7 @@ module sm83_alu
 		logic   c;
 		c = carry_in;
 		for (int i = 0; i < ALU_WIDTH; i++)
-			alu_slice(core_op_a[i], core_op_b[i], c, r[i], c);
+			{ c, r[i] } = alu_slice(core_op_a[i], core_op_b[i], c);
 		core_result = r;
 		carry       = c;
 	end

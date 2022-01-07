@@ -1,6 +1,5 @@
 `default_nettype none
 
-(* nolatches *)
 module sm83_adr_inc(
 		input  logic        clk, reset,
 
@@ -20,14 +19,15 @@ module sm83_adr_inc(
 		word_t lo;
 	} adr_t;
 
-	task automatic inc2b(input  logic [1:0] din, dec,
-	                     input  logic       cy_in,
-	                     output logic [1:0] dout,
-	                     output logic       cy_out);
+	function automatic logic [2:0] inc2b(logic [1:0] din, dec,
+	                                     logic       cy_in);
+		logic [1:0] dout;
+		logic       cy_out;
 		dout[0] = din[0] != cy_in;
 		dout[1] = din[1] != (cy_in && dec[0]);
 		cy_out  = cy_in && &dec;
-	endtask
+		inc2b   = { cy_out, dout };
+	endfunction
 
 	adr_t adr, al, bus, inc;
 
@@ -70,18 +70,18 @@ module sm83_adr_inc(
 		acc1 = &dec[11:7]  && acc0;
 		acc2 = &dec[14:12] && acc1;
 
-		inc2b(al[1:0],   dec[1:0],   cy, ninc[1:0],   cy);
-		inc2b(al[3:2],   dec[3:2],   cy, ninc[3:2],   cy);
-		inc2b(al[5:4],   dec[5:4],   cy, ninc[5:4],   cy);
-		ninc[6]  = al[6]  != cy;
-		cy       = acc0;
+		{ cy, ninc[1:0] } = inc2b(al[1:0], dec[1:0], cy);
+		{ cy, ninc[3:2] } = inc2b(al[3:2], dec[3:2], cy);
+		{ cy, ninc[5:4] } = inc2b(al[5:4], dec[5:4], cy);
+		ninc[6] = al[6] != cy;
+		cy      = acc0;
 
-		inc2b(al[8:7],   dec[8:7],   cy, ninc[8:7],   cy);
-		inc2b(al[10:9],  dec[10:9],  cy, ninc[10:9],  cy);
+		{ cy, ninc[8:7] }  = inc2b(al[8:7],  dec[8:7],  cy);
+		{ cy, ninc[10:9] } = inc2b(al[10:9], dec[10:9], cy);
 		ninc[11] = al[11] != cy;
 		cy       = acc1;
 
-		inc2b(al[13:12], dec[13:12], cy, ninc[13:12], cy);
+		{ cy, ninc[13:12] } = inc2b(al[13:12], dec[13:12], cy);
 		ninc[14] = al[14] != cy;
 		cy       = acc2;
 

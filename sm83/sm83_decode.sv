@@ -1,6 +1,5 @@
 `default_nettype none
 
-(* nolatches *)
 module sm83_decode(
 		input  logic [7:0] opcode,
 		input  logic       bank_cb,

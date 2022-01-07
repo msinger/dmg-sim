@@ -6,7 +6,6 @@
 
 `default_nettype none
 
-(* nolatches *)
 module sm83_alu_control(
 		input  logic       clk,
 

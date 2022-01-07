@@ -1,6 +1,5 @@
 `default_nettype none
 
-(* nolatches *)
 module sm83_control(
 		input  logic       clk, reset, ncyc,
 
@@ -143,7 +142,7 @@ module sm83_control(
 	localparam int LOW  = 1;
 	localparam int HIGH = 2;
 
-	/* Specifies direction of data flow within register file for write_regsp() task */
+	/* Specifies direction of data flow within register file for write_regsp task */
 	localparam bit GP2SYS = 0;
 	localparam bit SYS2GP = 1;
 
@@ -208,29 +207,29 @@ module sm83_control(
 	logic new_alu_fl_c2_we, new_alu_fl_c2_sh, new_alu_fl_c2_daa, new_alu_fl_sel_c2;
 
 	/* Trigger read memory cycle */
-	task automatic read_mcyc_after(input logic cyc);
+	task automatic read_mcyc_after(logic cyc);
 		if (cyc && t4) new_mread = 1;
 	endtask
 
 	/* Trigger write memory cycle */
-	task automatic write_mcyc_after(input logic cyc);
+	task automatic write_mcyc_after(logic cyc);
 		if (cyc && t4) new_mwrite = 1;
 	endtask
 
 	/* Indicate last memory cycle of instruction */
-	task automatic last_mcyc(input logic last);
+	task automatic last_mcyc(logic last);
 		if (last && t4) new_set_m1 = 1;
 	endtask
 
 	/* Read general purpose register */
-	task automatic read_reg(input logic [1:0] r);
+	task automatic read_reg(logic [1:0] r);
 		new_reg_sel       = r;
 		new_reg_gp_lo_sel = 1;
 		new_reg_gp_hi_sel = 1;
 	endtask
 
 	/* Read general purpose register or SP iff r==AF */
-	task automatic read_regsp(input logic [1:0] r);
+	task automatic read_regsp(logic [1:0] r);
 		new_use_sp         = r == AF;
 		read_reg(r);
 		new_reg_sp_sel     = new_use_sp;
@@ -241,7 +240,7 @@ module sm83_control(
 	endtask
 
 	/* Write general purpose register */
-	task automatic write_reg(input logic [1:0] r, input logic [1:0] hilo);
+	task automatic write_reg(logic [1:0] r, logic [1:0] hilo);
 		new_reg_sel       = r;
 		new_reg_gp_lo_sel = hilo[0];
 		new_reg_gp_hi_sel = hilo[1];
@@ -249,7 +248,7 @@ module sm83_control(
 	endtask
 
 	/* Write general purpose register or to SP iff r==AF */
-	task automatic write_regsp(input logic [1:0] r, input logic [1:0] hilo, input logic sys2gp);
+	task automatic write_regsp(logic [1:0] r, logic [1:0] hilo, logic sys2gp);
 		new_use_sp         = r == AF;
 		write_reg(r, hilo);
 		new_reg_sp_sel     = new_use_sp;
@@ -262,7 +261,7 @@ module sm83_control(
 	endtask
 
 	/* Write system register (PC, SP or WZ) */
-	task automatic write_sys(input logic [1:0] hilo);
+	task automatic write_sys(logic [1:0] hilo);
 		new_reg_sys_lo_sel = hilo[0];
 		new_reg_sys_hi_sel = hilo[1];
 		new_reg_sys_lo_we  = hilo[0];
@@ -270,24 +269,24 @@ module sm83_control(
 	endtask
 
 	/* Write SP register */
-	task automatic write_sp(input logic [1:0] hilo);
+	task automatic write_sp(logic [1:0] hilo);
 		new_reg_sp_sel = 1;
 		write_sys(hilo);
 	endtask
 
 	/* Write WZ register */
-	task automatic write_wz(input logic [1:0] hilo);
+	task automatic write_wz(logic [1:0] hilo);
 		new_reg_wz_sel = 1;
 		write_sys(hilo);
 	endtask
 
-	task automatic reg_to_sys(input logic [1:0] r);
+	task automatic reg_to_sys(logic [1:0] r);
 		read_reg(r);
 		new_reg_gp2sys_oe = 1;
 	endtask
 
 	/* Increment or decrement address latch */
-	task automatic inc_al(input logic dec);
+	task automatic inc_al(logic dec);
 		new_inc_cy  = 1;
 		new_inc_dec = dec;
 		new_inc_oe  = 1;
@@ -295,7 +294,7 @@ module sm83_control(
 	endtask
 
 	/* Apply system register to address pins */
-	task automatic sys_to_adr();
+	task automatic sys_to_adr;
 		new_reg_sys_hi_sel = 1;
 		new_reg_sys_lo_sel = 1;
 		new_al_we          = 1;
@@ -303,33 +302,33 @@ module sm83_control(
 	endtask
 
 	/* Apply PC to address pins */
-	task automatic pc_to_adr();
+	task automatic pc_to_adr;
 		new_reg_pc_sel = 1;
 		sys_to_adr();
 	endtask
 
 	/* Apply SP to address pins */
-	task automatic sp_to_adr();
+	task automatic sp_to_adr;
 		new_reg_sp_sel = 1;
 		sys_to_adr();
 	endtask
 
 	/* Apply WZ to address pins */
-	task automatic wz_to_adr();
+	task automatic wz_to_adr;
 		new_reg_wz_sel    = 1;
 		new_reg_gp2sys_oe = 1;
 		sys_to_adr();
 	endtask
 
 	/* Apply general purpose register to address pins */
-	task automatic reg_to_adr(input logic [1:0] r);
+	task automatic reg_to_adr(logic [1:0] r);
 		reg_to_sys(r);
 		new_al_we     = 1;
 		new_io_adr_we = 1;
 	endtask
 
 	/* Write incremented address latch to PC */
-	task automatic pc_from_adr_inc();
+	task automatic pc_from_adr_inc;
 		inc_al(INC);
 		new_inc_cy     = !(in_int || in_halt || in_rst);
 		new_reg_pc_sel = 1;
@@ -337,21 +336,21 @@ module sm83_control(
 	endtask
 
 	/* Write incremented or decremented address latch to SP */
-	task automatic sp_from_adr_inc(input logic dec);
+	task automatic sp_from_adr_inc(logic dec);
 		inc_al(dec);
 		new_reg_sp_sel = 1;
 		write_sys(HIGH|LOW);
 	endtask
 
 	/* Write incremented or decremented address latch to register */
-	task automatic reg_from_adr_inc(input logic [1:0] r, input logic dec);
+	task automatic reg_from_adr_inc(logic [1:0] r, logic dec);
 		inc_al(dec);
 		new_reg_sys2gp_oe = 1;
 		write_reg(r, HIGH|LOW);
 	endtask
 
 	/* Apply general purpose register to internal data bus (dbl and dbh) */
-	task automatic reg_to_db(input logic [1:0] r, input logic [1:0] hilo);
+	task automatic reg_to_db(logic [1:0] r, logic [1:0] hilo);
 		read_reg(r);
 		new_reg_gp2l_oe = hilo[0];
 		new_reg_gp2h_oe = hilo[1];
@@ -360,60 +359,60 @@ module sm83_control(
 	endtask
 
 	/* Apply general purpose register to data latch */
-	task automatic reg_to_dl(input logic [1:0] r, input logic [1:0] hilo);
+	task automatic reg_to_dl(logic [1:0] r, logic [1:0] hilo);
 		reg_to_db(r, hilo);
 		new_db_l2c_oe  = 1;
 		new_io_data_we = 1;
 	endtask
 
 	/* Write general purpose register to ALU operand A */
-	task automatic reg_to_alu_op_a(input logic [1:0] r, input logic [1:0] hilo);
+	task automatic reg_to_alu_op_a(logic [1:0] r, logic [1:0] hilo);
 		reg_to_db(r, hilo);
 		new_alu_sh_oe    = 1;
 		new_alu_op_a_bus = 1;
 	endtask
 
 	/* Write general purpose register to ALU operand B */
-	task automatic reg_to_alu_op_b(input logic [1:0] r, input logic [1:0] hilo);
+	task automatic reg_to_alu_op_b(logic [1:0] r, logic [1:0] hilo);
 		reg_to_db(r, hilo);
 		new_alu_sh_oe    = 1;
 		new_alu_op_b_bus = 1;
 	endtask
 
 	/* Write general purpose register with value on internal data bus (dbl to low byte and/or dbh to high byte) */
-	task automatic reg_from_db(input logic [1:0] r, input logic [1:0] hilo);
+	task automatic reg_from_db(logic [1:0] r, logic [1:0] hilo);
 		new_reg_h2gp_oe = 1;
 		new_reg_l2gp_oe = 1;
 		write_reg(r, hilo);
 	endtask
 
 	/* Write general purpose register with value on internal data bus (dbl to low byte and/or high byte) */
-	task automatic reg_from_dbl(input logic [1:0] r, input logic [1:0] hilo);
+	task automatic reg_from_dbl(logic [1:0] r, logic [1:0] hilo);
 		new_db_l2h_oe = 1;
 		reg_from_db(r, hilo);
 	endtask
 
 	/* Write general purpose register with value on internal data bus (dbh to low byte and/or high byte) */
-	task automatic reg_from_dbh(input logic [1:0] r, input logic [1:0] hilo);
+	task automatic reg_from_dbh(logic [1:0] r, logic [1:0] hilo);
 		new_db_h2l_oe = 1;
 		reg_from_db(r, hilo);
 	endtask
 
 	/* Write value from data latch to general purpose register */
-	task automatic reg_from_dl(input logic [1:0] r, input logic [1:0] hilo);
+	task automatic reg_from_dl(logic [1:0] r, logic [1:0] hilo);
 		new_io_data_oe = 1;
 		new_db_c2l_oe  = 1;
 		reg_from_dbl(r, hilo);
 	endtask
 
 	/* Write value from data latch to general purpose register or to SP iff r==AF */
-	task automatic regsp_from_dl(input logic [1:0] r, input logic [1:0] hilo);
+	task automatic regsp_from_dl(logic [1:0] r, logic [1:0] hilo);
 		reg_from_dl(r, hilo);
 		write_regsp(r, hilo, GP2SYS);
 	endtask
 
 	/* Apply system register to internal data bus (dbl and dbh) */
-	task automatic sys_to_db(input logic [1:0] hilo);
+	task automatic sys_to_db(logic [1:0] hilo);
 		new_reg_sys_lo_sel = 1;
 		new_reg_sys_hi_sel = 1;
 		new_reg_sys2gp_oe  = 1;
@@ -424,7 +423,7 @@ module sm83_control(
 	endtask
 
 	/* Apply PC to data latch */
-	task automatic pc_to_dl(input logic [1:0] hilo);
+	task automatic pc_to_dl(logic [1:0] hilo);
 		new_reg_pc_sel = 1;
 		sys_to_db(hilo);
 		new_db_l2c_oe  = 1;
@@ -432,7 +431,7 @@ module sm83_control(
 	endtask
 
 	/* Apply SP to data latch */
-	task automatic sp_to_dl(input logic [1:0] hilo);
+	task automatic sp_to_dl(logic [1:0] hilo);
 		new_reg_sp_sel = 1;
 		sys_to_db(hilo);
 		new_db_l2c_oe  = 1;
@@ -440,7 +439,7 @@ module sm83_control(
 	endtask
 
 	/* Write PC to ALU operand A */
-	task automatic pc_to_alu_op_a(input logic [1:0] hilo);
+	task automatic pc_to_alu_op_a(logic [1:0] hilo);
 		new_reg_pc_sel   = 1;
 		sys_to_db(hilo);
 		new_alu_sh_oe    = 1;
@@ -448,7 +447,7 @@ module sm83_control(
 	endtask
 
 	/* Write SP to ALU operand A */
-	task automatic sp_to_alu_op_a(input logic [1:0] hilo);
+	task automatic sp_to_alu_op_a(logic [1:0] hilo);
 		new_reg_sp_sel   = 1;
 		sys_to_db(hilo);
 		new_alu_sh_oe    = 1;
@@ -456,7 +455,7 @@ module sm83_control(
 	endtask
 
 	/* Write ALU result to SP */
-	task automatic sp_from_alu(input logic [1:0] hilo);
+	task automatic sp_from_alu(logic [1:0] hilo);
 		new_alu_res_oe    = 1;
 		new_alu_oe        = 1;
 		new_db_h2l_oe     = 1;
@@ -468,7 +467,7 @@ module sm83_control(
 	endtask
 
 	/* Write ALU result to WZ */
-	task automatic wz_from_alu(input logic [1:0] hilo);
+	task automatic wz_from_alu(logic [1:0] hilo);
 		new_alu_res_oe  = 1;
 		new_alu_oe      = 1;
 		new_db_h2l_oe   = 1;
@@ -478,7 +477,7 @@ module sm83_control(
 	endtask
 
 	/* Write value from data latch to WZ */
-	task automatic wz_from_dl(input logic [1:0] hilo);
+	task automatic wz_from_dl(logic [1:0] hilo);
 		new_io_data_oe  = 1;
 		new_db_c2l_oe   = 1;
 		new_db_l2h_oe   = 1;
@@ -488,21 +487,21 @@ module sm83_control(
 	endtask
 
 	/* Write ALU result to general purpose register */
-	task automatic reg_from_alu(input logic [1:0] r, input logic [1:0] hilo);
+	task automatic reg_from_alu(logic [1:0] r, logic [1:0] hilo);
 		new_alu_res_oe = 1;
 		new_alu_oe     = 1;
 		reg_from_dbh(r, hilo);
 	endtask
 
 	/* Write ALU operand A to general purpose register */
-	task automatic reg_from_alu_op_a(input logic [1:0] r, input logic [1:0] hilo);
+	task automatic reg_from_alu_op_a(logic [1:0] r, logic [1:0] hilo);
 		new_alu_op_a_oe = 1;
 		new_alu_oe      = 1;
 		reg_from_dbh(r, hilo);
 	endtask
 
 	/* Write selected ALU flags (either from internal data bus or ALU core) */
-	task automatic write_alu_flags(input logic [3:0] fmask);
+	task automatic write_alu_flags(logic [3:0] fmask);
 		new_alu_fl_zero_we  = fmask[$clog2(Z)];
 		new_alu_fl_neg_we   = fmask[$clog2(N)];
 		new_alu_fl_half_we  = fmask[$clog2(H)];
@@ -510,13 +509,13 @@ module sm83_control(
 	endtask
 
 	/* Update selected ALU flags based on ALU core outputs */
-	task automatic update_alu_flags(input logic [3:0] fmask);
+	task automatic update_alu_flags(logic [3:0] fmask);
 		new_alu_fl_alu = 1;
 		write_alu_flags(fmask);
 	endtask
 
 	/* Write AF to ALU operands and selected flags */
-	task automatic af_to_alu(input logic [3:0] fmask);
+	task automatic af_to_alu(logic [3:0] fmask);
 		reg_to_alu_op_a(AF, HIGH|LOW);
 		reg_to_alu_op_b(AF, HIGH|LOW);
 		new_alu_fl_bus = 1;
@@ -524,13 +523,13 @@ module sm83_control(
 	endtask
 
 	/* Write ALU flags to F */
-	task automatic f_from_alu();
+	task automatic f_from_alu;
 		new_alu_fl_oe = 1;
 		reg_from_dbl(AF, LOW);
 	endtask
 
 	/* Write ALU result into data latch */
-	task automatic dl_from_alu();
+	task automatic dl_from_alu;
 		new_alu_res_oe = 1;
 		new_alu_oe     = 1;
 		new_db_h2l_oe  = 1;
@@ -539,7 +538,7 @@ module sm83_control(
 	endtask
 
 	/* Write DL to ALU operand A */
-	task automatic dl_to_alu_op_a();
+	task automatic dl_to_alu_op_a;
 		new_io_data_oe   = 1;
 		new_db_c2l_oe    = 1;
 		new_db_l2h_oe    = 1;
@@ -548,7 +547,7 @@ module sm83_control(
 	endtask
 
 	/* Write DL to ALU operand B */
-	task automatic dl_to_alu_op_b();
+	task automatic dl_to_alu_op_b;
 		new_io_data_oe   = 1;
 		new_db_c2l_oe    = 1;
 		new_db_l2h_oe    = 1;
@@ -557,7 +556,7 @@ module sm83_control(
 	endtask
 
 	/* Demux 8 bit mask from bits 5:3 of DL into ALU operands */
-	task automatic dl_to_alu_bsel();
+	task automatic dl_to_alu_bsel;
 		new_io_data_oe   = 1;
 		new_alu_bs_oe    = 1;
 		new_alu_op_a_bus = 1;
@@ -565,20 +564,20 @@ module sm83_control(
 	endtask
 
 	/* Configure ALU for AND operation */
-	task automatic alu_op_and();
+	task automatic alu_op_and;
 		new_alu_fc           = 1;
 		new_alu_fl_carry_set = 1;
 	endtask
 
 	/* Configure ALU for XOR operation */
-	task automatic alu_op_xor();
+	task automatic alu_op_xor;
 		new_alu_nc           = 1;
 		new_alu_fl_carry_set = 1;
 		new_alu_fl_carry_cpl = 1;
 	endtask
 
 	/* Configure ALU for OR operation */
-	task automatic alu_op_or();
+	task automatic alu_op_or;
 		new_alu_nc           = 1;
 		new_alu_fc           = 1;
 		new_alu_ic           = 1;
@@ -683,10 +682,10 @@ module sm83_control(
 
 				unique0 case (1)
 					/* Apply PC to address pins for read cycle */
-					m1 && t4: pc_to_adr();
+					m1 && t4: pc_to_adr;
 
 					/* Increment PC */
-					m2 && t2: pc_from_adr_inc();
+					m2 && t2: pc_from_adr_inc;
 
 					/* Write fetched immediate from data latch into register selected by opcode[5:3] */
 					m2 && t4: reg_from_dl(op543_gp_reg, op543_gp_hilo);
@@ -742,10 +741,10 @@ module sm83_control(
 
 				unique0 case (1)
 					/* Apply PC to address pins for read cycle */
-					m1 && t4: pc_to_adr();
+					m1 && t4: pc_to_adr;
 
 					/* Increment PC */
-					m2 && t2: pc_from_adr_inc();
+					m2 && t2: pc_from_adr_inc;
 
 					/* Apply HL to address pins for write cycle */
 					m2 && t4: reg_to_adr(HL);
@@ -829,10 +828,10 @@ module sm83_control(
 
 				unique0 case (1)
 					/* Apply PC to address pins for read cycle */
-					m1 && t4: pc_to_adr();
+					m1 && t4: pc_to_adr;
 
 					/* Increment PC */
-					m2 && t2: pc_from_adr_inc();
+					m2 && t2: pc_from_adr_inc;
 
 					m2 && t4: begin
 						/* Write immediate fetched during M2 from data latch into Z */
@@ -843,14 +842,14 @@ module sm83_control(
 					end
 
 					/* Increment PC */
-					m3 && t2: pc_from_adr_inc();
+					m3 && t2: pc_from_adr_inc;
 
 					m3 && t4: begin
 						/* Write immediate fetched during M3 from data latch into W */
 						wz_from_dl(HIGH);
 
 						/* Apply WZ to address pins for write or read cycle */
-						wz_to_adr();
+						wz_to_adr;
 					end
 
 					m4 && t1: if (ld_n_dir) begin /* LDX (nn), A */
@@ -875,10 +874,10 @@ module sm83_control(
 
 				unique0 case (1)
 					/* Apply PC to address pins for read cycle */
-					m1 && t4: pc_to_adr();
+					m1 && t4: pc_to_adr;
 
 					/* Increment PC */
-					m2 && t2: pc_from_adr_inc();
+					m2 && t2: pc_from_adr_inc;
 
 					m2 && t4: begin
 						/* Write immediate fetched during M2 from data latch into Z */
@@ -886,7 +885,7 @@ module sm83_control(
 
 						/* Apply $ff00+Z to address pins for write or read cycle */
 						new_al_hi_ff = 1;
-						wz_to_adr();
+						wz_to_adr;
 					end
 
 					m3 && t1: if (ld_n_dir) begin /* LD (n), A */
@@ -916,7 +915,7 @@ module sm83_control(
 
 						/* Apply $ff00+Z to address pins for write or read cycle */
 						new_al_hi_ff = 1;
-						wz_to_adr();
+						wz_to_adr;
 					end
 
 					m2 && t1: if (ld_n_dir) begin /* LD (C), A */
@@ -939,10 +938,10 @@ module sm83_control(
 
 				unique0 case (1)
 					/* Apply PC to address pins for read cycle */
-					m1 && t4: pc_to_adr();
+					m1 && t4: pc_to_adr;
 
 					/* Increment PC */
-					m2 && t2: pc_from_adr_inc();
+					m2 && t2: pc_from_adr_inc;
 
 					/* Apply address latch to address pins for read cycle */
 					m2 && t4: new_io_adr_we = 1;
@@ -951,7 +950,7 @@ module sm83_control(
 					m3 && t1: regsp_from_dl(opcode[5:4], LOW);
 
 					/* Increment PC */
-					m3 && t2: pc_from_adr_inc();
+					m3 && t2: pc_from_adr_inc;
 
 					/* Write immediate fetched during M3 from data latch into high byte register */
 					m1 && t1: regsp_from_dl(opcode[5:4], HIGH);
@@ -981,10 +980,10 @@ module sm83_control(
 
 				unique0 case (1)
 					/* Apply PC to address pins for read cycle */
-					m1 && t4: pc_to_adr();
+					m1 && t4: pc_to_adr;
 
 					/* Increment PC */
-					m2 && t2: pc_from_adr_inc();
+					m2 && t2: pc_from_adr_inc;
 
 					m2 && t4: begin
 						/* Write immediate fetched during M2 from data latch into Z */
@@ -995,14 +994,14 @@ module sm83_control(
 					end
 
 					/* Increment PC */
-					m3 && t2: pc_from_adr_inc();
+					m3 && t2: pc_from_adr_inc;
 
 					m3 && t4: begin
 						/* Write immediate fetched during M3 from data latch into W */
 						wz_from_dl(HIGH);
 
 						/* Apply WZ to address pins for write cycle */
-						wz_to_adr();
+						wz_to_adr;
 					end
 
 					/* Write low byte of SP into data latch */
@@ -1031,15 +1030,15 @@ module sm83_control(
 						af_to_alu(Z|N|H|C);
 
 						/* Apply PC to address pins for read cycle */
-						pc_to_adr();
+						pc_to_adr;
 					end
 
 					/* Increment PC */
-					m2 && t2: pc_from_adr_inc();
+					m2 && t2: pc_from_adr_inc;
 
 					m2 && t4: begin
 						/* Write immediate fetched during M2 from data latch into ALU operand B */
-						dl_to_alu_op_b();
+						dl_to_alu_op_b;
 
 						/* Update ALU subtract flag (N) with sign bit from ALU core */
 						update_alu_flags(0|N|0|0);
@@ -1108,7 +1107,7 @@ module sm83_control(
 					end
 
 					/* Write ALU flags into register F */
-					m1 && t3: f_from_alu();
+					m1 && t3: f_from_alu;
 				endcase
 			end
 
@@ -1120,7 +1119,7 @@ module sm83_control(
 
 				unique0 case (1)
 					/* Apply SP to address pins for decrement */
-					m1 && t4: sp_to_adr();
+					m1 && t4: sp_to_adr;
 
 					/* Decrement SP */
 					m2 && t2: sp_from_adr_inc(DEC);
@@ -1150,7 +1149,7 @@ module sm83_control(
 
 				unique0 case (1)
 					/* Apply SP to address pins for read cycle */
-					m1 && t4: sp_to_adr();
+					m1 && t4: sp_to_adr;
 
 					/* Increment SP */
 					m2 && t2: sp_from_adr_inc(INC);
@@ -1217,7 +1216,7 @@ module sm83_control(
 
 						/* Write ALU flags into register F */
 						new_in_alu = 1;
-						f_from_alu();
+						f_from_alu;
 					end
 				endcase
 			end
@@ -1236,17 +1235,17 @@ module sm83_control(
 
 				unique0 case (1)
 					/* Apply PC to address pins for read cycle */
-					m1 && t4: pc_to_adr();
+					m1 && t4: pc_to_adr;
 
 					/* Increment PC */
-					m2 && t2: pc_from_adr_inc();
+					m2 && t2: pc_from_adr_inc;
 
 					/* Read register A into ALU operand A and register F into ALU flags */
 					m2 && t4: af_to_alu(Z|N|H|C);
 
 					m1 && t1: begin
 						/* Write data latch into ALU operand B */
-						dl_to_alu_op_b();
+						dl_to_alu_op_b;
 
 						/* Caclulate low nibble in ALU */
 						new_in_alu     = 1;
@@ -1275,7 +1274,7 @@ module sm83_control(
 
 						/* Write ALU flags into register F */
 						new_in_alu = 1;
-						f_from_alu();
+						f_from_alu;
 					end
 				endcase
 			end
@@ -1301,7 +1300,7 @@ module sm83_control(
 
 					m1 && t1: begin
 						/* Write data latch into ALU operand B */
-						dl_to_alu_op_b();
+						dl_to_alu_op_b;
 
 						/* Caclulate low nibble in ALU */
 						new_in_alu     = 1;
@@ -1330,7 +1329,7 @@ module sm83_control(
 
 						/* Write ALU flags into register F */
 						new_in_alu = 1;
-						f_from_alu();
+						f_from_alu;
 					end
 				endcase
 			end
@@ -1397,7 +1396,7 @@ module sm83_control(
 						new_alu_fl_half_cpl = alu_fl_neg;
 
 						/* Write ALU flags into register F */
-						f_from_alu();
+						f_from_alu;
 					end
 				endcase
 			end
@@ -1418,7 +1417,7 @@ module sm83_control(
 
 					m2 && t4: begin
 						/* Write data latch into ALU operand A */
-						dl_to_alu_op_a();
+						dl_to_alu_op_a;
 
 						/* Zero ALU operand B */
 						new_alu_op_b_zero = 1;
@@ -1464,7 +1463,7 @@ module sm83_control(
 						update_alu_flags(Z|N|0|0);
 
 						/* Write ALU result into data latch */
-						dl_from_alu();
+						dl_from_alu;
 					end
 
 					m3 && t3: begin
@@ -1472,7 +1471,7 @@ module sm83_control(
 						new_alu_fl_half_cpl = alu_fl_neg;
 
 						/* Write ALU flags into register F */
-						f_from_alu();
+						f_from_alu;
 					end
 				endcase
 			end
@@ -1493,7 +1492,7 @@ module sm83_control(
 						new_alu_neg = 1;
 
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate low nibble in ALU */
 						new_alu_op_low = 1;
@@ -1508,7 +1507,7 @@ module sm83_control(
 						new_alu_neg = 1;
 
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate high nibble in ALU */
 						new_alu_op_b_high = 1;
@@ -1526,7 +1525,7 @@ module sm83_control(
 						new_alu_fl_half_cpl = alu_fl_neg;
 
 						/* Write ALU flags into register F */
-						f_from_alu();
+						f_from_alu;
 					end
 				endcase
 			end
@@ -1593,7 +1592,7 @@ module sm83_control(
 						new_alu_fl_sel_c2 = 1;
 
 						/* Write ALU flags into register F */
-						f_from_alu();
+						f_from_alu;
 					end
 				endcase
 			end
@@ -1676,7 +1675,7 @@ module sm83_control(
 					end
 
 					/* Write ALU flags into register F */
-					m1 && t3: f_from_alu();
+					m1 && t3: f_from_alu;
 				endcase
 			end
 
@@ -1692,15 +1691,15 @@ module sm83_control(
 						af_to_alu(Z|N|H|C);
 
 						/* Apply PC to address pins for read cycle */
-						pc_to_adr();
+						pc_to_adr;
 					end
 
 					/* Increment PC */
-					m2 && t2: pc_from_adr_inc();
+					m2 && t2: pc_from_adr_inc;
 
 					m2 && t4: begin
 						/* Write immediate fetched during M2 from data latch into ALU operand B */
-						dl_to_alu_op_b();
+						dl_to_alu_op_b;
 
 						/* Update ALU subtract flag (N) with sign bit from ALU core */
 						update_alu_flags(0|N|0|0);
@@ -1769,7 +1768,7 @@ module sm83_control(
 					end
 
 					/* Write ALU flags into register F */
-					m4 && t3: f_from_alu();
+					m4 && t3: f_from_alu;
 				endcase
 			end
 
@@ -1814,7 +1813,7 @@ module sm83_control(
 						new_alu_shift = 1;
 
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate low nibble in ALU */
 						new_alu_op_low = 1;
@@ -1828,7 +1827,7 @@ module sm83_control(
 
 					m1 && t2: begin
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate high nibble in ALU */
 						new_alu_op_b_high = 1;
@@ -1845,7 +1844,7 @@ module sm83_control(
 					m1 && t3: begin
 						/* Write ALU flags into register F */
 						new_alu_fl_sel_c2 = opcode[5:3] != 5; /* set carry to shift out; except for SRA */
-						f_from_alu();
+						f_from_alu;
 					end
 				endcase
 			end
@@ -1871,12 +1870,12 @@ module sm83_control(
 
 					m2 && t4: begin
 						/* Write data latch into ALU operands with shift */
-						dl_to_alu_op_a();
-						dl_to_alu_op_b();
+						dl_to_alu_op_a;
+						dl_to_alu_op_b;
 						new_alu_shift = 1;
 
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate low nibble in ALU */
 						new_alu_op_low = 1;
@@ -1893,7 +1892,7 @@ module sm83_control(
 
 					m3 && t1: begin
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate high nibble in ALU */
 						new_alu_op_b_high = 1;
@@ -1903,13 +1902,13 @@ module sm83_control(
 						update_alu_flags(Z|N|H|C);
 
 						/* Write ALU result into data latch */
-						dl_from_alu();
+						dl_from_alu;
 					end
 
 					m3 && t3: begin
 						/* Write ALU flags into register F */
 						new_alu_fl_sel_c2 = 1;
-						f_from_alu();
+						f_from_alu;
 					end
 				endcase
 			end
@@ -1930,7 +1929,7 @@ module sm83_control(
 						new_alu_op_a_zero = 1;
 
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate low nibble in ALU */
 						new_alu_op_low    = 1;
@@ -1943,7 +1942,7 @@ module sm83_control(
 
 					m1 && t2: begin
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Update ALU flags */
 						new_alu_fl_neg_clr = 1;
@@ -1954,7 +1953,7 @@ module sm83_control(
 					end
 
 					/* Write ALU flags into register F */
-					m1 && t3: f_from_alu();
+					m1 && t3: f_from_alu;
 				endcase
 			end
 
@@ -1973,13 +1972,13 @@ module sm83_control(
 
 					m2 && t4: begin
 						/* Write data latch into ALU operand B */
-						dl_to_alu_op_b();
+						dl_to_alu_op_b;
 
 						/* Zero ALU operand A */
 						new_alu_op_a_zero = 1;
 
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate low nibble in ALU */
 						new_alu_op_low    = 1;
@@ -1995,18 +1994,18 @@ module sm83_control(
 
 					m3 && t1: begin
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Update ALU flags */
 						new_alu_fl_neg_clr = 1;
 						update_alu_flags(Z|N|H|C);
 
 						/* Write ALU result into data latch */
-						dl_from_alu();
+						dl_from_alu;
 					end
 
 					/* Write ALU flags into register F */
-					m3 && t3: f_from_alu();
+					m3 && t3: f_from_alu;
 				endcase
 			end
 
@@ -2021,7 +2020,7 @@ module sm83_control(
 						new_alu_sh_oe = 0;
 
 						/* Read bit number from data latch into ALU operands as bit mask */
-						dl_to_alu_bsel();
+						dl_to_alu_bsel;
 					end
 
 					m1 && t1: begin
@@ -2029,7 +2028,7 @@ module sm83_control(
 						reg_to_alu_op_a(op210_gp_reg, op210_gp_hilo);
 
 						/* Configure ALU for AND operation */
-						alu_op_and();
+						alu_op_and;
 
 						/* Caclulate low nibble in ALU */
 						new_alu_op_low = 1;
@@ -2041,7 +2040,7 @@ module sm83_control(
 
 					m1 && t2: begin
 						/* Configure ALU for AND operation */
-						alu_op_and();
+						alu_op_and;
 
 						/* Caclulate high nibble in ALU */
 						new_alu_op_b_high = 1;
@@ -2054,7 +2053,7 @@ module sm83_control(
 					end
 
 					/* Write ALU flags into register F */
-					m1 && t3: f_from_alu();
+					m1 && t3: f_from_alu;
 				endcase
 			end
 
@@ -2073,15 +2072,15 @@ module sm83_control(
 						new_alu_sh_oe = 0;
 
 						/* Read bit number from data latch into ALU operands as bit mask */
-						dl_to_alu_bsel();
+						dl_to_alu_bsel;
 					end
 
 					m2 && t4: begin
 						/* Write data latch into ALU operand A */
-						dl_to_alu_op_a();
+						dl_to_alu_op_a;
 
 						/* Configure ALU for AND operation */
-						alu_op_and();
+						alu_op_and;
 
 						/* Caclulate low nibble in ALU */
 						new_alu_op_low = 1;
@@ -2093,7 +2092,7 @@ module sm83_control(
 
 					m3 && t1: begin
 						/* Configure ALU for AND operation */
-						alu_op_and();
+						alu_op_and;
 
 						/* Caclulate high nibble in ALU */
 						new_alu_op_b_high = 1;
@@ -2106,7 +2105,7 @@ module sm83_control(
 					end
 
 					/* Write ALU flags into register F */
-					m3 && t3: f_from_alu();
+					m3 && t3: f_from_alu;
 				endcase
 			end
 
@@ -2121,7 +2120,7 @@ module sm83_control(
 						new_alu_sh_oe = 0;
 
 						/* Read bit number from data latch into ALU operands as bit mask */
-						dl_to_alu_bsel();
+						dl_to_alu_bsel;
 					end
 
 					m1 && t1: begin
@@ -2129,7 +2128,7 @@ module sm83_control(
 						reg_to_alu_op_a(op210_gp_reg, op210_gp_hilo);
 
 						/* Configure ALU for AND operation */
-						alu_op_and();
+						alu_op_and;
 
 						/* Complement ALU operand B */
 						new_alu_neg = 1;
@@ -2140,7 +2139,7 @@ module sm83_control(
 
 					m1 && t2: begin
 						/* Configure ALU for AND operation */
-						alu_op_and();
+						alu_op_and;
 
 						/* Complement ALU operand B */
 						new_alu_neg = 1;
@@ -2170,15 +2169,15 @@ module sm83_control(
 						new_alu_sh_oe = 0;
 
 						/* Read bit number from data latch into ALU operands as bit mask */
-						dl_to_alu_bsel();
+						dl_to_alu_bsel;
 					end
 
 					m2 && t4: begin
 						/* Write data latch into ALU operand A */
-						dl_to_alu_op_a();
+						dl_to_alu_op_a;
 
 						/* Configure ALU for AND operation */
-						alu_op_and();
+						alu_op_and;
 
 						/* Complement ALU operand B */
 						new_alu_neg = 1;
@@ -2192,7 +2191,7 @@ module sm83_control(
 
 					m3 && t1: begin
 						/* Configure ALU for AND operation */
-						alu_op_and();
+						alu_op_and;
 
 						/* Complement ALU operand B */
 						new_alu_neg = 1;
@@ -2201,7 +2200,7 @@ module sm83_control(
 						new_alu_op_b_high = 1;
 
 						/* Write ALU result into data latch */
-						dl_from_alu();
+						dl_from_alu;
 					end
 				endcase
 			end
@@ -2217,7 +2216,7 @@ module sm83_control(
 						new_alu_sh_oe = 0;
 
 						/* Read bit number from data latch into ALU operands as bit mask */
-						dl_to_alu_bsel();
+						dl_to_alu_bsel;
 					end
 
 					m1 && t1: begin
@@ -2225,7 +2224,7 @@ module sm83_control(
 						reg_to_alu_op_a(op210_gp_reg, op210_gp_hilo);
 
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate low nibble in ALU */
 						new_alu_op_low = 1;
@@ -2233,7 +2232,7 @@ module sm83_control(
 
 					m1 && t2: begin
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate high nibble in ALU */
 						new_alu_op_b_high = 1;
@@ -2260,15 +2259,15 @@ module sm83_control(
 						new_alu_sh_oe = 0;
 
 						/* Read bit number from data latch into ALU operands as bit mask */
-						dl_to_alu_bsel();
+						dl_to_alu_bsel;
 					end
 
 					m2 && t4: begin
 						/* Write data latch into ALU operand A */
-						dl_to_alu_op_a();
+						dl_to_alu_op_a;
 
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate low nibble in ALU */
 						new_alu_op_low = 1;
@@ -2279,13 +2278,13 @@ module sm83_control(
 
 					m3 && t1: begin
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate high nibble in ALU */
 						new_alu_op_b_high = 1;
 
 						/* Write ALU result into data latch */
-						dl_from_alu();
+						dl_from_alu;
 					end
 				endcase
 			end
@@ -2304,11 +2303,11 @@ module sm83_control(
 						af_to_alu(Z|N|H|C);
 
 						/* Apply PC to address pins for read cycle */
-						pc_to_adr();
+						pc_to_adr;
 					end
 
 					/* Increment PC */
-					m2 && t2: pc_from_adr_inc();
+					m2 && t2: pc_from_adr_inc;
 
 					m2 && t4: begin
 						/* Write immediate fetched during M2 from data latch into Z */
@@ -2319,7 +2318,7 @@ module sm83_control(
 					end
 
 					/* Increment PC */
-					m3 && t2: pc_from_adr_inc();
+					m3 && t2: pc_from_adr_inc;
 
 					m3 && t4: begin
 						/* Write immediate fetched during M3 from data latch into W */
@@ -2329,7 +2328,7 @@ module sm83_control(
 
 					m4 && t4: begin
 						/* Apply WZ to address pins instead of PC */
-						wz_to_adr();
+						wz_to_adr;
 						no_pc = 1;
 					end
 				endcase
@@ -2348,15 +2347,15 @@ module sm83_control(
 						af_to_alu(Z|N|H|C);
 
 						/* Apply PC to address pins for read cycle */
-						pc_to_adr();
+						pc_to_adr;
 					end
 
 					/* Increment PC */
-					m2 && t2: pc_from_adr_inc();
+					m2 && t2: pc_from_adr_inc;
 
 					m2 && t4: begin
 						/* Write immediate fetched during M2 from data latch into ALU operand B */
-						dl_to_alu_op_b();
+						dl_to_alu_op_b;
 
 						/* Update ALU subtract flag (N) with sign bit from ALU core */
 						update_alu_flags(0|N|0|0);
@@ -2423,7 +2422,7 @@ module sm83_control(
 						wz_from_alu(HIGH);
 
 						/* Apply WZ to address pins instead of PC */
-						wz_to_adr();
+						wz_to_adr;
 						no_pc = 1;
 					end
 				endcase
@@ -2458,11 +2457,11 @@ module sm83_control(
 						af_to_alu(Z|N|H|C);
 
 						/* Apply PC to address pins for read cycle */
-						pc_to_adr();
+						pc_to_adr;
 					end
 
 					/* Increment PC */
-					m2 && t2: pc_from_adr_inc();
+					m2 && t2: pc_from_adr_inc;
 
 					m2 && t4: begin
 						/* Write immediate fetched during M2 from data latch into Z */
@@ -2473,10 +2472,10 @@ module sm83_control(
 					end
 
 					/* Increment PC */
-					m3 && t2: pc_from_adr_inc();
+					m3 && t2: pc_from_adr_inc;
 
 					/* Apply SP to address pins for decrement */
-					m3 && t4: if (!new_set_m1) sp_to_adr();
+					m3 && t4: if (!new_set_m1) sp_to_adr;
 
 					/* Decrement SP */
 					m4 && t2: sp_from_adr_inc(DEC);
@@ -2503,7 +2502,7 @@ module sm83_control(
 
 					m6 && t4: begin
 						/* Apply WZ to address pins instead of PC */
-						wz_to_adr();
+						wz_to_adr;
 						no_pc = 1;
 					end
 				endcase
@@ -2518,7 +2517,7 @@ module sm83_control(
 
 				unique0 case (1)
 					/* Apply SP to address pins for read cycle */
-					m1 && t4: sp_to_adr();
+					m1 && t4: sp_to_adr;
 
 					/* Increment SP */
 					m2 && t2: sp_from_adr_inc(INC);
@@ -2539,7 +2538,7 @@ module sm83_control(
 
 					m4 && t4: begin
 						/* Apply WZ to address pins instead of PC */
-						wz_to_adr();
+						wz_to_adr;
 						no_pc = 1;
 					end
 				endcase
@@ -2557,7 +2556,7 @@ module sm83_control(
 					m1 && t4: af_to_alu(Z|N|H|C);
 
 					/* Apply SP to address pins for read cycle */
-					m2 && t4: if (!new_set_m1) sp_to_adr();
+					m2 && t4: if (!new_set_m1) sp_to_adr;
 
 					/* Increment SP */
 					m3 && t2: sp_from_adr_inc(INC);
@@ -2578,7 +2577,7 @@ module sm83_control(
 
 					m5 && t4: begin
 						/* Apply WZ to address pins instead of PC */
-						wz_to_adr();
+						wz_to_adr;
 						no_pc = 1;
 					end
 				endcase
@@ -2592,7 +2591,7 @@ module sm83_control(
 
 				unique0 case (1)
 					/* Apply SP to address pins for decrement */
-					m1 && t4: sp_to_adr();
+					m1 && t4: sp_to_adr;
 
 					m2 && t1: begin
 						/* Use ALU operand A to output $00 as high byte of destination address */
@@ -2631,7 +2630,7 @@ module sm83_control(
 
 					m4 && t4: begin
 						/* Apply WZ to address pins instead of PC */
-						wz_to_adr();
+						wz_to_adr;
 						no_pc = 1;
 					end
 				endcase
@@ -2647,7 +2646,7 @@ module sm83_control(
 
 					m1 && t1: begin
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate low nibble in ALU */
 						new_alu_op_low = 1;
@@ -2659,7 +2658,7 @@ module sm83_control(
 
 					m1 && t2: begin
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate high nibble in ALU */
 						new_alu_op_b_high = 1;
@@ -2674,7 +2673,7 @@ module sm83_control(
 					m1 && t3: begin
 						/* Write ALU flags into register F */
 						new_alu_fl_carry_set = 1;
-						f_from_alu();
+						f_from_alu;
 					end
 				endcase
 			end
@@ -2689,7 +2688,7 @@ module sm83_control(
 
 					m1 && t1: begin
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate low nibble in ALU */
 						new_alu_op_low = 1;
@@ -2701,7 +2700,7 @@ module sm83_control(
 
 					m1 && t2: begin
 						/* Configure ALU for OR operation */
-						alu_op_or();
+						alu_op_or;
 
 						/* Caclulate high nibble in ALU */
 						new_alu_op_b_high = 1;
@@ -2717,7 +2716,7 @@ module sm83_control(
 						/* Write ALU flags into register F */
 						new_alu_fl_carry_cpl = 1;
 						//new_alu_fl_half_cpl  = alu_fl_carry; // TODO: On Z80, H gets copy of old C. Check on GB
-						f_from_alu();
+						f_from_alu;
 					end
 				endcase
 			end
@@ -2797,7 +2796,7 @@ module sm83_control(
 
 			and_x: begin
 				/* Configure ALU for AND operation */
-				alu_op_and();
+				alu_op_and;
 
 				/* Clear subtract (N) flag */
 				new_alu_fl_neg_clr = 1;
@@ -2811,7 +2810,7 @@ module sm83_control(
 
 			xor_x: begin
 				/* Configure ALU for XOR operation */
-				alu_op_xor();
+				alu_op_xor;
 
 				/* Clear subtract (N) flag */
 				new_alu_fl_neg_clr = 1;
@@ -2820,7 +2819,7 @@ module sm83_control(
 
 			or_x: begin
 				/* Configure ALU for OR operation */
-				alu_op_or();
+				alu_op_or;
 
 				/* Clear subtract (N) flag */
 				new_alu_fl_neg_clr = 1;
@@ -2832,15 +2831,13 @@ module sm83_control(
 		read_mcyc_after(new_set_m1);
 
 		/* Apply PC to address pins for read cycle */
-		if (new_set_m1 && !no_pc) pc_to_adr();
+		if (new_set_m1 && !no_pc) pc_to_adr;
 		if (new_set_m1) new_io_adr_we = 1;
 
 		/* Instruction fetch */
 		unique0 case (1)
-			m1 && t2: begin
-				/* Increment PC */
-				pc_from_adr_inc();
-			end
+			/* Increment PC */
+			m1 && t2: pc_from_adr_inc;
 
 			/* Select opcode bank for next instruction */
 			m1 && t3: new_ir_bank_we = 1;

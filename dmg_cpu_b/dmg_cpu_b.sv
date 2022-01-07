@@ -92,7 +92,7 @@ module dmg_cpu_b(
 		output logic            cpu_wakeup     /* CPU in  B25 - Wake from STOP mode; active-high */
 	);
 
-	function automatic logic bidir_out(input logic drv_low, ndrv_high);
+	function automatic logic bidir_out(logic drv_low, ndrv_high);
 		if ($isunknown(drv_low) || $isunknown(ndrv_high))
 			bidir_out = 'x;
 		else if (drv_low == ndrv_high)

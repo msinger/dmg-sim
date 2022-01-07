@@ -6,7 +6,6 @@
 
 `default_nettype none
 
-(* nolatches *)
 module sm83_alu_flags(
 		input  logic       clk,
 
@@ -82,7 +81,7 @@ module sm83_alu_flags(
 
 	logic hc_reg, sec_c_reg, pri_c_we;
 
-	function automatic logic write_carry(input int bitnum);
+	function automatic logic write_carry(int bitnum);
 		assume (flags_bus != flags_alu);
 		unique case (1)
 			flags_bus: write_carry = din[bitnum];

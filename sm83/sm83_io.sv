@@ -1,6 +1,5 @@
 `default_nettype none
 
-(* nolatches *)
 module sm83_io(
 		input  logic        clk, reset,
 		input  logic        t1, t2, t3, t4,
