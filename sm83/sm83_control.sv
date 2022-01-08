@@ -1084,13 +1084,14 @@ module sm83_control(
 						/* Caclulate low nibble of high byte in ALU */
 						new_alu_op_low = 1;
 
-						/* Update ALU flags */
-						update_alu_flags(0|0|H|0);
+						/* Update ALU flags (keep H and C from low byte calculation and use secondary carry now) */
+						update_alu_flags(0|0|0|0);
+						new_alu_fl_c2_we = 1;
 					end
 
 					m1 && t2: begin
-						/* Use half carry for high nibble calculation */
-						new_alu_sel_hc = 1;
+						/* Select secondary carry for high byte calculation */
+						new_alu_fl_sel_c2 = 1;
 
 						/* Sign extend ALU operand B for high byte calculation */
 						new_alu_neg = alu_fl_neg;
@@ -1100,7 +1101,7 @@ module sm83_control(
 
 						/* Update ALU flags */
 						new_alu_fl_neg_clr = 1;
-						update_alu_flags(0|N|0|C);
+						update_alu_flags(0|N|0|0);
 
 						/* Write ALU result into H */
 						reg_from_alu(HL, HIGH);
@@ -1745,13 +1746,14 @@ module sm83_control(
 						/* Caclulate low nibble of high byte in ALU */
 						new_alu_op_low = 1;
 
-						/* Update ALU flags */
-						update_alu_flags(0|0|H|0);
+						/* Update ALU flags (keep H and C from low byte calculation and use secondary carry now) */
+						update_alu_flags(0|0|0|0);
+						new_alu_fl_c2_we = 1;
 					end
 
 					m4 && t2: begin
-						/* Use half carry for high nibble calculation */
-						new_alu_sel_hc = 1;
+						/* Select secondary carry for high byte calculation */
+						new_alu_fl_sel_c2 = 1;
 
 						/* Sign extend ALU operand B for high byte calculation */
 						new_alu_neg = alu_fl_neg;
@@ -1761,7 +1763,7 @@ module sm83_control(
 
 						/* Update ALU flags */
 						new_alu_fl_neg_clr = 1;
-						update_alu_flags(0|N|0|C);
+						update_alu_flags(0|N|0|0);
 
 						/* Write ALU result into high byte of SP */
 						sp_from_alu(HIGH);
