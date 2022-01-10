@@ -5,11 +5,14 @@ module sm83_control(
 
 		output logic       m1, m2, m3, m4, m5, m6,
 		output logic       t1, t2, t3, t4,
+		output logic       set_m1,
 
 		input  logic [7:0] opcode,
 		input  logic       bank_cb,
 
 		input  logic       alu_fl_neg, alu_cond_result,
+
+		input  logic       in_int, ime,
 
 		output logic       ctl_mread, ctl_mwrite,
 		output logic       ctl_reg_gp2h_oe, ctl_reg_gp2l_oe,
@@ -28,7 +31,7 @@ module sm83_control(
 		output logic       ctl_db_c2l_mask543,
 		output logic       ctl_io_data_oe, ctl_io_data_we,
 		output logic       ctl_io_adr_we,
-		output logic       ctl_zero_data_oe,
+		output logic       ctl_zero_data_oe, ctl_rst_data_oe,
 		output logic       ctl_ir_we,
 		output logic       ctl_ir_bank_we,
 		output logic       ctl_ir_bank_cb_set,
@@ -47,19 +50,19 @@ module sm83_control(
 		output logic       ctl_alu_fl_daac_we,
 		output logic       ctl_alu_fl_neg_we, ctl_alu_fl_neg_set, ctl_alu_fl_neg_clr,
 		output logic       ctl_alu_fl_carry_we, ctl_alu_fl_carry_set, ctl_alu_fl_carry_cpl,
-		output logic       ctl_alu_fl_c2_we, ctl_alu_fl_c2_sh, ctl_alu_fl_c2_daa, ctl_alu_fl_sel_c2
+		output logic       ctl_alu_fl_c2_we, ctl_alu_fl_c2_sh, ctl_alu_fl_c2_daa, ctl_alu_fl_sel_c2,
+		output logic       ctl_no_int, ctl_ime_we, ctl_ime_bit, ctl_ack_int
 	);
+
+	logic ctl_halt_set;
 
 	sm83_sequencer seq(.*);
 	sm83_decode    dec(.*);
-	sm83_int       intr(.*);
 
-	logic set_m1, new_set_m1;
-	logic no_int;
+	logic new_set_m1;
 	logic no_pc;
 
 	logic in_rst;
-	logic in_int;
 	logic in_halt;
 	logic in_alu, new_in_alu;
 
@@ -185,7 +188,7 @@ module sm83_control(
 	logic new_db_c2l_mask543;
 	logic new_io_data_oe, new_io_data_we;
 	logic new_io_adr_we;
-	logic new_zero_data_oe;
+	logic new_zero_data_oe, new_rst_data_oe;
 	logic new_ir_we;
 	logic new_ir_bank_we;
 	logic new_ir_bank_cb_set;
@@ -205,6 +208,8 @@ module sm83_control(
 	logic new_alu_fl_neg_we, new_alu_fl_neg_set, new_alu_fl_neg_clr;
 	logic new_alu_fl_carry_we, new_alu_fl_carry_set, new_alu_fl_carry_cpl;
 	logic new_alu_fl_c2_we, new_alu_fl_c2_sh, new_alu_fl_c2_daa, new_alu_fl_sel_c2;
+	logic new_no_int, new_ime_we, new_ime_bit, new_ack_int;
+	logic new_halt_set;
 
 	/* Trigger read memory cycle */
 	task automatic read_mcyc_after(logic cyc);
@@ -330,7 +335,7 @@ module sm83_control(
 	/* Write incremented address latch to PC */
 	task automatic pc_from_adr_inc;
 		inc_al(INC);
-		new_inc_cy     = !(in_int || in_halt || in_rst);
+		new_inc_cy     = !((in_int && ime) || in_halt || in_rst);
 		new_reg_pc_sel = 1;
 		write_sys(HIGH|LOW);
 	endtask
@@ -587,11 +592,9 @@ module sm83_control(
 
 	always_comb begin
 		new_set_m1 = 0;
-		no_int     = 0;
 		no_pc      = 0;
 
 		new_in_alu = 0;
-		in_halt    = 0;
 
 		new_reg_sel = 'x;
 		new_use_sp  = 0;
@@ -628,6 +631,7 @@ module sm83_control(
 		new_io_data_we       = 0;
 		new_io_adr_we        = 0;
 		new_zero_data_oe     = 0;
+		new_rst_data_oe      = 0;
 		new_ir_we            = 0;
 		new_ir_bank_we       = 0;
 		new_ir_bank_cb_set   = 0;
@@ -669,6 +673,11 @@ module sm83_control(
 		new_alu_fl_c2_sh     = 0;
 		new_alu_fl_c2_daa    = 0;
 		new_alu_fl_sel_c2    = 0;
+		new_no_int           = 0;
+		new_ime_we           = 0;
+		new_ime_bit          = 0;
+		new_ack_int          = 0;
+		new_halt_set         = 0;
 
 		unique0 case (1)
 			/* NOP -- No operation */
@@ -2543,6 +2552,12 @@ module sm83_control(
 						wz_to_adr;
 						no_pc = 1;
 					end
+
+					/* If RETI, set IME register */
+					m1 && t3: begin
+						new_ime_we  = reti;
+						new_ime_bit = reti;
+					end
 				endcase
 			end
 
@@ -2585,7 +2600,7 @@ module sm83_control(
 				endcase
 			end
 
-			/* RST t -- Push PC and jump to vector t */
+			/* RST t -- Push PC and jump to vector t (also used for interrupt entry) */
 			rst_t: begin
 				write_mcyc_after(m2); /* Write PC high byte to address in SP-1 during M3 */
 				write_mcyc_after(m3); /* Write PC low byte to address in SP-2 during M4 */
@@ -2610,6 +2625,12 @@ module sm83_control(
 						new_reg_l2gp_oe = 1;
 						new_reg_h2gp_oe = 1;
 						write_wz(HIGH|LOW);
+
+						/* Acknowledge interrupt */
+						new_ack_int = in_int && ime;
+
+						/* Reset IME register */
+						new_ime_we = in_int && ime;
 					end
 
 					/* Decrement SP */
@@ -2726,17 +2747,36 @@ module sm83_control(
 			/* HALT -- Halt CPU and wake on interrupt */
 			halt: begin
 				last_mcyc(m1);
+
+				unique0 case (1)
+					m1 && t3: new_halt_set = 1;
+				endcase
+
+				// TODO: Check for HALT bug
 			end
 
-			/* STOP -- Halt CPU and wake on interrupt */
+			/* STOP -- Halt system and wake on interrupt */
 			stop: begin
 				last_mcyc(m1);
+
+				// TODO: Implement STOP instruction
 			end
 
 			/* EI -- Enable interrupts */
 			/* DI -- Disable interrupts */
 			di_ei: begin
 				last_mcyc(m1);
+
+				unique0 case (1)
+					/* Don't allow interrupts during DI/EI instruction */
+					m1 && t4: new_no_int = 1;
+
+					/* Write IME register */
+					m1 && t3: begin
+						new_ime_we  = 1;
+						new_ime_bit = opcode[3];
+					end
+				endcase
 			end
 
 			/* Prefix CB */
@@ -2745,7 +2785,7 @@ module sm83_control(
 
 				unique0 case (1)
 					/* Don't allow interrupts between prefix and actual instruction */
-					m1 && t4: no_int = 1;
+					m1 && t4: new_no_int = 1;
 
 					/* Select CB bank for next instruction */
 					m1 && t3: new_ir_bank_cb_set = 1;
@@ -2848,6 +2888,9 @@ module sm83_control(
 				/* Override data (opcode) with zero when halted or under reset; executing a no-op effectively */
 				new_zero_data_oe = in_halt || in_rst;
 
+				/* Override data (opcode) with RST instruction for interrupt entry */
+				new_rst_data_oe = !new_zero_data_oe && in_int && ime;
+
 				/* Write fetched opcode to instruction register */
 				new_ir_we = 1;
 			end
@@ -2893,6 +2936,7 @@ module sm83_control(
 		ctl_io_data_we       = new_io_data_we;
 		ctl_io_adr_we        = new_io_adr_we;
 		ctl_zero_data_oe     = new_zero_data_oe;
+		ctl_rst_data_oe      = new_rst_data_oe;
 		ctl_ir_we            = new_ir_we;
 		ctl_ir_bank_we       = new_ir_bank_we;
 		ctl_ir_bank_cb_set   = new_ir_bank_cb_set;
@@ -2934,13 +2978,25 @@ module sm83_control(
 		ctl_alu_fl_c2_sh     = new_alu_fl_c2_sh;
 		ctl_alu_fl_c2_daa    = new_alu_fl_c2_daa;
 		ctl_alu_fl_sel_c2    = new_alu_fl_sel_c2;
+		ctl_no_int           = new_no_int;
+		ctl_ime_we           = new_ime_we;
+		ctl_ime_bit          = new_ime_bit;
+		ctl_ack_int          = new_ack_int;
+		ctl_halt_set         = new_halt_set;
 	end
 
 	always_ff @(posedge clk) begin
-		if (set_m1)
-			in_rst <= 0;
 		if (reset)
 			in_rst <= 1; /* prevent PC increment and read zero opcode (no-op) during first M cycle */
+		else if (set_m1)
+			in_rst <= 0;
+	end
+
+	always_ff @(posedge clk) begin
+		if (reset || in_int)
+			in_halt <= 0;
+		else if (ctl_halt_set)
+			in_halt <= 1;
 	end
 
 endmodule

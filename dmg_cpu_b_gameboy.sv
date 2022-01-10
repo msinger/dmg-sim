@@ -148,7 +148,6 @@ module dmg_cpu_b_gameboy;
 	sm83 cpu(.*);
 
 	assign ncyc       = !dmg.p1_clocks_reset.adyk && !dmg.p1_clocks_reset.alef;
-	assign irq        = 0;
 	assign cpu_a      = cpu_a_out;
 	assign d          = cpu_drv_d ? cpu_d_out : 'z;
 	assign din        = d;
@@ -193,6 +192,26 @@ module dmg_cpu_b_gameboy;
 		cpu_raw_rd <= 0;
 		cpu_raw_wr <= 0;
 		cpu_a_out  <= 0;
+	end
+
+	assign irq[0] = cpu_irq0_trig;
+	assign irq[1] = cpu_irq1_trig;
+	assign irq[2] = cpu_irq2_trig;
+	assign irq[3] = cpu_irq3_trig;
+	assign irq[4] = cpu_irq4_trig;
+	assign irq[5] = cpu_irq5_trig;
+	assign irq[6] = cpu_irq6_trig;
+	assign irq[7] = cpu_irq7_trig;
+
+	always_ff @(posedge clk) begin
+		cpu_irq0_ack <= iack[0];
+		cpu_irq1_ack <= iack[1];
+		cpu_irq2_ack <= iack[2];
+		cpu_irq3_ack <= iack[3];
+		cpu_irq4_ack <= iack[4];
+		cpu_irq5_ack <= iack[5];
+		cpu_irq6_ack <= iack[6];
+		cpu_irq7_ack <= iack[7];
 	end
 
 	program test;
