@@ -1856,7 +1856,7 @@ module sm83_control(
 
 					m1 && t3: begin
 						/* Write ALU flags into register F */
-						new_alu_fl_sel_c2 = opcode[5:3] != 5; /* set carry to shift out; except for SRA */
+						new_alu_fl_sel_c2 = 1;
 						f_from_alu;
 					end
 				endcase
