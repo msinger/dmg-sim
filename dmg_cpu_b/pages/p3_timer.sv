@@ -25,7 +25,7 @@ module timer(
 	assign #T_MUXI ukap = !(sopu ? _16384hz : uvyr);
 	assign #T_MUXI teko = !(sopu ? ubot : nff04_d1);
 	assign #T_MUXI tecy = !(samy ? ukap : teko);
-	assign #T_NOR  sogu = !(tecy || sabo);
+	assign #T_NOR  sogu = !(tecy || !sabo);
 	assign d[2] = supe;
 	assign d[1] = rote;
 	assign d[0] = ryla;
