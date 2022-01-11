@@ -715,7 +715,7 @@ module sm83_control(
 			end
 
 			/* LD r, (HL) -- Load register r with value stored at address in HL */
-			ld_r_hl: begin
+			ld_r_hl && !halt: begin
 				read_mcyc_after(m1); /* Read value stored at address in HL during M2 */
 				last_mcyc(m2);
 
@@ -729,7 +729,7 @@ module sm83_control(
 			end
 
 			/* LD (HL), r -- Load register r to address in HL */
-			ld_hl_r: begin
+			ld_hl_r && !halt: begin
 				write_mcyc_after(m1); /* Write to address in HL during M2 */
 				last_mcyc(m2);
 

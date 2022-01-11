@@ -153,6 +153,7 @@ module sm83_decode(
 	assign ld_r_hl  = !bank_cb && (opcode == 'h46 || /* LD B, (HL) */
 	                               opcode == 'h56 || /* LD D, (HL) */
 	                               opcode == 'h66 || /* LD H, (HL) */
+	                               opcode == 'h76 || /* HALT (just for simplifying logic) */
 	                               opcode == 'h4e || /* LD C, (HL) */
 	                               opcode == 'h5e || /* LD E, (HL) */
 	                               opcode == 'h6e || /* LD L, (HL) */
@@ -163,6 +164,7 @@ module sm83_decode(
 	                               opcode == 'h73 || /* LD (HL), E */
 	                               opcode == 'h74 || /* LD (HL), H */
 	                               opcode == 'h75 || /* LD (HL), L */
+	                               opcode == 'h76 || /* HALT (just for simplifying logic) */
 	                               opcode == 'h77);  /* LD (HL), A */
 	assign ld_r_n   = !bank_cb && (opcode == 'h06 || /* LD B, n */
 	                               opcode == 'h16 || /* LD D, n */
