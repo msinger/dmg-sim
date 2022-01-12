@@ -274,14 +274,6 @@ module dmg_cpu_b_gameboy;
 			cpu_out_t1   = 0;
 			cpu_clk_ena  = 0;
 			cpu_xo_ena   = 1;
-			cpu_irq0_ack = 0;
-			cpu_irq1_ack = 0;
-			cpu_irq2_ack = 0;
-			cpu_irq3_ack = 0;
-			cpu_irq4_ack = 0;
-			cpu_irq5_ack = 0;
-			cpu_irq6_ack = 0;
-			cpu_irq7_ack = 0;
 
 			cyc(64);
 			nrst = 1;
@@ -315,8 +307,7 @@ module dmg_cpu_b_gameboy;
 						if (cpu_in_t15)
 							cpu_clk_ena = 1;
 
-					@(posedge cpu_clkin_t3);
-					@(posedge cpu_clkin_t2);
+					@(posedge cpu_clkin_t7);
 					reset = 0;
 
 					$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
