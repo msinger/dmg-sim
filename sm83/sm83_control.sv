@@ -1395,8 +1395,8 @@ module sm83_control(
 
 						/* Update ALU flags */
 						new_alu_fl_neg_set = dec_m;
-						new_alu_fl_neg_we  = dec_m;
 						update_alu_flags(Z|0|0|0);
+						new_alu_fl_neg_we  = dec_m;
 
 						/* Write ALU result into register selected by opcode[5:3] */
 						reg_from_alu(op543_gp_reg, op543_gp_hilo);
@@ -1471,8 +1471,8 @@ module sm83_control(
 
 						/* Update ALU flags */
 						new_alu_fl_neg_set = dec_m;
-						new_alu_fl_neg_we  = dec_m;
 						update_alu_flags(Z|0|0|0);
+						new_alu_fl_neg_we  = dec_m;
 
 						/* Write ALU result into data latch */
 						dl_from_alu;
