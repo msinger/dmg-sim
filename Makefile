@@ -70,6 +70,9 @@ AV_DUMP = \
 snd_dump.sv \
 vid_dump.sv
 
+MBC = \
+mbc/mbc1.sv
+
 DMG_CPU_B_TEST_VVP_OUT = \
 dmg_cpu_b_test.vcd \
 dmg_cpu_b_test.fst \
@@ -155,8 +158,8 @@ sim-test $(DMG_CPU_B_TEST_VVP_OUT): dmg_cpu_b_test.vvp
 dmg_cpu_b_test.mkv: mkvid/mkimgs mkvid/mkvid.sh dmg_cpu_b_test.vid dmg_cpu_b_test.snd
 	mkvid/mkvid.sh dmg_cpu_b_test
 
-dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(AV_DUMP) $(TIMESCALE)
-	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83)
+dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(AV_DUMP) $(MBC) $(TIMESCALE)
+	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(MBC)
 
 sim-gameboy $(DMG_CPU_B_GAMEBOY_VVP_OUT): dmg_cpu_b_gameboy.vvp
 	$(VVP) $(VVP_FLAGS) $< $(call VVP_DUMP_FLAGS,dmg_cpu_b_gameboy) \

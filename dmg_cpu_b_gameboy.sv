@@ -108,14 +108,57 @@ module dmg_cpu_b_gameboy;
 	always_ff @(posedge nwr) if (!ncs && a_pin[14]) work_ram[a_pin[12:0]] <= $isunknown(d_pin) ? $random : d_pin;
 	assign d_pin = (!ncs && a_pin[14] && !nrd) ? work_ram[a_pin[12:0]] : 'z;
 
-	bit         has_rom;
-	logic [7:0] cart_rom[0:32767];
-	assign d_pin = (has_rom && !a_pin[15] && !nrd) ? cart_rom[a_pin[14:0]] : 'z;
+	bit          has_rom, has_ram;
+	bit          has_mbc1;
+	logic [7:0]  cart_rom[0:8388607];
+	logic [7:0]  cart_ram[0:262143];
+	logic [22:0] cart_rom_adr;
+	logic [17:0] cart_ram_adr;
+	logic        cart_rom_cs, cart_ram_cs;
+	assign d_pin = (has_rom && cart_rom_cs && !nrd) ? cart_rom[cart_rom_adr] : 'z;
+	initial foreach (cart_ram[i]) cart_ram[i] = $random;
+	always_ff @(posedge nwr) if (has_ram && cart_ram_cs) cart_ram[cart_ram_adr] <= $isunknown(d_pin) ? $random : d_pin;
+	assign d_pin = (has_ram && cart_ram_cs && !nrd) ? cart_rom[cart_ram_adr] : 'z;
+
+	logic [18:14] mbc1_ra;
+	logic [14:13] mbc1_aa;
+	logic         mbc1_ncs_rom, mbc1_ncs_ram, mbc1_cs_ram;
+	mbc1 mbc1_chip(
+		.nrst,
+		.a(a_pin[15:13]),
+		.d(d_pin[4:0]),
+		.nrd, .nwr, .ncs,
+		.ra(mbc1_ra),
+		.aa(mbc1_aa),
+		.ncs_rom(mbc1_ncs_rom),
+		.ncs_ram(mbc1_ncs_ram),
+		.cs_ram(mbc1_cs_ram)
+	);
+
+	always_comb unique case (1)
+		has_mbc1: begin
+			cart_rom_adr = { mbc1_ra, a_pin[13:0] };
+			cart_ram_adr = { mbc1_aa, a_pin[12:0] };
+			cart_rom_cs  = !mbc1_ncs_rom;
+			cart_ram_cs  = !mbc1_ncs_ram && mbc1_cs_ram;
+		end
+
+		default: begin
+			cart_rom_adr = a_pin[14:0];
+			cart_ram_adr = a_pin[12:0];
+			cart_rom_cs  = !a_pin[15];
+			cart_ram_cs  = !ncs && a_pin[13];
+		end
+	endcase
+
 	initial begin
 		string rom_file;
-		int f, _;
+		int    f, _;
+		byte   mbc_type, ram_size;
 
-		has_rom = 0;
+		has_rom  = 0;
+		has_ram  = 0;
+		has_mbc1 = 0;
 
 		rom_file = "";
 		_ = $value$plusargs("ROM=%s", rom_file);
@@ -130,6 +173,31 @@ module dmg_cpu_b_gameboy;
 			_ = $fread(cart_rom, f);
 			$fclose(f);
 			has_rom = 1;
+		end
+
+		if (has_rom) begin
+			mbc_type = cart_rom['h147];
+			ram_size = cart_rom['h149];
+
+			unique case (mbc_type)
+				'h00, 'h08, 'h09: ;
+				'h01, 'h02, 'h03: has_mbc1 = 1;
+				'h05, 'h06:       $error("MBC2 not supported yet.");
+				'h0b, 'h0c, 'h0d: $error("MMM01 not supported yet.");
+				'h0f, 'h10, 'h11,
+				'h12, 'h13:       $error("MBC3 not supported yet.");
+				'h19, 'h1a, 'h1b,
+				'h1c, 'h1d, 'h1e: $error("MBC5 not supported yet.");
+				'h20:             $error("MBC6 not supported yet.");
+				'h22:             $error("MBC7 not supported yet.");
+				'hfc:             $error("MAC-GBD not supported yet.");
+				'hfd:             $error("TAMA5 not supported yet.");
+				'hfe:             $error("HuC3 not supported yet.");
+				'hff:             $error("HuC1 not supported yet.");
+				default:          $error("Unsupported MBC type.");
+			endcase
+
+			has_ram = |ram_size;
 		end
 	end
 
