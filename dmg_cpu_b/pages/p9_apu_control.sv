@@ -62,7 +62,7 @@ module apu_control(
 	assign #T_INV  hapo = !nreset2;
 	assign #T_INV  gufo = !hapo;
 	assign #T_OR   jyro = hapo || !hada;
-	assign #T_TRI  hope = !jure ? !hada : 'z;
+	assign #T_TRI  hope = !jure ? !(!hada) : 'z;
 	assign #T_INV  kuby = !jyro;
 	assign #T_INV  keba = !kuby;
 	assign #T_MUX  cely = net03 ? baza : byfe_128hz;
