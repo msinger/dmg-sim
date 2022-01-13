@@ -162,7 +162,7 @@ module ch2_regs(
 	assign #T_NAND huma = !(ff19 && gado);
 	assign #T_NAND evyf = !(anuj && ff19);
 	assign #T_INV  fazo = !apu_reset;
-	assign #T_TRI  gojy = !huma ? !emer : 'z;
+	assign #T_TRI  gojy = !huma ? !(!emer) : 'z;
 	assign ff19_d6  = emer;
 	assign nff19_d6 = !emer;
 	assign d[6]     = gojy;
