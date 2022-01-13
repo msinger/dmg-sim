@@ -6,56 +6,59 @@ _start:
 .global _start
 	ld sp, 0xfffe
 
+	; Zero video memory
 	ld c, 0
 	ld de, 0x2000
 	ld hl, 0x8000
 	call memset
 
+	; Set APU registers #1
 	ld a, 0x80
 	ld (0x26), a
-	ld a, 0xbf
 	ld (0x11), a
-	ld a, 0xf3
+	ld a, 0x11
 	ld (0x12), a
 	ld a, 0xc1
 	ld (0x13), a
 	ld a, 0x87
 	ld (0x14), a
 
-	; Wait 2/256 seconds before switching on sound output, after starting channel 1
-	; to make sure it is not audible.
-	ld de, 204
-	call wait
-
-	ld a, 0xf3
-	ld (0x25), a
-	ld a, 0x77
-	ld (0x24), a
-
-	; Wait 5,358 m-cycles before switching on PPU to make sure it is synced to DIV like it
+	; Wait 7,432 m-cycles before switching on PPU to make sure it is synced to DIV like it
 	; is when booting with the original boot ROM.
-	ld de, 534          ; 3 cyc
-	call wait           ; 534*10 (loop) + 6 (call) + 3 (ret) = 5,349 cyc
-	nop
+	ld de, 741          ; 3 cyc
+	call wait           ; 741*10 (loop) + 6 (call) + 8 (cmp+ret) = 7424 cyc
 	nop
 	nop
 	nop
 	nop
 	nop
 
+	; Set PPU registers
 	ld a, 0xfc
 	ld (0x47), a
 	ld a, 0x91
 	ld (0x40), a
 
-	; Wait 52,625 m-cycles to make sure we leave the boot ROM with the same value in DIV
+	; Wait 13,017 m-cycles for channel 1 volume envelope to reach zero
+	ld de, 1300
+	call wait
+
+	; Set APU registers #2
+	ld a, 0xf3
+	ld (0x12), a
+	ld (0x25), a
+	ld a, 0x77
+	ld (0x24), a
+
+	; Wait 39,600 m-cycles to make sure we leave the boot ROM with the same value in DIV
 	; the original boot ROM would.
-	ld de, 5261         ; 3 cyc
-	call wait           ; 5261*10 (loop) + 6 (call) + 3 (ret) = 52,619 cyc
+	ld de, 3958         ; 3 cyc
+	call wait           ; 3958*10 (loop) + 6 (call) + 8 (cmp+ret) = 39,594 cyc
 	nop
 	nop
 	nop
 
+	; Set general purpose registers
 	ld a, 0xff
 	add a, 1
 	ld bc, 0x0013
