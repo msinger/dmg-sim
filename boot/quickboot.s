@@ -13,9 +13,21 @@ _start:
 
 	ld a, 0x80
 	ld (0x26), a
+	ld a, 0xbf
 	ld (0x11), a
 	ld a, 0xf3
 	ld (0x12), a
+	ld a, 0xc1
+	ld (0x13), a
+	ld a, 0x87
+	ld (0x14), a
+
+	; Wait 2/256 seconds before switching on sound output, after starting channel 1
+	; to make sure it is not audible.
+	ld de, 204
+	call wait
+
+	ld a, 0xf3
 	ld (0x25), a
 	ld a, 0x77
 	ld (0x24), a
@@ -31,24 +43,18 @@ _start:
 	ld de, 0x00d8
 	ld hl, 0x014d
 
-	; Waste 60,063 m-cycles to make sure we leave the boot ROM with the same value in DIV
+	; Waste 57,988 m-cycles to make sure we leave the boot ROM with the same value in DIV
 	; the original boot ROM would.
-	ld de, 6005         ; 3 cyc
+	ld de, 5797         ; 3 cyc
+	call wait           ; 5797*10 (loop) + 6 (call) + 3 (ret) = 57,979 cyc
 	nop
 	nop
 	nop
 	nop
 	nop
 	nop
-	nop
-	nop
-	nop
-div_sync_loop:
-	ld a, d             ; 1 cyc
-	or e                ; 1 cyc
-	jp z, hide_boot     ; 3 cyc (+1 on jump)
-	dec de              ; 2 cyc
-	jr div_sync_loop    ; 3 cyc
+
+	jp hide_boot
 
 memset:
 .global memset
@@ -59,6 +65,15 @@ memset:
 	ld (hli), a
 	dec de
 	jr memset
+
+wait:
+.global wait
+	nop                 ; 1 cyc
+	ld a, d             ; 1 cyc
+	or e                ; 1 cyc
+	ret z               ; 2 cyc (+3 on jump)
+	dec de              ; 2 cyc
+	jr wait             ; 3 cyc
 
 .section .hide
 hide_boot:
