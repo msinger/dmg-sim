@@ -115,7 +115,7 @@ module video_control(
 	assign #T_TRI  teby = tobe ? !sadu : 'z;
 	assign #T_TRI  wuga = tobe ? !xaty : 'z;
 	assign #T_OR   pago = nreset9 || ryju;
-	assign #T_TRI  sego = tobe ? !rupo : 'z;
+	assign #T_TRI  sego = tobe ? !nrupo : 'z;
 	assign nnype = !nype;
 	assign int_vbl     = paru;
 	assign int_oam     = tapa;

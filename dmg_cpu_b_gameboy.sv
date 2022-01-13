@@ -377,6 +377,7 @@ module dmg_cpu_b_gameboy;
 
 					@(posedge cpu_clkin_t7);
 					reset = 0;
+					// TODO: reset CPU based on cpu_in_t12 or cpu_in_t13
 
 					$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
 					$display("System reset done -- will simulate %s seconds", time_str);
