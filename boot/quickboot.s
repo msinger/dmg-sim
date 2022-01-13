@@ -32,27 +32,35 @@ _start:
 	ld a, 0x77
 	ld (0x24), a
 
+	; Wait 5,358 m-cycles before switching on PPU to make sure it is synced to DIV like it
+	; is when booting with the original boot ROM.
+	ld de, 534          ; 3 cyc
+	call wait           ; 534*10 (loop) + 6 (call) + 3 (ret) = 5,349 cyc
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+
 	ld a, 0xfc
 	ld (0x47), a
 	ld a, 0x91
 	ld (0x40), a
+
+	; Wait 52,625 m-cycles to make sure we leave the boot ROM with the same value in DIV
+	; the original boot ROM would.
+	ld de, 5261         ; 3 cyc
+	call wait           ; 5261*10 (loop) + 6 (call) + 3 (ret) = 52,619 cyc
+	nop
+	nop
+	nop
 
 	ld a, 0xff
 	add a, 1
 	ld bc, 0x0013
 	ld de, 0x00d8
 	ld hl, 0x014d
-
-	; Waste 57,988 m-cycles to make sure we leave the boot ROM with the same value in DIV
-	; the original boot ROM would.
-	ld de, 5797         ; 3 cyc
-	call wait           ; 5797*10 (loop) + 6 (call) + 3 (ret) = 57,979 cyc
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
 
 	jp hide_boot
 
