@@ -31,7 +31,24 @@ _start:
 	ld de, 0x00d8
 	ld hl, 0x014d
 
-	jp hide_boot
+	; Waste 60,063 m-cycles to make sure we leave the boot ROM with the same value in DIV
+	; the original boot ROM would.
+	ld de, 6005         ; 3 cyc
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+div_sync_loop:
+	ld a, d             ; 1 cyc
+	or e                ; 1 cyc
+	jp z, hide_boot     ; 3 cyc (+1 on jump)
+	dec de              ; 2 cyc
+	jr div_sync_loop    ; 3 cyc
 
 memset:
 .global memset
