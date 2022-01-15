@@ -79,7 +79,7 @@ module sm83_alu_flags(
 		endcase
 	end
 
-	logic hc_reg, sec_c_reg, pri_c_we;
+	logic hc_reg, sec_c_reg;
 
 	function automatic logic write_carry(int bitnum);
 		assume (flags_bus != flags_alu);
@@ -93,15 +93,14 @@ module sm83_alu_flags(
 		'b00: sec_c_reg <= carry_in;
 		'b01: sec_c_reg <= shift_out_in;
 		'b10: sec_c_reg <= daa_carry_in;
-		'b11: sec_c_reg <= 0; /* TODO: check if this case actually gets selected by CPU control */
 	endcase
 	initial sec_c_reg = 0;
 
-	assign pri_c_we = carry_we && !sec_carry_we; /* TODO: check if this ever happens that carry_we and sec_carry_we are true at the same time */
+	assert property (!carry_we || !sec_carry_we);
 
 	always_ff @(posedge clk) if (half_carry_we) hc_reg    <= write_carry(H);
 	always_ff @(posedge clk) if (daa_carry_we)  daa_carry <= write_carry(H);
-	always_ff @(posedge clk) if (pri_c_we)      pri_carry <= write_carry(C);
+	always_ff @(posedge clk) if (carry_we)      pri_carry <= write_carry(C);
 	initial hc_reg    = 0;
 	initial daa_carry = 0;
 	initial pri_carry = 0;
