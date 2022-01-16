@@ -7,16 +7,24 @@ module tffd #(
 		output logic q
 	);
 
-	logic initff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
+	bit ff, initff;
+	initial begin
+		initff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
+		ff     = initff;
+	end
 
-	logic ff;
-	initial ff = initff;
+	bit load_negedge;
+	initial load_negedge = 0;
+	always @(negedge load) load_negedge <= 1;
 
-	always @(negedge nclk, posedge load) begin
-		if (load)
+	always @(negedge nclk, posedge load_negedge) begin
+		if (load_negedge)
 			ff <= $isunknown(d) ? initff : d;
 		else
 			ff <= !ff;
+
+		if (load_negedge)
+			load_negedge <= 0;
 	end
 
 	assign #T_TFFD q = load ? d : ff;

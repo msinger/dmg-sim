@@ -7,10 +7,11 @@ module dffr_c #(
 		output logic q
 	);
 
-	logic initff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
-
-	logic ff;
-	initial ff = initff;
+	bit ff, initff;
+	initial begin
+		initff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
+		ff     = initff;
+	end
 
 	logic dffrc_clk;
 	assign dffrc_clk = dffrc_inv_clk ? !clk : clk;

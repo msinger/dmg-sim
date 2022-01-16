@@ -7,10 +7,11 @@ module dffr_b #(
 		output logic q
 	);
 
-	logic initff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
-
-	logic ff;
-	initial ff = initff;
+	bit ff, initff;
+	initial begin
+		initff = $isunknown(INITIAL_Q) ? $random : INITIAL_Q;
+		ff     = initff;
+	end
 
 	always_ff @(posedge clk, negedge nreset) begin
 		if (nreset)
