@@ -109,7 +109,7 @@ module dmg_cpu_b_gameboy;
 	assign d_pin = (!ncs && a_pin[14] && !nrd) ? work_ram[a_pin[12:0]] : 'z;
 
 	bit          has_rom, has_ram;
-	bit          has_mbc1;
+	bit          has_mbc1, has_mbc5;
 	logic [7:0]  cart_rom[0:8388607];
 	logic [7:0]  cart_ram[0:262143];
 	logic [22:0] cart_rom_adr;
@@ -135,12 +135,32 @@ module dmg_cpu_b_gameboy;
 		.cs_ram(mbc1_cs_ram)
 	);
 
+	logic [22:14] mbc5_ra;
+	logic [16:13] mbc5_aa;
+	logic         mbc5_ncs_ram;
+	mbc5 mbc5_chip(
+		.nrst,
+		.a(a_pin[15:12]),
+		.d(d_pin),
+		.nwr, .ncs,
+		.ra(mbc5_ra),
+		.aa(mbc5_aa),
+		.ncs_ram(mbc5_ncs_ram)
+	);
+
 	always_comb unique case (1)
 		has_mbc1: begin
 			cart_rom_adr = { mbc1_ra, a_pin[13:0] };
 			cart_ram_adr = { mbc1_aa, a_pin[12:0] };
 			cart_rom_cs  = !mbc1_ncs_rom;
 			cart_ram_cs  = !mbc1_ncs_ram && mbc1_cs_ram;
+		end
+
+		has_mbc5: begin
+			cart_rom_adr = { mbc5_ra, a_pin[13:0] };
+			cart_ram_adr = { mbc5_aa, a_pin[12:0] };
+			cart_rom_cs  = !a_pin[15];
+			cart_ram_cs  = !mbc5_ncs_ram;
 		end
 
 		default: begin
@@ -159,6 +179,7 @@ module dmg_cpu_b_gameboy;
 		has_rom  = 0;
 		has_ram  = 0;
 		has_mbc1 = 0;
+		has_mbc5 = 0;
 
 		rom_file = "";
 		_ = $value$plusargs("ROM=%s", rom_file);
@@ -187,7 +208,7 @@ module dmg_cpu_b_gameboy;
 				'h0f, 'h10, 'h11,
 				'h12, 'h13:       $error("MBC3 not supported yet.");
 				'h19, 'h1a, 'h1b,
-				'h1c, 'h1d, 'h1e: $error("MBC5 not supported yet.");
+				'h1c, 'h1d, 'h1e: has_mbc5 = 1;
 				'h20:             $error("MBC6 not supported yet.");
 				'h22:             $error("MBC7 not supported yet.");
 				'hfc:             $error("MAC-GBD not supported yet.");

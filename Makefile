@@ -71,7 +71,8 @@ snd_dump.sv \
 vid_dump.sv
 
 MBC = \
-mbc/mbc1.sv
+mbc/mbc1.sv \
+mbc/mbc5.sv
 
 DMG_CPU_B_TEST_VVP_OUT = \
 dmg_cpu_b_test.vcd \
