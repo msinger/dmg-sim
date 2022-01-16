@@ -25,6 +25,7 @@ Files in this repo
 | ./vid_dump.sv                     | Code for dumping the PPU's video signals to a file.                                 |
 | ./mkvid/mkimgs.c                  | C code for extracting raw RGB frames from video signal dumps.                       |
 | ./mkvid/mkvid.sh                  | Bash script for combining dumped sound output and extracted RGB frames to a video.  |
+| ./boot/quickboot.s                | Assembly code for a boot ROM that boots in less than 0.2 seconds.
 
 
 Usage
@@ -70,15 +71,24 @@ Simulate boot ROM
 -----------------
 
 The boot ROM is not part of this repo. You need to download it somewhere else (in binary form; 256 bytes).
-Put it in the root directory of this repository and rename it to `DMG_ROM.bin`.
+Put it in the root directory of this repository and rename it to `DMG_ROM.bin`. You can also build and use
+the quick boot ROM in the `boot` folder. You need the [SM83 Binutils](https://github.com/msinger/binutils-sm83)
+for that. To use it you can either move the generated binary to the root of the repository and rename it
+to `DMG_ROM.bin` or add the variable `BOOTROM=boot/quickboot.bin` to the `make` command line.
 
 Then simulate it with:
 ```
 make sim-gameboy
 ```
 
-The simulation takes about 3.8 hours on a Ryzen 5 3600. If you just want to generate a video, then you can safe
-about one hour by disabling the signal dump:
+This simulates the boot ROM without cartridge. You can specify a ROM file and how many seconds you want to
+simulate:
+```
+make sim-gameboy ROM=path/to/romfile.gb SECS=10.0
+```
+
+The simulation takes about 45 minutes per simulated second on a Ryzen 5 3600. If you just want to generate a
+video, you can safe some time by disabling the signal dump:
 ```
 make sim-gameboy DUMP=
 ```
@@ -90,3 +100,33 @@ make dmg_cpu_b_gameboy.mkv
 
 This is what the video should look like: [https://youtu.be/kIpV2FVUPKs](https://youtu.be/kIpV2FVUPKs)
 
+
+Tests
+-----
+
+Results of Blargg's tests:
+
+| Test       | Result |
+| ---------- | ------ |
+| cpu_instrs | PASS   |
+
+Results of Mooneye GB tests:
+
+| Test                                  | Result |
+| ------------------------------------- | ------ |
+| acceptance/boot_div-dmgABCmgb         | PASS   |
+| acceptance/boot_hwio-dmgABCmgb        | PASS   |
+| acceptance/boot_regs-dmgABC           | PASS   |
+| acceptance/timer/div_write            | PASS   |
+| acceptance/timer/rapid_toggle         | FAIL   |
+| acceptance/timer/tim00_div_trigger    | PASS   |
+| acceptance/timer/tim00                | PASS   |
+| acceptance/timer/tim01_div_trigger    | PASS   |
+| acceptance/timer/tim01                | PASS   |
+| acceptance/timer/tim10_div_trigger    | PASS   |
+| acceptance/timer/tim10                | PASS   |
+| acceptance/timer/tim11_div_trigger    | PASS   |
+| acceptance/timer/tim11                | PASS   |
+| acceptance/timer/tima_reload          | PASS   |
+| acceptance/timer/tima_write_reloading | PASS   |
+| acceptance/timer/tma_write_reloading  | PASS   |
