@@ -33,7 +33,6 @@ module sm83(
 
 	logic m1, m2, m3, m4, m5, m6;
 	logic t1, t2, t3, t4;
-	logic set_m1;
 
 	adr_t al_in, al_out, apin;
 
@@ -55,10 +54,10 @@ module sm83(
 
 		.opcode, .bank_cb,
 
-		.int_num, .iena(iena_dout), .iena_sel,
+		.iena(iena_dout), .iena_sel,
 
 		.ctl_ir_we, .ctl_ir_bank_we, .ctl_ir_bank_cb_set,
-		.ctl_zero_data_oe, .ctl_rst_data_oe
+		.ctl_zero_data_oe, .ctl_ff_data_oe
 	);
 
 	logic alu_shift_dbh, alu_shift_dbl;
@@ -179,7 +178,7 @@ module sm83(
 	logic ctl_db_c2l_mask543;
 	logic ctl_io_data_oe, ctl_io_data_we;
 	logic ctl_io_adr_we;
-	logic ctl_zero_data_oe, ctl_rst_data_oe;
+	logic ctl_zero_data_oe, ctl_ff_data_oe;
 	logic ctl_ir_we;
 	logic ctl_ir_bank_we;
 	logic ctl_ir_bank_cb_set;
@@ -199,11 +198,10 @@ module sm83(
 	logic ctl_alu_fl_neg_we, ctl_alu_fl_neg_set, ctl_alu_fl_neg_clr;
 	logic ctl_alu_fl_carry_we, ctl_alu_fl_carry_set, ctl_alu_fl_carry_cpl;
 	logic ctl_alu_fl_c2_we, ctl_alu_fl_c2_sh, ctl_alu_fl_c2_daa, ctl_alu_fl_sel_c2;
-	logic ctl_no_int, ctl_ime_we, ctl_ime_bit, ctl_ack_int;
+	logic ctl_accept_int, ctl_ime_we, ctl_ime_bit, ctl_ack_int, ctl_int_vector_oe;
 
 	logic       in_int, ime, iena_oe, iena_we, iena_sel;
-	logic [2:0] int_num;
-	word_t      iena_dout;
+	word_t      iena_dout, int_vector;
 	assign iena_sel = &adr;
 	assign iena_we  = iena_sel && wr;
 
@@ -222,11 +220,11 @@ module sm83(
 	initial reg_pc = 0;
 
 	/* common data bus matrix */
-	logic [1:0] dbc_sel;
+	logic [2:0] dbc_sel;
 	word_t      db_c2l, io_din, io_dout;
-	assign dbc_sel = { ctl_io_data_oe, ctl_db_l2c_oe };
-	assign db_c2l  = db_mux(dbc_sel,     'x, io_din, 'x, 'x, 'x, 'x, 'x) & (ctl_db_c2l_mask543 ? { 1'b0, in_int, 3'b111, 3'b000 } : {WORD_SIZE{1'b1}});
-	assign io_dout = db_mux(dbc_sel, db_l2c,     'x, 'x, 'x, 'x, 'x, 'x);
+	assign dbc_sel = { ctl_int_vector_oe, ctl_io_data_oe, ctl_db_l2c_oe };
+	assign db_c2l  = db_mux(dbc_sel,     'x, io_din, int_vector, 'x, 'x, 'x, 'x) & (ctl_db_c2l_mask543 ? 'h38 : {WORD_SIZE{1'b1}});
+	assign io_dout = db_mux(dbc_sel, db_l2c,     'x, int_vector, 'x, 'x, 'x, 'x);
 
 	/* low data bus matrix */
 	logic [4:0] dbl_sel;

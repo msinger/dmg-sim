@@ -2,9 +2,8 @@
 
 module sm83_int(
 		input  logic       clk, reset,
-		input  logic       set_m1,
 		output logic       in_int,
-		output logic [2:0] int_num,
+		output logic [7:0] int_vector,
 		output logic       ime,
 
 		input  logic [7:0] irq,
@@ -14,12 +13,10 @@ module sm83_int(
 		output logic [7:0] iena_dout,
 		input  logic       iena_we,
 
-		input  logic       ctl_no_int, ctl_ime_we, ctl_ime_bit, ctl_ack_int
+		input  logic       ctl_accept_int, ctl_ime_we, ctl_ime_bit, ctl_ack_int
 	);
 
-	logic int_armed;
-
-	logic [7:0] reg_iena;
+	logic [7:0] reg_iena, irq_buffered;
 
 	always_ff @(posedge clk) begin
 		if (reset)
@@ -29,17 +26,12 @@ module sm83_int(
 	end
 
 	always_ff @(posedge clk) begin
-		if (reset || (in_int && ime))
-			int_armed <= 0;
-		else
-			int_armed <= |(irq & reg_iena);
-	end
-
-	always_ff @(posedge clk) begin
 		if (reset)
 			in_int <= 0;
-		else if (set_m1 && !ctl_no_int)
-			in_int <= int_armed;
+		else if (ctl_accept_int)
+			in_int <= |(irq & reg_iena);
+		else if (ctl_ack_int)
+			in_int <= 0;
 	end
 
 	always_ff @(posedge clk) begin
@@ -49,19 +41,26 @@ module sm83_int(
 			reg_iena <= iena_din;
 	end
 
-	always_comb priority casez (irq & reg_iena)
-		'b ???????1: int_num = 0;
-		'b ??????10: int_num = 1;
-		'b ?????100: int_num = 2;
-		'b ????1000: int_num = 3;
-		'b ???10000: int_num = 4;
-		'b ??100000: int_num = 5;
-		'b ?1000000: int_num = 6;
-		'b 10000000: int_num = 7;
-		default:     int_num = 'x;
+	always_ff @(posedge clk) begin
+		if (reset)
+			irq_buffered <= 0;
+		else
+			irq_buffered <= irq & reg_iena;
+	end
+
+	always_comb priority casez (irq_buffered)
+		'b ???????1: int_vector = 'h40;
+		'b ??????10: int_vector = 'h48;
+		'b ?????100: int_vector = 'h50;
+		'b ????1000: int_vector = 'h58;
+		'b ???10000: int_vector = 'h60;
+		'b ??100000: int_vector = 'h68;
+		'b ?1000000: int_vector = 'h70;
+		'b 10000000: int_vector = 'h78;
+		default:     int_vector = 'h00; /* Must be zero. See Mooneye GB's acceptance/interrupts/ie_push test. */
 	endcase
 
-	always_comb priority casez (irq & reg_iena & {8{ctl_ack_int}})
+	always_comb priority casez (irq_buffered & {8{ctl_ack_int}})
 		'b ???????1: iack = 'b 00000001;
 		'b ??????10: iack = 'b 00000010;
 		'b ?????100: iack = 'b 00000100;
