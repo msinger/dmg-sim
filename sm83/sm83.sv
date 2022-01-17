@@ -203,7 +203,7 @@ module sm83(
 	logic       in_int, ime, iena_oe, iena_we, iena_sel;
 	word_t      iena_dout, int_vector;
 	assign iena_sel = &adr;
-	assign iena_we  = iena_sel && wr;
+	assign iena_we  = iena_sel && wr && t3; /* Write IE register at T3 or T4: This makes Mooneye GB's acceptance/interrupts/ie_push test pass. */
 
 	sm83_control ctl(.*);
 	sm83_int     intr(.*, .iena_din(dout));

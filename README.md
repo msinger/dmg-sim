@@ -117,6 +117,7 @@ Results of Mooneye GB tests:
 | acceptance/boot_div-dmgABCmgb         | PASS   |
 | acceptance/boot_hwio-dmgABCmgb        | PASS   |
 | acceptance/boot_regs-dmgABC           | PASS   |
+| acceptance/interrupts/ie_push         | PASS   |
 | acceptance/timer/div_write            | PASS   |
 | acceptance/timer/rapid_toggle         | PASS   |
 | acceptance/timer/tim00_div_trigger    | PASS   |
