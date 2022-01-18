@@ -2075,7 +2075,7 @@ module sm83_control(
 			/* BIT b, (HL) -- Test bit b of value at address in HL */
 			bit_b_m && cb_hl: begin
 				read_mcyc_after(m1); /* Read value from address in HL during M2 */
-				last_mcyc(m3);
+				last_mcyc(m2);
 
 				unique0 case (1)
 					/* Apply HL to address pins for read cycle */
@@ -2105,7 +2105,7 @@ module sm83_control(
 						update_alu_flags(Z|N|H|0);
 					end
 
-					m3 && t1: begin
+					m1 && t1: begin
 						/* Configure ALU for AND operation */
 						alu_op_and;
 
@@ -2120,7 +2120,7 @@ module sm83_control(
 					end
 
 					/* Write ALU flags into register F */
-					m3 && t3: f_from_alu;
+					m1 && t3: f_from_alu;
 				endcase
 			end
 
