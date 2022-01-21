@@ -2,7 +2,7 @@
 
 module sm83(
 		input  logic                 clk,
-		input  logic                 reset,
+		input  logic                 reset, areset,
 		input  logic                 ncyc,
 
 		output logic [ADR_WIDTH-1:0] adr,
@@ -12,7 +12,10 @@ module sm83(
 		output logic                 wr,
 
 		input  logic [NUM_IRQS-1:0]  irq,
-		output logic [NUM_IRQS-1:0]  iack
+		output logic [NUM_IRQS-1:0]  iack,
+
+		output logic                 clk_ena,
+		input  logic                 clk_stable
 	);
 
 	localparam int WORD_SIZE = 8;
@@ -200,7 +203,7 @@ module sm83(
 	logic ctl_alu_fl_c2_we, ctl_alu_fl_c2_sh, ctl_alu_fl_c2_daa, ctl_alu_fl_sel_c2;
 	logic ctl_accept_int, ctl_ime_we, ctl_ime_bit, ctl_ack_int, ctl_int_vector_oe;
 
-	logic       in_int, ime, iena_oe, iena_we, iena_sel;
+	logic       in_int, ime, iena_oe, iena_we, iena_sel, wake;
 	word_t      iena_dout, int_vector;
 	assign iena_sel = &adr;
 	assign iena_we  = iena_sel && wr && t3; /* Write IE register at T3 or T4: This makes Mooneye GB's acceptance/interrupts/ie_push test pass. */
@@ -311,6 +314,13 @@ module sm83(
 				if (ctl_reg_sp_sel) reg_sp.hi <= ab.hi;
 			end
 		end
+	end
+
+	always_ff @(negedge clk, posedge areset) begin
+		if (areset)
+			clk_ena <= 0;
+		else if (clk_stable || wake)
+			clk_ena <= 1;
 	end
 
 endmodule

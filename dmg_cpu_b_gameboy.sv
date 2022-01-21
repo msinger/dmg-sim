@@ -223,7 +223,7 @@ module dmg_cpu_b_gameboy;
 	end
 
 	logic           clk;
-	logic           reset;
+	logic           reset, areset;
 	logic           ncyc;
 
 	logic [15:0]    adr;
@@ -234,13 +234,20 @@ module dmg_cpu_b_gameboy;
 	logic [7:0]     irq;
 	logic [7:0]     iack;
 
+	logic           clk_ena;
+	logic           clk_stable;
+
 	sm83 cpu(.*);
 
-	assign ncyc       = !dmg.p1_clocks_reset.adyk && !dmg.p1_clocks_reset.alef;
-	assign cpu_a      = cpu_a_out;
-	assign d          = cpu_drv_d ? cpu_d_out : 'z;
-	assign din        = d;
-	assign cpu_out_r7 = (cpu_raw_rd || cpu_raw_wr) && !cpu_in_r4 && !cpu_in_r5;
+	assign ncyc        = !dmg.p1_clocks_reset.adyk && !dmg.p1_clocks_reset.alef;
+	assign cpu_a       = cpu_a_out;
+	assign d           = cpu_drv_d ? cpu_d_out : 'z;
+	assign din         = d;
+	assign cpu_out_r7  = (cpu_raw_rd || cpu_raw_wr) && !cpu_in_r4 && !cpu_in_r5;
+	assign clk_stable  = cpu_in_t15;
+	assign cpu_clk_ena = clk_ena;
+	assign reset       = cpu_in_t12;
+	assign areset      = cpu_in_t13;
 
 	logic        cpu_drv_d;
 	logic [7:0]  cpu_d_out;
@@ -358,10 +365,8 @@ module dmg_cpu_b_gameboy;
 			nrst = 0;
 
 			clk   = 0;
-			reset = 1;
 
 			cpu_out_t1   = 0;
-			cpu_clk_ena  = 0;
 			cpu_xo_ena   = 1;
 
 			cyc(64);
@@ -390,16 +395,7 @@ module dmg_cpu_b_gameboy;
 				end
 
 				begin
-					/* CPU needs to wait for cpu_in_t15 before enabling cpu_clk_ena, otherwise
-					 * peripheral resets won't deassert. */
-					while (!cpu_clk_ena) @(posedge cpu_clkin_t10)
-						if (cpu_in_t15)
-							cpu_clk_ena = 1;
-
-					@(posedge cpu_clkin_t7);
-					reset = 0;
-					// TODO: reset CPU based on cpu_in_t12 or cpu_in_t13
-
+					@(negedge reset);
 					$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
 					$display("System reset done -- will simulate %s seconds", time_str);
 					prev_time_str = time_str;

@@ -2,12 +2,14 @@
 
 module sm83_int(
 		input  logic       clk, reset,
+		input  logic       t1, t2, t3, t4,
 		output logic       in_int,
 		output logic [7:0] int_vector,
 		output logic       ime,
 
 		input  logic [7:0] irq,
 		output logic [7:0] iack,
+		output logic       wake,
 
 		input  logic [7:0] iena_din,
 		output logic [7:0] iena_dout,
@@ -16,7 +18,7 @@ module sm83_int(
 		input  logic       ctl_accept_int, ctl_ime_we, ctl_ime_bit, ctl_ack_int
 	);
 
-	logic [7:0] reg_iena, irq_buffered;
+	logic [7:0] reg_iena, irq_latched, irq_buffered, wake_latched;
 
 	always_ff @(posedge clk) begin
 		if (reset)
@@ -41,12 +43,18 @@ module sm83_int(
 			reg_iena <= iena_din;
 	end
 
+	/* Synchronize interrupt flags for interrupt entry. */
+	always_latch if (t2) irq_latched <= irq;
 	always_ff @(posedge clk) begin
 		if (reset)
 			irq_buffered <= 0;
-		else
-			irq_buffered <= irq & reg_iena;
+		else if (t3)
+			irq_buffered <= irq_latched & reg_iena;
 	end
+
+	/* Synchronize interrupt flags for wakeup. */
+	always_latch if (t4) wake_latched <= irq;
+	assign wake = t1 && |(wake_latched & reg_iena);
 
 	always_comb priority casez (irq_buffered)
 		'b ???????1: int_vector = 'h40;
