@@ -8,10 +8,11 @@ module sm83_control(
 
 		input  logic [7:0] opcode,
 		input  logic       bank_cb,
+		input  logic       intr_entry,
 
 		input  logic       alu_fl_neg, alu_cond_result,
 
-		input  logic       in_int, ime,
+		input  logic       clk_ena, int_pending,
 
 		output logic       ctl_mread, ctl_mwrite,
 		output logic       ctl_reg_gp2h_oe, ctl_reg_gp2l_oe,
@@ -30,7 +31,7 @@ module sm83_control(
 		output logic       ctl_db_c2l_mask543,
 		output logic       ctl_io_data_oe, ctl_io_data_we,
 		output logic       ctl_io_adr_we,
-		output logic       ctl_zero_data_oe, ctl_ff_data_oe,
+		output logic       ctl_zero_data_oe,
 		output logic       ctl_ir_we,
 		output logic       ctl_ir_bank_we,
 		output logic       ctl_ir_bank_cb_set,
@@ -50,10 +51,9 @@ module sm83_control(
 		output logic       ctl_alu_fl_neg_we, ctl_alu_fl_neg_set, ctl_alu_fl_neg_clr,
 		output logic       ctl_alu_fl_carry_we, ctl_alu_fl_carry_set, ctl_alu_fl_carry_cpl,
 		output logic       ctl_alu_fl_c2_we, ctl_alu_fl_c2_sh, ctl_alu_fl_c2_daa, ctl_alu_fl_sel_c2,
-		output logic       ctl_accept_int, ctl_ime_we, ctl_ime_bit, ctl_ack_int, ctl_int_vector_oe
+		output logic       ctl_update_int, ctl_ime_we, ctl_ime_bit, ctl_ack_int, ctl_int_vector_oe,
+		output logic       ctl_halt_set
 	);
-
-	logic ctl_halt_set;
 
 	sm83_sequencer seq(.*);
 	sm83_decode    dec(.*);
@@ -61,9 +61,9 @@ module sm83_control(
 	logic set_m1;
 	logic no_pc;
 	logic no_int;
+	logic no_inc;
 
 	logic in_rst;
-	logic in_halt;
 	logic in_alu, new_in_alu;
 
 	logic add_r;      /* ADD/ADC/SUB/SBC/AND/XOR/OR/CP r/(HL) */
@@ -188,7 +188,7 @@ module sm83_control(
 	logic new_db_c2l_mask543;
 	logic new_io_data_oe, new_io_data_we;
 	logic new_io_adr_we;
-	logic new_zero_data_oe, new_ff_data_oe;
+	logic new_zero_data_oe;
 	logic new_ir_we;
 	logic new_ir_bank_we;
 	logic new_ir_bank_cb_set;
@@ -208,7 +208,7 @@ module sm83_control(
 	logic new_alu_fl_neg_we, new_alu_fl_neg_set, new_alu_fl_neg_clr;
 	logic new_alu_fl_carry_we, new_alu_fl_carry_set, new_alu_fl_carry_cpl;
 	logic new_alu_fl_c2_we, new_alu_fl_c2_sh, new_alu_fl_c2_daa, new_alu_fl_sel_c2;
-	logic new_accept_int, new_ime_we, new_ime_bit, new_ack_int, new_int_vector_oe;
+	logic new_update_int, new_ime_we, new_ime_bit, new_ack_int, new_int_vector_oe;
 	logic new_halt_set;
 
 	/* Trigger read memory cycle */
@@ -335,7 +335,6 @@ module sm83_control(
 	/* Write incremented address latch to PC */
 	task automatic pc_from_adr_inc;
 		inc_al(INC);
-		new_inc_cy     = !((in_int && ime) || in_halt || in_rst);
 		new_reg_pc_sel = 1;
 		write_sys(HIGH|LOW);
 	endtask
@@ -594,6 +593,7 @@ module sm83_control(
 		set_m1 = 0;
 		no_pc  = 0;
 		no_int = 0;
+		no_inc = 0;
 
 		new_in_alu = 0;
 
@@ -632,7 +632,6 @@ module sm83_control(
 		new_io_data_we       = 0;
 		new_io_adr_we        = 0;
 		new_zero_data_oe     = 0;
-		new_ff_data_oe       = 0;
 		new_ir_we            = 0;
 		new_ir_bank_we       = 0;
 		new_ir_bank_cb_set   = 0;
@@ -674,14 +673,14 @@ module sm83_control(
 		new_alu_fl_c2_sh     = 0;
 		new_alu_fl_c2_daa    = 0;
 		new_alu_fl_sel_c2    = 0;
-		new_accept_int       = 0;
+		new_update_int       = 0;
 		new_ime_we           = 0;
 		new_ime_bit          = 0;
 		new_ack_int          = 0;
 		new_int_vector_oe    = 0;
 		new_halt_set         = 0;
 
-		unique0 case (1)
+		if (clk_ena) unique0 case (1)
 			/* NOP -- No operation */
 			nop:
 				last_mcyc(m1);
@@ -2604,7 +2603,7 @@ module sm83_control(
 				endcase
 			end
 
-			/* RST t -- Push PC and jump to vector t (also used for interrupt entry) */
+			/* RST t -- Push PC and jump to vector t */
 			rst_t: begin
 				write_mcyc_after(m2); /* Write PC high byte to address in SP-1 during M3 */
 				write_mcyc_after(m3); /* Write PC low byte to address in SP-2 during M4 */
@@ -2648,22 +2647,6 @@ module sm83_control(
 
 					/* Read low byte of PC into data latch */
 					m4 && t1: pc_to_dl(LOW);
-
-					m4 && t3: if (in_int && ime) begin
-						/* Use interrupt number as low byte of destination address */
-						new_int_vector_oe = 1;
-						new_db_c2l_oe     = 1;
-
-						/* Write destination address low byte into Z */
-						new_reg_l2gp_oe = 1;
-						write_wz(LOW);
-
-						/* Acknowledge interrupt */
-						new_ack_int = 1;
-
-						/* Reset IME register */
-						new_ime_we = 1;
-					end
 
 					m4 && t4: begin
 						/* Apply WZ to address pins instead of PC */
@@ -2762,10 +2745,11 @@ module sm83_control(
 				last_mcyc(m1);
 
 				unique0 case (1)
-					m1 && t3: new_halt_set = 1;
+					m1 && t3: begin
+						new_halt_set = !int_pending;
+						no_inc       = 1;
+					end
 				endcase
-
-				// TODO: Check for HALT bug
 			end
 
 			/* STOP -- Halt system and wake on interrupt */
@@ -2804,7 +2788,73 @@ module sm83_control(
 					m1 && t3: new_ir_bank_cb_set = 1;
 				endcase
 			end
-		endcase
+
+			/* Interrupt Entry */
+			intr_entry: begin
+				write_mcyc_after(m3); /* Write PC high byte to address in SP-1 during M3 */
+				write_mcyc_after(m4); /* Write PC low byte to address in SP-2 during M4 */
+				last_mcyc(m5);
+
+				unique0 case (1)
+					/* Decrement PC so that the fetch of the instruction that was just aborted by the interrupt
+					   will be restarted after the interrupt returned. */
+					m2 && t3: begin
+						inc_al(DEC);
+						new_reg_pc_sel = 1;
+						write_sys(HIGH|LOW);
+					end
+
+					/* Apply SP to address pins for decrement */
+					m2 && t4: sp_to_adr;
+
+					/* Decrement SP */
+					m3 && t3: sp_from_adr_inc(DEC);
+
+					/* Apply address latch to address pins for write cycle */
+					m3 && t4: new_io_adr_we = 1;
+
+					/* Read high byte of PC into data latch */
+					m4 && t1: pc_to_dl(HIGH);
+
+					/* Decrement SP */
+					m4 && t3: sp_from_adr_inc(DEC);
+
+					/* Apply address latch to address pins for write cycle */
+					m4 && t4: new_io_adr_we = 1;
+
+					/* Read low byte of PC into data latch */
+					m5 && t1: pc_to_dl(LOW);
+
+					m5 && t3: begin
+						/* Use ALU operand A to output $00 as high byte of destination address */
+						new_alu_op_a_zero = 1;
+						new_alu_op_a_oe   = 1;
+						new_alu_oe        = 1;
+
+						/* Use interrupt number as low byte of destination address */
+						new_int_vector_oe = 1;
+						new_db_c2l_oe     = 1;
+
+						/* Write destination address into WZ */
+						new_reg_l2gp_oe = 1;
+						new_reg_h2gp_oe = 1;
+						write_wz(HIGH|LOW);
+
+						/* Acknowledge interrupt */
+						new_ack_int = 1;
+
+						/* Reset IME register */
+						new_ime_we = 1;
+					end
+
+					m5 && t4: begin
+						/* Apply WZ to address pins instead of PC */
+						wz_to_adr;
+						no_pc = 1;
+					end
+				endcase
+			end
+		endcase else last_mcyc(m1);
 
 		/* Control ALU operation for 8 bit arithmetical and logical instructions */
 		unique0 case (1)
@@ -2891,12 +2941,12 @@ module sm83_control(
 
 		/* Instruction fetch */
 		unique0 case (1)
-			/* Allow interrupts */
-			m1 && t2: new_accept_int = !no_int;
-
 			m1 && t3: begin
 				/* Increment PC */
 				pc_from_adr_inc;
+
+				/* Allow interrupts */
+				new_update_int = !no_int;
 
 				/* Select opcode bank for next instruction */
 				new_ir_bank_we = 1;
@@ -2904,10 +2954,7 @@ module sm83_control(
 
 			m1 && t4: begin
 				/* Override data (opcode) with zero when halted or under reset; executing a no-op effectively */
-				new_zero_data_oe = in_halt || in_rst;
-
-				/* Override data (opcode) with "RST 0xff" instruction for interrupt entry */
-				new_ff_data_oe = !new_zero_data_oe && in_int && ime;
+				new_zero_data_oe = !clk_ena || in_rst;
 
 				/* Write fetched opcode to instruction register */
 				new_ir_we = 1;
@@ -2916,6 +2963,8 @@ module sm83_control(
 
 		/* Evaluate ALU flags for conditional instructions; F must be loaded into ALU on M1 T4 */
 		if (m2 && t1) new_alu_cond_we = 1;
+
+		new_inc_cy &= !no_inc && !in_rst && clk_ena;
 
 		in_alu  = new_in_alu;
 		reg_sel = new_reg_sel;
@@ -2953,7 +3002,6 @@ module sm83_control(
 		ctl_io_data_we       = new_io_data_we;
 		ctl_io_adr_we        = new_io_adr_we;
 		ctl_zero_data_oe     = new_zero_data_oe;
-		ctl_ff_data_oe       = new_ff_data_oe;
 		ctl_ir_we            = new_ir_we;
 		ctl_ir_bank_we       = new_ir_bank_we;
 		ctl_ir_bank_cb_set   = new_ir_bank_cb_set;
@@ -2995,7 +3043,7 @@ module sm83_control(
 		ctl_alu_fl_c2_sh     = new_alu_fl_c2_sh;
 		ctl_alu_fl_c2_daa    = new_alu_fl_c2_daa;
 		ctl_alu_fl_sel_c2    = new_alu_fl_sel_c2;
-		ctl_accept_int       = new_accept_int;
+		ctl_update_int       = new_update_int;
 		ctl_ime_we           = new_ime_we;
 		ctl_ime_bit          = new_ime_bit;
 		ctl_ack_int          = new_ack_int;
@@ -3008,13 +3056,6 @@ module sm83_control(
 			in_rst <= 1; /* prevent PC increment and read zero opcode (no-op) during first M cycle */
 		else if (set_m1)
 			in_rst <= 0;
-	end
-
-	always_ff @(posedge clk) begin
-		if (reset || in_int)
-			in_halt <= 0;
-		else if (ctl_halt_set)
-			in_halt <= 1;
 	end
 
 endmodule

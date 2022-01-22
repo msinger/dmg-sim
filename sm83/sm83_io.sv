@@ -27,8 +27,7 @@ module sm83_io(
 		input  logic        ctl_ir_we,
 		input  logic        ctl_ir_bank_we,
 		input  logic        ctl_ir_bank_cb_set,
-		input  logic        ctl_zero_data_oe,
-		input  logic        ctl_ff_data_oe
+		input  logic        ctl_zero_data_oe
 	);
 
 	typedef logic [7:0] word_t;
@@ -68,9 +67,8 @@ module sm83_io(
 
 	word_t data, data_t4;
 	always_ff @(posedge clk) priority case (1)
-		ctl_zero_data_oe || ctl_ff_data_oe || dl_we: unique case (1)
+		ctl_zero_data_oe || dl_we: unique case (1)
 			ctl_zero_data_oe: data <= 0;
-			ctl_ff_data_oe:   data <= '1;
 			dl_we:            data <= din;
 		endcase
 		rd && t4:             data <= iena_sel ? iena : ext_din;
@@ -78,7 +76,6 @@ module sm83_io(
 	endcase
 	always_comb priority case (1)
 		ctl_zero_data_oe: data_t4 = 0;
-		ctl_ff_data_oe:   data_t4 = '1;
 		default:          data_t4 = iena_sel ? iena : ext_din;
 	endcase
 	assign dout = rd && t4 ? data_t4 : data;

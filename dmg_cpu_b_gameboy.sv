@@ -422,5 +422,38 @@ module dmg_cpu_b_gameboy;
 		end
 	endprogram
 
+	/* HALT instruction test code */
+	/*
+	initial irq = 0;
+	localparam int ser_int_ht = 4;  // interrupt before halt  (iff IME=0, instruction after halt executes two times)
+	//localparam int ser_int_ht = 5;  // no unclocked cycles    (iff IME=0, instruction after halt executes two times; otherwise, iff IME=1, HALT executes two times)
+	//localparam int ser_int_ht = 12; // no unclocked cycles    (iff IME=0, instruction after halt executes two times; otherwise, iff IME=1, HALT executes two times)
+	//localparam int ser_int_ht = 13; // one unclocked cycle
+	//localparam int ser_int_ht = 24; // one unclocked cycle
+	//localparam int ser_int_ht = 25; // two unclocked cycles
+	always @(posedge clk) begin
+		int ht;
+		irq[3] = 0;
+		if (adr == 'hff02 && cpu_raw_wr && din == 'h80 && cpu.t4) begin
+			ht = -14;
+			begin :ser_int_wait
+				forever begin
+					@(posedge clk);
+					ht++;
+					if (ht == ser_int_ht)
+						disable ser_int_wait;
+					@(negedge clk);
+					ht++;
+					if (ht == ser_int_ht)
+						disable ser_int_wait;
+				end
+			end
+			#61ns;
+			irq[3] = 1;
+			@(posedge iack[3]);
+		end
+	end
+	*/
+
 endmodule
 

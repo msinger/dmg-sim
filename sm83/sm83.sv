@@ -41,6 +41,7 @@ module sm83(
 
 	word_t opcode;
 	logic  bank_cb;
+	logic  intr_entry;
 
 	sm83_io io(
 		.clk, .reset,
@@ -60,7 +61,7 @@ module sm83(
 		.iena(iena_dout), .iena_sel,
 
 		.ctl_ir_we, .ctl_ir_bank_we, .ctl_ir_bank_cb_set,
-		.ctl_zero_data_oe, .ctl_ff_data_oe
+		.ctl_zero_data_oe
 	);
 
 	logic alu_shift_dbh, alu_shift_dbl;
@@ -181,7 +182,7 @@ module sm83(
 	logic ctl_db_c2l_mask543;
 	logic ctl_io_data_oe, ctl_io_data_we;
 	logic ctl_io_adr_we;
-	logic ctl_zero_data_oe, ctl_ff_data_oe;
+	logic ctl_zero_data_oe;
 	logic ctl_ir_we;
 	logic ctl_ir_bank_we;
 	logic ctl_ir_bank_cb_set;
@@ -201,10 +202,11 @@ module sm83(
 	logic ctl_alu_fl_neg_we, ctl_alu_fl_neg_set, ctl_alu_fl_neg_clr;
 	logic ctl_alu_fl_carry_we, ctl_alu_fl_carry_set, ctl_alu_fl_carry_cpl;
 	logic ctl_alu_fl_c2_we, ctl_alu_fl_c2_sh, ctl_alu_fl_c2_daa, ctl_alu_fl_sel_c2;
-	logic ctl_accept_int, ctl_ime_we, ctl_ime_bit, ctl_ack_int, ctl_int_vector_oe;
+	logic ctl_update_int, ctl_ime_we, ctl_ime_bit, ctl_ack_int, ctl_int_vector_oe;
+	logic ctl_halt_set;
 
-	logic       in_int, ime, iena_oe, iena_we, iena_sel, wake;
-	word_t      iena_dout, int_vector;
+	logic  iena_oe, iena_we, iena_sel, wake, int_pending;
+	word_t iena_dout, int_vector;
 	assign iena_sel = &adr;
 	assign iena_we  = iena_sel && wr && t3; /* Write IE register at T3 or T4: This makes Mooneye GB's acceptance/interrupts/ie_push test pass. */
 
@@ -317,10 +319,18 @@ module sm83(
 	end
 
 	always_ff @(negedge clk, posedge areset) begin
-		if (areset)
+		if (areset || (halt_clk && t1))
 			clk_ena <= 0;
 		else if (clk_stable || wake)
 			clk_ena <= 1;
+	end
+
+	logic halt_clk;
+	always_ff @(posedge clk) begin
+		if (reset || t1)
+			halt_clk <= 0;
+		else if (ctl_halt_set)
+			halt_clk <= 1;
 	end
 
 endmodule
