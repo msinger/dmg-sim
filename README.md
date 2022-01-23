@@ -106,9 +106,10 @@ Tests
 
 Results of Blargg's tests:
 
-| Test       | Result |
-| ---------- | ------ |
-| cpu_instrs | PASS   |
+| Test         | Result |
+| ------------ | ------ |
+| cpu_instrs   | PASS   |
+| instr_timing | PASS   |
 
 Results of Mooneye GB tests:
 
@@ -117,6 +118,21 @@ Results of Mooneye GB tests:
 | acceptance/boot_div-dmgABCmgb         | PASS   |
 | acceptance/boot_hwio-dmgABCmgb        | PASS   |
 | acceptance/boot_regs-dmgABC           | PASS   |
+| acceptance/di_timing-GS               | FAIL   |
+| acceptance/div_timing                 | PASS   |
+| acceptance/ei_sequence                | PASS   |
+| acceptance/ei_timing                  | PASS   |
+| acceptance/halt_ime0_ei               | PASS   |
+| acceptance/halt_ime0_nointr_timing    | PASS   |
+| acceptance/halt_ime1_timing           | PASS   |
+| acceptance/halt_ime1_timing2-GS       | FAIL   |
+| acceptance/if_ie_registers            | PASS   |
+| acceptance/intr_timing                | PASS   |
+| acceptance/rapid_di_ei                | PASS   |
+| acceptance/bits/mem_oam               | PASS   |
+| acceptance/bits/reg_f                 | PASS   |
+| acceptance/bits/unused_hwio-GS        | PASS   |
+| acceptance/instr/daa                  | PASS   |
 | acceptance/interrupts/ie_push         | PASS   |
 | acceptance/timer/div_write            | PASS   |
 | acceptance/timer/rapid_toggle         | PASS   |

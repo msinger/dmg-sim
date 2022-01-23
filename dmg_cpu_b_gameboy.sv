@@ -422,15 +422,22 @@ module dmg_cpu_b_gameboy;
 		end
 	endprogram
 
-	/* HALT instruction test code */
+	/* HALT/EI/DI instruction test code */
 	/*
 	initial irq = 0;
-	localparam int ser_int_ht = 4;  // interrupt before halt  (iff IME=0, instruction after halt executes two times)
+	// For halt.gb:
+	//localparam int ser_int_ht = 4;  // interrupt before halt  (iff IME=0, instruction after halt executes two times)
 	//localparam int ser_int_ht = 5;  // no unclocked cycles    (iff IME=0, instruction after halt executes two times; otherwise, iff IME=1, HALT executes two times)
 	//localparam int ser_int_ht = 12; // no unclocked cycles    (iff IME=0, instruction after halt executes two times; otherwise, iff IME=1, HALT executes two times)
 	//localparam int ser_int_ht = 13; // one unclocked cycle
 	//localparam int ser_int_ht = 24; // one unclocked cycle
 	//localparam int ser_int_ht = 25; // two unclocked cycles
+	// For eidi.gb:
+	//localparam int ser_int_ht = 4;  // interrupt before EI; one NOP executed and one more fetched
+	//localparam int ser_int_ht = 20; // interrupt after EI; still one NOP executed and one more fetched
+	//localparam int ser_int_ht = 21; // interrupt after EI; two NOPs executed
+	//localparam int ser_int_ht = 4;  // interrupt before DI; DI aborted after fetch
+	//localparam int ser_int_ht = 5;  // interrupt blocked by DI
 	always @(posedge clk) begin
 		int ht;
 		irq[3] = 0;

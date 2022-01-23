@@ -2765,11 +2765,11 @@ module sm83_control(
 				last_mcyc(m1);
 
 				unique0 case (1)
-					/* Don't allow interrupts during DI/EI instruction */
-					m1 && t2: no_int = 1;
-
-					/* Write IME register */
 					m1 && t3: begin
+						/* Don't allow interrupts during DI instruction */
+						no_int = !opcode[3];
+
+						/* Write IME register */
 						new_ime_we  = 1;
 						new_ime_bit = opcode[3];
 					end
@@ -2781,11 +2781,13 @@ module sm83_control(
 				last_mcyc(m1);
 
 				unique0 case (1)
-					/* Don't allow interrupts between prefix and actual instruction */
-					m1 && t2: no_int = 1;
+					m1 && t3: begin
+						/* Don't allow interrupts between prefix and actual instruction */
+						no_int = 1;
 
-					/* Select CB bank for next instruction */
-					m1 && t3: new_ir_bank_cb_set = 1;
+						/* Select CB bank for next instruction */
+						new_ir_bank_cb_set = 1;
+					end
 				endcase
 			end
 
