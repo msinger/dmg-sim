@@ -112,7 +112,7 @@ module ch3_regs(
 	dffr_a dffr_jemo(!huda, kopy, d[0], jemo);
 	dffr_a dffr_jacy(!huda, kopy, d[2], jacy);
 	dffr_a dffr_jety(!huda, kopy, d[1], jety);
-	assign #T_NAND huda = !(ff1e && apu_wr);
+	assign #T_AND  huda = ff1e && apu_wr;
 	assign #T_INV  juzo = !huda;
 	assign #T_INV  kopy = !apu_reset;
 	assign ff1e_d0 = jemo;
