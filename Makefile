@@ -40,12 +40,12 @@ DMG_CPU_B_CELLS = \
 dmg_cpu_b/cells/timing_param.sv \
 dmg_cpu_b/cells/nor_srlatch.sv \
 dmg_cpu_b/cells/nand_srlatch.sv \
-dmg_cpu_b/cells/dlatch.sv \
-dmg_cpu_b/cells/dff.sv \
+dmg_cpu_b/cells/dlatch_a.sv \
+dmg_cpu_b/cells/dlatch_b.sv \
+dmg_cpu_b/cells/drlatch.sv \
 dmg_cpu_b/cells/dffr_a.sv \
 dmg_cpu_b/cells/dffr_b.sv \
 dmg_cpu_b/cells/dffr_bp.sv \
-dmg_cpu_b/cells/dffr_c.sv \
 dmg_cpu_b/cells/dffsr.sv \
 dmg_cpu_b/cells/tffd.sv
 

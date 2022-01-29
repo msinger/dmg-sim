@@ -1,6 +1,6 @@
 `default_nettype none
 
-module dlatch(
+module dlatch_b(
 		input  logic c, d,
 		output logic q
 	);
@@ -14,6 +14,6 @@ module dlatch(
 			l = d;
 	end
 
-	assign #T_DL q = l;
+	assign #T_DL_B q = l;
 
 endmodule

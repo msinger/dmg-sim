@@ -58,14 +58,14 @@ module dma(
 
 	logic nafa, nygy, para, pyne, pula, nydo, poku, maru, poly, pare, rema, rofo, raly, pane, resu, nuvy;
 	logic evax, exyf, eraf, duve, fusy;
-	dff dff_nafa(loru, d[0], nafa);
-	dff dff_nygy(loru, d[4], nygy);
-	dff dff_para(loru, d[2], para);
-	dff dff_pyne(loru, d[1], pyne);
-	dff dff_pula(loru, d[5], pula);
-	dff dff_nydo(loru, d[3], nydo);
-	dff dff_poku(loru, d[6], poku);
-	dff dff_maru(loru, d[7], maru);
+	dlatch_a latch_nafa(!loru, d[0], nafa);
+	dlatch_a latch_nygy(!loru, d[4], nygy);
+	dlatch_a latch_para(!loru, d[2], para);
+	dlatch_a latch_pyne(!loru, d[1], pyne);
+	dlatch_a latch_pula(!loru, d[5], pula);
+	dlatch_a latch_nydo(!loru, d[3], nydo);
+	dlatch_a latch_poku(!loru, d[6], poku);
+	dlatch_a latch_maru(!loru, d[7], maru);
 	assign #T_TRI  poly = pusy ? !(!nafa) : 'z;
 	assign #T_TRI  pare = pusy ? !(!nygy) : 'z;
 	assign #T_TRI  rema = pusy ? !(!para) : 'z;

@@ -41,13 +41,13 @@ module ext_cpu_busses(
 
 	logic tova, nyre, lonu, lobu, lumy, pate, lysa, luno, pege, muce, mojy, male, pamy, masu, mano;
 	logic pahy, puhe, leva, labe, loso, luce, lyny, lepy, rore, roxu, meny, mune, mego, myny, net01;
-	dlatch latch_nyre(mate, a[14], nyre);
-	dlatch latch_lonu(mate, a[13], lonu);
-	dlatch latch_lobu(mate, a[12], lobu);
-	dlatch latch_lumy(mate, a[11], lumy);
-	dlatch latch_pate(mate, a[10], pate);
-	dlatch latch_lysa(mate, a[9],  lysa);
-	dlatch latch_luno(mate, a[8],  luno);
+	dlatch_b latch_nyre(mate, a[14], nyre);
+	dlatch_b latch_lonu(mate, a[13], lonu);
+	dlatch_b latch_lobu(mate, a[12], lobu);
+	dlatch_b latch_lumy(mate, a[11], lumy);
+	dlatch_b latch_pate(mate, a[10], pate);
+	dlatch_b latch_lysa(mate, a[9],  lysa);
+	dlatch_b latch_luno(mate, a[8],  luno);
 	assign #T_INV  tova = !t1_nt2;
 	assign #T_MUX  pege = dma_addr_ext ? dma_a[14] : nyre;
 	assign #T_MUX  muce = dma_addr_ext ? dma_a[13] : lonu;
@@ -88,14 +88,14 @@ module ext_cpu_busses(
 
 	logic arym, aros, atev, avys, aret, alyr, apur, alor, asur, atyr, atov, atem, amer, apok, atol, amet;
 	logic colo, defy, cyka, cepu, ajav, badu, bevo, byla, bola, boty, bajo, boku, cotu, caba, koty, kupo;
-	dlatch latch_arym(mate, a[7], arym);
-	dlatch latch_aros(mate, a[6], aros);
-	dlatch latch_atev(mate, a[5], atev);
-	dlatch latch_avys(mate, a[4], avys);
-	dlatch latch_aret(mate, a[3], aret);
-	dlatch latch_alyr(mate, a[2], alyr);
-	dlatch latch_apur(mate, a[1], apur);
-	dlatch latch_alor(mate, a[0], alor);
+	dlatch_b latch_arym(mate, a[7], arym);
+	dlatch_b latch_aros(mate, a[6], aros);
+	dlatch_b latch_atev(mate, a[5], atev);
+	dlatch_b latch_avys(mate, a[4], avys);
+	dlatch_b latch_aret(mate, a[3], aret);
+	dlatch_b latch_alyr(mate, a[2], alyr);
+	dlatch_b latch_apur(mate, a[1], apur);
+	dlatch_b latch_alor(mate, a[0], alor);
 	assign #T_MUX  asur = dma_addr_ext ? dma_a[7] : arym;
 	assign #T_MUX  atyr = dma_addr_ext ? dma_a[6] : aros;
 	assign #T_MUX  atov = dma_addr_ext ? dma_a[5] : atev;
@@ -239,14 +239,14 @@ module ext_cpu_busses(
 
 	logic lavo, sody, selo, rony, soma, raxy, rupa, sago, sazy;
 	logic tepe, tavo, ruvo, ryma, ryko, sevu, safo, taju;
-	dlatch latch_sody(lavo, d_in[4], sody);
-	dlatch latch_selo(lavo, d_in[3], selo);
-	dlatch latch_rony(lavo, d_in[1], rony);
-	dlatch latch_soma(lavo, d_in[0], soma);
-	dlatch latch_raxy(lavo, d_in[2], raxy);
-	dlatch latch_rupa(lavo, d_in[6], rupa);
-	dlatch latch_sago(lavo, d_in[5], sago);
-	dlatch latch_sazy(lavo, d_in[7], sazy);
+	dlatch_b latch_sody(lavo, d_in[4], sody);
+	dlatch_b latch_selo(lavo, d_in[3], selo);
+	dlatch_b latch_rony(lavo, d_in[1], rony);
+	dlatch_b latch_soma(lavo, d_in[0], soma);
+	dlatch_b latch_raxy(lavo, d_in[2], raxy);
+	dlatch_b latch_rupa(lavo, d_in[6], rupa);
+	dlatch_b latch_sago(lavo, d_in[5], sago);
+	dlatch_b latch_sazy(lavo, d_in[7], sazy);
 	assign #T_NAND lavo = !(cpu_raw_rd && texo && from_cpu5);
 	assign #T_TRI  tepe = !lavo ? !sody : 'z;
 	assign #T_TRI  tavo = !lavo ? !selo : 'z;

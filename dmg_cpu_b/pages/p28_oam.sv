@@ -46,8 +46,8 @@ module oam(
 	logic wuzu, wowa, axer, aveb, asox, amuh, cetu, cofo;
 	logic aryn, azoz, acot, agyk, cuje, buse, ater, anum;
 	logic oam_addr_nrender, oam_addr_nparse, oam_addr_ncpu;
-	dffr_a dffr_xecy(!waru, nreset7, d[7], xecy);
 	dffr_bp dffr_xuva(xyny, xare, xecy, xuva);
+	drlatch latch_xecy(waru, nreset7, d[7], xecy);
 	nor_srlatch latch_besu(catu, asen, besu,);
 	nor_srlatch latch_wuje(xyny, xuto, wuje,);
 	assign #T_OR   asen = reset_video || avap;

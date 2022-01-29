@@ -21,14 +21,14 @@ module ch1_regs(
 	logic gago, hocu, gaxu, kagy, hato, haxe, hamy, hafu, kygy;
 	logic jopu, jena, jaxo, jaty, jafy, jusa, juzy, joma;
 	logic jyse, heve, hewa, howu, hono, jyne, jaca, joku;
-	dffr_a dffr_jopu(!gaxu, hato, d[7], jopu);
-	dffr_a dffr_jena(!gaxu, hato, d[6], jena);
-	dffr_a dffr_jaxo(!gaxu, hato, d[5], jaxo);
-	dffr_a dffr_jaty(!gaxu, hato, d[4], jaty);
-	dffr_a dffr_jafy(!gaxu, hato, d[3], jafy);
-	dffr_a dffr_jusa(!hafu, hato, d[0], jusa);
-	dffr_a dffr_juzy(!hafu, hato, d[1], juzy);
-	dffr_a dffr_joma(!hafu, hato, d[2], joma);
+	drlatch latch_jopu(gaxu, hato, d[7], jopu);
+	drlatch latch_jena(gaxu, hato, d[6], jena);
+	drlatch latch_jaxo(gaxu, hato, d[5], jaxo);
+	drlatch latch_jaty(gaxu, hato, d[4], jaty);
+	drlatch latch_jafy(gaxu, hato, d[3], jafy);
+	drlatch latch_jusa(hafu, hato, d[0], jusa);
+	drlatch latch_juzy(hafu, hato, d[1], juzy);
+	drlatch latch_joma(hafu, hato, d[2], joma);
 	assign #T_INV  gago = !ff12;
 	assign #T_OR   hocu = gago || ncpu_rd;
 	assign #T_AND  gaxu = ff12 && apu_wr;
@@ -68,7 +68,7 @@ module ch1_regs(
 	assign d[2] = joku;
 
 	logic buda, bale, bage, camy, boko, bytu;
-	dffr_a dffr_boko(bage, camy, d[6], boko);
+	drlatch latch_boko(!bage, camy, d[6], boko);
 	assign #T_INV  buda = !ncpu_rd;
 	assign #T_NAND bale = !(buda && ff14);
 	assign #T_NAND bage = !(anuj && ff14);
@@ -132,13 +132,13 @@ module ch1_regs(
 
 	logic cenu, buze, atyn, asop;
 	logic bany, anaz, botu, avaf, arax, adek, bana, amyd, azyp, awos, afox, atax, avek, akux;
-	dffr_a dffr_bany(!cenu, napu_reset, d[0], bany);
-	dffr_a dffr_anaz(!cenu, napu_reset, d[2], anaz);
-	dffr_a dffr_botu(!cenu, napu_reset, d[6], botu);
-	dffr_a dffr_avaf(!cenu, napu_reset, d[3], avaf);
-	dffr_a dffr_arax(!cenu, napu_reset, d[1], arax);
-	dffr_a dffr_adek(!cenu, napu_reset, d[4], adek);
-	dffr_a dffr_bana(!cenu, napu_reset, d[5], bana);
+	drlatch latch_bany(cenu, napu_reset, d[0], bany);
+	drlatch latch_anaz(cenu, napu_reset, d[2], anaz);
+	drlatch latch_botu(cenu, napu_reset, d[6], botu);
+	drlatch latch_avaf(cenu, napu_reset, d[3], avaf);
+	drlatch latch_arax(cenu, napu_reset, d[1], arax);
+	drlatch latch_adek(cenu, napu_reset, d[4], adek);
+	drlatch latch_bana(cenu, napu_reset, d[5], bana);
 	assign #T_AND  cenu = apu_wr && ff10;
 	assign #T_INV  buze = !ff10;
 	assign #T_NOR  atyn = !(ncpu_rd || buze);
@@ -166,8 +166,8 @@ module ch1_regs(
 	assign d[5] = akux;
 
 	logic buwa, bexu, covu, dafo, cena, dyca, bowo, cuda;
-	dffr_a dffr_cena(!covu, napu_reset6, d[6], cena);
-	dffr_a dffr_dyca(!covu, napu_reset6, d[7], dyca);
+	drlatch latch_cena(covu, napu_reset6, d[6], cena);
+	drlatch latch_dyca(covu, napu_reset6, d[7], dyca);
 	assign #T_INV  buwa = !ncpu_rd;
 	assign #T_NAND bexu = !(buwa && ff11);
 	assign #T_AND  covu = apu_wr && ff11;

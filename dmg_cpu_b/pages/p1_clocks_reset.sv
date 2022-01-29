@@ -103,10 +103,10 @@ module clocks_reset(
 
 	logic adyk, afur, alef, apuk, ucob, uvyt, nclkin_a;
 	logic adar, atyp, afep, arov, ajax, bugo, arev, apov, agut, awod, bate, basu;
-	dffr_a dffr_adyk(atal_4mhz,  t1t2_nrst, apuk,  adyk);
-	dffr_a dffr_afur(!atal_4mhz, t1t2_nrst, !adyk, afur);
-	dffr_a dffr_alef(atal_4mhz,  t1t2_nrst, afur,  alef);
-	dffr_a dffr_apuk(!atal_4mhz, t1t2_nrst, alef,  apuk);
+	drlatch latch_adyk(!atal_4mhz, t1t2_nrst, apuk,  adyk);
+	drlatch latch_afur(atal_4mhz,  t1t2_nrst, !adyk, afur);
+	drlatch latch_alef(!atal_4mhz, t1t2_nrst, afur,  alef);
+	drlatch latch_apuk(atal_4mhz,  t1t2_nrst, alef,  apuk);
 	assign #T_INV  abol = !clk_from_cpu;
 	assign #T_INV  ucob = !clkin_a;
 	assign #T_INV  uvyt = !nphi_out;

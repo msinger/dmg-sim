@@ -11,14 +11,14 @@ module palettes(
 
 	logic vuso, vely, tepy, tepo, mena, moru, maxy, nusy, mogy, muke, pylu, pavo;
 	logic lary, lyka, lobe, paba, lody, lace, redo, raro;
-	dff dff_mena(tepo, d[7], mena);
-	dff dff_moru(tepo, d[5], moru);
-	dff dff_maxy(tepo, d[3], maxy);
-	dff dff_nusy(tepo, d[1], nusy);
-	dff dff_mogy(tepo, d[6], mogy);
-	dff dff_muke(tepo, d[4], muke);
-	dff dff_pylu(tepo, d[2], pylu);
-	dff dff_pavo(tepo, d[0], pavo);
+	dlatch_a latch_mena(!tepo, d[7], mena);
+	dlatch_a latch_moru(!tepo, d[5], moru);
+	dlatch_a latch_maxy(!tepo, d[3], maxy);
+	dlatch_a latch_nusy(!tepo, d[1], nusy);
+	dlatch_a latch_mogy(!tepo, d[6], mogy);
+	dlatch_a latch_muke(!tepo, d[4], muke);
+	dlatch_a latch_pylu(!tepo, d[2], pylu);
+	dlatch_a latch_pavo(!tepo, d[0], pavo);
 	assign #T_AND  vuso = cpu_rd2 && ff47;
 	assign #T_AND  vely = cpu_wr2 && ff47;
 	assign #T_INV  tepy = !vuso;
@@ -50,14 +50,14 @@ module palettes(
 
 	logic xufy, xoma, xozy, xelo, xana, xyze, xalo, xuky, xupo, xeru, xova, xufu;
 	logic xawo, xobo, xuby, xoke, xaxa, xaju, xuno, xary;
-	dff dff_xana(xelo, d[7], xana);
-	dff dff_xyze(xelo, d[5], xyze);
-	dff dff_xalo(xelo, d[3], xalo);
-	dff dff_xuky(xelo, d[1], xuky);
-	dff dff_xupo(xelo, d[6], xupo);
-	dff dff_xeru(xelo, d[4], xeru);
-	dff dff_xova(xelo, d[2], xova);
-	dff dff_xufu(xelo, d[0], xufu);
+	dlatch_a latch_xana(!xelo, d[7], xana);
+	dlatch_a latch_xyze(!xelo, d[5], xyze);
+	dlatch_a latch_xalo(!xelo, d[3], xalo);
+	dlatch_a latch_xuky(!xelo, d[1], xuky);
+	dlatch_a latch_xupo(!xelo, d[6], xupo);
+	dlatch_a latch_xeru(!xelo, d[4], xeru);
+	dlatch_a latch_xova(!xelo, d[2], xova);
+	dlatch_a latch_xufu(!xelo, d[0], xufu);
 	assign #T_AND  xufy = cpu_rd2 && ff48;
 	assign #T_AND  xoma = cpu_wr2 && ff48;
 	assign #T_INV  xozy = !xufy;
@@ -89,14 +89,14 @@ module palettes(
 
 	logic mumy, myxe, lote, leho, luxo, lugu, lose, lawo, lepu, lune, mosa, moxy;
 	logic lelu, luga, lyza, lepa, leba, luky, lode, laju;
-	dff dff_luxo(leho, d[7], luxo);
-	dff dff_lugu(leho, d[5], lugu);
-	dff dff_lose(leho, d[3], lose);
-	dff dff_lawo(leho, d[1], lawo);
-	dff dff_lepu(leho, d[6], lepu);
-	dff dff_lune(leho, d[4], lune);
-	dff dff_mosa(leho, d[2], mosa);
-	dff dff_moxy(leho, d[0], moxy);
+	dlatch_a latch_luxo(!leho, d[7], luxo);
+	dlatch_a latch_lugu(!leho, d[5], lugu);
+	dlatch_a latch_lose(!leho, d[3], lose);
+	dlatch_a latch_lawo(!leho, d[1], lawo);
+	dlatch_a latch_lepu(!leho, d[6], lepu);
+	dlatch_a latch_lune(!leho, d[4], lune);
+	dlatch_a latch_mosa(!leho, d[2], mosa);
+	dlatch_a latch_moxy(!leho, d[0], moxy);
 	assign #T_AND  mumy = cpu_rd2 && ff49;
 	assign #T_AND  myxe = cpu_wr2 && ff49;
 	assign #T_INV  lote = !mumy;

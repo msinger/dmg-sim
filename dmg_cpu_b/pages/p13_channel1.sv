@@ -72,7 +72,6 @@ module channel1(
 	dffr_bp dffr_kozy(horu_512hz, koro,        kote,        kozy);
 	dffr_bp dffr_fare(dyfa_1mhz,  erum,        ch1_restart, fare);
 	dffr_bp dffr_fyte(dyfa_1mhz,  erum,        fare,        fyte);
-	dffr_a  dffr_dupe(doge,       dado,        d[7],        dupe);
 	dffr_bp dffr_ezec(dova_phi,   duka,        dupe,        ezec);
 	dffr_bp dffr_feku(dyfa_1mhz,  eget,        nfyfo,       feku);
 	dffr_bp dffr_kyno(kozy,       koru,        jade,        kyno);
@@ -84,6 +83,7 @@ module channel1(
 	tffd tffd_hoko(heto, ch1_restart, ff12_d6,  hoko);
 	tffd tffd_hemy(hyto, ch1_restart, ff12_d5,  hemy);
 	tffd tffd_hafo(jufy, ch1_restart, ff12_d4,  hafo);
+	drlatch latch_dupe(!doge, dado, d[7], dupe);
 	nor_srlatch latch_cyto(ch1_restart, bery, cyto,);
 	nor_srlatch latch_fyfo(gefe,        ezec, fyfo, nfyfo);
 	nor_srlatch latch_kezu(kyno,        keko, kezu,);

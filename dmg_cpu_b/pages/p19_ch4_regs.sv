@@ -39,14 +39,14 @@ module ch4_regs(
 	logic fexo, goko, fupa, gony, hasu, daco, dyke, bofy, boxe;
 	logic gedu, gozo, goky, garu, geky, ezyk, etyj, emok;
 	logic hacu, hoge, godu, heda, gome, cuzu, coce, demy;
-	dffr_a dffr_gedu(!goko, fexo, d[7], gedu);
-	dffr_a dffr_gozo(!goko, fexo, d[6], gozo);
-	dffr_a dffr_goky(!goko, fexo, d[5], goky);
-	dffr_a dffr_garu(!goko, fexo, d[4], garu);
-	dffr_a dffr_geky(!goko, fexo, d[3], geky);
-	dffr_a dffr_ezyk(!daco, fexo, d[2], ezyk);
-	dffr_a dffr_etyj(!daco, fexo, d[1], etyj);
-	dffr_a dffr_emok(!daco, fexo, d[0], emok);
+	drlatch latch_gedu(goko, fexo, d[7], gedu);
+	drlatch latch_gozo(goko, fexo, d[6], gozo);
+	drlatch latch_goky(goko, fexo, d[5], goky);
+	drlatch latch_garu(goko, fexo, d[4], garu);
+	drlatch latch_geky(goko, fexo, d[3], geky);
+	drlatch latch_ezyk(daco, fexo, d[2], ezyk);
+	drlatch latch_etyj(daco, fexo, d[1], etyj);
+	drlatch latch_emok(daco, fexo, d[0], emok);
 	assign #T_INV  fexo = !apu_reset;
 	assign #T_AND  goko = ff21 && apu_wr;
 	assign #T_INV  fupa = !goko;
@@ -80,11 +80,11 @@ module ch4_regs(
 
 	logic kage, jora, hoso, getu, gugo, heze, hyne, efug;
 	logic jamy, feta, gogo, gafo, fyto, keta, geda, gaka, hapy, gype;
-	dffr_a dffr_jamy(hoso,  hyne,        d[3], jamy);
-	dffr_a dffr_feta(!getu, napu_reset4, d[4], feta);
-	dffr_a dffr_gogo(!getu, napu_reset4, d[6], gogo);
-	dffr_a dffr_gafo(!getu, napu_reset4, d[7], gafo);
-	dffr_a dffr_fyto(!getu, napu_reset4, d[5], fyto);
+	drlatch latch_jamy(!hoso, hyne,        d[3], jamy);
+	drlatch latch_feta(getu,  napu_reset4, d[4], feta);
+	drlatch latch_gogo(getu,  napu_reset4, d[6], gogo);
+	drlatch latch_gafo(getu,  napu_reset4, d[7], gafo);
+	drlatch latch_fyto(getu,  napu_reset4, d[5], fyto);
 	assign #T_INV  kage = !ncpu_rd;
 	assign #T_NAND jora = !(kage && ff22);
 	assign #T_NAND hoso = !(ff22 && apu_wr);
@@ -114,9 +114,9 @@ module ch4_regs(
 	assign d[5] = gype;
 
 	logic humo, hova, koku, keka, jaky, jero, jare, kyro, kaku, kamo;
-	dffr_a dffr_jaky(!humo, napu_reset5, d[2], jaky);
-	dffr_a dffr_jero(!humo, napu_reset5, d[1], jero);
-	dffr_a dffr_jare(!humo, napu_reset5, d[0], jare);
+	drlatch latch_jaky(humo, napu_reset5, d[2], jaky);
+	drlatch latch_jero(humo, napu_reset5, d[1], jero);
+	drlatch latch_jare(humo, napu_reset5, d[0], jare);
 	assign #T_AND  humo = apu_wr && ff22;
 	assign #T_INV  hova = !humo;
 	assign #T_INV  koku = !ff22;
@@ -132,7 +132,7 @@ module ch4_regs(
 	assign d[0] = kamo;
 
 	logic bylo, dulu, cabe, bare, cuny, cury;
-	dffr_a dffr_cuny(dulu, cabe, d[6], cuny);
+	drlatch latch_cuny(!dulu, cabe, d[6], cuny);
 	assign #T_INV  bylo = !ncpu_rd;
 	assign #T_NAND dulu = !(anuj && ff23);
 	assign #T_INV  cabe = !apu_reset;
@@ -142,7 +142,7 @@ module ch4_regs(
 	assign d[6] = cury;
 
 	logic foxe, hoga;
-	dffr_a dffr_hoga(foxe, rst_ff23_d7, d[7], hoga);
+	drlatch latch_hoga(!foxe, rst_ff23_d7, d[7], hoga);
 	assign #T_NAND foxe = !(apu_wr && ff23);
 	assign ff23_d7 = hoga;
 
