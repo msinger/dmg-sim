@@ -23,9 +23,17 @@ static uint32_t read_timestamp()
 	return r;
 }
 
-static void put_pixel(FILE *f, int v)
+static void put_pixel(FILE *f, int v, bool raw)
 {
-	const uint8_t pal[5][3] = {
+	const uint8_t pal_raw[5][3] = {
+		{ 255, 255, 255 }, /* off */
+		{ 252, 252, 252 }, /*  0  */
+		{ 189, 189, 189 }, /*  1  */
+		{ 126, 126, 126 }, /*  2  */
+		{  63,  63,  63 }, /*  3  */
+	};
+
+	const uint8_t pal_classic[5][3] = {
 		{ 229, 255,   0 }, /* off */
 		{ 191, 245,   0 }, /*  0  */
 		{ 139, 179,   0 }, /*  1  */
@@ -33,9 +41,16 @@ static void put_pixel(FILE *f, int v)
 		{  62,  80,   0 }, /*  3  */
 	};
 
-	putc(pal[v][0], f);
-	putc(pal[v][1], f);
-	putc(pal[v][2], f);
+	const uint8_t (*pal)[5][3];
+
+	if (raw)
+		pal = &pal_raw;
+	else
+		pal = &pal_classic;
+
+	putc((*pal)[v][0], f);
+	putc((*pal)[v][1], f);
+	putc((*pal)[v][2], f);
 }
 
 int main(int argc, char **argv)
@@ -44,7 +59,7 @@ int main(int argc, char **argv)
 	uint8_t  (*bgframe)[160][144], (*fgframe)[160][144], (*tmpframe)[160][144];
 	uint32_t t, pt, pidx;
 	int      c, y;
-	bool     dis;
+	bool     dis, raw;
 
 	bgframe = &frame0;
 	fgframe = &frame1;
@@ -54,6 +69,10 @@ int main(int argc, char **argv)
 	y    = 0;
 	pidx = 0;
 	pt   = 0;
+	raw  = false;
+
+	if (argc > 1 && !strcmp(argv[1], "--raw"))
+		raw = true;
 
 	while (true) {
 		t = read_timestamp();
@@ -71,17 +90,23 @@ int main(int argc, char **argv)
 				fprintf(stderr, "Failed to open %s\n", fname);
 				exit(1);
 			}
-			for (int i = 0; i < 144; i++) {
-				for (int repeat = 0; repeat < 3; repeat++) {
-					for (int j = 0; j < 160; j++) {
-						put_pixel(fp, (*fgframe)[j][i]);
-						put_pixel(fp, (*fgframe)[j][i]);
-						put_pixel(fp, (*fgframe)[j][i]);
-						put_pixel(fp, 0);
+			if (raw) {
+				for (int i = 0; i < 144; i++)
+					for (int j = 0; j < 160; j++)
+						put_pixel(fp, (*fgframe)[j][i], true);
+			} else {
+				for (int i = 0; i < 144; i++) {
+					for (int repeat = 0; repeat < 3; repeat++) {
+						for (int j = 0; j < 160; j++) {
+							put_pixel(fp, (*fgframe)[j][i], false);
+							put_pixel(fp, (*fgframe)[j][i], false);
+							put_pixel(fp, (*fgframe)[j][i], false);
+							put_pixel(fp, 0, false);
+						}
 					}
+					for (int j = 0; j < 160 * 4; j++)
+						put_pixel(fp, 0, false);
 				}
-				for (int j = 0; j < 160 * 4; j++)
-					put_pixel(fp, 0);
 			}
 			fclose(fp);
 			pidx++;
