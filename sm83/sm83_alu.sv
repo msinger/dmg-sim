@@ -131,24 +131,16 @@ module sm83_alu
 	/* only one of load_a* can be set at the same time */
 	assume property ($onehot0({ load_a, load_a_zero }));
 	always_ff @(negedge clk) if (load_a || load_a_zero) unique case (1)
-		load_a:      op_a.l <= bus.l;
-		load_a_zero: op_a.l <= 0;
-	endcase
-	always_ff @(negedge clk) if (load_a || load_a_zero) unique case (1)
-		load_a:      op_a.h <= bus.h;
-		load_a_zero: op_a.h <= 0;
+		load_a:      op_a <= bus;
+		load_a_zero: op_a <= 0;
 	endcase
 	initial op_a = 0;
 
 	/* only one of load_b* can be set at the same time */
 	assume property ($onehot0({ load_b, load_b_zero }));
 	always_ff @(negedge clk) if (load_b || load_b_zero) unique case (1)
-		load_b:      op_b.l <= bus.l;
-		load_b_zero: op_b.l <= 0;
-	endcase
-	always_ff @(negedge clk) if (load_b || load_b_zero) unique case (1)
-		load_b:      op_b.h <= bus.h;
-		load_b_zero: op_b.h <= 0;
+		load_b:      op_b <= bus;
+		load_b_zero: op_b <= 0;
 	endcase
 	initial op_b = 0;
 
