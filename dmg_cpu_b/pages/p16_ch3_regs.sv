@@ -65,8 +65,8 @@ module ch3_regs(
 	drlatch latch_jaxa(jafa, kuha, d[2], jaxa);
 	drlatch latch_jovy(jafa, kuha, d[1], jovy);
 	drlatch latch_koga(jafa, kuha, d[0], koga);
-	assign #T_NAND kota = !(ff1d && apu_wr);
-	assign #T_NAND jafa = !(ff1d && apu_wr);
+	assign #T_AND  kota = ff1d && apu_wr;
+	assign #T_AND  jafa = ff1d && apu_wr;
 	assign #T_INV  kuha = !apu_reset;
 	assign #T_INV  kyho = !kota;
 	assign #T_INV  kuly = !jafa;
