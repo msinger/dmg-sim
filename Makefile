@@ -143,8 +143,9 @@ all: sim-test sim-gameboy
 
 clean:
 	rm -f $(DMG_CPU_B_TEST_OUT) $(DMG_CPU_B_GAMEBOY_OUT) mkvid/mkimgs
+	rm -rf tests/logs
 
-.PHONY: all clean sim-test sim-gameboy
+.PHONY: all clean test sim-test sim-gameboy
 
 dmg_cpu_b_test.vvp: dmg_cpu_b_test.sv $(DMG_CPU_B) $(AV_DUMP) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_test.sv $(DMG_CPU_B)
@@ -176,3 +177,10 @@ dmg_cpu_b_gameboy.mkv: mkvid/mkimgs mkvid/mkvid.sh dmg_cpu_b_gameboy.vid dmg_cpu
 
 mkvid/mkimgs: mkvid/mkimgs.c
 	$(CC) $(CFLAGS) -o $@ $^
+
+boot/quickboot.bin:
+	make -C boot
+
+test: dmg_cpu_b_gameboy.vvp boot/quickboot.bin
+	tests/run_tests.sh
+
