@@ -181,6 +181,6 @@ mkvid/mkimgs: mkvid/mkimgs.c
 boot/quickboot.bin:
 	make -C boot
 
-test: dmg_cpu_b_gameboy.vvp boot/quickboot.bin
+test: dmg_cpu_b_gameboy.vvp boot/quickboot.bin mkvid/mkimgs
 	tests/run_tests.sh
 
