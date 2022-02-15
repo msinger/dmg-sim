@@ -6,6 +6,30 @@ passes=0
 fails=0
 
 for i in $(cd -- "$TESTS_DIR"/data; find * -name setup.sh -printf %h\\n | sort); do
+	if [ -n "$1" ]; then
+		SETUP_PATH=$TESTS_DIR/data/$i/setup.sh
+		CATEGORY=
+		. "$SETUP_PATH"
+
+		CATEGORY_MATCH=
+		for j in $1; do
+			for k in $CATEGORY; do
+				if [[ $k == $j* ]]; then
+					CATEGORY_MATCH=y
+					break
+				fi
+			done
+
+			if [ -n "$CATEGORY_MATCH" ]; then
+				break
+			fi
+		done
+
+		if [ -z "$CATEGORY_MATCH" ]; then
+			continue
+		fi
+	fi
+
 	mkdir -p "$TESTS_DIR/logs/$i"
 	printf "%-70s" "$i"
 	"$TESTS_DIR"/run_test.sh "$i" >"$TESTS_DIR/logs/$i/out.log" 2>&1

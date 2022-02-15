@@ -1,2 +1,3 @@
 SECS=0.6
 FRAME=36
+CATEGORY=cpu

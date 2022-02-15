@@ -145,7 +145,7 @@ clean:
 	rm -f $(DMG_CPU_B_TEST_OUT) $(DMG_CPU_B_GAMEBOY_OUT) mkvid/mkimgs
 	rm -rf tests/logs
 
-.PHONY: all clean test sim-test sim-gameboy
+.PHONY: all clean sim-test sim-gameboy
 
 dmg_cpu_b_test.vvp: dmg_cpu_b_test.sv $(DMG_CPU_B) $(AV_DUMP) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_test.sv $(DMG_CPU_B)
@@ -181,6 +181,19 @@ mkvid/mkimgs: mkvid/mkimgs.c
 boot/quickboot.bin:
 	make -C boot
 
-test: dmg_cpu_b_gameboy.vvp boot/quickboot.bin mkvid/mkimgs
+.PHONY: test test-all test-cpu test-boot
+
+TEST_DEPENDENCIES = dmg_cpu_b_gameboy.vvp boot/quickboot.bin mkvid/mkimgs
+
+test: $(TEST_DEPENDENCIES)
+	tests/run_tests.sh "boot peripheral"
+
+test-all: $(TEST_DEPENDENCIES)
 	tests/run_tests.sh
+
+test-cpu: $(TEST_DEPENDENCIES)
+	tests/run_tests.sh cpu
+
+test-boot: $(TEST_DEPENDENCIES)
+	tests/run_tests.sh boot
 
