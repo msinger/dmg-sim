@@ -411,8 +411,8 @@ module dmg_cpu_b_gameboy;
 								prev_time_str = time_str;
 							end
 						end
-						@(posedge cpu_clkin_t3);
-						@(posedge cpu_clkin_t2);
+						@(posedge cpu_clkin_t9);
+						@(posedge cpu_clkin_t10);
 					end
 
 					disable tick_tick;
