@@ -412,10 +412,10 @@ module dmg_cpu_b(
 	logic [7:0] oam_a_ram[0:79], oam_b_ram[0:79];
 	initial foreach (oam_a_ram[i]) oam_a_ram[i] = $random;
 	initial foreach (oam_b_ram[i]) oam_b_ram[i] = $random;
-	always_ff @(posedge oam_a_ncs) oam_a_ram[oam_a[6:1]] <= $isunknown(oam_a_nd) ? $random : oam_a_nd;
-	always_ff @(posedge oam_b_ncs) oam_b_ram[oam_a[6:1]] <= $isunknown(oam_b_nd) ? $random : oam_b_nd;
-	assign oam_a_nd = (!oam_clk && oam_a[6:1] < 80) ? oam_a_ram[oam_a[6:1]] : 'z;
-	assign oam_b_nd = (!oam_clk && oam_a[6:1] < 80) ? oam_b_ram[oam_a[6:1]] : 'z;
+	always_ff @(posedge oam_a_ncs) oam_a_ram[oam_a[7:1]] <= $isunknown(oam_a_nd) ? $random : oam_a_nd;
+	always_ff @(posedge oam_b_ncs) oam_b_ram[oam_a[7:1]] <= $isunknown(oam_b_nd) ? $random : oam_b_nd;
+	assign oam_a_nd = (!oam_clk && oam_a[7:1] < 80) ? oam_a_ram[oam_a[7:1]] : 'z;
+	assign oam_b_nd = (!oam_clk && oam_a[7:1] < 80) ? oam_b_ram[oam_a[7:1]] : 'z;
 
 	/* connection to HRAM */
 	logic hram_cs; /* CS */
