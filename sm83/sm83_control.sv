@@ -2550,16 +2550,16 @@ module sm83_control(
 					/* Write value from data latch that was fetched during M3 into W */
 					m3 && t4: wz_from_dl(HIGH);
 
+					/* If RETI, set IME register */
+					m4 && t3: begin
+						new_ime_we  = reti;
+						new_ime_bit = reti;
+					end
+
 					m4 && t4: begin
 						/* Apply WZ to address pins instead of PC */
 						wz_to_adr;
 						no_pc = 1;
-					end
-
-					/* If RETI, set IME register */
-					m1 && t3: begin
-						new_ime_we  = reti;
-						new_ime_bit = reti;
 					end
 				endcase
 			end
