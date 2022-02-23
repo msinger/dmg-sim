@@ -87,7 +87,7 @@ module vram_interface(
 	assign d_a[0] = ruxa;
 
 	logic cufe, vape, aver, xujy, bycu;
-	assign #T_AOI  cufe = !((saro && dma_run) || mopa_nphi);
+	assign #T_OAI  cufe = !((saro || dma_run) && mopa_nphi);
 	assign #T_AND  vape = tacu && tuvo;
 	assign #T_NAND aver = !(acyl && xyso);
 	assign #T_INV  xujy = !vape;
