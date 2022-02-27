@@ -157,7 +157,7 @@ Results of Mooneye GB tests:
 | acceptance/ppu/intr_1_2_timing-GS           | PASS   |
 | acceptance/ppu/intr_2_0_timing              | PASS   |
 | acceptance/ppu/intr_2_mode0_timing          | PASS   |
-| acceptance/ppu/intr_2_mode0_timing_sprites  | FAIL   |
+| acceptance/ppu/intr_2_mode0_timing_sprites  | PASS   |
 | acceptance/ppu/intr_2_mode3_timing          | FAIL   |
 | acceptance/ppu/intr_2_oam_ok_timing         | PASS   |
 | acceptance/ppu/lcdon_timing-dmgABCmgbS      | FAIL   |
@@ -187,4 +187,4 @@ Results of Mooneye GB tests:
 | acceptance/timer/tima_write_reloading       | PASS   |
 | acceptance/timer/tma_write_reloading        | PASS   |
 | madness/mgb_oam_dma_halt_sprites            | FAIL   |
-| manual-only/sprite_priority                 | FAIL   |
+| manual-only/sprite_priority                 | PASS   |
