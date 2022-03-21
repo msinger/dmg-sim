@@ -5,7 +5,7 @@ module sys_decode(
 		inout  tri logic [7:0]  d,
 
 		input  logic reset, nreset2, nt1, nt2, wr_in, rd_b,
-		input  logic cpu_rd_sync, cpu_raw_rd,
+		input  logic cpu_wr_sync, cpu_raw_rd,
 		input  logic from_cpu6,
 		output logic cpu_wr, cpu_wr2, cpu_rd, cpu_rd2,
 		output logic t1t2_nrst, t1_nt2, nt1_t2,
@@ -32,7 +32,7 @@ module sys_decode(
 	assign nt1_t2    = umut;
 
 	logic ubal, ujyv, lexy, tapu, tedo, dyky, ajas, cupa, asot, pin_nc;
-	assign #T_MUXI ubal = !(t1_nt2 ? wr_in : cpu_rd_sync);
+	assign #T_MUXI ubal = !(t1_nt2 ? wr_in : cpu_wr_sync);
 	assign #T_MUXI ujyv = !(t1_nt2 ? rd_b  : cpu_raw_rd);
 	assign #T_INV  lexy = !from_cpu6;
 	assign #T_INV  tapu = !ubal;

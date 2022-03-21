@@ -11,7 +11,7 @@ module ext_cpu_busses(
 		output logic wr_a, wr_c, rd_a, rd_c,
 
 		input logic from_cpu3, from_cpu4, from_cpu5,
-		input logic cpu_raw_rd, cpu_rd_sync,
+		input logic cpu_raw_rd, cpu_wr_sync,
 		input logic cpu_rd, nt1_t2, t1_nt2, dma_addr_ext,
 
 		input  logic abuz, tutu, nfexxffxx,
@@ -152,7 +152,7 @@ module ext_cpu_busses(
 
 	logic moca, mexo, lywe, nevy, moty, puva, tymu, usuf, uver, ugac, urun;
 	assign #T_NOR  moca = !(texo || nt1_t2);
-	assign #T_INV  mexo = !cpu_rd_sync;
+	assign #T_INV  mexo = !cpu_wr_sync;
 	assign #T_INV  lywe = !lagu;
 	assign #T_OR   nevy = mexo || moca;
 	assign #T_OR   moty = moca || lywe;

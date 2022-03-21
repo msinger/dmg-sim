@@ -11,7 +11,7 @@ module clocks_reset(
 
 		inout tri logic [7:0] d,
 
-		output logic cpu_rd_sync,
+		output logic cpu_wr_sync,
 		input  logic cpu_wr, cpu_rd,
 		input  logic t1t2_nrst, t1_nt2, nt1_t2,
 
@@ -127,7 +127,7 @@ module clocks_reset(
 	assign #T_INV  buke = !basu;
 	assign nclkin_a    = ucob;
 	assign phi_out     = uvyt;
-	assign cpu_rd_sync = apov;
+	assign cpu_wr_sync = apov;
 
 	logic bapy, belu, beru, byry, bufa, byly, bude, beva, byda, bavy, beja, dova;
 	logic bane, belo, baze, buto;

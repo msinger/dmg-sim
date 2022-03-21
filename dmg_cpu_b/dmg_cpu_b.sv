@@ -211,7 +211,7 @@ module dmg_cpu_b(
 	logic clk1, clk2, clk3, clk4, clk5;
 	logic cpu_wr, cpu_wr2;
 	logic cpu_rd, cpu_rd2;
-	logic cpu_rd_sync; /* this is wrongly labeled in the schematics; it is actually WR sync */
+	logic cpu_wr_sync;
 	logic t1t2_nrst;
 	logic ff04_ff07, nff0f_rd, nff0f_wr, ff00wr, ff00rd;
 	logic nff04_d0, nff04_d1;
