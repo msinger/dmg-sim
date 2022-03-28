@@ -11,7 +11,7 @@ module channel1(
 
 		output logic ch1_restart, ch1_shift_clk, ch1_ld_shift, ch1_freq_upd1, ch1_freq_upd2,
 		output logic nch1_active, nch1_amp_en,
-		input  logic atys, copu, cate, abol,
+		input  logic atys, copu, cate,
 		output logic ngexu, cope, kyly, adad,
 		input  logic byfe_128hz, bufy_256hz, horu_512hz, dyfa_1mhz, ajer_2mhz,
 
@@ -93,7 +93,7 @@ module channel1(
 	assign #T_INV  jola = !kere;
 	assign #T_AND  kote = kera && kenu && jova;
 	assign #T_INV  kury = !kozy;
-	assign #T_NOR  kuku = !(abol || kury);
+	assign #T_NOR  kuku = !(horu_512hz || kury);
 	assign #T_NOR  koro = !(kuku || koma || ch1_restart || apu_reset);
 	assign #T_NOR  kaza = !(ch1_restart || kozy);
 	assign #T_INV  kuxu = !kaza;

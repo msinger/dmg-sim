@@ -36,7 +36,7 @@ module clocks_reset(
 		output logic horu_512hz,
 		output logic jeso_512k, hama_512k,
 		input  logic fero_q,
-		output logic bedo, abuz, afas, abol, beko, bolo, boma, afer, taba, buke,
+		output logic bedo, abuz, afas, beko, bolo, boma, afer, taba, buke,
 		output logic nff04_d0, nff04_d1,
 		output logic _16384hz, _65536hz, _262144hz
 	);
@@ -101,7 +101,7 @@ module clocks_reset(
 	assign nreset_video2 = lyfe;
 	assign reset_video3  = lyha;
 
-	logic adyk, afur, alef, apuk, ucob, uvyt, nclkin_a;
+	logic adyk, afur, alef, apuk, ucob, uvyt, abol, nclkin_a;
 	logic adar, atyp, afep, arov, ajax, bugo, arev, apov, agut, awod, bate, basu;
 	drlatch latch_adyk(!atal_4mhz, t1t2_nrst, apuk,  adyk);
 	drlatch latch_afur(atal_4mhz,  t1t2_nrst, !adyk, afur);
