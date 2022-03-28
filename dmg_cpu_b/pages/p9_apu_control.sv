@@ -18,9 +18,9 @@ module apu_control(
 		input  logic byfe_128hz,
 		output logic fero_q, cate, gaxo,
 
-		output logic [3:0] lmixer, rmixer,
-		output logic [2:0] nlvolume, nrvolume,
-		output logic       vin_l_ena, vin_r_ena,
+		output logic [3:0] rmixer, lmixer,
+		output logic [2:0] nrvolume, nlvolume,
+		output logic       vin_r_ena, vin_l_ena,
 
 		input logic nch1_active, nch2_active, nch3_active, nch4_active
 	);
@@ -114,14 +114,14 @@ module apu_control(
 	assign d[2]    = avud;
 	assign d[1]    = awed;
 	assign d[0]    = akod;
-	assign vin_r_ena   = bedu;
-	assign nrvolume[2] = !cozu;
-	assign nrvolume[1] = !bumo;
-	assign nrvolume[0] = !byre;
-	assign vin_l_ena   = apos;
-	assign nlvolume[2] = !ager;
-	assign nlvolume[1] = !byga;
-	assign nlvolume[0] = !apeg;
+	assign vin_l_ena   = bedu;
+	assign nlvolume[2] = !cozu;
+	assign nlvolume[1] = !bumo;
+	assign nlvolume[0] = !byre;
+	assign vin_r_ena   = apos;
+	assign nrvolume[2] = !ager;
+	assign nrvolume[1] = !byga;
+	assign nrvolume[0] = !apeg;
 
 	logic gepa, hefa, gumu, bupo, bono, byfa;
 	logic bogu, bafo, atuf, anev, bepu, befo, bume, bofa;
@@ -148,14 +148,14 @@ module apu_control(
 	assign #T_TRI  cada = !gumu ? !(!befo) : 'z;
 	assign #T_TRI  cavu = !gumu ? !(!bume) : 'z;
 	assign #T_TRI  cudu = !gumu ? !(!bofa) : 'z;
-	assign lmixer[1] = bogu;
-	assign lmixer[2] = bafo;
-	assign lmixer[3] = atuf;
-	assign lmixer[0] = anev;
-	assign rmixer[3] = bepu;
-	assign rmixer[2] = befo;
-	assign rmixer[0] = bume;
-	assign rmixer[1] = bofa;
+	assign rmixer[1] = bogu;
+	assign rmixer[2] = bafo;
+	assign rmixer[3] = atuf;
+	assign rmixer[0] = anev;
+	assign lmixer[3] = bepu;
+	assign lmixer[2] = befo;
+	assign lmixer[0] = bume;
+	assign lmixer[1] = bofa;
 	assign d[1]      = capu;
 	assign d[2]      = caga;
 	assign d[3]      = boca;

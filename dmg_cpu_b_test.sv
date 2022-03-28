@@ -36,7 +36,7 @@ module dmg_cpu_b_test;
 	logic ld0, ld1;
 
 	/* Audio pins */
-	real lout, rout;
+	real rout, lout;
 
 	/* Connections to SM83 CPU core */
 	logic cpu_out_t1;       /* CPU out T1  - Goes to unbonded pin; Some test pin? */

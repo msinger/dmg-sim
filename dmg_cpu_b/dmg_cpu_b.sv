@@ -36,7 +36,7 @@ module dmg_cpu_b(
 		output logic            st,         /* Pin 54        - ST pin */
 		output logic            s,          /* Pin 57        - S pin */
 		output logic            ld0, ld1,   /* Pin 51, 50    - LD0, LD1 pins (pixel data) */
-		output real             lout, rout, /* Pin 60, 59    - Left and right audio out channels */
+		output real             rout, lout, /* Pin 59, 60    - SO1, SO2 pins (right and left audio out channels) */
 		input  real             vin,        /* Pin 61        - Cartridge audio input */
 
 		/* Unbonded I/O pads of the DMG CPU B chip */
@@ -353,33 +353,33 @@ module dmg_cpu_b(
 	logic        wave_ram_rd;
 
 	/* connections to analog parts */
-	logic [3:0] lmixer, rmixer;
+	logic [3:0] rmixer, lmixer;
 	logic [3:0] ch1_out, ch2_out, wave_dac_d, ch4_out;
-	logic [2:0] nlvolume, nrvolume;
-	logic       vin_l_ena, vin_r_ena;
+	logic [2:0] nrvolume, nlvolume;
+	logic       vin_r_ena, vin_l_ena;
 
 	/* simulate analog parts */
 	real ch1_fp, ch2_fp, ch3_fp, ch4_fp;
-	real lvol_fp, rvol_fp;
-	real lmix, rmix;
+	real rvol_fp, lvol_fp;
+	real rmix, lmix;
 	assign ch1_fp = $itor(ch1_out) / 15.0;
 	assign ch2_fp = $itor(ch2_out) / 15.0;
 	assign ch3_fp = $itor(wave_dac_d) / 15.0;
 	assign ch4_fp = $itor(ch4_out) / 15.0;
-	assign lvol_fp = $itor(~nlvolume) / 7.0;
 	assign rvol_fp = $itor(~nrvolume) / 7.0;
-	assign lmix = (lmixer[0] ? ch1_fp * 0.7 : 0.0) +
-	              (lmixer[1] ? ch2_fp * 0.7 : 0.0) +
-	              (lmixer[2] ? ch3_fp * 0.7 : 0.0) +
-	              (lmixer[3] ? ch4_fp * 0.7 : 0.0) +
-	              (vin_l_ena ? vin * 0.7 : 0.0);
+	assign lvol_fp = $itor(~nlvolume) / 7.0;
 	assign rmix = (rmixer[0] ? ch1_fp * 0.7 : 0.0) +
 	              (rmixer[1] ? ch2_fp * 0.7 : 0.0) +
 	              (rmixer[2] ? ch3_fp * 0.7 : 0.0) +
 	              (rmixer[3] ? ch4_fp * 0.7 : 0.0) +
 	              (vin_r_ena ? vin * 0.7 : 0.0);
-	assign lout = (lmix * lvol_fp > 1.0) ? 1.0 : (lmix * lvol_fp);
+	assign lmix = (lmixer[0] ? ch1_fp * 0.7 : 0.0) +
+	              (lmixer[1] ? ch2_fp * 0.7 : 0.0) +
+	              (lmixer[2] ? ch3_fp * 0.7 : 0.0) +
+	              (lmixer[3] ? ch4_fp * 0.7 : 0.0) +
+	              (vin_l_ena ? vin * 0.7 : 0.0);
 	assign rout = (rmix * rvol_fp > 1.0) ? 1.0 : (rmix * rvol_fp);
+	assign lout = (lmix * lvol_fp > 1.0) ? 1.0 : (lmix * lvol_fp);
 
 	/* connections to wave RAM */
 	logic [7:0] wave_rd_d = $random; /* data output (data input is directly connected to common d[7:0]) */
