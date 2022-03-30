@@ -28,7 +28,7 @@ module ch4_regs(
 	tffd tffd_cedo(dena, dotu, d[3], cedo);
 	assign #T_INV  dopu = !(!cedo);
 	assign #T_NAND caze = !(apu_wr && ff20);
-	assign #T_NOR  doda = !(fugo || bufy_256hz || ff23_d6);
+	assign #T_NOR  doda = !(fugo || bufy_256hz || nff23_d6);
 	assign #T_INV  furu = !caze;
 	assign #T_INV  epek = !caze;
 	assign #T_INV  dotu = !caze;
@@ -131,14 +131,15 @@ module ch4_regs(
 	assign d[1] = kaku;
 	assign d[0] = kamo;
 
-	logic bylo, dulu, cabe, bare, cuny, cury;
+	logic bylo, dulu, cabe, bare, cuny, cury, nff23_d6;
 	drlatch latch_cuny(!dulu, cabe, d[6], cuny);
 	assign #T_INV  bylo = !ncpu_rd;
 	assign #T_NAND dulu = !(anuj && ff23);
 	assign #T_INV  cabe = !apu_reset;
 	assign #T_NAND bare = !(ff23 && bylo);
 	assign #T_TRI  cury = !bare ? !(!cuny) : 'z;
-	assign ff23_d6 = cuny;
+	assign ff23_d6  = cuny;
+	assign nff23_d6 = !cuny;
 	assign d[6] = cury;
 
 	logic foxe, hoga;

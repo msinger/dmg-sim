@@ -24,7 +24,7 @@ module channel4(
 	logic esep, dere, dota, erut, dete, dose, demo, doke, dale, dure, epor, ezef, deko, cexo;
 	logic etyr, elyx, dary, eryf, feme, ezul, gufa, gyve, kara, kopa;
 	logic cosa, dyry, cepy, como, cote, bagu, befa, dato, atel;
-	logic ch4_lfsr_clk1, ch4_lfsr_clk2, ch4_lfsr_clk3, nff23_d6, ch4_bit;
+	logic ch4_lfsr_clk1, ch4_lfsr_clk2, ch4_lfsr_clk3, ch4_bit;
 	dffr_bp dffr_esep(!dere, napu_reset4, !esep, esep);
 	dffr_bp dffr_dere(!dota, napu_reset4, !dere, dere);
 	dffr_bp dffr_dota(!erut, napu_reset4, !dota, dota);
@@ -59,7 +59,7 @@ module channel4(
 	assign #T_INV  kara = !gyve;
 	assign #T_INV  kopa = !kara;
 	assign #T_INV  cosa = !ncpu_rd;
-	assign #T_AND  dyry = nff23_d6 && net03;
+	assign #T_AND  dyry = ff23_d6 && net03;
 	assign #T_INV  cepy = !ff23_d6;
 	assign #T_AND  como = dyry && cosa;
 	assign #T_AND  cote = cepy && net03;
@@ -70,7 +70,6 @@ module channel4(
 	assign ch4_lfsr_clk1 = feme;
 	assign ch4_lfsr_clk2 = gyve;
 	assign ch4_lfsr_clk3 = kopa;
-	assign nff23_d6 = cepy;
 	assign ch4_bit  = dato;
 	assign d[0] = atel;
 
