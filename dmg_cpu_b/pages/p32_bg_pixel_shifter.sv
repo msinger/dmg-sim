@@ -8,7 +8,7 @@ module bg_pixel_shifter(
 		output logic bg_pix_a_7, bg_pix_b_7
 	);
 
-	logic leso, ajar, labu, mete, loma, loze, luxa, legu, muku, megu, nasa;
+	logic leso, luve, labu, mete, loma, loze, luxa, legu, muku, megu, nasa;
 	logic tosa, luhe, tyce, leke, ryga, lala, rapu, neze;
 	logic seja, tuxe, loty, laky, sure, ruce, lutu, loto;
 	logic suca, ruto, mosy, myvy, supu, rajo, nyha, nute;
@@ -33,8 +33,8 @@ module bg_pixel_shifter(
 	dffr_a dffr_poju(labu, '1, md[5], poju);
 	dffr_a dffr_pyju(labu, '1, md[7], pyju);
 	assign #T_INV  leso = !mofu;
-	assign #T_INV  ajar = !leso;
-	assign #T_INV  labu = !ajar;
+	assign #T_INV  luve = !leso;
+	assign #T_INV  labu = !luve;
 	assign #T_INV  mete = !nydy;
 	assign #T_INV  loma = !mete;
 	assign #T_INV  loze = !nyxu;
