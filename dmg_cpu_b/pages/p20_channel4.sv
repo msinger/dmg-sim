@@ -177,7 +177,7 @@ module channel4(
 	assign #T_INV  goge = !gepo;
 	assign #T_INV  jyja = !ch4_lfsr_clk1;
 	assign #T_AO   kavu = (joto && ff22_d3) || (nff22_d3 && juxe);
-	assign #T_NAND game = !(gena && hezu);
+	assign #T_AND  game = gena && hezu;
 	assign #T_XNOR hura = hyro == hezu;
 	assign rst_ff23_d7 = guzy;
 	assign ch4_restart = gone;
