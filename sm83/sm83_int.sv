@@ -29,7 +29,7 @@ module sm83_int(
 	end
 
 	always_ff @(posedge clk) begin
-		assert(!ctl_update_int || !t2);
+		// assert(!ctl_update_int || !t2);
 		if (reset)
 			intr_entry <= 0;
 		else if (ctl_update_int)

@@ -34,10 +34,10 @@ module sm83_io(
 
 	always_ff @(posedge clk) begin
 		/* read or write sequence should only be triggered right before next cycle */
-		assume (t4 || !mread);
-		assume (t4 || !mwrite);
+		// assume (t4 || !mread);
+		// assume (t4 || !mwrite);
 		/* only one sequence can be triggered at a time */
-		assume (!mread || !mwrite);
+		// assume (!mread || !mwrite);
 
 		if (reset) begin
 			rd <= 0;
@@ -87,7 +87,7 @@ module sm83_io(
 	word_t opcode_r;
 	always_ff @(posedge clk) begin
 		/* instruction register should only be written during a read at T4 */
-		assume ((t4 && rd) || !ctl_ir_we || ctl_zero_data_oe);
+		// assume ((t4 && rd) || !ctl_ir_we || ctl_zero_data_oe);
 		if (reset) begin
 			opcode_r <= 0;
 			bank_cb  <= 0;
@@ -104,16 +104,16 @@ module sm83_io(
 	initial opcode_r = 0;
 
 	/* Don't run into illegal instructions */
-	assume property (bank_cb || opcode != 'hd3);
-	assume property (bank_cb || opcode != 'hdb);
-	assume property (bank_cb || opcode != 'hdd);
-	assume property (bank_cb || opcode != 'he3);
-	assume property (bank_cb || opcode != 'he4);
-	assume property (bank_cb || opcode != 'heb);
-	assume property (bank_cb || opcode != 'hec);
-	assume property (bank_cb || opcode != 'hed);
-	assume property (bank_cb || opcode != 'hf4);
-	assume property (bank_cb || opcode != 'hfc);
-	assume property (bank_cb || opcode != 'hfd);
+	// assume property (bank_cb || opcode != 'hd3);
+	// assume property (bank_cb || opcode != 'hdb);
+	// assume property (bank_cb || opcode != 'hdd);
+	// assume property (bank_cb || opcode != 'he3);
+	// assume property (bank_cb || opcode != 'he4);
+	// assume property (bank_cb || opcode != 'heb);
+	// assume property (bank_cb || opcode != 'hec);
+	// assume property (bank_cb || opcode != 'hed);
+	// assume property (bank_cb || opcode != 'hf4);
+	// assume property (bank_cb || opcode != 'hfc);
+	// assume property (bank_cb || opcode != 'hfd);
 
 endmodule
