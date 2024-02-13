@@ -6,7 +6,7 @@ module vid_dump(
 		input logic ld0, ld1
 	);
 
-	task automatic video_dump_loop(input int f);
+	task automatic video_dump_loop(input int f, input bit is_running);
 		bit [1:0] line[0:159];
 		int       pxidx, lineidx;
 		bit       dis;
@@ -15,14 +15,14 @@ module vid_dump(
 		lineidx = 0;
 		dis     = 1;
 
-		forever fork :video_event
+		while (is_running) fork
 			begin
 				@(posedge s);
 				lineidx = 0;
 				/* Vertical sync:
 				 *   4 byte little endian timestamp + "V" */
 				$fwrite(f, "%c%c%c%cV", t[7:0], t[15:8], t[23:16], t[31:24]);
-				disable video_event;
+				is_running = 0;
 			end
 
 			begin
@@ -33,7 +33,7 @@ module vid_dump(
 					pxidx++;
 				if (st) /* Horizontal sync active at pixel clock edge? */
 					pxidx = 0;
-				disable video_event;
+				is_running = 0;
 			end
 
 			begin :video_latch
@@ -45,7 +45,7 @@ module vid_dump(
 				if (pxidx < 161)
 					pxidx++;
 				if (dis || lineidx >= 144)
-					disable video_event;
+					is_running = 0;
 				/* Latch line:
 				 *   4 byte little endian timestamp + "L" + 40 bytes pixel data
 				 *  or
@@ -67,7 +67,7 @@ module vid_dump(
 						$fwrite(f, "%c", pxout);
 				end
 				lineidx++;
-				disable video_event;
+				is_running = 0;
 			end
 
 			begin

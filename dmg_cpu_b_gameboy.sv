@@ -261,30 +261,45 @@ module dmg_cpu_b_gameboy;
 	 * otherwise it collides with 0xff driven on the right side of page 5. */
 	assign cpu_drv_d = cpu_raw_wr && cpu_clkin_t3 && !cpu_clkin_t2;
 
-	always @(posedge cpu_clkin_t3) if (rd && !cpu_in_t12 && !cpu_in_t13) begin :read_cycle
+	bit read_cycle;
+
+	always @(posedge cpu_clkin_t3) if (rd && !cpu_in_t12 && !cpu_in_t13) begin: read_cycle_
+		read_cycle <= 1;
 		cpu_a_out  <= adr;
 		cpu_raw_rd <= 1;
-		@(posedge cpu_clkin_t2);
+
+		@(posedge cpu_clkin_t2, negedge read_cycle);
+		if (read_cycle == 1) disable read_cycle_;
+
 		cpu_raw_rd <= 0;
 		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
 			cpu_a_out[15:8] <= 0;
 	end
 
-	always @(posedge cpu_clkin_t3) if (wr && !cpu_in_t12 && !cpu_in_t13) begin :write_cycle
+	bit write_cycle;
+
+	always @(posedge cpu_clkin_t3) if (wr && !cpu_in_t12 && !cpu_in_t13) begin: write_cycle_
+		write_cycle <= 1;
 		cpu_a_out  <= adr;
 		cpu_d_out  <= '1;
 		cpu_raw_wr <= 1;
-		@(posedge cpu_clkin_t5);
+
+		@(posedge cpu_clkin_t5, negedge write_cycle);
+		if (write_cycle == 0) disable write_cycle_;
+
 		cpu_d_out  <= dout;
-		@(posedge cpu_clkin_t2);
+
+		@(posedge cpu_clkin_t2, negedge write_cycle);
+		if (write_cycle == 0) disable write_cycle_;
+
 		cpu_raw_wr <= 0;
 		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
 			cpu_a_out[15:8] <= 0;
 	end
 
 	always @(posedge cpu_clkin_t10, posedge cpu_in_t12, posedge cpu_in_t13) if (cpu_in_t12 || cpu_in_t13) begin
-		disable read_cycle;
-		disable write_cycle;
+		read_cycle <= 0;
+		write_cycle <= 0;
 		cpu_raw_rd <= 0;
 		cpu_raw_wr <= 0;
 		cpu_a_out  <= 0;
@@ -311,6 +326,8 @@ module dmg_cpu_b_gameboy;
 	end
 
 	int sample_idx;
+	bit tick_tick;
+	bit video_dump;
 
 	initial begin
 		string dumpfile, ch_file, snd_file, vid_file;
@@ -371,9 +388,11 @@ module dmg_cpu_b_gameboy;
 		cyc(64);
 		nrst = 1;
 
+		tick_tick = 1;
+
 		fork
-			begin :tick_tick
-				forever begin
+			begin
+				while (tick_tick) begin
 					cyc(64);
 					if (dump_channels) begin
 						write_bit4_as_int8(fch[1], dmg.ch1_out);
@@ -389,8 +408,8 @@ module dmg_cpu_b_gameboy;
 				end
 			end
 
-			if (dump_video) begin :video_dump
-				vdump.video_dump_loop(fvid);
+			if (dump_video) begin
+				vdump.video_dump_loop(fvid, video_dump);
 			end
 
 			begin
@@ -414,8 +433,8 @@ module dmg_cpu_b_gameboy;
 					@(posedge cpu_clkin_t10);
 				end
 
-				disable tick_tick;
-				disable video_dump;
+				tick_tick = 0;
+				video_dump = 0;
 			end
 		join
 
