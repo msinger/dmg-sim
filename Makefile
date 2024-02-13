@@ -198,4 +198,4 @@ test-boot: $(TEST_DEPENDENCIES)
 	tests/run_tests.sh boot
 
 verilator:
-	verilator -Wall --cc --trace --top-module dmg_cpu_b_gameboy --exe $(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(MBC)
+	verilator --timing --cc --trace --top-module dmg_cpu_b_gameboy --exe $(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(MBC)
