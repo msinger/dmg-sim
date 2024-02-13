@@ -114,7 +114,7 @@ module dmg_cpu_b(
 		for (genvar i = 0; i < 8; i++)
 			assign d_pin_drv[i] = bidir_out(d_d[i], d_a[i]);
 	endgenerate
-	assign (pull1, highz0) d_pin = {8{!lula}};
+	assign (pull1, weak0) d_pin = {8{!lula}};
 	assign                 d_pin = d_pin_drv;
 
 	logic [7:0] md_pin_drv; /* Value driven internally onto the pins if not 'z */
@@ -122,7 +122,7 @@ module dmg_cpu_b(
 		for (genvar i = 0; i < 8; i++)
 			assign md_pin_drv[i] = bidir_out(md_out[i], md_a[i]);
 	endgenerate
-	assign (pull1, highz0) md_pin = {8{!md_b}};
+	assign (pull1, weak0) md_pin = {8{!md_b}};
 	assign                 md_pin = md_pin_drv;
 
 	generate
@@ -135,8 +135,8 @@ module dmg_cpu_b(
 	assign                 sout = nsout;
 	assign                 sin  = bidir_out(sin_d, sin_a);
 	assign                 sck  = bidir_out(sck_d, sck_a);
-	assign (pull1, highz0) sin  = !sin_b;
-	assign (pull1, highz0) sck  = !sck_dir;
+	assign (pull1, weak0) sin  = !sin_b;
+	assign (pull1, weak0) sck  = !sck_dir;
 
 	assign                 p10  = bidir_out(p10_d, p10_a);
 	assign                 p11  = bidir_out(p11_d, p11_a);
@@ -144,10 +144,10 @@ module dmg_cpu_b(
 	assign                 p13  = bidir_out(p13_d, p13_a);
 	assign                 p14  = bidir_out(p14_b, p14_a);
 	assign                 p15  = bidir_out(p15_b, p15_a);
-	assign (pull1, highz0) p10  = !p10_b;
-	assign (pull1, highz0) p11  = !p11_b;
-	assign (pull1, highz0) p12  = !p12_b;
-	assign (pull1, highz0) p13  = !p13_b;
+	assign (pull1, weak0) p10  = !p10_b;
+	assign (pull1, weak0) p11  = !p11_b;
+	assign (pull1, weak0) p12  = !p12_b;
+	assign (pull1, weak0) p13  = !p13_b;
 
 	assign cpg = !npin_cpg;
 	assign cp  = !ncp;
