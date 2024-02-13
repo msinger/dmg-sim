@@ -5,7 +5,7 @@ module dmg_cpu_b_gameboy;
 	import snd_dump::write_header;
 	import snd_dump::write_bit4_as_int8;
 	import snd_dump::write_real_as_int16;
-	vid_dump vdump(.*, .t(test.sample_idx));
+	vid_dump vdump(.*, .t(sample_idx));
 
 	/* Clock (crystal) pins */
 	logic xi, xo;
@@ -310,119 +310,117 @@ module dmg_cpu_b_gameboy;
 		cpu_irq7_ack <= iack[7];
 	end
 
-	program test;
-		int sample_idx;
+	int sample_idx;
 
-		initial begin
-			string dumpfile, ch_file, snd_file, vid_file;
-			string time_str, prev_time_str;
-			real   sim_seconds;
-			int    _;
-			int    fch[1:4];
-			int    fmix, fvid;
-			int    sim_mcycs;
-			bit    dump_channels, dump_sound, dump_video;
+	initial begin
+		string dumpfile, ch_file, snd_file, vid_file;
+		string time_str, prev_time_str;
+		real   sim_seconds;
+		int    _;
+		int    fch[1:4];
+		int    fmix, fvid;
+		int    sim_mcycs;
+		bit    dump_channels, dump_sound, dump_video;
 
-			dumpfile = "";
-			_ = $value$plusargs("DUMPFILE=%s", dumpfile);
+		dumpfile = "";
+		_ = $value$plusargs("DUMPFILE=%s", dumpfile);
 
-			ch_file = "";
-			_ = $value$plusargs("CH_FILE=%s", ch_file);
-			dump_channels = ch_file != "";
+		ch_file = "";
+		_ = $value$plusargs("CH_FILE=%s", ch_file);
+		dump_channels = ch_file != "";
 
-			snd_file = "";
-			_ = $value$plusargs("SND_FILE=%s", snd_file);
-			dump_sound = snd_file != "";
+		snd_file = "";
+		_ = $value$plusargs("SND_FILE=%s", snd_file);
+		dump_sound = snd_file != "";
 
-			vid_file = "";
-			_ = $value$plusargs("VID_FILE=%s", vid_file);
-			dump_video = vid_file != "";
+		vid_file = "";
+		_ = $value$plusargs("VID_FILE=%s", vid_file);
+		dump_video = vid_file != "";
 
-			sim_seconds = 6.0; /* Enough time for the boot ROM */
-			_ = $value$plusargs("SECS=%f", sim_seconds);
+		sim_seconds = 6.0; /* Enough time for the boot ROM */
+		_ = $value$plusargs("SECS=%f", sim_seconds);
 
-			sim_mcycs = $rtoi(sim_seconds * 1048576.0);
+		sim_mcycs = $rtoi(sim_seconds * 1048576.0);
 
-			$dumpfile(dumpfile);
-			$dumpvars(0, dmg_cpu_b_gameboy);
+		$dumpfile(dumpfile);
+		$dumpvars(0, dmg_cpu_b_gameboy);
 
-			if (dump_channels) for (int i = 1; i <= 4; i++) begin
-				string filename;
-				$sformat(filename, ch_file, i);
-				fch[i] = $fopen(filename, "wb");
-				write_header(fch[i], 65536, 1, 0);
-			end
-			if (dump_sound) begin
-				fmix = $fopen(snd_file, "wb");
-				write_header(fmix, 65536, 2, 1);
-			end
-			if (dump_video)
-				fvid = $fopen(vid_file, "wb");
-
-			sample_idx = 0;
-
-			xi   = 0;
-			nrst = 0;
-
-			clk   = 0;
-
-			cpu_out_t1   = 0;
-			cpu_xo_ena   = 1;
-
-			cyc(64);
-			nrst = 1;
-
-			fork
-				begin :tick_tick
-					forever begin
-						cyc(64);
-						if (dump_channels) begin
-							write_bit4_as_int8(fch[1], dmg.ch1_out);
-							write_bit4_as_int8(fch[2], dmg.ch2_out);
-							write_bit4_as_int8(fch[3], dmg.wave_dac_d);
-							write_bit4_as_int8(fch[4], dmg.ch4_out);
-						end
-						if (dump_sound) begin
-							write_real_as_int16(fmix, lout);
-							write_real_as_int16(fmix, rout);
-						end
-						sample_idx++;
-					end
-				end
-
-				if (dump_video) begin :video_dump
-					vdump.video_dump_loop(fvid);
-				end
-
-				begin
-					@(negedge reset);
-					$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
-					$display("System reset done -- will simulate %s seconds", time_str);
-					$fflush(32'h8000_0001);
-					prev_time_str = time_str;
-
-					while (sim_mcycs) begin
-						sim_mcycs--;
-						if (sim_mcycs % 131072) begin
-							$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
-							if (time_str != prev_time_str && time_str != "0.0") begin
-								$display("%s seconds remaining", time_str);
-								$fflush(32'h8000_0001);
-								prev_time_str = time_str;
-							end
-						end
-						@(posedge cpu_clkin_t9);
-						@(posedge cpu_clkin_t10);
-					end
-
-					disable tick_tick;
-					disable video_dump;
-				end
-			join
-
-			$finish;
+		if (dump_channels) for (int i = 1; i <= 4; i++) begin
+			string filename;
+			$sformat(filename, ch_file, i);
+			fch[i] = $fopen(filename, "wb");
+			write_header(fch[i], 65536, 1, 0);
 		end
-	endprogram
+		if (dump_sound) begin
+			fmix = $fopen(snd_file, "wb");
+			write_header(fmix, 65536, 2, 1);
+		end
+		if (dump_video)
+			fvid = $fopen(vid_file, "wb");
+
+		sample_idx = 0;
+
+		xi   = 0;
+		nrst = 0;
+
+		clk   = 0;
+
+		cpu_out_t1   = 0;
+		cpu_xo_ena   = 1;
+
+		cyc(64);
+		nrst = 1;
+
+		fork
+			begin :tick_tick
+				forever begin
+					cyc(64);
+					if (dump_channels) begin
+						write_bit4_as_int8(fch[1], dmg.ch1_out);
+						write_bit4_as_int8(fch[2], dmg.ch2_out);
+						write_bit4_as_int8(fch[3], dmg.wave_dac_d);
+						write_bit4_as_int8(fch[4], dmg.ch4_out);
+					end
+					if (dump_sound) begin
+						write_real_as_int16(fmix, lout);
+						write_real_as_int16(fmix, rout);
+					end
+					sample_idx++;
+				end
+			end
+
+			if (dump_video) begin :video_dump
+				vdump.video_dump_loop(fvid);
+			end
+
+			begin
+				@(negedge reset);
+				$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
+				$display("System reset done -- will simulate %s seconds", time_str);
+				$fflush(32'h8000_0001);
+				prev_time_str = time_str;
+
+				while (sim_mcycs) begin
+					sim_mcycs--;
+					if (sim_mcycs % 131072) begin
+						$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
+						if (time_str != prev_time_str && time_str != "0.0") begin
+							$display("%s seconds remaining", time_str);
+							$fflush(32'h8000_0001);
+							prev_time_str = time_str;
+						end
+					end
+					@(posedge cpu_clkin_t9);
+					@(posedge cpu_clkin_t10);
+				end
+
+				disable tick_tick;
+				disable video_dump;
+			end
+		join
+
+		$finish;
+	end
 
 	/* HALT/EI/DI instruction test code */
 	/*
