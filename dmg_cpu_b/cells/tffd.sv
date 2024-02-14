@@ -27,6 +27,6 @@ module tffd #(
 			load_negedge <= 0;
 	end
 
-	assign #T_TFFD q = load ? d : ff;
+	assign q = load ? d : ff;
 
 endmodule

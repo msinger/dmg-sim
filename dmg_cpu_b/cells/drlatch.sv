@@ -18,6 +18,6 @@ module drlatch #(
 			l = d;
 	end
 
-	assign #T_DRL q = l;
+	assign q = l;
 
 endmodule

@@ -23,6 +23,6 @@ module dffr_a #(
 			ff <= 0;
 	end
 
-	assign #T_DFFR_A q = ff;
+	assign q = ff;
 
 endmodule
