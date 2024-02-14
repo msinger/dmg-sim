@@ -181,7 +181,7 @@ mkvid/mkimgs: mkvid/mkimgs.c
 boot/quickboot.bin:
 	make -C boot
 
-.PHONY: test test-all test-cpu test-boot
+.PHONY: test test-all test-cpu test-boot verilator
 
 TEST_DEPENDENCIES = dmg_cpu_b_gameboy.vvp boot/quickboot.bin mkvid/mkimgs
 
@@ -198,4 +198,13 @@ test-boot: $(TEST_DEPENDENCIES)
 	tests/run_tests.sh boot
 
 verilator:
-	verilator -CFLAGS -DVL_DEBUG=1 -Wno-fatal --timing --debug --cc --trace --top-module dmg_cpu_b_gameboy --binary -j 0 $(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(MBC)
+	verilator -CFLAGS -DVL_DEBUG=1 -Wno-fatal --timing --debug --cc --trace-fst --top-module dmg_cpu_b_gameboy --binary -j 0 $(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(MBC)
+
+sim-verilator $(DMG_CPU_B_GAMEBOY_VVP_OUT): verilator
+	./obj_dir/Vdmg_cpu_b_gameboy +DUMPFILE=dmg_cpu_b_gameboy_ver.fst \
+	                       $(call VVP_CH_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       $(call VVP_SND_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       +BOOTROM="$(BOOTROM)" \
+	                       +ROM="$(ROM)" \
+	                       +SECS=$(SECS)
