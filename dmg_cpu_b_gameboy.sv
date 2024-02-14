@@ -86,7 +86,6 @@ module dmg_cpu_b_gameboy;
 	dmg_cpu_b dmg(.*, .t1('0), .t2('0), .vin(0.0), .unbonded_pad0('1), .unbonded_pad1());
 
 	task automatic xi_tick();
-		$display("xi_tick");
 		/* Simulate the 4 MiHz crystal that is attached to the XI and XO pins */
 		#122ns xi = xo;
 
@@ -422,11 +421,6 @@ module dmg_cpu_b_gameboy;
 			if (dump_video) begin
 				$display("video_dump");
 				vdump.video_dump_loop(fvid, video_dump);
-			end
-
-			forever begin 
-				@(posedge dmg.p1_clocks_reset.sola)
-				$display("tick");
 			end
 
 			begin
