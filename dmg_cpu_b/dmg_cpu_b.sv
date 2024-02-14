@@ -433,6 +433,8 @@ module dmg_cpu_b(
 		string bootrom_file;
 		int f, _;
 
+		$display("DMG CPU B: Starting up...");
+
 		bootrom_file = "";
 		_ = $value$plusargs("BOOTROM=%s", bootrom_file);
 

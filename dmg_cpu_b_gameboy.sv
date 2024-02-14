@@ -1,4 +1,5 @@
 `default_nettype none
+`timescale 1ns/1ps
 
 module dmg_cpu_b_gameboy;
 
@@ -85,6 +86,7 @@ module dmg_cpu_b_gameboy;
 	dmg_cpu_b dmg(.*, .t1('0), .t2('0), .vin(0.0), .unbonded_pad0('1), .unbonded_pad1());
 
 	task automatic xi_tick();
+		$display("xi_tick");
 		/* Simulate the 4 MiHz crystal that is attached to the XI and XO pins */
 		#122ns xi = xo;
 
@@ -171,57 +173,6 @@ module dmg_cpu_b_gameboy;
 		end
 	endcase
 
-	initial begin
-		string rom_file;
-		int    f, _;
-		byte   mbc_type, ram_size;
-
-		has_rom  = 0;
-		has_ram  = 0;
-		has_mbc1 = 0;
-		has_mbc5 = 0;
-
-		rom_file = "";
-		_ = $value$plusargs("ROM=%s", rom_file);
-
-		f = 0;
-		if (rom_file != "") begin
-			f = $fopen(rom_file, "rb");
-			if (!f)
-				$error("Failed to open cartridge ROM file %s for reading.", rom_file);
-		end
-		if (f) begin
-			_ = $fread(cart_rom, f);
-			$fclose(f);
-			has_rom = 1;
-		end
-
-		if (has_rom) begin
-			mbc_type = cart_rom['h147];
-			ram_size = cart_rom['h149];
-
-			unique case (mbc_type)
-				'h00, 'h08, 'h09: ;
-				'h01, 'h02, 'h03: has_mbc1 = 1;
-				'h05, 'h06:       $error("MBC2 not supported yet.");
-				'h0b, 'h0c, 'h0d: $error("MMM01 not supported yet.");
-				'h0f, 'h10, 'h11,
-				'h12, 'h13:       $error("MBC3 not supported yet.");
-				'h19, 'h1a, 'h1b,
-				'h1c, 'h1d, 'h1e: has_mbc5 = 1;
-				'h20:             $error("MBC6 not supported yet.");
-				'h22:             $error("MBC7 not supported yet.");
-				'hfc:             $error("MAC-GBD not supported yet.");
-				'hfd:             $error("TAMA5 not supported yet.");
-				'hfe:             $error("HuC3 not supported yet.");
-				'hff:             $error("HuC1 not supported yet.");
-				default:          $error("Unsupported MBC type.");
-			endcase
-
-			has_ram = |ram_size;
-		end
-	end
-
 	logic           clk;
 	logic           reset, areset;
 	logic           ncyc;
@@ -300,6 +251,7 @@ module dmg_cpu_b_gameboy;
 	always @(posedge cpu_clkin_t10, posedge cpu_in_t12, posedge cpu_in_t13) if (cpu_in_t12 || cpu_in_t13) begin
 		read_cycle <= 0;
 		write_cycle <= 0;
+
 		cpu_raw_rd <= 0;
 		cpu_raw_wr <= 0;
 		cpu_a_out  <= 0;
@@ -330,14 +282,64 @@ module dmg_cpu_b_gameboy;
 	bit video_dump;
 
 	initial begin
+		string rom_file;
+		int    f, _;
+		byte   mbc_type, ram_size;
+
 		string dumpfile, ch_file, snd_file, vid_file;
 		string time_str, prev_time_str;
 		real   sim_seconds;
-		int    _;
 		int    fch[1:4];
 		int    fmix, fvid;
 		int    sim_mcycs;
 		bit    dump_channels, dump_sound, dump_video;
+
+		$display("DMG: Starting up...");
+
+		has_rom  = 0;
+		has_ram  = 0;
+		has_mbc1 = 0;
+		has_mbc5 = 0;
+
+		rom_file = "";
+		_ = $value$plusargs("ROM=%s", rom_file);
+
+		f = 0;
+		if (rom_file != "") begin
+			f = $fopen(rom_file, "rb");
+			if (!f)
+				$error("Failed to open cartridge ROM file %s for reading.", rom_file);
+		end
+		if (f) begin
+			_ = $fread(cart_rom, f);
+			$fclose(f);
+			has_rom = 1;
+		end
+
+		if (has_rom) begin
+			mbc_type = cart_rom['h147];
+			ram_size = cart_rom['h149];
+
+			unique case (mbc_type)
+				'h00, 'h08, 'h09: ;
+				'h01, 'h02, 'h03: has_mbc1 = 1;
+				'h05, 'h06:       $error("MBC2 not supported yet.");
+				'h0b, 'h0c, 'h0d: $error("MMM01 not supported yet.");
+				'h0f, 'h10, 'h11,
+				'h12, 'h13:       $error("MBC3 not supported yet.");
+				'h19, 'h1a, 'h1b,
+				'h1c, 'h1d, 'h1e: has_mbc5 = 1;
+				'h20:             $error("MBC6 not supported yet.");
+				'h22:             $error("MBC7 not supported yet.");
+				'hfc:             $error("MAC-GBD not supported yet.");
+				'hfd:             $error("TAMA5 not supported yet.");
+				'hfe:             $error("HuC3 not supported yet.");
+				'hff:             $error("HuC1 not supported yet.");
+				default:          $error("Unsupported MBC type.");
+			endcase
+
+			has_ram = |ram_size;
+		end
 
 		dumpfile = "";
 		_ = $value$plusargs("DUMPFILE=%s", dumpfile);
@@ -357,10 +359,14 @@ module dmg_cpu_b_gameboy;
 		sim_seconds = 6.0; /* Enough time for the boot ROM */
 		_ = $value$plusargs("SECS=%f", sim_seconds);
 
+		$display("loaded args");
+
 		sim_mcycs = $rtoi(sim_seconds * 1048576.0);
 
 		$dumpfile(dumpfile);
 		$dumpvars(0, dmg_cpu_b_gameboy);
+
+		$display("dump file setup");
 
 		if (dump_channels) for (int i = 1; i <= 4; i++) begin
 			string filename;
@@ -385,13 +391,18 @@ module dmg_cpu_b_gameboy;
 		cpu_out_t1   = 0;
 		cpu_xo_ena   = 1;
 
+		$display("starting cyc");
+
 		cyc(64);
 		nrst = 1;
 
 		tick_tick = 1;
 
+		$display("begin fork");
+
 		fork
 			begin
+				$display("tick_tick");
 				while (tick_tick) begin
 					cyc(64);
 					if (dump_channels) begin
@@ -409,10 +420,17 @@ module dmg_cpu_b_gameboy;
 			end
 
 			if (dump_video) begin
+				$display("video_dump");
 				vdump.video_dump_loop(fvid, video_dump);
 			end
 
+			forever begin 
+				@(posedge dmg.p1_clocks_reset.sola)
+				$display("tick");
+			end
+
 			begin
+				$display("Waiting reset...");
 				@(negedge reset);
 				$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
 				$display("System reset done -- will simulate %s seconds", time_str);
