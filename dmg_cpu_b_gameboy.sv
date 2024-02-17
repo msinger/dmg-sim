@@ -396,6 +396,7 @@ module dmg_cpu_b_gameboy;
 		nrst = 1;
 
 		tick_tick = 1;
+		video_dump = 1;
 
 		$display("begin fork");
 
@@ -421,6 +422,7 @@ module dmg_cpu_b_gameboy;
 			if (dump_video) begin
 				$display("video_dump");
 				vdump.video_dump_loop(fvid, video_dump);
+				$display("video dump ended");
 			end
 
 			begin

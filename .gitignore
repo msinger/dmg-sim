@@ -7,3 +7,5 @@
 /*.mkv
 /DMG_ROM.bin
 obj_dir
+obj-gameboy
+obj-debug
