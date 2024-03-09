@@ -71,7 +71,7 @@ module sprite_pixel_shifter(
 	assign #T_INV  wyco = !suto;
 	assign #T_INV  selu = !rydu;
 	assign #T_INV  wamy = !sega;
-	assign #T_INV  sery = !sery;
+	assign #T_INV  sery = !rama;
 	assign #T_INV  sulu = !semo;
 	assign #T_NAND waxo = !(voby && tyta);
 	assign #T_NAND tyga = !(sele && tyta);
