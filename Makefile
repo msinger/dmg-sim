@@ -55,6 +55,23 @@ $(DMG_CPU_B_CELLS) \
 $(DMG_CPU_B_PAGES)
 
 SM83 = \
+dmgcpu/HDL/sm83/_GekkioNames.v \
+dmgcpu/HDL/sm83/ALU.v \
+dmgcpu/HDL/sm83/Bottom.v \
+dmgcpu/HDL/sm83/DataMux.v \
+dmgcpu/HDL/sm83/Decoder1.v \
+dmgcpu/HDL/sm83/Decoder2.v \
+dmgcpu/HDL/sm83/Decoder3.v \
+dmgcpu/HDL/sm83/IDU.v \
+dmgcpu/HDL/sm83/IRNots.v \
+dmgcpu/HDL/sm83/IRQ.v \
+dmgcpu/HDL/sm83/Regs.v \
+dmgcpu/HDL/sm83/SeqCells.v \
+dmgcpu/HDL/sm83/Seq.v \
+dmgcpu/HDL/sm83/Thingy.v \
+dmgcpu/HDL/sm83/Top.v \
+
+#SM83 = \
 sm83/sm83.sv \
 sm83/sm83_adr_inc.sv \
 sm83/sm83_alu.sv \

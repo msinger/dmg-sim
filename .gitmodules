@@ -1,0 +1,3 @@
+[submodule "dmgcpu"]
+	path = dmgcpu
+	url = git@github.com:emurussia/dmgcpu.git
