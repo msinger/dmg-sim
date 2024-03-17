@@ -1,11 +1,12 @@
 `default_nettype none
+`timescale 1ns/1ps
 
 module dmg_cpu_b_gameboy;
 
 	import snd_dump::write_header;
 	import snd_dump::write_bit4_as_int8;
 	import snd_dump::write_real_as_int16;
-	vid_dump vdump(.*, .t(test.sample_idx));
+	vid_dump vdump(.*, .t(sample_idx));
 
 	/* Clock (crystal) pins */
 	logic xi, xo;
@@ -171,10 +172,128 @@ module dmg_cpu_b_gameboy;
 		end
 	endcase
 
+	logic           clk;
+	logic           reset, areset;
+	logic           ncyc;
+
+	logic [15:0]    adr;
+	logic [7:0]     din, dout;
+	logic           rd;
+	logic           wr;
+
+	logic [7:0]     irq;
+	logic [7:0]     iack;
+
+	logic           clk_ena;
+	logic           clk_stable;
+
+	sm83 cpu(.*);
+
+	assign ncyc        = !dmg.p1_clocks_reset.adyk && !dmg.p1_clocks_reset.alef;
+	assign cpu_a       = cpu_a_out;
+	assign d           = cpu_drv_d ? cpu_d_out : 'z;
+	assign din         = d;
+	assign cpu_out_r7  = (cpu_raw_rd || cpu_raw_wr) && !cpu_in_r4 && !cpu_in_r5;
+	assign clk_stable  = cpu_in_t15;
+	assign cpu_clk_ena = clk_ena;
+	assign reset       = cpu_in_t12;
+	assign areset      = cpu_in_t13;
+
+	logic        cpu_drv_d;
+	logic [7:0]  cpu_d_out;
+	logic [15:0] cpu_a_out;
+
+	initial cpu_a_out  = 0;
+	initial cpu_raw_rd = 0;
+	initial cpu_raw_wr = 0;
+
+	/* CPU must not drive data bus when cpu_clkin_t3 (BEDO) is low or cpu_clkin_t2 (BOWA) is high,
+	 * otherwise it collides with 0xff driven on the right side of page 5. */
+	assign cpu_drv_d = cpu_raw_wr && cpu_clkin_t3 && !cpu_clkin_t2;
+
+	bit read_cycle;
+
+	always @(posedge cpu_clkin_t3) if (rd && !cpu_in_t12 && !cpu_in_t13) begin: read_cycle_
+		read_cycle <= 1;
+		cpu_a_out  <= adr;
+		cpu_raw_rd <= 1;
+
+		@(posedge cpu_clkin_t2, negedge read_cycle);
+		if (read_cycle == 1) disable read_cycle_;
+
+		cpu_raw_rd <= 0;
+		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
+			cpu_a_out[15:8] <= 0;
+	end
+
+	bit write_cycle;
+
+	always @(posedge cpu_clkin_t3) if (wr && !cpu_in_t12 && !cpu_in_t13) begin: write_cycle_
+		write_cycle <= 1;
+		cpu_a_out  <= adr;
+		cpu_d_out  <= '1;
+		cpu_raw_wr <= 1;
+
+		@(posedge cpu_clkin_t5, negedge write_cycle);
+		if (write_cycle == 0) disable write_cycle_;
+
+		cpu_d_out  <= dout;
+
+		@(posedge cpu_clkin_t2, negedge write_cycle);
+		if (write_cycle == 0) disable write_cycle_;
+
+		cpu_raw_wr <= 0;
+		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
+			cpu_a_out[15:8] <= 0;
+	end
+
+	always @(posedge cpu_clkin_t10, posedge cpu_in_t12, posedge cpu_in_t13) if (cpu_in_t12 || cpu_in_t13) begin
+		read_cycle <= 0;
+		write_cycle <= 0;
+
+		cpu_raw_rd <= 0;
+		cpu_raw_wr <= 0;
+		cpu_a_out  <= 0;
+	end
+
+	assign irq[0] = cpu_irq0_trig;
+	assign irq[1] = cpu_irq1_trig;
+	assign irq[2] = cpu_irq2_trig;
+	assign irq[3] = cpu_irq3_trig;
+	assign irq[4] = cpu_irq4_trig;
+	assign irq[5] = cpu_irq5_trig;
+	assign irq[6] = cpu_irq6_trig;
+	assign irq[7] = cpu_irq7_trig;
+
+	always_ff @(posedge clk) begin
+		cpu_irq0_ack <= iack[0];
+		cpu_irq1_ack <= iack[1];
+		cpu_irq2_ack <= iack[2];
+		cpu_irq3_ack <= iack[3];
+		cpu_irq4_ack <= iack[4];
+		cpu_irq5_ack <= iack[5];
+		cpu_irq6_ack <= iack[6];
+		cpu_irq7_ack <= iack[7];
+	end
+
+	int sample_idx;
+	bit tick_tick;
+	bit video_dump;
+
 	initial begin
 		string rom_file;
 		int    f, _;
 		byte   mbc_type, ram_size;
+
+		string dumpfile, ch_file, snd_file, vid_file;
+		string time_str, prev_time_str;
+		real   sim_seconds;
+		int    fch[1:4];
+		int    fmix, fvid;
+		int    sim_mcycs;
+		bit    dump_channels, dump_sound, dump_video;
+
+		$display("DMG: Starting up...");
 
 		has_rom  = 0;
 		has_ram  = 0;
@@ -220,209 +339,121 @@ module dmg_cpu_b_gameboy;
 
 			has_ram = |ram_size;
 		end
-	end
 
-	logic           clk;
-	logic           reset, areset;
-	logic           ncyc;
+		dumpfile = "";
+		_ = $value$plusargs("DUMPFILE=%s", dumpfile);
 
-	logic [15:0]    adr;
-	logic [7:0]     din, dout;
-	logic           rd;
-	logic           wr;
+		ch_file = "";
+		_ = $value$plusargs("CH_FILE=%s", ch_file);
+		dump_channels = ch_file != "";
 
-	logic [7:0]     irq;
-	logic [7:0]     iack;
+		snd_file = "";
+		_ = $value$plusargs("SND_FILE=%s", snd_file);
+		dump_sound = snd_file != "";
 
-	logic           clk_ena;
-	logic           clk_stable;
+		vid_file = "";
+		_ = $value$plusargs("VID_FILE=%s", vid_file);
+		dump_video = vid_file != "";
 
-	sm83 cpu(.*);
+		sim_seconds = 6.0; /* Enough time for the boot ROM */
+		_ = $value$plusargs("SECS=%f", sim_seconds);
 
-	assign ncyc        = !dmg.p1_clocks_reset.adyk && !dmg.p1_clocks_reset.alef;
-	assign cpu_a       = cpu_a_out;
-	assign d           = cpu_drv_d ? cpu_d_out : 'z;
-	assign din         = d;
-	assign cpu_out_r7  = (cpu_raw_rd || cpu_raw_wr) && !cpu_in_r4 && !cpu_in_r5;
-	assign clk_stable  = cpu_in_t15;
-	assign cpu_clk_ena = clk_ena;
-	assign reset       = cpu_in_t12;
-	assign areset      = cpu_in_t13;
+		$display("loaded args");
 
-	logic        cpu_drv_d;
-	logic [7:0]  cpu_d_out;
-	logic [15:0] cpu_a_out;
+		sim_mcycs = $rtoi(sim_seconds * 1048576.0);
 
-	initial cpu_a_out  = 0;
-	initial cpu_raw_rd = 0;
-	initial cpu_raw_wr = 0;
+		$dumpfile(dumpfile);
+		$dumpvars(0, dmg_cpu_b_gameboy);
 
-	/* CPU must not drive data bus when cpu_clkin_t3 (BEDO) is low or cpu_clkin_t2 (BOWA) is high,
-	 * otherwise it collides with 0xff driven on the right side of page 5. */
-	assign cpu_drv_d = cpu_raw_wr && cpu_clkin_t3 && !cpu_clkin_t2;
+		$display("dump file setup");
 
-	always @(posedge cpu_clkin_t3) if (rd && !cpu_in_t12 && !cpu_in_t13) begin :read_cycle
-		cpu_a_out  <= adr;
-		cpu_raw_rd <= 1;
-		@(posedge cpu_clkin_t2);
-		cpu_raw_rd <= 0;
-		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
-			cpu_a_out[15:8] <= 0;
-	end
-
-	always @(posedge cpu_clkin_t3) if (wr && !cpu_in_t12 && !cpu_in_t13) begin :write_cycle
-		cpu_a_out  <= adr;
-		cpu_d_out  <= '1;
-		cpu_raw_wr <= 1;
-		@(posedge cpu_clkin_t5);
-		cpu_d_out  <= dout;
-		@(posedge cpu_clkin_t2);
-		cpu_raw_wr <= 0;
-		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
-			cpu_a_out[15:8] <= 0;
-	end
-
-	always @(posedge cpu_clkin_t10, posedge cpu_in_t12, posedge cpu_in_t13) if (cpu_in_t12 || cpu_in_t13) begin
-		disable read_cycle;
-		disable write_cycle;
-		cpu_raw_rd <= 0;
-		cpu_raw_wr <= 0;
-		cpu_a_out  <= 0;
-	end
-
-	assign irq[0] = cpu_irq0_trig;
-	assign irq[1] = cpu_irq1_trig;
-	assign irq[2] = cpu_irq2_trig;
-	assign irq[3] = cpu_irq3_trig;
-	assign irq[4] = cpu_irq4_trig;
-	assign irq[5] = cpu_irq5_trig;
-	assign irq[6] = cpu_irq6_trig;
-	assign irq[7] = cpu_irq7_trig;
-
-	always_ff @(posedge clk) begin
-		cpu_irq0_ack <= iack[0];
-		cpu_irq1_ack <= iack[1];
-		cpu_irq2_ack <= iack[2];
-		cpu_irq3_ack <= iack[3];
-		cpu_irq4_ack <= iack[4];
-		cpu_irq5_ack <= iack[5];
-		cpu_irq6_ack <= iack[6];
-		cpu_irq7_ack <= iack[7];
-	end
-
-	program test;
-		int sample_idx;
-
-		initial begin
-			string dumpfile, ch_file, snd_file, vid_file;
-			string time_str, prev_time_str;
-			real   sim_seconds;
-			int    _;
-			int    fch[1:4];
-			int    fmix, fvid;
-			int    sim_mcycs;
-			bit    dump_channels, dump_sound, dump_video;
-
-			dumpfile = "";
-			_ = $value$plusargs("DUMPFILE=%s", dumpfile);
-
-			ch_file = "";
-			_ = $value$plusargs("CH_FILE=%s", ch_file);
-			dump_channels = ch_file != "";
-
-			snd_file = "";
-			_ = $value$plusargs("SND_FILE=%s", snd_file);
-			dump_sound = snd_file != "";
-
-			vid_file = "";
-			_ = $value$plusargs("VID_FILE=%s", vid_file);
-			dump_video = vid_file != "";
-
-			sim_seconds = 6.0; /* Enough time for the boot ROM */
-			_ = $value$plusargs("SECS=%f", sim_seconds);
-
-			sim_mcycs = $rtoi(sim_seconds * 1048576.0);
-
-			$dumpfile(dumpfile);
-			$dumpvars(0, dmg_cpu_b_gameboy);
-
-			if (dump_channels) for (int i = 1; i <= 4; i++) begin
-				string filename;
-				$sformat(filename, ch_file, i);
-				fch[i] = $fopen(filename, "wb");
-				write_header(fch[i], 65536, 1, 0);
-			end
-			if (dump_sound) begin
-				fmix = $fopen(snd_file, "wb");
-				write_header(fmix, 65536, 2, 1);
-			end
-			if (dump_video)
-				fvid = $fopen(vid_file, "wb");
-
-			sample_idx = 0;
-
-			xi   = 0;
-			nrst = 0;
-
-			clk   = 0;
-
-			cpu_out_t1   = 0;
-			cpu_xo_ena   = 1;
-
-			cyc(64);
-			nrst = 1;
-
-			fork
-				begin :tick_tick
-					forever begin
-						cyc(64);
-						if (dump_channels) begin
-							write_bit4_as_int8(fch[1], dmg.ch1_out);
-							write_bit4_as_int8(fch[2], dmg.ch2_out);
-							write_bit4_as_int8(fch[3], dmg.wave_dac_d);
-							write_bit4_as_int8(fch[4], dmg.ch4_out);
-						end
-						if (dump_sound) begin
-							write_real_as_int16(fmix, lout);
-							write_real_as_int16(fmix, rout);
-						end
-						sample_idx++;
-					end
-				end
-
-				if (dump_video) begin :video_dump
-					vdump.video_dump_loop(fvid);
-				end
-
-				begin
-					@(negedge reset);
-					$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
-					$display("System reset done -- will simulate %s seconds", time_str);
-					$fflush(32'h8000_0001);
-					prev_time_str = time_str;
-
-					while (sim_mcycs) begin
-						sim_mcycs--;
-						if (sim_mcycs % 131072) begin
-							$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
-							if (time_str != prev_time_str && time_str != "0.0") begin
-								$display("%s seconds remaining", time_str);
-								$fflush(32'h8000_0001);
-								prev_time_str = time_str;
-							end
-						end
-						@(posedge cpu_clkin_t9);
-						@(posedge cpu_clkin_t10);
-					end
-
-					disable tick_tick;
-					disable video_dump;
-				end
-			join
-
-			$finish;
+		if (dump_channels) for (int i = 1; i <= 4; i++) begin
+			string filename;
+			$sformat(filename, ch_file, i);
+			fch[i] = $fopen(filename, "wb");
+			write_header(fch[i], 65536, 1, 0);
 		end
-	endprogram
+		if (dump_sound) begin
+			fmix = $fopen(snd_file, "wb");
+			write_header(fmix, 65536, 2, 1);
+		end
+		if (dump_video)
+			fvid = $fopen(vid_file, "wb");
+
+		sample_idx = 0;
+
+		xi   = 0;
+		nrst = 0;
+
+		clk   = 0;
+
+		cpu_out_t1   = 0;
+		cpu_xo_ena   = 1;
+
+		$display("starting cyc");
+
+		cyc(64);
+		nrst = 1;
+
+		tick_tick = 1;
+		video_dump = 1;
+
+		$display("begin fork");
+
+		fork
+			begin
+				$display("tick_tick");
+				while (tick_tick) begin
+					cyc(64);
+					if (dump_channels) begin
+						write_bit4_as_int8(fch[1], dmg.ch1_out);
+						write_bit4_as_int8(fch[2], dmg.ch2_out);
+						write_bit4_as_int8(fch[3], dmg.wave_dac_d);
+						write_bit4_as_int8(fch[4], dmg.ch4_out);
+					end
+					if (dump_sound) begin
+						write_real_as_int16(fmix, lout);
+						write_real_as_int16(fmix, rout);
+					end
+					sample_idx++;
+				end
+			end
+
+			if (dump_video) begin
+				$display("video_dump");
+				vdump.video_dump_loop(fvid, video_dump);
+				$display("video dump ended");
+			end
+
+			begin
+				$display("Waiting reset...");
+				@(negedge reset);
+				$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
+				$display("System reset done -- will simulate %s seconds", time_str);
+				$fflush(32'h8000_0001);
+				prev_time_str = time_str;
+
+				while (sim_mcycs) begin
+					sim_mcycs--;
+					if (sim_mcycs % 131072) begin
+						$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
+						if (time_str != prev_time_str && time_str != "0.0") begin
+							$display("%s seconds remaining", time_str);
+							$fflush(32'h8000_0001);
+							prev_time_str = time_str;
+						end
+					end
+					@(posedge cpu_clkin_t9);
+					@(posedge cpu_clkin_t10);
+				end
+
+				tick_tick = 0;
+				video_dump = 0;
+			end
+		join
+
+		$finish;
+	end
 
 	/* HALT/EI/DI instruction test code */
 	/*

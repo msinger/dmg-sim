@@ -181,7 +181,7 @@ mkvid/mkimgs: mkvid/mkimgs.c
 boot/quickboot.bin:
 	make -C boot
 
-.PHONY: test test-all test-cpu test-boot
+.PHONY: test test-all test-cpu test-boot verilator verilator-test
 
 TEST_DEPENDENCIES = dmg_cpu_b_gameboy.vvp boot/quickboot.bin mkvid/mkimgs
 
@@ -197,3 +197,56 @@ test-cpu: $(TEST_DEPENDENCIES)
 test-boot: $(TEST_DEPENDENCIES)
 	tests/run_tests.sh boot
 
+verilator:
+	verilator --Mdir obj-gameboy \
+		-Wno-fatal --timing  --cc --trace-fst \
+		--top-module dmg_cpu_b_gameboy \
+		--binary -j 0 \
+		$(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(MBC)
+
+# same as above, but without trace
+verilator-test:
+	verilator --Mdir obj-test \
+		--debug \
+		-Wno-fatal --timing  --cc \
+		--top-module dmg_cpu_b_gameboy \
+		--binary -j 0 \
+		$(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(MBC)
+
+verilator-debug:
+	verilator --Mdir obj-debug \
+		-CFLAGS -DVL_DEBUG=1 \
+		--debug --trace-fst \
+		-Wno-fatal --timing  --cc \
+		--top-module dmg_cpu_b_gameboy \
+		--binary -j 0 \
+		$(AV_DUMP) dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(MBC)
+
+sim-verilator: verilator
+	./obj-gameboy/Vdmg_cpu_b_gameboy +DUMPFILE=dmg_cpu_b_gameboy_ver.fst \
+	                       $(call VVP_CH_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       $(call VVP_SND_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       +BOOTROM="$(BOOTROM)" \
+	                       +ROM="$(ROM)" \
+	                       +SECS=$(SECS)
+
+sim-verilator-test: verilator-test
+	./obj-test/Vdmg_cpu_b_gameboy \
+	                       $(call VVP_CH_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       $(call VVP_SND_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       +BOOTROM="$(BOOTROM)" \
+	                       +ROM="$(ROM)" \
+	                       +SECS=$(SECS)
+
+sim-verilator-debug: verilator-debug
+	./obj-debug/Vdmg_cpu_b_gameboy \
+	                    	$(call VVP_CH_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                    	$(call VVP_SND_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                    	$(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                    	+verilator+debug \
+	                    	+BOOTROM="$(BOOTROM)" \
+	                    	+ROM="$(ROM)" \
+	                    	+SECS=$(SECS)
+							

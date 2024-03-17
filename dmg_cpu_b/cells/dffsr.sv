@@ -40,6 +40,6 @@ module dffsr #(
 			nreset_posedge <= 0;
 	end
 
-	assign #T_DFFSR q = ff;
+	assign q = ff;
 
 endmodule

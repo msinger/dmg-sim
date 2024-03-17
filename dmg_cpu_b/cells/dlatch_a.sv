@@ -16,6 +16,6 @@ module dlatch_a #(
 			l = d;
 	end
 
-	assign #T_DL_A q = l;
+	assign q = l;
 
 endmodule

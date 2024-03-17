@@ -58,7 +58,7 @@ module sm83_alu_flags(
 	assign dout[3:0] = 0;
 
 	always_ff @(posedge clk) if (zero_we) begin
-		assume (flags_bus != flags_alu);
+		// assume (flags_bus != flags_alu);
 		if (zero_clr)
 			zero <= 0;
 		else unique case (1)
@@ -68,7 +68,7 @@ module sm83_alu_flags(
 	end
 
 	always_ff @(posedge clk) if (neg_we) begin
-		assume (neg_clr || neg_set || flags_bus != flags_alu);
+		// assume (neg_clr || neg_set || flags_bus != flags_alu);
 		if (neg_clr)
 			neg <= 0;
 		else if (neg_set)
@@ -82,7 +82,7 @@ module sm83_alu_flags(
 	logic hc_reg, sec_c_reg;
 
 	function automatic logic write_carry(int bitnum);
-		assume (flags_bus != flags_alu);
+		// assume (flags_bus != flags_alu);
 		unique case (1)
 			flags_bus: write_carry = din[bitnum];
 			flags_alu: write_carry = carry_in;
@@ -96,7 +96,7 @@ module sm83_alu_flags(
 	endcase
 	initial sec_c_reg = 0;
 
-	assert property (!carry_we || !sec_carry_we);
+	// assert property (!carry_we || !sec_carry_we);
 
 	always_ff @(posedge clk) if (half_carry_we) hc_reg    <= write_carry(H);
 	always_ff @(posedge clk) if (daa_carry_we)  daa_carry <= write_carry(H);

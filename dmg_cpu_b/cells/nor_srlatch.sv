@@ -25,7 +25,7 @@ module nor_srlatch(
 		end
 	end
 
-	assign #T_SRL q  = lp;
-	assign #T_SRL nq = lm;
+	assign q  = lp;
+	assign nq = lm;
 
 endmodule
