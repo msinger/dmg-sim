@@ -189,9 +189,9 @@ module sprite_x_matchers(
 	assign #T_XOR  ewok = dazo != nh[3];
 	assign #T_NOR  cyvy = !(cola || boba || colu || bahu);
 	assign #T_NOR  ewam = !(edym || emyb || ebef || ewok);
-	assign #T_XOR  zare = zoly != nh[4];
+	assign #T_XOR  zare = zoly != nh[6];
 	assign #T_XOR  zemu = zogo != nh[5];
-	assign #T_XOR  zygo = zecu != nh[6];
+	assign #T_XOR  zygo = zecu != nh[4];
 	assign #T_XOR  zuzy = zesa != nh[7];
 	assign #T_XOR  xosu = ycol != nh[0];
 	assign #T_XOR  zuvu = yrac != nh[1];
