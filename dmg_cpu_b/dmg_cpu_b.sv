@@ -1,3 +1,4 @@
+`timescale 1ns/1ns
 `default_nettype none
 
 /* Not sure about these things, so make them easily switchable for testing: */
