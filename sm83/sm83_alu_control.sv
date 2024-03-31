@@ -4,6 +4,7 @@
  * https://baltazarstudios.com/
  */
 
+ `timescale 1ns/1ns
 `default_nettype none
 
 module sm83_alu_control(

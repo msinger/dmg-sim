@@ -1,0 +1,63 @@
+OSC_STABLE <- taba <- (t1^t2) | upof (DIV) & ~tubo
+
+tubo <- clkin_a | (clk_ena (cpu) | reset)
+
+clkin_a <- clk_xo_ena <- OSC_ENA <- Seq <- SYNC_RESET
+SYNC_RESET <~ afer <- asol <- afar <- taba
+
+clk_ena (cpu) <- w66 <- w28 <- w27 <- w14 | w114&w113 <- ...? <- RESET?
+
+# Investigation
+
+The address bus of the CPU, when running in dmg-sim, never increments, whereas
+the simulation in dmgcpu does.
+
+The signal `d` of the Sequencer never changes from 0x00..04000 to 0x00402..00,
+like the simulation in `dmgcpu` does.
+
+The following inputs to the CPU differ from the simulation in dmgcpu:
+ - slightly changed in the CLKs' phase during the reset, nothing major.
+ - OSC_STABLE is always low, instead of high before the reset.
+ - NMI is unconnected, instead of always 0
+ - IPL_REQ is always high, instead of always 0
+ - SYNC_RESET is always high, instead of going low after the reset.
+
+`OSC_STABLE` becomes high when `UPOF` (last bit of `DIV`, 16Hz) is high, and
+`TUBO`, a latch for the `CLK_ENA` signal from the CPU, becomes low. In dmgcpu,
+`UPOF` is hardcoded to be high.
+
+`OSC_STABLE = T1&~T2 | ~T1&T2 | UPOF&~TUBO`
+`TUBO = nor_latch(.set(CLK_ENA), .reset(RESET | ~OSC_ENA))`
+
+`OSC_STABLE` feeds the `SYNC_RESET` (CPU T12), which becomes locked low in
+`ASOL` latch. This made me think that `CLK_ENA` should only go high after
+`SYNC_RESET` is low.
+
+Looking at Seq.v (see logic.py), `CLK_ENA` is low when `RESET` is high, or if
+the CPU halted:
+
+RESET|SYNC_RESET| CLK_ENA
+-----|----------|----------------------------------------
+0    | 0        | ~(d[100] | IR[4] & d[101]) | SeqControl_1
+0    | 1        | ~(d[100] | IR[4] & d[101])
+1    | x        | False
+
+From `_GekkioNames.v`:
+
+- d[100]: s1_op_halt_s0xx
+- d[101]: s1_op_nop_stop_s0xx
+
+So `CLK_ENA` is almost unaffected by `SYNC_RESET`.
+
+Another way to make `OSC_STABLE` go high is to ensure to only reset when `UPOF`
+is high. But `UPOF` does not run until `RESET` is low! And the CPU `RESET` is
+directly connected to the global simulation RESET!
+
+Maybe `UPOF` should be reset high? Probably not, it may mess up with the `DIV`
+timing, and the simulation is too slow to make guessed changes.
+
+`UPOF` is reset by `RESET_DIV`:
+- `~RESET_DIV = ~(RESET | ~OSC_STABLE | (FF04_FF07 & CPU_WR & ~A1 & ~A2))`.
+- `RESET_DIV = RESET | ~OSC_STABLE | <write to DIV>`
+
+`ASOL` is reset by `RESET`.

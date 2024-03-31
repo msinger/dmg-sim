@@ -1,3 +1,4 @@
+`timescale 1ns/1ns
 `default_nettype none
 
 module window_map_lookup(
