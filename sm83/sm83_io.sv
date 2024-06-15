@@ -32,6 +32,9 @@ module sm83_io(
 
 	typedef logic [7:0] word_t;
 
+	word_t data, data_t4;
+	word_t opcode_r;
+
 	always_ff @(posedge clk) begin
 		/* read or write sequence should only be triggered right before next cycle */
 		assume (t4 || !mread);
@@ -65,7 +68,6 @@ module sm83_io(
 
 	initial aout = 0;
 
-	word_t data, data_t4;
 	always_ff @(posedge clk) priority case (1)
 		ctl_zero_data_oe || dl_we: unique case (1)
 			ctl_zero_data_oe: data <= 0;
@@ -84,7 +86,6 @@ module sm83_io(
 	initial data    = 0;
 	initial data_t4 = 0;
 
-	word_t opcode_r;
 	always_ff @(posedge clk) begin
 		/* instruction register should only be written during a read at T4 */
 		assume ((t4 && rd) || !ctl_ir_we || ctl_zero_data_oe);

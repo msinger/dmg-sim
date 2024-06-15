@@ -20,6 +20,12 @@ module wave_ram(
 	logic bezu, desa, bava, bune, bade, baty, desy, dugu;
 	logic bepa, bora, cevo, cuvo, begu, budy, cesy, cyfo;
 	logic copo, cuzo, dazy, date;
+
+	logic abur, bama, aruc, bory, beta, azet, busa, cozy, azor, buku, boxo;
+	logic boru, bano, atur, azus, aler, butu;
+
+	logic boke, bena, byza, cazu, amyt, wave_ram_wr;
+
 	drlatch latch_bepa(butu_512khz, acor, wave_rd_d[7], bepa);
 	drlatch latch_bora(butu_512khz, acor, wave_rd_d[6], bora);
 	drlatch latch_cevo(butu_512khz, acor, wave_rd_d[5], cevo);
@@ -56,8 +62,6 @@ module wave_ram(
 	assign d           = { bezu, desa, bava, bune, bade, baty, desy, dugu };
 	assign wave_play_d = { copo, cuzo, dazy, date };
 
-	logic abur, bama, aruc, bory, beta, azet, busa, cozy, azor, buku, boxo;
-	logic boru, bano, atur, azus, aler, butu;
 	dffr_bp dffr_azet(aruc,      bama, azus, azet);
 	dffr_bp dffr_busa(amuk_4mhz, bama, gase, busa);
 	dffr_bp dffr_bano(cozy,      bama, busa, bano);
@@ -78,7 +82,6 @@ module wave_ram(
 	assign wave_ram_ctrl1 = aler;
 	assign butu_512khz    = butu;
 
-	logic boke, bena, byza, cazu, amyt, wave_ram_wr;
 	assign #T_INV  boke = !ncpu_rd;
 	assign #T_NAND bena = !(boke && ff3x);
 	assign #T_AND  byza = apu_wr && ff3x;

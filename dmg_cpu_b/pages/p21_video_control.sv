@@ -17,6 +17,22 @@ module video_control(
 	);
 
 	logic syfu, tery, tucy, tyku, rasy, reda, tyde, ryme, sovu, subo, rape, paly;
+
+	logic vena, mude, saxo, typo, vyzo, telu, sude, taha, tyry;
+	logic tocu, vepe, vuty, tuju, tafy, tuda, vate, voku, tozu, tece, tebo, tegy;
+	logic sanu, sono, rutu, sygu, ryno, pogu;
+
+	logic nype, popu, xugu, xena, xano, paru, tolu, tapa, taru, vypu;
+	logic sepa, ryve, rugu, refe, ropo, rufo, roxe, suko, tuva, voty;
+	logic voga, wego, xajo, xymu, wusa, toba, tobe, semu, vave, sadu, xaty, rypo, ryju;
+	logic puzo, sasy, pofo, pote, teby, wuga, pago, sego, rupo, nrupo;
+	logic int_oam, int_hbl;
+
+	logic tady, xuke, xyle, rybo, xegy, xora, xeho, savy, xodu, xydo, acam, azub, amel, ahal;
+	logic toca, tyba, sury, sake, tyge, roku, tuhu, tuky, tako, sybe, apux, abef, adaz, asah;
+
+	logic noko, myta, lama, muwy, myro, lexa, lydo, lovu, lema, mato, lafo;
+
 	assign #T_XOR  syfu = v[7] != ff45_d7;
 	assign #T_XOR  tery = v[6] != ff45_d6;
 	assign #T_XOR  tucy = v[5] != ff45_d5;
@@ -30,9 +46,6 @@ module video_control(
 	assign #T_NAND rape = !(sovu && subo);
 	assign #T_INV  paly = !rape;
 
-	logic vena, mude, saxo, typo, vyzo, telu, sude, taha, tyry;
-	logic tocu, vepe, vuty, tuju, tafy, tuda, vate, voku, tozu, tece, tebo, tegy;
-	logic sanu, sono, rutu, sygu, ryno, pogu;
 	dffr_bp dffr_vena(wuvu_nq, nreset_video,  !vena, vena);
 	dffr_bp dffr_saxo(talu,    mude,          !saxo, saxo);
 	dffr_bp dffr_typo(!saxo,   mude,          !typo, typo);
@@ -64,11 +77,6 @@ module video_control(
 	assign l113    = rutu;
 	assign npin_cpg = pogu;
 
-	logic nype, popu, xugu, xena, xano, paru, tolu, tapa, taru, vypu;
-	logic sepa, ryve, rugu, refe, ropo, rufo, roxe, suko, tuva, voty;
-	logic voga, wego, xajo, xymu, wusa, toba, tobe, semu, vave, sadu, xaty, rypo, ryju;
-	logic puzo, sasy, pofo, pote, teby, wuga, pago, sego, rupo, nrupo;
-	logic int_oam, int_hbl;
 	dffr_bp dffr_nype(talu, nreset_video2, l113,  nype);
 	dffr_bp dffr_popu(nype, nreset_video2, xyvo,  popu);
 	dffr_bp dffr_napo(popu, nreset_video2, !napo, napo);
@@ -131,8 +139,6 @@ module video_control(
 	assign d[1] = wuga;
 	assign d[2] = sego;
 
-	logic tady, xuke, xyle, rybo, xegy, xora, xeho, savy, xodu, xydo, acam, azub, amel, ahal;
-	logic toca, tyba, sury, sake, tyge, roku, tuhu, tuky, tako, sybe, apux, abef, adaz, asah;
 	dffr_bp dffr_xeho(clkpipe, tady, !xeho, xeho);
 	dffr_bp dffr_savy(clkpipe, tady, rybo,  savy);
 	dffr_bp dffr_xodu(clkpipe, tady, xegy,  xodu);
@@ -178,7 +184,6 @@ module video_control(
 	assign nh[6] = adaz;
 	assign nh[7] = asah;
 
-	logic noko, myta, lama, muwy, myro, lexa, lydo, lovu, lema, mato, lafo;
 	dffr_bp dffr_myta(nnype, nreset_video2, noko,  myta);
 	dffr_bp dffr_muwy(l113,  lama,          !muwy, muwy);
 	dffr_bp dffr_myro(!muwy, lama,          !myro, myro);

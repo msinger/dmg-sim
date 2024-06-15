@@ -82,6 +82,19 @@ module dmg_cpu_b_test;
 	tri logic [15:0] cpu_a; /* CPU out B9-B24 */
 	logic cpu_wakeup;       /* CPU in  B25 - Wake from STOP mode; active-high */
 
+	logic [7:0] video_ram[0:8191];
+
+	logic cpu_drv_d, cpu_drv_a;
+	logic read_cycle;
+	logic write_cycle;
+	logic mem_cycle;
+
+	logic [15:0] cpu_a_out;
+
+	logic [7:0] cpu_d_out;
+
+	logic [7:0] d_pin_drv;
+
 	dmg_cpu_b dmg(.*, .t1('0), .t2('0), .vin(0.0), .unbonded_pad0('1), .unbonded_pad1());
 
 	task automatic xi_tick();
@@ -96,7 +109,6 @@ module dmg_cpu_b_test;
 			xi_tick();
 	endtask
 
-	logic [7:0] video_ram[0:8191];
 	initial foreach (video_ram[i]) video_ram[i] = $random;
 	always_ff @(posedge nmwr) if (!nmcs) video_ram[ma_pin] <= $isunknown(md_pin) ? $random : md_pin;
 	assign md_pin = (!nmcs && !nmoe) ? video_ram[ma_pin] : 'z;
@@ -118,18 +130,10 @@ module dmg_cpu_b_test;
 	 * raise it when accessing FExx and FFxx (cpu_in_r4) or 00xx while boot ROM is visible (cpu_in_r5). */
 	assign cpu_out_r7 = !cpu_in_t13 && !cpu_in_t12 && mem_cycle && !cpu_in_r4 && !cpu_in_r5;
 
-	logic cpu_drv_d, cpu_drv_a;
-	logic read_cycle;
-	logic write_cycle;
-	logic mem_cycle;
-
-	logic [15:0] cpu_a_out;
 	assign cpu_a = cpu_drv_a ? cpu_a_out : 'z;
 
-	logic [7:0] cpu_d_out;
 	assign d = cpu_drv_d ? cpu_d_out : 'z;
 
-	logic [7:0] d_pin_drv;
 	assign d_pin = d_pin_drv;
 
 	task automatic write(input logic [15:0] adr, logic [7:0] data);

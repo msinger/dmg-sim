@@ -19,6 +19,8 @@ module sm83_adr_inc(
 		word_t lo;
 	} adr_t;
 
+	adr_t adr, al, bus, inc;
+
 	function automatic logic [2:0] inc2b(logic [1:0] din, dec,
 	                                     logic       cy_in);
 		logic [1:0] dout;
@@ -28,8 +30,6 @@ module sm83_adr_inc(
 		cy_out  = cy_in && &dec;
 		inc2b   = { cy_out, dout };
 	endfunction
-
-	adr_t adr, al, bus, inc;
 
 	assign bus  = ain;
 	assign aout = al;
@@ -89,4 +89,5 @@ module sm83_adr_inc(
 
 		inc = ninc;
 	end
+
 endmodule

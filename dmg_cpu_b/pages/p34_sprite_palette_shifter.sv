@@ -16,6 +16,7 @@ module sprite_palette_shifter(
 	logic rora, rudu, mene, pazo, luke, lowa, lamy, lunu;
 	logic rugo, sata, rosa, somy, palu, nuke, moda, lyme;
 	logic lome, lafu, leka;
+
 	dffsr dffsr_rugo(clkpipe, pume, suco, '0,   rugo);
 	dffsr dffsr_sata(clkpipe, soro, tafa, rugo, sata);
 	dffsr dffsr_rosa(clkpipe, pamo, pyzy, sata, rosa);

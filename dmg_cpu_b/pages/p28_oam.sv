@@ -17,6 +17,27 @@ module oam(
 	);
 
 	logic yfel, wewy, goso, elyn, faha, fony, gava;
+
+	logic awoh, abaf, anel, byha, amyg, abak;
+
+	logic asen, boge, ajon, bete, apar, ajuj, asam, xyny, xuto, adah, wuje;
+	logic wefy, bofe, ajep, xuja, bota, xupa, xuca, apag, asyt, xecy, azul;
+	logic bode, yval, yryv, zodo, xuva, azar;
+	logic zaxa, zamy, zaky, zopu, wule, wyky, zozo, zaja;
+	logic zufo, zuga, zato, zumo, yvuc, xyto, zufe, zyfa;
+	logic wuzu, wowa, axer, aveb, asox, amuh, cetu, cofo;
+	logic aryn, azoz, acot, agyk, cuje, buse, ater, anum;
+	logic oam_addr_nrender, oam_addr_nparse, oam_addr_ncpu;
+
+	logic foby, fyke, goby, fetu, yzet, waxa, fugu, gama, fydu, xemu;
+	logic gera, faco, faku, edol, ymev, fevu, faby, futo, elug, yvom;
+	logic wape, gyka, gema, fyky, yfoc, gose, gybu, guse, fago, yfot;
+	logic wacu, wydu, wuwe, fesa, zyfo, garo, geca, gefy, fodo, geka;
+	logic mynu, wafo, guko, wuku, ylyc, ynyc, wume, wewu, zone, zofe;
+	tri logic [7:0] oam_na;
+
+	logic [7:0] oam_na_cap = $random;
+
 	dffr_bp dffr_yfel(gava,  anom, !yfel, yfel);
 	dffr_bp dffr_wewy(!yfel, anom, !wewy, wewy);
 	dffr_bp dffr_goso(!wewy, anom, !goso, goso);
@@ -26,7 +47,6 @@ module oam(
 	assign #T_AND  feto = yfel && wewy && fony && goso;
 	assign #T_OR   gava = feto || xupy;
 
-	logic awoh, abaf, anel, byha, amyg, abak;
 	dffr_bp dffr_anel(awoh, abez, catu, anel);
 	assign #T_INV  awoh = !xupy;
 	assign #T_INV  abaf = !catu;
@@ -38,14 +58,6 @@ module oam(
 	assign #T_OR   abak = atej || amyg;
 	assign #T_INV  byva = !abak;
 
-	logic asen, boge, ajon, bete, apar, ajuj, asam, xyny, xuto, adah, wuje;
-	logic wefy, bofe, ajep, xuja, bota, xupa, xuca, apag, asyt, xecy, azul;
-	logic bode, yval, yryv, zodo, xuva, azar;
-	logic zaxa, zamy, zaky, zopu, wule, wyky, zozo, zaja;
-	logic zufo, zuga, zato, zumo, yvuc, xyto, zufe, zyfa;
-	logic wuzu, wowa, axer, aveb, asox, amuh, cetu, cofo;
-	logic aryn, azoz, acot, agyk, cuje, buse, ater, anum;
-	logic oam_addr_nrender, oam_addr_nparse, oam_addr_ncpu;
 	dffr_bp dffr_xuva(xyny, xare, xecy, xuva);
 	drlatch latch_xecy(waru, nreset7, d[7], xecy);
 	nor_srlatch latch_besu(catu, asen, besu,);
@@ -147,12 +159,6 @@ module oam(
 	assign oam_a_nd[7] = ater;
 	assign oam_b_nd[7] = anum;
 
-	logic foby, fyke, goby, fetu, yzet, waxa, fugu, gama, fydu, xemu;
-	logic gera, faco, faku, edol, ymev, fevu, faby, futo, elug, yvom;
-	logic wape, gyka, gema, fyky, yfoc, gose, gybu, guse, fago, yfot;
-	logic wacu, wydu, wuwe, fesa, zyfo, garo, geca, gefy, fodo, geka;
-	logic mynu, wafo, guko, wuku, ylyc, ynyc, wume, wewu, zone, zofe;
-	tri logic [7:0] oam_na;
 	assign #T_TRI  foby = !oam_addr_ncpu    ? !a[7] : 'z;
 	assign #T_TRI  fyke = !oam_addr_nrender ? !weza : 'z;
 	assign #T_TRI  goby = !oam_addr_nparse  ? !fony : 'z;
@@ -250,7 +256,6 @@ module oam(
 	assign oam_b_ncs = zofe;
 
 	/* Icarus doesn't support trireg, so we do it like this: */
-	logic [7:0] oam_na_cap = $random;
 	always @(oam_na) oam_na_cap = oam_na;
 	assign (weak1, weak0) oam_na = oam_na_cap;
 

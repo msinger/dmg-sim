@@ -25,6 +25,21 @@ module channel4(
 	logic etyr, elyx, dary, eryf, feme, ezul, gufa, gyve, kara, kopa;
 	logic cosa, dyry, cepy, como, cote, bagu, befa, dato, atel;
 	logic ch4_lfsr_clk1, ch4_lfsr_clk2, ch4_lfsr_clk3, ch4_bit;
+
+	logic felo, fole, etef, edyf, elaf, feko, faty, feru, fyro, akof, byzy, apyr, boza;
+	logic daro, cuty, dubo, emet, evur, fyno, enur, erox;
+
+	logic alop, boky, abel, bawa, buxo, dogo, cofe, cuna, ejex;
+	logic fosy, enec, dapy, gexe, hury, fowa, gopa;
+	logic ch4_eg_tick, ch4_eg_disable;
+
+	logic gaso, fale, helu, gysu, hazo, nhazo, guzy, gone, feby, gora, gaty, hapu;
+	logic gevy, efot, hery, fegy, jery, njery, gena, kyku, juwa, kony, kanu;
+	logic jyco, jyre, jyfu, hyno, gyba, gary, cary, gofu, guny, huce;
+	logic gepo, goge, jyja, kavu, game, hura, lfsr_out;
+	logic jepe, javo, hepa, hory, heno, hyro, hezu;
+	logic joto, komu, ketu, kuta, kuzy, kywy, jaju, hape, juxe;
+
 	dffr_bp dffr_esep(!dere, napu_reset4, !esep, esep);
 	dffr_bp dffr_dere(!dota, napu_reset4, !dere, dere);
 	dffr_bp dffr_dota(!erut, napu_reset4, !dota, dota);
@@ -73,8 +88,6 @@ module channel4(
 	assign ch4_bit  = dato;
 	assign d[0] = atel;
 
-	logic felo, fole, etef, edyf, elaf, feko, faty, feru, fyro, akof, byzy, apyr, boza;
-	logic daro, cuty, dubo, emet, evur, fyno, enur, erox;
 	dffr_bp dffr_fyno(ch4_eg_tick, emet, evur, fyno);
 	tffd tffd_feko(fole, ch4_restart, ff21_d4, feko);
 	tffd tffd_faty(etef, ch4_restart, ff21_d5, faty);
@@ -98,9 +111,6 @@ module channel4(
 	assign #T_OR   enur = apu_reset || ch4_restart;
 	assign ch4_out = { boza, apyr, byzy, akof };
 
-	logic alop, boky, abel, bawa, buxo, dogo, cofe, cuna, ejex;
-	logic fosy, enec, dapy, gexe, hury, fowa, gopa;
-	logic ch4_eg_tick, ch4_eg_disable;
 	dffr_bp dffr_abel(alop,       boky, !abel, abel);
 	dffr_bp dffr_fosy(horu_512hz, gopa, ejex,  fosy);
 	tffd tffd_dogo(cofe, dapy, nff21_d2, dogo);
@@ -120,12 +130,6 @@ module channel4(
 	assign ch4_eg_tick    = fosy;
 	assign ch4_eg_disable = fowa;
 
-	logic gaso, fale, helu, gysu, hazo, nhazo, guzy, gone, feby, gora, gaty, hapu;
-	logic gevy, efot, hery, fegy, jery, njery, gena, kyku, juwa, kony, kanu;
-	logic jyco, jyre, jyfu, hyno, gyba, gary, cary, gofu, guny, huce;
-	logic gepo, goge, jyja, kavu, game, hura, lfsr_out;
-	logic jepe, javo, hepa, hory, heno, hyro, hezu;
-	logic joto, komu, ketu, kuta, kuzy, kywy, jaju, hape, juxe;
 	dffr_bp dffr_gysu(dova_phi,      gaso, ff23_d7, gysu);
 	dffr_bp dffr_gone(hama_512k,     fale, nhazo,   gone);
 	dffr_bp dffr_gora(hama_512k,     feby, gone,    gora);

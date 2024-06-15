@@ -20,6 +20,25 @@ module channel1(
 
 	logic boro, boka, cory, cero, capy, cyfa, hoca, bone, bery, femy, gepu, gexu, bugy, canu, bepe, cuso;
 	logic bacy, cavy, bovy, cuno, cura, eram;
+
+	logic cala, comy, cyte, dyru, doka;
+
+	logic dafa, cymu, bave, caxy, cypu, cupo, bury, coze, bexa;
+
+	logic jone, kado, kaly, kere, jola, jova, kenu, kera, kote, kury, kuku, koro, kozy, kaza, kuxu, koma, kake;
+	logic erum, fare, fyte, eget, doge, dado, dupe, duka, ezec, gefe, fyfo, nfyfo, feku, keko, kaba;
+	logic hufu, hano, hake, koru, jade, kyno, kezu;
+	logic cyto, cara, duwo, cowe, boto;
+	logic hesu, heto, hyto, jufy, hevo, hoko, hemy, hafo, aceg, agof, ason, amop;
+
+	logic dacu, cylu, copa, caja, byra, buge, copy, atat, BYTE, epuk, evol, femu, nfemu, egyp, cele, dody, egor, dapu;
+	logic nno_sweep;
+
+	logic dajo, esut, eros, dape, duvo, ezoz, enek, codo, coso, cava, cevu, caxo, duna;
+	logic ch1_bit;
+
+	logic atuv, boje, buso, kala;
+
 	dffr_bp dffr_cero(!eram, cory, !cero, cero);
 	tffd tffd_bacy(canu, bugy, d[0], bacy);
 	tffd tffd_cavy(bacy, bugy, d[1], cavy);
@@ -44,7 +63,6 @@ module channel1(
 	assign #T_INV  cuso = !(!cuno);
 	assign nch1_amp_en = hoca;
 
-	logic cala, comy, cyte, dyru, doka;
 	dffr_bp dffr_comy(cala, dyru, !comy, comy);
 	assign #T_INV  cala = !copu;
 	assign #T_INV  cyte = !comy;
@@ -52,7 +70,6 @@ module channel1(
 	assign #T_NOR  dyru = !(apu_reset || ch1_restart || doka);
 	assign #T_AND  doka = comy && dyfa_1mhz;
 
-	logic dafa, cymu, bave, caxy, cypu, cupo, bury, coze, bexa;
 	dffr_bp dffr_bexa(ajer_2mhz, bury, coze, bexa);
 	tffd tffd_caxy(cypu, cymu, nff10_d6, caxy);
 	tffd tffd_cypu(cupo, cymu, nff10_d5, cypu);
@@ -63,11 +80,6 @@ module channel1(
 	assign #T_NOR  bury = !(bave || apu_reset);
 	assign #T_AND  coze = caxy && cypu && cupo;
 
-	logic jone, kado, kaly, kere, jola, jova, kenu, kera, kote, kury, kuku, koro, kozy, kaza, kuxu, koma, kake;
-	logic erum, fare, fyte, eget, doge, dado, dupe, duka, ezec, gefe, fyfo, nfyfo, feku, keko, kaba;
-	logic hufu, hano, hake, koru, jade, kyno, kezu;
-	logic cyto, cara, duwo, cowe, boto;
-	logic hesu, heto, hyto, jufy, hevo, hoko, hemy, hafo, aceg, agof, ason, amop;
 	dffr_bp dffr_kaly(jone,       kado,        !kaly,       kaly);
 	dffr_bp dffr_kozy(horu_512hz, koro,        kote,        kozy);
 	dffr_bp dffr_fare(dyfa_1mhz,  erum,        ch1_restart, fare);
@@ -131,8 +143,6 @@ module channel1(
 	assign ch1_out[1]  = ason;
 	assign ch1_out[0]  = amop;
 
-	logic dacu, cylu, copa, caja, byra, buge, copy, atat, BYTE, epuk, evol, femu, nfemu, egyp, cele, dody, egor, dapu;
-	logic nno_sweep;
 	dffr_bp dffr_byte(ajer_2mhz, atat, copy, BYTE);
 	tffd tffd_copa(dapu, cylu, nff10_d0, copa);
 	tffd tffd_caja(copa, cylu, nff10_d1, caja);
@@ -154,8 +164,6 @@ module channel1(
 	assign nno_sweep     = buge;
 	assign ch1_shift_clk = egor;
 
-	logic dajo, esut, eros, dape, duvo, ezoz, enek, codo, coso, cava, cevu, caxo, duna;
-	logic ch1_bit;
 	dffr_bp dffr_esut(dajo,  napu_reset6, !esut, esut);
 	dffr_b  dffr_eros(!esut, napu_reset6, !eros, eros);
 	dffr_b  dffr_dape(!eros, napu_reset6, !dape, dape);
@@ -171,7 +179,6 @@ module channel1(
 	assign #T_AO   duna = (enek && coso) || (ezoz && cava) || (dape && cevu) || (codo && caxo);
 	assign ch1_bit = duna;
 
-	logic atuv, boje, buso, kala;
 	assign #T_AND  atuv = bexa && atys;
 	assign #T_AND  boje = atuv && nno_sweep;
 	assign #T_AND  buso = nno_sweep && atys && bexa;

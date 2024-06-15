@@ -19,6 +19,20 @@ module ch4_regs(
 
 	logic fugo, dopu, caze, doda, furu, epek, dotu, cuwa;
 	logic gapy, edop, fylo, dano, favy, dena, cedo;
+
+	logic fexo, goko, fupa, gony, hasu, daco, dyke, bofy, boxe;
+	logic gedu, gozo, goky, garu, geky, ezyk, etyj, emok;
+	logic hacu, hoge, godu, heda, gome, cuzu, coce, demy;
+
+	logic kage, jora, hoso, getu, gugo, heze, hyne, efug;
+	logic jamy, feta, gogo, gafo, fyto, keta, geda, gaka, hapy, gype;
+
+	logic humo, hova, koku, keka, jaky, jero, jare, kyro, kaku, kamo;
+
+	logic bylo, dulu, cabe, bare, cuny, cury, nff23_d6;
+
+	logic foxe, hoga;
+
 	dffr_bp dffr_fugo(!edop, gapy, !fugo, fugo);
 	tffd tffd_edop(fylo, epek, d[5], edop);
 	tffd tffd_fylo(dopu, epek, d[4], fylo);
@@ -36,9 +50,6 @@ module ch4_regs(
 	assign #T_NOR  gapy = !(furu || apu_reset || ch4_restart);
 	assign fugo_q = fugo;
 
-	logic fexo, goko, fupa, gony, hasu, daco, dyke, bofy, boxe;
-	logic gedu, gozo, goky, garu, geky, ezyk, etyj, emok;
-	logic hacu, hoge, godu, heda, gome, cuzu, coce, demy;
 	drlatch latch_gedu(goko, fexo, d[7], gedu);
 	drlatch latch_gozo(goko, fexo, d[6], gozo);
 	drlatch latch_goky(goko, fexo, d[5], goky);
@@ -78,8 +89,6 @@ module ch4_regs(
 	assign nff21_d0 = !emok;
 	assign d = { hacu, hoge, godu, heda, gome, cuzu, coce, demy };
 
-	logic kage, jora, hoso, getu, gugo, heze, hyne, efug;
-	logic jamy, feta, gogo, gafo, fyto, keta, geda, gaka, hapy, gype;
 	drlatch latch_jamy(!hoso, hyne,        d[3], jamy);
 	drlatch latch_feta(getu,  napu_reset4, d[4], feta);
 	drlatch latch_gogo(getu,  napu_reset4, d[6], gogo);
@@ -113,7 +122,6 @@ module ch4_regs(
 	assign d[7] = hapy;
 	assign d[5] = gype;
 
-	logic humo, hova, koku, keka, jaky, jero, jare, kyro, kaku, kamo;
 	drlatch latch_jaky(humo, napu_reset5, d[2], jaky);
 	drlatch latch_jero(humo, napu_reset5, d[1], jero);
 	drlatch latch_jare(humo, napu_reset5, d[0], jare);
@@ -131,7 +139,6 @@ module ch4_regs(
 	assign d[1] = kaku;
 	assign d[0] = kamo;
 
-	logic bylo, dulu, cabe, bare, cuny, cury, nff23_d6;
 	drlatch latch_cuny(!dulu, cabe, d[6], cuny);
 	assign #T_INV  bylo = !ncpu_rd;
 	assign #T_NAND dulu = !(anuj && ff23);
@@ -142,7 +149,6 @@ module ch4_regs(
 	assign nff23_d6 = !cuny;
 	assign d[6] = cury;
 
-	logic foxe, hoga;
 	drlatch latch_hoga(!foxe, rst_ff23_d7, d[7], hoga);
 	assign #T_NAND foxe = !(apu_wr && ff23);
 	assign ff23_d7 = hoga;

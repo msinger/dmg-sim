@@ -14,6 +14,12 @@ module interrupts(
 	);
 
 	logic kery, batu, awob, acef, agem, apug, asok, int_jp;
+
+	logic rotu, lety, muxe, lufe, sulo, lamo, seme, leja, nabe, lesa, rake;
+	logic myzu, lyta, tome, tuny, toga, tyme, mody, movu, pyhu, pyga;
+	logic pesu, lope, ubul, ulak, lalu, nybo;
+	logic pola, maty, nejy, nuty, mopo, pavy, nela, pado, pegy, nabo, rova;
+
 	dffr_bp dffr_batu(boga1mhz, nreset2, kery, batu);
 	dffr_bp dffr_acef(boga1mhz, nreset2, batu, acef);
 	dffr_bp dffr_agem(boga1mhz, nreset2, acef, agem);
@@ -24,10 +30,6 @@ module interrupts(
 	assign to_cpu2 = awob;
 	assign int_jp  = asok;
 
-	logic rotu, lety, muxe, lufe, sulo, lamo, seme, leja, nabe, lesa, rake;
-	logic myzu, lyta, tome, tuny, toga, tyme, mody, movu, pyhu, pyga;
-	logic pesu, lope, ubul, ulak, lalu, nybo;
-	logic pola, maty, nejy, nuty, mopo, pavy, nela, pado, pegy, nabo, rova;
 	dffsr dffsr_lope(int_vbl_buf, myzu, lyta, '1, lope);
 	dffsr dffsr_ubul(int_serial,  tome, tuny, '1, ubul);
 	dffsr dffsr_ulak(int_jp,      toga, tyme, '1, ulak);

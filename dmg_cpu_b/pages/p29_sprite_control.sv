@@ -29,6 +29,30 @@ module sprite_control(
 	logic geke, gyga, foxa, guze;
 	logic dyba, fono, exuq, wapo, womy, wafy, xudy, gota, egav, cedy, eboj;
 	logic dubu, goro, guky, wacy, feve, wohu, gake, foko, efev, dywe;
+
+	logic yceb, zuca, WONE, zaxe, xafu, yses, zeca, ydyv;
+	logic xele, ypon, xuvo, zysa, yweg, xabu, ytux, yfap;
+	logic ywok, xegu, yjex, xyju, ybog, wyso, xote, yzab, xuso;
+	logic abon, fugy, gavo, wyga, wune, gotu, gegu, xehe;
+	logic ebos, dasa, fuky, fuve, fepu, fofa, femo, gusu;
+	logic eruc, enef, feco, gyky, gopu, fuwa, goju, wuhu;
+	logic eruc_c, enef_c, feco_c, gyky_c, gopu_c, fuwa_c, goju_c, wuhu_c;
+	logic gace, guvu, gyda, gewy, govu, wota, gese, spr_match;
+	logic tobu, vonu, wuky, wago, cyvu, bore, buvy, xuqu;
+	logic baxe, aras, agag, abem, dyso, fufo, gejy, famu;
+
+	logic xyva, xota, xyfy, wuvu, ales, abov, balu, wosu, bagy, wojo, ceno, byba;
+	logic ceha, doba, care, bebu, dyty;
+
+	logic seba, toxe, tuly, tese, tepa, tyfo, tyno, saky, tytu, toma;
+	logic vusa, tyso, tame, sycu, topu, raca, vywa, peby, weny, nybe;
+
+	logic baky, dezy, cake, bese, cuxy, bego, dybe;
+	logic eden, cypy, cape, caxu, fycu, fone, ekud, elyg;
+	logic gebu, womu, guna, foco, dewy, dezo, dogu, cugu, cupe, cuva;
+	logic wyxo, xujo, gape, guve, caho, cemy, cato, cado, cecu, byby;
+	logic gyfo, weka, gyvo, gusa, buka, dyhu, decu, bede, duke, buco;
+
 	dffr_bp dffr_fono(wuty, byva, guze, fono);
 	dffr_bp dffr_exuq(wuty, byva, foxa, exuq);
 	dffr_bp dffr_wapo(wuty, byva, gutu, wapo);
@@ -115,16 +139,6 @@ module sprite_control(
 	assign #T_INV  doku = !efev;
 	assign #T_INV  dyna = !dywe;
 
-	logic yceb, zuca, WONE, zaxe, xafu, yses, zeca, ydyv;
-	logic xele, ypon, xuvo, zysa, yweg, xabu, ytux, yfap;
-	logic ywok, xegu, yjex, xyju, ybog, wyso, xote, yzab, xuso;
-	logic abon, fugy, gavo, wyga, wune, gotu, gegu, xehe;
-	logic ebos, dasa, fuky, fuve, fepu, fofa, femo, gusu;
-	logic eruc, enef, feco, gyky, gopu, fuwa, goju, wuhu;
-	logic eruc_c, enef_c, feco_c, gyky_c, gopu_c, fuwa_c, goju_c, wuhu_c;
-	logic gace, guvu, gyda, gewy, govu, wota, gese, spr_match;
-	logic tobu, vonu, wuky, wago, cyvu, bore, buvy, xuqu;
-	logic baxe, aras, agag, abem, dyso, fufo, gejy, famu;
 	dffr_bp dffr_tobu(clk5, nxymu, tuly, tobu);
 	dffr_bp dffr_vonu(clk5, nxymu, tobu, vonu);
 	dlatch_a latch_xegu(!ywok, yceb, xegu);
@@ -224,8 +238,6 @@ module sprite_control(
 	assign nma[4]  = famu;
 	assign spr_match = gese;
 
-	logic xyva, xota, xyfy, wuvu, ales, abov, balu, wosu, bagy, wojo, ceno, byba;
-	logic ceha, doba, care, bebu, dyty;
 	dffr_bp dffr_wuvu(xota, nreset_video, !wuvu, wuvu);
 	dffr_bp dffr_wosu(xyfy, nreset_video, !wuvu, wosu);
 	dffr_bp dffr_ceno(xupy, abez,         besu,  ceno);
@@ -252,8 +264,6 @@ module sprite_control(
 	assign #T_INV  avap = !bebu;
 	assign wuvu_nq = !wuvu;
 
-	logic seba, toxe, tuly, tese, tepa, tyfo, tyno, saky, tytu, toma;
-	logic vusa, tyso, tame, sycu, topu, raca, vywa, peby, weny, nybe;
 	dffr_bp dffr_seba(clk4,  nxymu, vonu,  seba);
 	dffr_bp dffr_toxe(toma,  seca,  !toxe, toxe);
 	dffr_bp dffr_tuly(!toxe, seca,  !tuly, tuly);
@@ -284,11 +294,6 @@ module sprite_control(
 	assign #T_INV  puco = !nybe;
 	assign tyfo_nq = !tyfo;
 
-	logic baky, dezy, cake, bese, cuxy, bego, dybe;
-	logic eden, cypy, cape, caxu, fycu, fone, ekud, elyg;
-	logic gebu, womu, guna, foco, dewy, dezo, dogu, cugu, cupe, cuva;
-	logic wyxo, xujo, gape, guve, caho, cemy, cato, cado, cecu, byby;
-	logic gyfo, weka, gyvo, gusa, buka, dyhu, decu, bede, duke, buco;
 	dffr_bp dffr_dezy(clk1,  nreset_video, dyty,  dezy);
 	dffr_bp dffr_bese(cake,  azyb,         !bese, bese);
 	dffr_bp dffr_cuxy(!bese, azyb,         !cuxy, cuxy);

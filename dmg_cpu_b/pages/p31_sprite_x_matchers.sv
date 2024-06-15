@@ -36,6 +36,7 @@ module sprite_x_matchers(
 	logic bazy, cyle, ceva, bumy, guzo, gola, geve, gude;
 	logic duhy, ejuf, enor, depy, foka, fyty, fuby, goxu;
 	logic ceko, dety, dozo, cony, fuzu, feso, foky, fyva;
+
 	dlatch_a latch_gomo(!xega, wyno, gomo);
 	dlatch_a latch_baxo(!xega, cyra, baxo);
 	dlatch_a latch_yzos(!xega, zuve, yzos);

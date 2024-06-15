@@ -14,6 +14,14 @@ module dma(
 	);
 
 	logic decy, maka, naxy, powu, luvy, molu, nygo, pusy, lavy, loru, lyxe, nlyxe, lupa, ahoc, loko, lapa, meta;
+
+	logic mopa, navo, nolo, myte, lene, lara, loky, matu, mory, luma, logo, duga, lebu, muda, muho, lufa;
+
+	logic nafa, nygy, para, pyne, pula, nydo, poku, maru, poly, pare, rema, rofo, raly, pane, resu, nuvy;
+	logic evax, exyf, eraf, duve, fusy;
+
+	logic naky, pyro, nefy, muty, nyko, pylo, nuto, mugu, ecal, egez, fuhe, fyzy, damu, dava, eteg, erew;
+
 	dffr_bp dffr_maka(clk1,    nreset6, caty, maka);
 	dffr_bp dffr_luvy(phi_out, nreset6, lupa, luvy);
 	nor_srlatch latch_lyxe(lavy, loko, lyxe, nlyxe);
@@ -33,7 +41,6 @@ module dma(
 	assign #T_INV  lapa = !loko;
 	assign #T_AND  meta = phi_out && loky;
 
-	logic mopa, navo, nolo, myte, lene, lara, loky, matu, mory, luma, logo, duga, lebu, muda, muho, lufa;
 	dffr_bp dffr_myte(mopa,    lapa,    nolo, myte);
 	dffr_bp dffr_lene(mopa,    nreset6, luvy, lene);
 	dffr_bp dffr_matu(phi_out, nreset6, loky, matu);
@@ -56,8 +63,6 @@ module dma(
 	assign oam_addr_ndma = duga;
 	assign vram_to_oam   = lufa;
 
-	logic nafa, nygy, para, pyne, pula, nydo, poku, maru, poly, pare, rema, rofo, raly, pane, resu, nuvy;
-	logic evax, exyf, eraf, duve, fusy;
 	dlatch_a latch_nafa(!loru, d[0], nafa);
 	dlatch_a latch_nygy(!loru, d[4], nygy);
 	dlatch_a latch_para(!loru, d[2], para);
@@ -101,7 +106,6 @@ module dma(
 	assign nma[9]  = duve;
 	assign nma[11] = fusy;
 
-	logic naky, pyro, nefy, muty, nyko, pylo, nuto, mugu, ecal, egez, fuhe, fyzy, damu, dava, eteg, erew;
 	dffr_bp dffr_naky(meta,  lapa, !naky, naky);
 	dffr_bp dffr_pyro(!naky, lapa, !pyro, pyro);
 	dffr_bp dffr_nefy(!pyro, lapa, !nefy, nefy);

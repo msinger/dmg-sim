@@ -82,6 +82,44 @@ module dmg_cpu_b_gameboy;
 	tri logic [15:0] cpu_a; /* CPU out B9-B24 */
 	logic cpu_wakeup;       /* CPU in  B25 - Wake from STOP mode; active-high */
 
+	logic [7:0] video_ram[0:8191];
+	logic [7:0] work_ram[0:8191];
+
+	bit          has_rom, has_ram;
+	bit          has_mbc1, has_mbc5;
+	logic [7:0]  cart_rom[0:8388607];
+	logic [7:0]  cart_ram[0:262143];
+	logic [22:0] cart_rom_adr;
+	logic [17:0] cart_ram_adr;
+	logic        cart_rom_cs, cart_ram_cs;
+
+	logic [18:14] mbc1_ra;
+	logic [14:13] mbc1_aa;
+	logic         mbc1_ncs_rom, mbc1_ncs_ram, mbc1_cs_ram;
+
+	logic [22:14] mbc5_ra;
+	logic [16:13] mbc5_aa;
+	logic         mbc5_ncs_ram;
+
+	logic           clk;
+	logic           reset, areset;
+	logic           ncyc;
+
+	logic [15:0]    adr;
+	logic [7:0]     din, dout;
+	logic           rd;
+	logic           wr;
+
+	logic [7:0]     irq;
+	logic [7:0]     iack;
+
+	logic           clk_ena;
+	logic           clk_stable;
+
+	logic        cpu_drv_d;
+	logic [7:0]  cpu_d_out;
+	logic [15:0] cpu_a_out;
+
 	dmg_cpu_b dmg(.*, .t1('0), .t2('0), .vin(0.0), .unbonded_pad0('1), .unbonded_pad1());
 
 	task automatic xi_tick();
@@ -98,31 +136,19 @@ module dmg_cpu_b_gameboy;
 			xi_tick();
 	endtask
 
-	logic [7:0] video_ram[0:8191];
 	initial foreach (video_ram[i]) video_ram[i] = $random;
 	always_ff @(posedge nmwr) if (!nmcs) video_ram[ma_pin] <= $isunknown(md_pin) ? $random : md_pin;
 	assign md_pin = (!nmcs && !nmoe) ? video_ram[ma_pin] : 'z;
 
-	logic [7:0] work_ram[0:8191];
 	initial foreach (work_ram[i]) work_ram[i] = $random;
 	always_ff @(posedge nwr) if (!ncs && a_pin[14]) work_ram[a_pin[12:0]] <= $isunknown(d_pin) ? $random : d_pin;
 	assign d_pin = (!ncs && a_pin[14] && !nrd) ? work_ram[a_pin[12:0]] : 'z;
 
-	bit          has_rom, has_ram;
-	bit          has_mbc1, has_mbc5;
-	logic [7:0]  cart_rom[0:8388607];
-	logic [7:0]  cart_ram[0:262143];
-	logic [22:0] cart_rom_adr;
-	logic [17:0] cart_ram_adr;
-	logic        cart_rom_cs, cart_ram_cs;
 	assign d_pin = (has_rom && cart_rom_cs && !nrd) ? cart_rom[cart_rom_adr] : 'z;
 	initial foreach (cart_ram[i]) cart_ram[i] = $random;
 	always_ff @(posedge nwr) if (has_ram && cart_ram_cs) cart_ram[cart_ram_adr] <= $isunknown(d_pin) ? $random : d_pin;
 	assign d_pin = (has_ram && cart_ram_cs && !nrd) ? cart_rom[cart_ram_adr] : 'z;
 
-	logic [18:14] mbc1_ra;
-	logic [14:13] mbc1_aa;
-	logic         mbc1_ncs_rom, mbc1_ncs_ram, mbc1_cs_ram;
 	mbc1 mbc1_chip(
 		.nrst,
 		.a(a_pin[15:13]),
@@ -135,9 +161,6 @@ module dmg_cpu_b_gameboy;
 		.cs_ram(mbc1_cs_ram)
 	);
 
-	logic [22:14] mbc5_ra;
-	logic [16:13] mbc5_aa;
-	logic         mbc5_ncs_ram;
 	mbc5 mbc5_chip(
 		.nrst,
 		.a(a_pin[15:12]),
@@ -222,21 +245,6 @@ module dmg_cpu_b_gameboy;
 		end
 	end
 
-	logic           clk;
-	logic           reset, areset;
-	logic           ncyc;
-
-	logic [15:0]    adr;
-	logic [7:0]     din, dout;
-	logic           rd;
-	logic           wr;
-
-	logic [7:0]     irq;
-	logic [7:0]     iack;
-
-	logic           clk_ena;
-	logic           clk_stable;
-
 	sm83 cpu(.*);
 
 	assign ncyc        = !dmg.p1_clocks_reset.adyk && !dmg.p1_clocks_reset.alef;
@@ -248,10 +256,6 @@ module dmg_cpu_b_gameboy;
 	assign cpu_clk_ena = clk_ena;
 	assign reset       = cpu_in_t12;
 	assign areset      = cpu_in_t13;
-
-	logic        cpu_drv_d;
-	logic [7:0]  cpu_d_out;
-	logic [15:0] cpu_a_out;
 
 	initial cpu_a_out  = 0;
 	initial cpu_raw_rd = 0;

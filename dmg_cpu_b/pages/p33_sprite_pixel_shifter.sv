@@ -17,6 +17,10 @@ module sprite_pixel_shifter(
 	logic voby, wery, wura, wyco, selu, wamy, sery, sulu;
 	logic waxo, tyga, xato, vexu, xexu, vaby, xole, vume;
 	logic tula, teso, xyve, vune, taby, tapo, tupe, tuxa;
+
+	logic nuro, maso, lefe, lesu, wyho, wora, vafo, wufy;
+	logic nylu, pefu, naty, pyjo, vare, weba, vanu, vupy;
+
 	dlatch_a latch_pudu(!xado, pobe, pudu);
 	dlatch_a latch_ramu(!puco, pobe, ramu);
 	dlatch_a latch_mytu(!puco, pono, mytu);
@@ -90,8 +94,6 @@ module sprite_pixel_shifter(
 	assign #T_NAND tupe = !(sulu && soka);
 	assign #T_NAND tuxa = !(semo && soka);
 
-	logic nuro, maso, lefe, lesu, wyho, wora, vafo, wufy;
-	logic nylu, pefu, naty, pyjo, vare, weba, vanu, vupy;
 	dffsr dffsr_nuro(clkpipe, pabe, pyzu, '0,   nuro);
 	dffsr dffsr_maso(clkpipe, myto, mada, nuro, maso);
 	dffsr dffsr_lefe(clkpipe, lela, lyde, maso, lefe);

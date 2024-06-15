@@ -55,9 +55,6 @@ module sm83_control(
 		output logic       ctl_halt_set
 	);
 
-	sm83_sequencer seq(.*);
-	sm83_decode    dec(.*);
-
 	logic set_m1;
 	logic no_pc;
 	logic no_int;
@@ -156,20 +153,9 @@ module sm83_control(
 	logic       op543_gp_hi;
 	logic [1:0] op210_gp_hilo;
 	logic [1:0] op543_gp_hilo;
-	assign op210_gp_reg  = opcode[2:1];
-	assign op543_gp_reg  = opcode[5:4];
-	assign op210_gp_hi   = (op210_gp_reg == AF) ? opcode[0] : !opcode[0];
-	assign op543_gp_hi   = (op543_gp_reg == AF) ? opcode[3] : !opcode[3];
-	assign op210_gp_hilo = { op210_gp_hi, !op210_gp_hi };
-	assign op543_gp_hilo = { op543_gp_hi, !op543_gp_hi };
 
-	/* Select general purpose register */
 	logic [1:0] reg_sel, new_reg_sel;
 	logic       use_sp, new_use_sp;
-	assign ctl_reg_bc_sel = reg_sel === BC;
-	assign ctl_reg_de_sel = reg_sel === DE;
-	assign ctl_reg_hl_sel = reg_sel === HL;
-	assign ctl_reg_af_sel = reg_sel === AF && !use_sp;
 
 	logic new_mread, new_mwrite;
 	logic new_reg_gp2h_oe, new_reg_gp2l_oe;
@@ -210,6 +196,22 @@ module sm83_control(
 	logic new_alu_fl_c2_we, new_alu_fl_c2_sh, new_alu_fl_c2_daa, new_alu_fl_sel_c2;
 	logic new_update_int, new_ime_we, new_ime_bit, new_ack_int, new_int_vector_oe;
 	logic new_halt_set;
+
+	sm83_sequencer seq(.*);
+	sm83_decode    dec(.*);
+
+	assign op210_gp_reg  = opcode[2:1];
+	assign op543_gp_reg  = opcode[5:4];
+	assign op210_gp_hi   = (op210_gp_reg == AF) ? opcode[0] : !opcode[0];
+	assign op543_gp_hi   = (op543_gp_reg == AF) ? opcode[3] : !opcode[3];
+	assign op210_gp_hilo = { op210_gp_hi, !op210_gp_hi };
+	assign op543_gp_hilo = { op543_gp_hi, !op543_gp_hi };
+
+	/* Select general purpose register */
+	assign ctl_reg_bc_sel = reg_sel === BC;
+	assign ctl_reg_de_sel = reg_sel === DE;
+	assign ctl_reg_hl_sel = reg_sel === HL;
+	assign ctl_reg_af_sel = reg_sel === AF && !use_sp;
 
 	/* Trigger read memory cycle */
 	task automatic read_mcyc_after(logic cyc);

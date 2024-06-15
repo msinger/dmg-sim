@@ -29,6 +29,7 @@ module channel2(
 	logic buwe, azeg, atep, caza, byho, bufo, bodo, cemo, cemo_1mhz, buta, nbuta, cama;
 	logic fopy, etup, faru, gafa, fena, fomy, fete, feno;
 	logic dome, cyse, bonu, emyr, erat, fyre, gufy, amov, asog, anyv, anan;
+
 	dffr_bp dffr_jyna(hota,       katy,        !jyna,   jyna);
 	dffr_bp dffr_gyko(galu,       gyre,        !gyko,   gyko);
 	dffr_bp dffr_jopa(horu_512hz, hafe,        kyvo,    jopa);

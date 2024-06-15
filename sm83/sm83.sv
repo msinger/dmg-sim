@@ -1,6 +1,10 @@
 `default_nettype none
 
-module sm83(
+module sm83 #(
+		parameter int WORD_SIZE = 8,
+		parameter int ADR_WIDTH = WORD_SIZE * 2,
+		parameter int NUM_IRQS  = WORD_SIZE
+	) (
 		input  logic                 clk,
 		input  logic                 reset, areset,
 		input  logic                 ncyc,
@@ -17,10 +21,6 @@ module sm83(
 		output logic                 clk_ena,
 		input  logic                 clk_stable
 	);
-
-	localparam int WORD_SIZE = 8;
-	localparam int ADR_WIDTH = WORD_SIZE * 2;
-	localparam int NUM_IRQS  = WORD_SIZE;
 
 	typedef logic [WORD_SIZE-1:0] word_t;
 
@@ -43,6 +43,90 @@ module sm83(
 	logic  bank_cb;
 	logic  intr_entry;
 
+	logic alu_shift_dbh, alu_shift_dbl;
+	logic alu_shift_out, alu_shift_in, alu_shift_l, alu_shift_r;
+	logic alu_zero, alu_carry, alu_ct_daa_carry, alu_sign;
+	logic alu_daa_lgt9, alu_daa_hgt9, alu_daa_heq9;
+	logic alu_fl_zero, alu_fl_carry, alu_fl_pri_carry, alu_fl_half_carry, alu_fl_daa_carry, alu_fl_neg;
+	logic alu_cond_result;
+
+	logic ctl_mread, ctl_mwrite;
+	logic ctl_reg_gp2h_oe, ctl_reg_gp2l_oe;
+	logic ctl_reg_h2gp_oe, ctl_reg_l2gp_oe;
+	logic ctl_reg_gp_hi_sel, ctl_reg_gp_lo_sel;
+	logic ctl_reg_gp_we;
+	logic ctl_reg_sys_hi_sel, ctl_reg_sys_lo_sel;
+	logic ctl_reg_sys_hi_we, ctl_reg_sys_lo_we;
+	logic ctl_reg_bc_sel, ctl_reg_de_sel, ctl_reg_hl_sel, ctl_reg_af_sel, ctl_reg_sp_sel, ctl_reg_wz_sel, ctl_reg_pc_sel;
+	logic ctl_reg_gp2sys_oe, ctl_reg_sys2gp_oe;
+	logic ctl_al_we, ctl_al_hi_ff;
+	logic ctl_inc_dec, ctl_inc_cy;
+	logic ctl_inc_oe;
+	logic ctl_db_c2l_oe, ctl_db_l2c_oe;
+	logic ctl_db_l2h_oe, ctl_db_h2l_oe;
+	logic ctl_db_c2l_mask543;
+	logic ctl_io_data_oe, ctl_io_data_we;
+	logic ctl_io_adr_we;
+	logic ctl_zero_data_oe;
+	logic ctl_ir_we;
+	logic ctl_ir_bank_we;
+	logic ctl_ir_bank_cb_set;
+	logic ctl_alu_oe, ctl_alu_fl_oe, ctl_alu_daa_oe;
+	logic ctl_alu_sh_oe, ctl_alu_op_a_oe, ctl_alu_res_oe, ctl_alu_bs_oe;
+	logic ctl_alu_op_a_bus, ctl_alu_op_a_zero;
+	logic ctl_alu_op_b_bus, ctl_alu_op_b_zero;
+	logic ctl_alu_nc, ctl_alu_fc, ctl_alu_ic;
+	logic ctl_alu_neg, ctl_alu_op_low, ctl_alu_op_b_high;
+	logic ctl_alu_shift;   /* Makes ALU perform shift operation on data input. */
+	logic ctl_alu_sel_hc;  /* Selects which carry flag goes into ALU core. (0: carry; 1: half carry) */
+	logic ctl_alu_cond_we; /* Write condition result flag for conditional operation. */
+	logic ctl_alu_fl_bus, ctl_alu_fl_alu;
+	logic ctl_alu_fl_zero_we, ctl_alu_fl_zero_clr;
+	logic ctl_alu_fl_half_we, ctl_alu_fl_half_set, ctl_alu_fl_half_cpl;
+	logic ctl_alu_fl_daac_we;
+	logic ctl_alu_fl_neg_we, ctl_alu_fl_neg_set, ctl_alu_fl_neg_clr;
+	logic ctl_alu_fl_carry_we, ctl_alu_fl_carry_set, ctl_alu_fl_carry_cpl;
+	logic ctl_alu_fl_c2_we, ctl_alu_fl_c2_sh, ctl_alu_fl_c2_daa, ctl_alu_fl_sel_c2;
+	logic ctl_update_int, ctl_ime_we, ctl_ime_bit, ctl_ack_int, ctl_int_vector_oe;
+	logic ctl_halt_set;
+
+	logic  iena_oe, iena_we, iena_sel, wake, int_pending;
+	word_t iena_dout, int_vector;
+
+	reg_t reg_bc, reg_de, reg_hl, reg_af, reg_sp, reg_wz, reg_pc;
+	reg_t reg_gp2sys, reg_sys2gp;
+
+	/* common data bus matrix */
+	logic [2:0] dbc_sel;
+	word_t      db_c2l, io_din, io_dout;
+
+	/* low data bus matrix */
+	logic [4:0] dbl_sel;
+	word_t      db_l2c, db_l2h, reg_lo_dout, reg_lo_din, alu_ct_dout, alu_fl_dout, alu_fl_din;
+
+	/* high data bus matrix */
+	logic [2:0] dbh_sel;
+	word_t      db_h2l, reg_hi_dout, reg_hi_din, alu_dout, alu_din;
+
+	logic [3:0] reg_gp_sel, reg_gp_lo_oe, reg_gp_hi_oe;
+	logic       reg_wz_lo_oe, reg_wz_hi_oe;
+
+	/* low register bus matrix */
+	logic [6:0] rbl_sel;
+	word_t      rbl;
+
+	/* high register bus matrix */
+	logic [6:0] rbh_sel;
+	word_t      rbh;
+
+	logic [1:0] reg_sys_sel, reg_sys_lo_oe, reg_sys_hi_oe;
+
+	/* address bus matrix */
+	adr_t       ab;
+	logic [3:0] abl_sel, abh_sel;
+
+	logic halt_clk;
+
 	sm83_io io(
 		.clk, .reset,
 		.t1, .t2, .t3, .t4,
@@ -63,13 +147,6 @@ module sm83(
 		.ctl_ir_we, .ctl_ir_bank_we, .ctl_ir_bank_cb_set,
 		.ctl_zero_data_oe
 	);
-
-	logic alu_shift_dbh, alu_shift_dbl;
-	logic alu_shift_out, alu_shift_in, alu_shift_l, alu_shift_r;
-	logic alu_zero, alu_carry, alu_ct_daa_carry, alu_sign;
-	logic alu_daa_lgt9, alu_daa_hgt9, alu_daa_heq9;
-	logic alu_fl_zero, alu_fl_carry, alu_fl_pri_carry, alu_fl_half_carry, alu_fl_daa_carry, alu_fl_neg;
-	logic alu_cond_result;
 
 	sm83_alu alu(
 		.clk,
@@ -165,56 +242,11 @@ module sm83(
 		endcase
 	endfunction
 
-	logic ctl_mread, ctl_mwrite;
-	logic ctl_reg_gp2h_oe, ctl_reg_gp2l_oe;
-	logic ctl_reg_h2gp_oe, ctl_reg_l2gp_oe;
-	logic ctl_reg_gp_hi_sel, ctl_reg_gp_lo_sel;
-	logic ctl_reg_gp_we;
-	logic ctl_reg_sys_hi_sel, ctl_reg_sys_lo_sel;
-	logic ctl_reg_sys_hi_we, ctl_reg_sys_lo_we;
-	logic ctl_reg_bc_sel, ctl_reg_de_sel, ctl_reg_hl_sel, ctl_reg_af_sel, ctl_reg_sp_sel, ctl_reg_wz_sel, ctl_reg_pc_sel;
-	logic ctl_reg_gp2sys_oe, ctl_reg_sys2gp_oe;
-	logic ctl_al_we, ctl_al_hi_ff;
-	logic ctl_inc_dec, ctl_inc_cy;
-	logic ctl_inc_oe;
-	logic ctl_db_c2l_oe, ctl_db_l2c_oe;
-	logic ctl_db_l2h_oe, ctl_db_h2l_oe;
-	logic ctl_db_c2l_mask543;
-	logic ctl_io_data_oe, ctl_io_data_we;
-	logic ctl_io_adr_we;
-	logic ctl_zero_data_oe;
-	logic ctl_ir_we;
-	logic ctl_ir_bank_we;
-	logic ctl_ir_bank_cb_set;
-	logic ctl_alu_oe, ctl_alu_fl_oe, ctl_alu_daa_oe;
-	logic ctl_alu_sh_oe, ctl_alu_op_a_oe, ctl_alu_res_oe, ctl_alu_bs_oe;
-	logic ctl_alu_op_a_bus, ctl_alu_op_a_zero;
-	logic ctl_alu_op_b_bus, ctl_alu_op_b_zero;
-	logic ctl_alu_nc, ctl_alu_fc, ctl_alu_ic;
-	logic ctl_alu_neg, ctl_alu_op_low, ctl_alu_op_b_high;
-	logic ctl_alu_shift;   /* Makes ALU perform shift operation on data input. */
-	logic ctl_alu_sel_hc;  /* Selects which carry flag goes into ALU core. (0: carry; 1: half carry) */
-	logic ctl_alu_cond_we; /* Write condition result flag for conditional operation. */
-	logic ctl_alu_fl_bus, ctl_alu_fl_alu;
-	logic ctl_alu_fl_zero_we, ctl_alu_fl_zero_clr;
-	logic ctl_alu_fl_half_we, ctl_alu_fl_half_set, ctl_alu_fl_half_cpl;
-	logic ctl_alu_fl_daac_we;
-	logic ctl_alu_fl_neg_we, ctl_alu_fl_neg_set, ctl_alu_fl_neg_clr;
-	logic ctl_alu_fl_carry_we, ctl_alu_fl_carry_set, ctl_alu_fl_carry_cpl;
-	logic ctl_alu_fl_c2_we, ctl_alu_fl_c2_sh, ctl_alu_fl_c2_daa, ctl_alu_fl_sel_c2;
-	logic ctl_update_int, ctl_ime_we, ctl_ime_bit, ctl_ack_int, ctl_int_vector_oe;
-	logic ctl_halt_set;
-
-	logic  iena_oe, iena_we, iena_sel, wake, int_pending;
-	word_t iena_dout, int_vector;
 	assign iena_sel = &adr;
 	assign iena_we  = iena_sel && wr && t3; /* Write IE register at T3 or T4: This makes Mooneye GB's acceptance/interrupts/ie_push test pass. */
 
 	sm83_control ctl(.*);
 	sm83_int     intr(.*, .iena_din(dout));
-
-	reg_t reg_bc, reg_de, reg_hl, reg_af, reg_sp, reg_wz, reg_pc;
-	reg_t reg_gp2sys, reg_sys2gp;
 
 	initial reg_bc = 0;
 	initial reg_de = 0;
@@ -225,15 +257,11 @@ module sm83(
 	initial reg_pc = 0;
 
 	/* common data bus matrix */
-	logic [2:0] dbc_sel;
-	word_t      db_c2l, io_din, io_dout;
 	assign dbc_sel = { ctl_int_vector_oe, ctl_io_data_oe, ctl_db_l2c_oe };
 	assign db_c2l  = db_mux(dbc_sel,     'x, io_din, int_vector, 'x, 'x, 'x, 'x) & (ctl_db_c2l_mask543 ? 'h38 : {WORD_SIZE{1'b1}});
 	assign io_dout = db_mux(dbc_sel, db_l2c,     'x, int_vector, 'x, 'x, 'x, 'x);
 
 	/* low data bus matrix */
-	logic [4:0] dbl_sel;
-	word_t      db_l2c, db_l2h, reg_lo_dout, reg_lo_din, alu_ct_dout, alu_fl_dout, alu_fl_din;
 	assign dbl_sel = { ctl_alu_fl_oe, ctl_alu_daa_oe, ctl_reg_gp2l_oe, ctl_db_h2l_oe, ctl_db_c2l_oe };
 	assign db_l2c     = db_mux(dbl_sel,     'x, db_h2l, reg_lo_dout, alu_ct_dout, alu_fl_dout, 'x, 'x);
 	assign db_l2h     = db_mux(dbl_sel, db_c2l,     'x, reg_lo_dout, alu_ct_dout, alu_fl_dout, 'x, 'x);
@@ -241,15 +269,11 @@ module sm83(
 	assign alu_fl_din = db_mux(dbl_sel, db_c2l, db_h2l, reg_lo_dout, alu_ct_dout,          'x, 'x, 'x);
 
 	/* high data bus matrix */
-	logic [2:0] dbh_sel;
-	word_t      db_h2l, reg_hi_dout, reg_hi_din, alu_dout, alu_din;
 	assign dbh_sel = { ctl_alu_oe, ctl_reg_gp2h_oe, ctl_db_l2h_oe };
 	assign db_h2l     = db_mux(dbh_sel,     'x, reg_hi_dout, alu_dout, 'x, 'x, 'x, 'x);
 	assign reg_hi_din = db_mux(dbh_sel, db_l2h,          'x, alu_dout, 'x, 'x, 'x, 'x);
 	assign alu_din    = db_mux(dbh_sel, db_l2h, reg_hi_dout,       'x, 'x, 'x, 'x, 'x);
 
-	logic [3:0] reg_gp_sel, reg_gp_lo_oe, reg_gp_hi_oe;
-	logic       reg_wz_lo_oe, reg_wz_hi_oe;
 	assign reg_gp_sel = { ctl_reg_af_sel, ctl_reg_hl_sel, ctl_reg_de_sel, ctl_reg_bc_sel };
 	assign reg_gp_lo_oe = reg_gp_sel & {4{ctl_reg_gp_lo_sel && !ctl_reg_gp_we}};
 	assign reg_gp_hi_oe = reg_gp_sel & {4{ctl_reg_gp_hi_sel && !ctl_reg_gp_we}};
@@ -257,8 +281,6 @@ module sm83(
 	assign reg_wz_hi_oe = ctl_reg_wz_sel && ctl_reg_sys_hi_sel && !ctl_reg_sys_hi_we;
 
 	/* low register bus matrix */
-	logic [6:0] rbl_sel;
-	word_t      rbl;
 	assign rbl_sel = { ctl_reg_sys2gp_oe, ctl_reg_l2gp_oe, reg_wz_lo_oe, reg_gp_lo_oe };
 	assign rbl           = db_mux(rbl_sel, reg_bc.lo, reg_de.lo, reg_hl.lo, reg_af.lo & 'hf0, reg_wz.lo, reg_lo_din, reg_sys2gp.lo);
 	assign reg_lo_dout   = db_mux(rbl_sel, reg_bc.lo, reg_de.lo, reg_hl.lo, reg_af.lo & 'hf0, reg_wz.lo,         'x, reg_sys2gp.lo);
@@ -272,8 +294,6 @@ module sm83(
 	always_ff @(posedge clk) if (ctl_reg_sys_lo_we && ctl_reg_sys_lo_sel && ctl_reg_wz_sel) reg_wz.lo <= rbl;
 
 	/* high register bus matrix */
-	logic [6:0] rbh_sel;
-	word_t      rbh;
 	assign rbh_sel = { ctl_reg_sys2gp_oe, ctl_reg_h2gp_oe, reg_wz_hi_oe, reg_gp_hi_oe };
 	assign rbh           = db_mux(rbh_sel, reg_bc.hi, reg_de.hi, reg_hl.hi, reg_af.hi, reg_wz.hi, reg_hi_din, reg_sys2gp.hi);
 	assign reg_hi_dout   = db_mux(rbh_sel, reg_bc.hi, reg_de.hi, reg_hl.hi, reg_af.hi, reg_wz.hi,         'x, reg_sys2gp.hi);
@@ -286,14 +306,11 @@ module sm83(
 	end
 	always_ff @(posedge clk) if (ctl_reg_sys_hi_we && ctl_reg_sys_hi_sel && ctl_reg_wz_sel) reg_wz.hi <= rbh;
 
-	logic [1:0] reg_sys_sel, reg_sys_lo_oe, reg_sys_hi_oe;
 	assign reg_sys_sel = { ctl_reg_sp_sel, ctl_reg_pc_sel };
 	assign reg_sys_lo_oe = reg_sys_sel & {2{ctl_reg_sys_lo_sel && !ctl_reg_sys_lo_we}};
 	assign reg_sys_hi_oe = reg_sys_sel & {2{ctl_reg_sys_hi_sel && !ctl_reg_sys_hi_we}};
 
 	/* address bus matrix */
-	adr_t       ab;
-	logic [3:0] abl_sel, abh_sel;
 	assign abl_sel = { ctl_inc_oe, ctl_reg_gp2sys_oe, reg_sys_lo_oe };
 	assign abh_sel = { ctl_inc_oe, ctl_reg_gp2sys_oe, reg_sys_hi_oe };
 	assign ab.lo         = db_mux(abl_sel, reg_pc.lo, reg_sp.lo, reg_gp2sys.lo, al_out.lo, 'x, 'x, 'x);
@@ -325,7 +342,6 @@ module sm83(
 			clk_ena <= 1;
 	end
 
-	logic halt_clk;
 	always_ff @(posedge clk) begin
 		if (reset || t1)
 			halt_clk <= 0;

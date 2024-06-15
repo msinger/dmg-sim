@@ -89,124 +89,21 @@ module dmg_cpu_b(
 		output logic            cpu_wakeup     /* CPU in  B25 - Wake from STOP mode; active-high */
 	);
 
-	function automatic logic bidir_out(logic drv_low, ndrv_high);
-		if ($isunknown(drv_low) || $isunknown(ndrv_high))
-			bidir_out = 'x;
-		else if (drv_low == ndrv_high)
-			bidir_out = !drv_low;
-		else if (drv_low)
-			bidir_out = 'x;
-		else
-			bidir_out = 'z;
-	endfunction
-
-	assign phi = !nphi_out;
-	assign nrd = bidir_out(rd_c, rd_a);
-	assign nwr = bidir_out(wr_c, wr_a);
-	assign ncs = !cs_out;
-
-	assign nmoe = bidir_out(moe_d, moe_a);
-	assign nmwr = bidir_out(mwr_d, mwr_a);
-	assign nmcs = bidir_out(mcs_d, mcs_a);
-
-	logic [7:0] d_pin_drv; /* Value driven internally onto the data pins if not 'z */
-	generate
-		for (genvar i = 0; i < 8; i++)
-			assign d_pin_drv[i] = bidir_out(d_d[i], d_a[i]);
-	endgenerate
-	assign (pull1, highz0) d_pin = {8{!lula}};
-	assign                 d_pin = d_pin_drv;
-
+	logic [7:0] d_pin_drv;  /* Value driven internally onto the data pins if not 'z */
 	logic [7:0] md_pin_drv; /* Value driven internally onto the pins if not 'z */
-	generate
-		for (genvar i = 0; i < 8; i++)
-			assign md_pin_drv[i] = bidir_out(md_out[i], md_a[i]);
-	endgenerate
-	assign (pull1, highz0) md_pin = {8{!md_b}};
-	assign                 md_pin = md_pin_drv;
-
-	generate
-		for (genvar i = 0; i < 16; i++)
-			assign a_pin[i] = bidir_out(a_d[i], a_a[i]);
-	endgenerate
-
-	assign ma_pin = ~nma_out;
-
-	assign                 sout = nsout;
-	assign                 sin  = bidir_out(sin_d, sin_a);
-	assign                 sck  = bidir_out(sck_d, sck_a);
-	assign (pull1, highz0) sin  = !sin_b;
-	assign (pull1, highz0) sck  = !sck_dir;
-
-	assign                 p10  = bidir_out(p10_d, p10_a);
-	assign                 p11  = bidir_out(p11_d, p11_a);
-	assign                 p12  = bidir_out(p12_d, p12_a);
-	assign                 p13  = bidir_out(p13_d, p13_a);
-	assign                 p14  = bidir_out(p14_b, p14_a);
-	assign                 p15  = bidir_out(p15_b, p15_a);
-	assign (pull1, highz0) p10  = !p10_b;
-	assign (pull1, highz0) p11  = !p11_b;
-	assign (pull1, highz0) p12  = !p12_b;
-	assign (pull1, highz0) p13  = !p13_b;
-
-	assign cpg = !npin_cpg;
-	assign cp  = !ncp;
-	assign cpl = !npin_cpl;
-	assign fr  = !npin_fr;
-	assign st  = !npin_st;
-	assign s   = !npin_s;
-	assign ld0 = !nld0;
-	assign ld1 = !nld1;
-
-	assign cpu_in_t13 = reset;
-	assign cpu_in_r3  = t1_nt2;
-	assign cpu_in_r6  = nt1_t2;
-
-	assign cpu_clkin_t2  = to_cpu;
-	assign cpu_clkin_t3  = bedo;
-	assign cpu_clkin_t4  = beko;
-	assign cpu_clkin_t5  = nphi_out;
-	assign cpu_clkin_t6  = bolo;
-	assign cpu_clkin_t7  = from_cpu5;
-	assign cpu_clkin_t8  = buke;
-	assign cpu_clkin_t9  = boma;
-	assign cpu_clkin_t10 = boga1mhz;
-	assign cpu_in_t12    = afer;
-	assign cpu_in_t15    = taba;
-	assign cpu_in_r4     = syro;
-	assign cpu_in_r5     = tutu;
-	assign a             = cpu_a;
-	assign cpu_wakeup    = to_cpu2;
-	assign cpu_in_t16    = !unbonded_pad0;
-	assign cpu_irq5_trig = 0;
-	assign cpu_irq6_trig = 0;
-	assign cpu_irq7_trig = 0;
 
 	tri0 logic [15:0] a;
 	tri logic  [7:0]  md;
 	tri0 logic [12:0] nma;
 
-	/* Icarus doesn't support trireg, so we do it like this: */
 	logic [7:0] d_cap = $random, md_cap = $random;
-	always @(d) d_cap = d;
-	always @(md) md_cap = md;
-	assign (weak1, weak0) d = d_cap;
-	assign (weak1, weak0) md = md_cap;
 
 	logic [7:0]  d_a, d_in, d_d, md_a, md_in, md_out;
 	logic [15:0] a_a, a_c, a_d, dma_a;
 	logic [12:0] nma_out;
-	assign d_in  = ~d_pin;
-	assign md_in = ~md_pin;
-	assign a_c   = ~a_pin;
 
 	logic wr_a, wr_in, wr_c, rd_a, rd_b, rd_c;
 	logic moe_a, moe_in, moe_d, mwr_a, mwr_in, mwr_d, mcs_a, mcs_in, mcs_d, md_b;
-	assign wr_in  = !nwr;
-	assign rd_b   = !nrd;
-	assign moe_in = !nmoe;
-	assign mwr_in = !nmwr;
-	assign mcs_in = !nmcs;
 
 	logic clk1, clk2, clk3, clk4, clk5;
 	logic cpu_wr, cpu_wr2;
@@ -221,23 +118,9 @@ module dmg_cpu_b(
 	logic from_cpu5; /* this is wrongly labeled in the schematics; it is actually a CPU input */
 
 	logic reset;
-	assign reset = !nrst;
-
 	logic clkin_a, clkin_b;
-	assign clkin_a = cpu_xo_ena;
-	assign clkin_b = !xi;
-
-	assign xo = cpu_xo_ena ? !xi : 0;
-
 	logic from_cpu3, from_cpu4, from_cpu6, clk_from_cpu;
-	assign from_cpu3    = cpu_raw_wr;
-	assign from_cpu4    = cpu_out_r7;
-	assign from_cpu6    = cpu_out_t1;
-	assign clk_from_cpu = cpu_clk_ena;
-
 	logic nt1, nt2;
-	assign nt1 = !t1;
-	assign nt2 = !t2;
 
 	logic nreset2, nreset6, reset7, nreset7, nreset8, nreset9;
 	logic reset_video, nreset_video, reset_video2, nreset_video2, reset_video3;
@@ -246,12 +129,6 @@ module dmg_cpu_b(
 	logic nsout, sin_a, sin_b, sin_in, sin_d, sck_a, sck_dir, sck_in, sck_d;
 	logic p10_a, p10_b, p10_c, p10_d, p11_a, p11_b, p11_c, p11_d, p12_a, p12_b, p12_c, p12_d, p13_a, p13_b, p13_c, p13_d;
 	logic p14_a, p14_b, p15_a, p15_b;
-	assign sin_in = !sin;
-	assign sck_in = !sck;
-	assign p10_c  = !p10;
-	assign p11_c  = !p11;
-	assign p12_c  = !p12;
-	assign p13_c  = !p13;
 
 	logic oam_a_cpu_nrd, oam_b_cpu_nrd;
 	logic dma_run, vram_to_oam, dma_addr_ext, oam_addr_ndma;
@@ -358,10 +235,222 @@ module dmg_cpu_b(
 	logic [2:0] nrvolume, nlvolume;
 	logic       vin_r_ena, vin_l_ena;
 
-	/* simulate analog parts */
 	real ch1_fp, ch2_fp, ch3_fp, ch4_fp;
 	real rvol_fp, lvol_fp;
 	real rmix, lmix;
+
+	/* connections to wave RAM */
+	logic [7:0] wave_rd_d = $random; /* data output (data input is directly connected to common d[7:0]) */
+	logic [3:0] wave_a;              /* address */
+	logic       wave_ram_ctrl1;      /* !CS */
+	logic       nwave_ram_wr;        /* !WR */
+	logic       atok;                /* !OE */
+
+	logic [7:0] wave_ram[0:15];
+
+	/* connections to OAM RAM */
+	tri logic [7:0] oam_a_nd, oam_b_nd;      /* ~data I/O */
+	logic     [7:0] oam_a;                   /* address (except bit 0) */
+	logic     oam_a_ncs, oam_b_ncs;          /* !WR */
+	logic     oam_clk;                       /* !OE */
+	logic     [7:0] oam_a_nd_cap = $random, oam_b_nd_cap = $random;
+
+	logic [7:0] oam_a_ram[0:79], oam_b_ram[0:79];
+
+	/* connection to HRAM */
+	logic hram_cs; /* CS */
+
+	logic [7:0] hram[0:127];
+
+	/* connection to boot ROM */
+	logic boot_cs; /* OE */
+
+	logic [7:0] brom[0:255];
+
+	/* for convinience */
+	logic [15:0] reg_div16;
+	logic [7:0]  reg_ff00;
+	logic [7:0]  reg_ff01;
+	logic [7:0]  reg_ff02;
+	logic [7:0]  reg_ff04;
+	logic [7:0]  reg_ff05;
+	logic [7:0]  reg_ff06;
+	logic [7:0]  reg_ff07;
+	logic [7:0]  reg_ff0f;
+	logic [7:0]  reg_ff10, reg_ff10s;
+	logic [7:0]  reg_ff11;
+	logic [7:0]  reg_ff12, reg_ff12s;
+	logic [7:0]  reg_ff13, reg_ff13s, reg_ff13t, reg_ff13u, reg_ff13v;
+	logic [7:0]  reg_ff14, reg_ff14s, reg_ff14t, reg_ff14u, reg_ff14v;
+	logic [7:0]  reg_ff16;
+	logic [7:0]  reg_ff17, reg_ff17s;
+	logic [7:0]  reg_ff18, reg_ff18s;
+	logic [7:0]  reg_ff19, reg_ff19s;
+	logic [7:0]  reg_ff1a;
+	logic [7:0]  reg_ff1b;
+	logic [7:0]  reg_ff1c;
+	logic [7:0]  reg_ff1d, reg_ff1ds;
+	logic [7:0]  reg_ff1e, reg_ff1es;
+	logic [7:0]  reg_ff20;
+	logic [7:0]  reg_ff21, reg_ff21s;
+	logic [7:0]  reg_ff22, reg_ff22s;
+	logic [7:0]  reg_ff23, reg_ff23s;
+	logic [7:0]  reg_ff24;
+	logic [7:0]  reg_ff25;
+	logic [7:0]  reg_ff26;
+	logic [7:0]  reg_ff40;
+	logic [7:0]  reg_ff41;
+	logic [7:0]  reg_ff42;
+	logic [7:0]  reg_ff43;
+	logic [7:0]  reg_ff44;
+	logic [7:0]  reg_ff45;
+	logic [7:0]  reg_ff46;
+	logic [7:0]  reg_ff47;
+	logic [7:0]  reg_ff48;
+	logic [7:0]  reg_ff49;
+	logic [7:0]  reg_ff50;
+	logic [7:0]  reg_ff60;
+	logic [6:0]  reg_cpg_count;
+	logic [3:0]  reg_oam_src;
+	logic [7:0]  reg_obj_y_cmp;
+	logic [31:0] obj0, obj1, obj2, obj3, obj4, obj5, obj6, obj7;
+	logic [3:0]  reg_obj0y, reg_obj1y, reg_obj2y, reg_obj3y, reg_obj4y;
+	logic [3:0]  reg_obj5y, reg_obj6y, reg_obj7y, reg_obj8y, reg_obj9y;
+	logic [5:0]  reg_obj0i, reg_obj1i, reg_obj2i, reg_obj3i, reg_obj4i;
+	logic [5:0]  reg_obj5i, reg_obj6i, reg_obj7i, reg_obj8i, reg_obj9i;
+	logic [7:0]  reg_obj0x, reg_obj1x, reg_obj2x, reg_obj3x, reg_obj4x;
+	logic [7:0]  reg_obj5x, reg_obj6x, reg_obj7x, reg_obj8x, reg_obj9x;
+
+	function automatic logic bidir_out(logic drv_low, ndrv_high);
+		if ($isunknown(drv_low) || $isunknown(ndrv_high))
+			bidir_out = 'x;
+		else if (drv_low == ndrv_high)
+			bidir_out = !drv_low;
+		else if (drv_low)
+			bidir_out = 'x;
+		else
+			bidir_out = 'z;
+	endfunction
+
+	assign phi = !nphi_out;
+	assign nrd = bidir_out(rd_c, rd_a);
+	assign nwr = bidir_out(wr_c, wr_a);
+	assign ncs = !cs_out;
+
+	assign nmoe = bidir_out(moe_d, moe_a);
+	assign nmwr = bidir_out(mwr_d, mwr_a);
+	assign nmcs = bidir_out(mcs_d, mcs_a);
+
+	generate
+		for (genvar i = 0; i < 8; i++)
+			assign d_pin_drv[i] = bidir_out(d_d[i], d_a[i]);
+	endgenerate
+	assign (pull1, highz0) d_pin = {8{!lula}};
+	assign                 d_pin = d_pin_drv;
+
+	generate
+		for (genvar i = 0; i < 8; i++)
+			assign md_pin_drv[i] = bidir_out(md_out[i], md_a[i]);
+	endgenerate
+	assign (pull1, highz0) md_pin = {8{!md_b}};
+	assign                 md_pin = md_pin_drv;
+
+	generate
+		for (genvar i = 0; i < 16; i++)
+			assign a_pin[i] = bidir_out(a_d[i], a_a[i]);
+	endgenerate
+
+	assign ma_pin = ~nma_out;
+
+	assign                 sout = nsout;
+	assign                 sin  = bidir_out(sin_d, sin_a);
+	assign                 sck  = bidir_out(sck_d, sck_a);
+	assign (pull1, highz0) sin  = !sin_b;
+	assign (pull1, highz0) sck  = !sck_dir;
+
+	assign                 p10  = bidir_out(p10_d, p10_a);
+	assign                 p11  = bidir_out(p11_d, p11_a);
+	assign                 p12  = bidir_out(p12_d, p12_a);
+	assign                 p13  = bidir_out(p13_d, p13_a);
+	assign                 p14  = bidir_out(p14_b, p14_a);
+	assign                 p15  = bidir_out(p15_b, p15_a);
+	assign (pull1, highz0) p10  = !p10_b;
+	assign (pull1, highz0) p11  = !p11_b;
+	assign (pull1, highz0) p12  = !p12_b;
+	assign (pull1, highz0) p13  = !p13_b;
+
+	assign cpg = !npin_cpg;
+	assign cp  = !ncp;
+	assign cpl = !npin_cpl;
+	assign fr  = !npin_fr;
+	assign st  = !npin_st;
+	assign s   = !npin_s;
+	assign ld0 = !nld0;
+	assign ld1 = !nld1;
+
+	assign cpu_in_t13 = reset;
+	assign cpu_in_r3  = t1_nt2;
+	assign cpu_in_r6  = nt1_t2;
+
+	assign cpu_clkin_t2  = to_cpu;
+	assign cpu_clkin_t3  = bedo;
+	assign cpu_clkin_t4  = beko;
+	assign cpu_clkin_t5  = nphi_out;
+	assign cpu_clkin_t6  = bolo;
+	assign cpu_clkin_t7  = from_cpu5;
+	assign cpu_clkin_t8  = buke;
+	assign cpu_clkin_t9  = boma;
+	assign cpu_clkin_t10 = boga1mhz;
+	assign cpu_in_t12    = afer;
+	assign cpu_in_t15    = taba;
+	assign cpu_in_r4     = syro;
+	assign cpu_in_r5     = tutu;
+	assign a             = cpu_a;
+	assign cpu_wakeup    = to_cpu2;
+	assign cpu_in_t16    = !unbonded_pad0;
+	assign cpu_irq5_trig = 0;
+	assign cpu_irq6_trig = 0;
+	assign cpu_irq7_trig = 0;
+
+	/* Icarus doesn't support trireg, so we do it like this: */
+	always @(d) d_cap = d;
+	always @(md) md_cap = md;
+	assign (weak1, weak0) d = d_cap;
+	assign (weak1, weak0) md = md_cap;
+
+	assign d_in  = ~d_pin;
+	assign md_in = ~md_pin;
+	assign a_c   = ~a_pin;
+
+	assign wr_in  = !nwr;
+	assign rd_b   = !nrd;
+	assign moe_in = !nmoe;
+	assign mwr_in = !nmwr;
+	assign mcs_in = !nmcs;
+
+	assign reset = !nrst;
+
+	assign clkin_a = cpu_xo_ena;
+	assign clkin_b = !xi;
+
+	assign xo = cpu_xo_ena ? !xi : 0;
+
+	assign from_cpu3    = cpu_raw_wr;
+	assign from_cpu4    = cpu_out_r7;
+	assign from_cpu6    = cpu_out_t1;
+	assign clk_from_cpu = cpu_clk_ena;
+
+	assign nt1 = !t1;
+	assign nt2 = !t2;
+
+	assign sin_in = !sin;
+	assign sck_in = !sck;
+	assign p10_c  = !p10;
+	assign p11_c  = !p11;
+	assign p12_c  = !p12;
+	assign p13_c  = !p13;
+
+	/* simulate analog parts */
 	assign ch1_fp = $itor(ch1_out) / 15.0;
 	assign ch2_fp = $itor(ch2_out) / 15.0;
 	assign ch3_fp = $itor(wave_dac_d) / 15.0;
@@ -381,14 +470,6 @@ module dmg_cpu_b(
 	assign rout = (rmix * rvol_fp > 1.0) ? 1.0 : (rmix * rvol_fp);
 	assign lout = (lmix * lvol_fp > 1.0) ? 1.0 : (lmix * lvol_fp);
 
-	/* connections to wave RAM */
-	logic [7:0] wave_rd_d = $random; /* data output (data input is directly connected to common d[7:0]) */
-	logic [3:0] wave_a;              /* address */
-	logic       wave_ram_ctrl1;      /* !CS */
-	logic       nwave_ram_wr;        /* !WR */
-	logic       atok;                /* !OE */
-
-	logic [7:0] wave_ram[0:15];
 	initial foreach (wave_ram[i]) wave_ram[i] = $random;
 	always_ff @(posedge nwave_ram_wr) if (!wave_ram_ctrl1) wave_ram[wave_a] <= $isunknown(d) ? $random : d;
 	always_latch if (!wave_ram_ctrl1 && !atok) wave_rd_d = wave_ram[wave_a];
@@ -396,20 +477,12 @@ module dmg_cpu_b(
 	// TODO: When reading the next byte from wave RAM (for example FF31), the previous sample (high nibble of FF30)
 	//       gets output for a very short time before the next sample (high nibble of FF31) gets output. Check if correct.
 
-	/* connections to OAM RAM */
-	tri logic [7:0] oam_a_nd, oam_b_nd;      /* ~data I/O */
-	logic     [7:0] oam_a;                   /* address (except bit 0) */
-	logic     oam_a_ncs, oam_b_ncs;          /* !WR */
-	logic     oam_clk;                       /* !OE */
-
 	/* Icarus doesn't support trireg, so we do it like this: */
-	logic [7:0] oam_a_nd_cap = $random, oam_b_nd_cap = $random;
 	always @(oam_a_nd) oam_a_nd_cap = oam_a_nd;
 	always @(oam_b_nd) oam_b_nd_cap = oam_b_nd;
 	assign (weak1, weak0) oam_a_nd = oam_a_nd_cap;
 	assign (weak1, weak0) oam_b_nd = oam_b_nd_cap;
 
-	logic [7:0] oam_a_ram[0:79], oam_b_ram[0:79];
 	initial foreach (oam_a_ram[i]) oam_a_ram[i] = $random;
 	initial foreach (oam_b_ram[i]) oam_b_ram[i] = $random;
 	always_ff @(posedge oam_a_ncs) oam_a_ram[oam_a[7:1]] <= $isunknown(oam_a_nd) ? $random : oam_a_nd;
@@ -417,18 +490,10 @@ module dmg_cpu_b(
 	assign oam_a_nd = (!oam_clk && oam_a[7:1] < 80) ? oam_a_ram[oam_a[7:1]] : 'z;
 	assign oam_b_nd = (!oam_clk && oam_a[7:1] < 80) ? oam_b_ram[oam_a[7:1]] : 'z;
 
-	/* connection to HRAM */
-	logic hram_cs; /* CS */
-
-	logic [7:0] hram[0:127];
 	initial foreach (hram[i]) hram[i] = $random;
 	always_ff @(negedge cpu_wr) if (hram_cs) hram[a[6:0]] <= $isunknown(d) ? $random : d;
 	assign d = (hram_cs && cpu_rd) ? hram[a[6:0]] : 'z;
 
-	/* connection to boot ROM */
-	logic boot_cs; /* OE */
-
-	logic [7:0] brom[0:255];
 	initial begin
 		string bootrom_file;
 		int f, _;
@@ -488,58 +553,6 @@ module dmg_cpu_b(
 	palettes               p36_palettes(.*);
 
 	/* for convinience */
-	logic [15:0] reg_div16;
-	logic [7:0]  reg_ff00;
-	logic [7:0]  reg_ff01;
-	logic [7:0]  reg_ff02;
-	logic [7:0]  reg_ff04;
-	logic [7:0]  reg_ff05;
-	logic [7:0]  reg_ff06;
-	logic [7:0]  reg_ff07;
-	logic [7:0]  reg_ff0f;
-	logic [7:0]  reg_ff10, reg_ff10s;
-	logic [7:0]  reg_ff11;
-	logic [7:0]  reg_ff12, reg_ff12s;
-	logic [7:0]  reg_ff13, reg_ff13s, reg_ff13t, reg_ff13u, reg_ff13v;
-	logic [7:0]  reg_ff14, reg_ff14s, reg_ff14t, reg_ff14u, reg_ff14v;
-	logic [7:0]  reg_ff16;
-	logic [7:0]  reg_ff17, reg_ff17s;
-	logic [7:0]  reg_ff18, reg_ff18s;
-	logic [7:0]  reg_ff19, reg_ff19s;
-	logic [7:0]  reg_ff1a;
-	logic [7:0]  reg_ff1b;
-	logic [7:0]  reg_ff1c;
-	logic [7:0]  reg_ff1d, reg_ff1ds;
-	logic [7:0]  reg_ff1e, reg_ff1es;
-	logic [7:0]  reg_ff20;
-	logic [7:0]  reg_ff21, reg_ff21s;
-	logic [7:0]  reg_ff22, reg_ff22s;
-	logic [7:0]  reg_ff23, reg_ff23s;
-	logic [7:0]  reg_ff24;
-	logic [7:0]  reg_ff25;
-	logic [7:0]  reg_ff26;
-	logic [7:0]  reg_ff40;
-	logic [7:0]  reg_ff41;
-	logic [7:0]  reg_ff42;
-	logic [7:0]  reg_ff43;
-	logic [7:0]  reg_ff44;
-	logic [7:0]  reg_ff45;
-	logic [7:0]  reg_ff46;
-	logic [7:0]  reg_ff47;
-	logic [7:0]  reg_ff48;
-	logic [7:0]  reg_ff49;
-	logic [7:0]  reg_ff50;
-	logic [7:0]  reg_ff60;
-	logic [6:0]  reg_cpg_count;
-	logic [3:0]  reg_oam_src;
-	logic [7:0]  reg_obj_y_cmp;
-	logic [31:0] obj0, obj1, obj2, obj3, obj4, obj5, obj6, obj7;
-	logic [3:0]  reg_obj0y, reg_obj1y, reg_obj2y, reg_obj3y, reg_obj4y;
-	logic [3:0]  reg_obj5y, reg_obj6y, reg_obj7y, reg_obj8y, reg_obj9y;
-	logic [5:0]  reg_obj0i, reg_obj1i, reg_obj2i, reg_obj3i, reg_obj4i;
-	logic [5:0]  reg_obj5i, reg_obj6i, reg_obj7i, reg_obj8i, reg_obj9i;
-	logic [7:0]  reg_obj0x, reg_obj1x, reg_obj2x, reg_obj3x, reg_obj4x;
-	logic [7:0]  reg_obj5x, reg_obj6x, reg_obj7x, reg_obj8x, reg_obj9x;
 	assign reg_div16[0]   = p1_clocks_reset.ukup;
 	assign reg_div16[1]   = p1_clocks_reset.ufor;
 	assign reg_div16[2]   = p1_clocks_reset.uner;

@@ -26,6 +26,22 @@ module apu_control(
 	);
 
 	logic ajer, bata, calo, dyfa, najer_2mhz;
+
+	logic dapa, afat, agur, atyv, kame, cepo, napu_reset3;
+
+	logic kydu, jure, hapo, gufo, jyro, kuby, keba, hawu, hada, hope, bopy, bowy, baza, cely, cone;
+	logic kepy, etuc, foku, efop, fero, edek;
+
+	logic aguz, byma, befu, adak, bosu, baxy, bubu, bowe, ataf;
+	logic bedu, cozu, bumo, byre, apos, ager, byga, apeg;
+	logic atum, bocy, arux, amad, axem, avud, awed, akod;
+
+	logic gepa, hefa, gumu, bupo, bono, byfa;
+	logic bogu, bafo, atuf, anev, bepu, befo, bume, bofa;
+	logic capu, caga, boca, buzu, cere, cada, cavu, cudu;
+
+	logic ceto, kazo, curu, dole, kamu, duru, fewa, coto, koge, efus, fate;
+
 	dffr_bp dffr_ajer(apuv_4mhz, napu_reset3, !ajer, ajer);
 	dffr_bp dffr_calo(bata,      napu_reset,  !calo, calo);
 	assign #T_INV  bata = !ajer_2mhz;
@@ -34,7 +50,6 @@ module apu_control(
 	assign najer_2mhz = !ajer;
 	assign dyfa_1mhz  = dyfa;
 
-	logic dapa, afat, agur, atyv, kame, cepo, napu_reset3;
 	assign #T_INV  dapa = !apu_reset;
 	assign #T_INV  afat = !apu_reset;
 	assign #T_INV  agur = !apu_reset;
@@ -48,8 +63,6 @@ module apu_control(
 	assign napu_reset5 = kame;
 	assign napu_reset6 = cepo;
 
-	logic kydu, jure, hapo, gufo, jyro, kuby, keba, hawu, hada, hope, bopy, bowy, baza, cely, cone;
-	logic kepy, etuc, foku, efop, fero, edek;
 	dffr_bp dffr_hada(hawu,       gufo,        d[7], hada);
 	dffr_bp dffr_bowy(bopy,       kepy,        d[5], bowy);
 	dffr_bp dffr_baza(najer_2mhz, napu_reset3, bowy, baza);
@@ -77,9 +90,6 @@ module apu_control(
 	assign net03     = edek;
 	assign d[7]      = hope;
 
-	logic aguz, byma, befu, adak, bosu, baxy, bubu, bowe, ataf;
-	logic bedu, cozu, bumo, byre, apos, ager, byga, apeg;
-	logic atum, bocy, arux, amad, axem, avud, awed, akod;
 	drlatch latch_bedu(baxy, kepy, d[7], bedu);
 	drlatch latch_cozu(baxy, kepy, d[6], cozu);
 	drlatch latch_bumo(baxy, kepy, d[5], bumo);
@@ -123,9 +133,6 @@ module apu_control(
 	assign nrvolume[1] = !byga;
 	assign nrvolume[0] = !apeg;
 
-	logic gepa, hefa, gumu, bupo, bono, byfa;
-	logic bogu, bafo, atuf, anev, bepu, befo, bume, bofa;
-	logic capu, caga, boca, buzu, cere, cada, cavu, cudu;
 	drlatch latch_bogu(bono, kepy, d[1], bogu);
 	drlatch latch_bafo(bono, kepy, d[2], bafo);
 	drlatch latch_atuf(bono, kepy, d[3], atuf);
@@ -165,7 +172,6 @@ module apu_control(
 	assign d[4]      = cavu;
 	assign d[5]      = cudu;
 
-	logic ceto, kazo, curu, dole, kamu, duru, fewa, coto, koge, efus, fate;
 	assign #T_INV  ceto = !ncpu_rd;
 	assign #T_INV  kazo = !ncpu_rd;
 	assign #T_INV  curu = !ncpu_rd;

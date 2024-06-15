@@ -17,15 +17,18 @@ module joypad_io(
 		output logic p14_a, p14_b, p15_a, p15_b
 	);
 
+	logic kyme, kuko, keru, jale, kore, jeva, kywe, kena, kory, kale, kyhu, kasy;
+	logic byzo, kolo, keja, kevu, kapa, jeku, kuve, kema, kuro, kely, cofy, karu, koce, cudy;
+	logic kura, cela, jute, kecy, kole, kybu, kyto, kabu;
+
+	logic axyn, adyr, apys, afop, anoc, ajec, arar, benu, akaj, asuz, ataj, beda;
+
 	assign sin_b = ff60_d0;
 	assign p10_b = 0;
 	assign p11_b = 0;
 	assign p12_b = 0;
 	assign p13_b = 0;
 
-	logic kyme, kuko, keru, jale, kore, jeva, kywe, kena, kory, kale, kyhu, kasy;
-	logic byzo, kolo, keja, kevu, kapa, jeku, kuve, kema, kuro, kely, cofy, karu, koce, cudy;
-	logic kura, cela, jute, kecy, kole, kybu, kyto, kabu;
 	dffr_bp dffr_kyme(ff00wr, nreset2, d[3], kyme);
 	dffr_bp dffr_kuko(ff00wr, nreset2, d[6], kuko);
 	dffr_bp dffr_keru(ff00wr, nreset2, d[7], keru);
@@ -82,7 +85,6 @@ module joypad_io(
 	assign p11_a = kyto;
 	assign p11_d = kabu;
 
-	logic axyn, adyr, apys, afop, anoc, ajec, arar, benu, akaj, asuz, ataj, beda;
 	assign #T_INV  axyn = !bedo;
 	assign #T_INV  adyr = !axyn;
 	assign #T_NOR  apys = !(t1_nt2 || adyr);

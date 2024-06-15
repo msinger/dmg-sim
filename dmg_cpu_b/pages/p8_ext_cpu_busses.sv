@@ -21,6 +21,26 @@ module ext_cpu_busses(
 	);
 
 	logic sogy, tuma, tynu, toza, soby, sepy, ryca, raza, syzu, tyho, tazy, rulo, suze;
+
+	logic tova, nyre, lonu, lobu, lumy, pate, lysa, luno, pege, muce, mojy, male, pamy, masu, mano;
+	logic pahy, puhe, leva, labe, loso, luce, lyny, lepy, rore, roxu, meny, mune, mego, myny, net01;
+
+	logic arym, aros, atev, avys, aret, alyr, apur, alor, asur, atyr, atov, atem, amer, apok, atol, amet;
+	logic colo, defy, cyka, cepu, ajav, badu, bevo, byla, bola, boty, bajo, boku, cotu, caba, koty, kupo;
+
+	logic tola, mule, loxo, lasy, mate, sore, tevy, levo, lagu;
+
+	logic moca, mexo, lywe, nevy, moty, puva, tymu, usuf, uver, ugac, urun;
+
+	logic base, afec, buxu, camu, cygu, cogo, kova, anar, azuv, akan, byxe, byne, byna, kejo;
+
+	logic lahe, lura, mujy, pevo, mady, nena, sura, abup, lyna, lefy, lofa, nefe, lora, mapu, rala, ajov;
+
+	logic redu, rogy, ryda, rune, resy, rypu, suly, seze, tamu;
+
+	logic lavo, sody, selo, rony, soma, raxy, rupa, sago, sazy;
+	logic tepe, tavo, ruvo, ryma, ryko, sevu, safo, taju;
+
 	assign #T_INV  sogy = !a[14];
 	assign #T_AND  tuma = a[13] && sogy && a[15];
 	assign #T_AO   tynu = (a[15] && a[14]) || tuma;
@@ -39,8 +59,6 @@ module ext_cpu_busses(
 	assign a_a[15] = suze;
 	assign a[15]   = syzu;
 
-	logic tova, nyre, lonu, lobu, lumy, pate, lysa, luno, pege, muce, mojy, male, pamy, masu, mano;
-	logic pahy, puhe, leva, labe, loso, luce, lyny, lepy, rore, roxu, meny, mune, mego, myny, net01;
 	dlatch_b latch_nyre(mate, a[14], nyre);
 	dlatch_b latch_lonu(mate, a[13], lonu);
 	dlatch_b latch_lobu(mate, a[12], lobu);
@@ -86,8 +104,6 @@ module ext_cpu_busses(
 	assign a_d[8]  = mego;
 	assign a_a[8]  = myny;
 
-	logic arym, aros, atev, avys, aret, alyr, apur, alor, asur, atyr, atov, atem, amer, apok, atol, amet;
-	logic colo, defy, cyka, cepu, ajav, badu, bevo, byla, bola, boty, bajo, boku, cotu, caba, koty, kupo;
 	dlatch_b latch_arym(mate, a[7], arym);
 	dlatch_b latch_aros(mate, a[6], aros);
 	dlatch_b latch_atev(mate, a[5], atev);
@@ -137,7 +153,6 @@ module ext_cpu_busses(
 	assign a_d[0] = koty;
 	assign a_a[0] = kupo;
 
-	logic tola, mule, loxo, lasy, mate, sore, tevy, levo, lagu;
 	assign #T_INV  tola = !a[1];
 	assign #T_INV  mule = !nt1_t2;
 	assign #T_AO   loxo = (mule && texo) || nt1_t2;
@@ -150,7 +165,6 @@ module ext_cpu_busses(
 	assign #T_AO   lagu = (cpu_raw_rd && levo) || from_cpu3;
 	assign tola_na1 = tola;
 
-	logic moca, mexo, lywe, nevy, moty, puva, tymu, usuf, uver, ugac, urun;
 	assign #T_NOR  moca = !(texo || nt1_t2);
 	assign #T_INV  mexo = !cpu_wr_sync;
 	assign #T_INV  lywe = !lagu;
@@ -167,7 +181,6 @@ module ext_cpu_busses(
 	assign rd_a = ugac;
 	assign rd_c = urun;
 
-	logic base, afec, buxu, camu, cygu, cogo, kova, anar, azuv, akan, byxe, byne, byna, kejo;
 	assign #T_INV  base = !a_c[3];
 	assign #T_INV  afec = !a_c[4];
 	assign #T_INV  buxu = !a_c[2];
@@ -190,7 +203,6 @@ module ext_cpu_busses(
 	assign a[7] = byna;
 	assign a[0] = kejo;
 
-	logic lahe, lura, mujy, pevo, mady, nena, sura, abup, lyna, lefy, lofa, nefe, lora, mapu, rala, ajov;
 	assign #T_INV  lahe = !a_c[12];
 	assign #T_INV  lura = !a_c[13];
 	assign #T_INV  mujy = !a_c[8];
@@ -216,7 +228,6 @@ module ext_cpu_busses(
 	assign a[10] = rala;
 	assign a[5]  = ajov;
 
-	logic redu, rogy, ryda, rune, resy, rypu, suly, seze, tamu;
 	assign #T_INV  redu = !cpu_rd;
 	assign #T_MUX  roru = t1_nt2 ? redu : moty;
 	assign #T_INV  lula = !roru;
@@ -237,8 +248,6 @@ module ext_cpu_busses(
 	assign d_d[3] = seze;
 	assign d_d[5] = tamu;
 
-	logic lavo, sody, selo, rony, soma, raxy, rupa, sago, sazy;
-	logic tepe, tavo, ruvo, ryma, ryko, sevu, safo, taju;
 	dlatch_b latch_sody(lavo, d_in[4], sody);
 	dlatch_b latch_selo(lavo, d_in[3], selo);
 	dlatch_b latch_rony(lavo, d_in[1], rony);

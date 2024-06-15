@@ -71,6 +71,8 @@ module sm83_decode(
 		output logic       cb_hl       /* RLC/RRC/RL/RR/SLA/SRA/SWAP/SRL (HL)  ~or~  BIT/RES/SET b, (HL) */
 	);
 
+	logic bank0;
+
 	/* ALU operation */
 	assign add_x = in_alu && opcode[5:3] == 0; /* ADD r/(HL)/n */
 	assign adc_x = in_alu && opcode[5:3] == 1; /* ADC r/(HL)/n */
@@ -81,7 +83,6 @@ module sm83_decode(
 	assign or_x  = in_alu && opcode[5:3] == 6; /* OR  r/(HL)/n */
 	assign cp_x  = in_alu && opcode[5:3] == 7; /* CP  r/(HL)/n */
 
-	logic bank0;
 	assign bank0 = !bank_cb && !intr_entry;
 
 	/* 8 bit arithmetic */

@@ -11,6 +11,13 @@ module palettes(
 
 	logic vuso, vely, tepy, tepo, mena, moru, maxy, nusy, mogy, muke, pylu, pavo;
 	logic lary, lyka, lobe, paba, lody, lace, redo, raro;
+
+	logic xufy, xoma, xozy, xelo, xana, xyze, xalo, xuky, xupo, xeru, xova, xufu;
+	logic xawo, xobo, xuby, xoke, xaxa, xaju, xuno, xary;
+
+	logic mumy, myxe, lote, leho, luxo, lugu, lose, lawo, lepu, lune, mosa, moxy;
+	logic lelu, luga, lyza, lepa, leba, luky, lode, laju;
+
 	dlatch_a latch_mena(!tepo, d[7], mena);
 	dlatch_a latch_moru(!tepo, d[5], moru);
 	dlatch_a latch_maxy(!tepo, d[3], maxy);
@@ -48,8 +55,6 @@ module palettes(
 	assign d[2] = redo;
 	assign d[0] = raro;
 
-	logic xufy, xoma, xozy, xelo, xana, xyze, xalo, xuky, xupo, xeru, xova, xufu;
-	logic xawo, xobo, xuby, xoke, xaxa, xaju, xuno, xary;
 	dlatch_a latch_xana(!xelo, d[7], xana);
 	dlatch_a latch_xyze(!xelo, d[5], xyze);
 	dlatch_a latch_xalo(!xelo, d[3], xalo);
@@ -87,8 +92,6 @@ module palettes(
 	assign d[2] = xuno;
 	assign d[0] = xary;
 
-	logic mumy, myxe, lote, leho, luxo, lugu, lose, lawo, lepu, lune, mosa, moxy;
-	logic lelu, luga, lyza, lepa, leba, luky, lode, laju;
 	dlatch_a latch_luxo(!leho, d[7], luxo);
 	dlatch_a latch_lugu(!leho, d[5], lugu);
 	dlatch_a latch_lose(!leho, d[3], lose);

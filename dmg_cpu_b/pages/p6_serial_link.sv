@@ -15,6 +15,11 @@ module serial_link(
 
 	logic uwam, ucom, coty, cave, dawa, etaf, culy, caro, eluv, core, _8192hz;
 	logic kexu, jago, kujo, edyl, cafa, cylo, cyde, caly, coba, caby, nser_tick;
+
+	logic sare, sefy, sano, urys, daku, epyt, deho, dawe, cage, ufeg;
+	logic cohy, dumo, dybo, daju, dyly, ehuj, efak, eguv, cufu, docu, dela, dyge, dola, elok, edel, efef;
+	logic cuba, degu, dyra, dojo, dovu, ejab, erod, eder, cugy, dude, detu, daso, dame, evok, efab, etak, elys;
+
 	dffr_bp dffr_coty(_16384hz, uwam,    !coty, coty);
 	dffr_bp dffr_etaf(uwam,     caby,    d[7],  etaf);
 	dffr_bp dffr_culy(uwam,     nreset2, d[0],  culy);
@@ -44,9 +49,6 @@ module serial_link(
 	assign nser_tick  = edyl;
 	assign int_serial = caly;
 
-	logic sare, sefy, sano, urys, daku, epyt, deho, dawe, cage, ufeg;
-	logic cohy, dumo, dybo, daju, dyly, ehuj, efak, eguv, cufu, docu, dela, dyge, dola, elok, edel, efef;
-	logic cuba, degu, dyra, dojo, dovu, ejab, erod, eder, cugy, dude, detu, daso, dame, evok, efab, etak, elys;
 	dffsr dffsr_cuba(dawe, cufu, cohy, cage, cuba);
 	dffsr dffsr_degu(dawe, docu, dumo, cuba, degu);
 	dffsr dffsr_dyra(dawe, dela, dybo, degu, dyra);

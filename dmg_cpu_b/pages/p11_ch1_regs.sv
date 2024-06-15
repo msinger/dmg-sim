@@ -21,6 +21,18 @@ module ch1_regs(
 	logic gago, hocu, gaxu, kagy, hato, haxe, hamy, hafu, kygy;
 	logic jopu, jena, jaxo, jaty, jafy, jusa, juzy, joma;
 	logic jyse, heve, hewa, howu, hono, jyne, jaca, joku;
+
+	logic buda, bale, bage, camy, boko, bytu;
+
+	logic cege, daxa, caca, dypu, evaj, epyk, fume, fulo, geku, dega, kype, cure, dako, deru, dupy;
+	logic gaxe, hyfe, jyty, kyna, jema, hyke, feva, ekov, emus, evak;
+	logic foru, gefu, kyvu, kumo, kary, gode, goje, foze, dopa, demu, dexo;
+
+	logic cenu, buze, atyn, asop;
+	logic bany, anaz, botu, avaf, arax, adek, bana, amyd, azyp, awos, afox, atax, avek, akux;
+
+	logic buwa, bexu, covu, dafo, cena, dyca, bowo, cuda;
+
 	drlatch latch_jopu(gaxu, hato, d[7], jopu);
 	drlatch latch_jena(gaxu, hato, d[6], jena);
 	drlatch latch_jaxo(gaxu, hato, d[5], jaxo);
@@ -67,7 +79,6 @@ module ch1_regs(
 	assign d[1] = jaca;
 	assign d[2] = joku;
 
-	logic buda, bale, bage, camy, boko, bytu;
 	drlatch latch_boko(!bage, camy, d[6], boko);
 	assign #T_INV  buda = !ncpu_rd;
 	assign #T_NAND bale = !(buda && ff14);
@@ -78,9 +89,6 @@ module ch1_regs(
 	assign nff14_d6 = !boko;
 	assign d[6] = bytu;
 
-	logic cege, daxa, caca, dypu, evaj, epyk, fume, fulo, geku, dega, kype, cure, dako, deru, dupy;
-	logic gaxe, hyfe, jyty, kyna, jema, hyke, feva, ekov, emus, evak;
-	logic foru, gefu, kyvu, kumo, kary, gode, goje, foze, dopa, demu, dexo;
 	tffd tffd_gaxe(geku, fume, acc_d[0],  gaxe);
 	tffd tffd_hyfe(gaxe, fume, acc_d[1],  hyfe);
 	tffd tffd_jyty(hyfe, fume, acc_d[2],  jyty);
@@ -130,8 +138,6 @@ module ch1_regs(
 	assign d[1] = demu;
 	assign d[2] = dexo;
 
-	logic cenu, buze, atyn, asop;
-	logic bany, anaz, botu, avaf, arax, adek, bana, amyd, azyp, awos, afox, atax, avek, akux;
 	drlatch latch_bany(cenu, napu_reset, d[0], bany);
 	drlatch latch_anaz(cenu, napu_reset, d[2], anaz);
 	drlatch latch_botu(cenu, napu_reset, d[6], botu);
@@ -165,7 +171,6 @@ module ch1_regs(
 	assign d[4] = avek;
 	assign d[5] = akux;
 
-	logic buwa, bexu, covu, dafo, cena, dyca, bowo, cuda;
 	drlatch latch_cena(covu, napu_reset6, d[6], cena);
 	drlatch latch_dyca(covu, napu_reset6, d[7], dyca);
 	assign #T_INV  buwa = !ncpu_rd;

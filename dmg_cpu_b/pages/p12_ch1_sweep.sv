@@ -28,6 +28,7 @@ module ch1_sweep(
 	logic beku, agez, elux, exac, fedo, fude, jota, jolu, goga, jefa, fabu;
 	logic culu, dozy, cale, dyme, fure, goly, kefe, hefy, gopo, gela, gylo;
 	logic deva, eter, defa, edok, epyr, gele, jete, jape, hele, hopa, hora;
+
 	dffsr dffsr_axan(ch1_freq_upd1, afeg, apaj, coru, axan);
 	dffsr dffsr_evab(ch1_freq_upd1, budo, bovu, dule, evab);
 	dffsr dffsr_dygy(ch1_freq_upd1, bugu, boxu, dyxe, dygy);

@@ -28,6 +28,40 @@ module vram_interface(
 
 	logic reho, pony, ruma, pedu, ruky, nuva, vode, tago, vova, tujy, mume, luby, mewy;
 	logic lefa, mysa, lalo, mepa, loly, mavu, luvo, myre, laca, masa, lozu, myfu, lexe;
+
+	logic ryvo, rera, raby, rory, ruja, ravu, rafy, ruxa;
+
+	logic cufe, vape, aver, xujy, bycu;
+
+	logic tefa, sose, tuca, tuja, tegu, tavy, sycy, soto, tuto, sudo, tefy, sale, tyjy, tole;
+
+	logic soho, rawa, raco, rylu, racu, apam, ruvy, sohy, sutu, sere, sazo, ropy, ryje, revo, rela, rocy;
+	logic rena, rahu, rofa, rute, sema, sofy, taxy, sewo, tode, saha, refo, ragu, sysy, sety, soky;
+
+	logic raku, roce, remo, ropu, reta, rydo, rody, reba;
+
+	logic runy, tuso, sole, tahy, tesu, taxo, tovu, tazu, tewa, sosa, sedu;
+
+	logic xane, xedu, xeca, xybo, rysu, ruse, rumo, xyne, xoba, xody, ryna, rese, xaky, xopo, xuxu;
+
+	logic lyra, ryba, ruzy, rome, tehe, soca, ratu, tovo, saza;
+	logic ropa, sywa, sugu, tute, temy, sajo, tuty, tawo;
+
+	logic rove, sefa, suna, sumo, suke, samo, sogo, sazu, sefu, rege, rada, ryro, ryze, reku, ryky, revu, razo;
+
+	logic cede, syzo, tune, sera, sysa, tube, sugy, ralo, tenu;
+	logic bape, bypy, bomo, bubo, basa, betu, buma, baxu, basy, byny, bupy, buhu, wasa, wejo, cako, cyme;
+
+	logic tyvy, seby, roro, rery, rona, runa, runo, same, sana, rabo, rexu, ruga, rybu, rota, raju, toku, tyja, rupy;
+
+	logic xonu, wudo, wawe, wolu, xucy, xeze;
+
+	logic teme, tewu, tygo, sote, seke, rujo, tofa, suza;
+	logic synu, syma, roko, sybu, sako, sejy, sedo, sawu;
+	logic rura, ruly, rare, rodu, rube, rumu, ryty, rady;
+
+	logic vuza, vury, tobo, suvo, reso, roha, rusa, vejy, sezu, vapy;
+
 	assign #T_INV  reho = !nma[12];
 	assign #T_INV  ruma = !nma[11];
 	assign #T_INV  ruky = !nma[10];
@@ -68,7 +102,6 @@ module vram_interface(
 	assign nma_out[1]  = lozu;
 	assign nma_out[0]  = lexe;
 
-	logic ryvo, rera, raby, rory, ruja, ravu, rafy, ruxa;
 	assign #T_NAND ryvo = !(d[5] && lula);
 	assign #T_NAND rera = !(d[3] && lula);
 	assign #T_NAND raby = !(d[2] && lula);
@@ -86,7 +119,6 @@ module vram_interface(
 	assign d_a[6] = rafy;
 	assign d_a[0] = ruxa;
 
-	logic cufe, vape, aver, xujy, bycu;
 	assign #T_OAI  cufe = !((saro || dma_run) && mopa_nphi);
 	assign #T_AND  vape = tacu && tuvo;
 	assign #T_NAND aver = !(acyl && xyso);
@@ -94,7 +126,6 @@ module vram_interface(
 	assign #T_NAND bycu = !(cufe && xujy && aver);
 	assign #T_INV  cota = !bycu;
 
-	logic tefa, sose, tuca, tuja, tegu, tavy, sycy, soto, tuto, sudo, tefy, sale, tyjy, tole;
 	dffr_bp dffr_soto(sycy, nreset6, !soto, soto);
 	assign #T_INV  syro = !nfexxffxx;
 	assign #T_NOR  tefa = !(syro || texo);
@@ -111,8 +142,6 @@ module vram_interface(
 	assign #T_MUX  tyjy = tuto ? sudo : tuja;
 	assign #T_MUX  tole = tuto ? tefy : tuca;
 
-	logic soho, rawa, raco, rylu, racu, apam, ruvy, sohy, sutu, sere, sazo, ropy, ryje, revo, rela, rocy;
-	logic rena, rahu, rofa, rute, sema, sofy, taxy, sewo, tode, saha, refo, ragu, sysy, sety, soky;
 	assign #T_AND  soho = tacu && texy;
 	assign #T_INV  rawa = !soho;
 	assign #T_NAND rylu = !(sale && ropy);
@@ -152,7 +181,6 @@ module vram_interface(
 	assign mcs_a = soky;
 	assign md_b = rofa;
 
-	logic raku, roce, remo, ropu, reta, rydo, rody, reba;
 	assign #T_TRI  raku = rena ? !md_in[7] : 'z;
 	assign #T_TRI  roce = rena ? !md_in[4] : 'z;
 	assign #T_TRI  remo = rena ? !md_in[3] : 'z;
@@ -170,7 +198,6 @@ module vram_interface(
 	assign md[0] = rody;
 	assign md[1] = reba;
 
-	logic runy, tuso, sole, tahy, tesu, taxo, tovu, tazu, tewa, sosa, sedu;
 	assign         runy = 1;
 	assign #T_NOR  tuso = !(t1_nt2 || bedo);
 	assign #T_INV  sole = !tuso;
@@ -191,7 +218,6 @@ module vram_interface(
 	assign d[1] = sosa;
 	assign d[2] = sedu;
 
-	logic xane, xedu, xeca, xybo, rysu, ruse, rumo, xyne, xoba, xody, ryna, rese, xaky, xopo, xuxu;
 	assign #T_NOR  xane = !(vram_to_oam || nxymu);
 	assign #T_INV  xedu = !xane;
 	assign #T_TRI  xeca = !xedu ? !a[4]  : 'z;
@@ -221,8 +247,6 @@ module vram_interface(
 	assign nma[6]  = xopo;
 	assign nma[1]  = xuxu;
 
-	logic lyra, ryba, ruzy, rome, tehe, soca, ratu, tovo, saza;
-	logic ropa, sywa, sugu, tute, temy, sajo, tuty, tawo;
 	assign #T_NAND lyra = !(t1_nt2 && roru);
 	assign #T_INV  ryba = !d_in[7];
 	assign #T_INV  ruzy = !d_in[1];
@@ -249,7 +273,6 @@ module vram_interface(
 	assign d[0] = tuty;
 	assign d[3] = tawo;
 
-	logic rove, sefa, suna, sumo, suke, samo, sogo, sazu, sefu, rege, rada, ryro, ryze, reku, ryky, revu, razo;
 	assign #T_INV  rove = !rahu;
 	assign #T_AND  sefa = md[0] && rove;
 	assign #T_AND  suna = md[3] && rove;
@@ -276,8 +299,6 @@ module vram_interface(
 	assign md_a[5] = revu;
 	assign md_a[2] = razo;
 
-	logic cede, syzo, tune, sera, sysa, tube, sugy, ralo, tenu;
-	logic bape, bypy, bomo, bubo, basa, betu, buma, baxu, basy, byny, bupy, buhu, wasa, wejo, cako, cyme;
 	assign #T_INV  cede = !dma_addr_ext;
 	assign #T_INV  syzo = !d_in[7];
 	assign #T_INV  tune = !d_in[1];
@@ -320,7 +341,6 @@ module vram_interface(
 	assign oam_b_nd[3] = cako;
 	assign oam_a_nd[3] = cyme;
 
-	logic tyvy, seby, roro, rery, rona, runa, runo, same, sana, rabo, rexu, ruga, rybu, rota, raju, toku, tyja, rupy;
 	assign #T_NAND tyvy = !(sere && leko);
 	assign #T_INV  seby = !tyvy;
 	assign #T_INV  roro = !md[5];
@@ -348,7 +368,6 @@ module vram_interface(
 	assign d[4] = tyja;
 	assign d[6] = rupy;
 
-	logic xonu, wudo, wawe, wolu, xucy, xeze;
 	assign #T_TRI  xonu = !xucy ? !xuha : 'z;
 	assign #T_TRI  wudo = !xucy ? !vyno : 'z;
 	assign #T_TRI  wawe = !xucy ? !vujo : 'z;
@@ -361,9 +380,6 @@ module vram_interface(
 	assign nma[2] = wawe;
 	assign nma[3] = wolu;
 
-	logic teme, tewu, tygo, sote, seke, rujo, tofa, suza;
-	logic synu, syma, roko, sybu, sako, sejy, sedo, sawu;
-	logic rura, ruly, rare, rodu, rube, rumu, ryty, rady;
 	assign #T_TRIB teme = !rahu ? d[0] : 'z;
 	assign #T_TRIB tewu = !rahu ? d[1] : 'z;
 	assign #T_TRIB tygo = !rahu ? d[2] : 'z;
@@ -405,7 +421,6 @@ module vram_interface(
 	assign md_out[6] = ryty;
 	assign md_out[7] = rady;
 
-	logic vuza, vury, tobo, suvo, reso, roha, rusa, vejy, sezu, vapy;
 	assign #T_NOR  vuza = !(ff40_d4 || pyju);
 	assign #T_TRI  vury = neta ? !vuza  : 'z;
 	assign #T_TRI  tobo = neta ? !pyju : 'z;

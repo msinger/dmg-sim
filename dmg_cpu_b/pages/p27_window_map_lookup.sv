@@ -19,6 +19,24 @@ module window_map_lookup(
 	);
 
 	logic veku, taka, tuku, sowo, teky, sobu, suda, rosy, ryce;
+
+	logic nojo, paga, pezo, nupa, naze, pebo, pomo, nevu;
+	logic palo, nele, pafu, roge, sary;
+
+	logic lebo, laxe, lyzu, laxu, mesu, nyva, lovy, myso;
+	logic nako, nofu, moce, lury, nogu, lony, neny, lusu;
+
+	logic repu, rejo, nezo, nory, nono, pase, mylo, puwu, puho, nytu;
+	logic puky, nufa, nogy, nuko, nopa, nuny, nyfo;
+	logic roco, pyco, mehe, nunu, pynu, nocu, wazy, syny;
+	logic paha, paso, pecu, ryku, roga, rubu, roze, suha, syby, sozu, rone;
+	logic moxe, pohu, nyze, puxa, puku, rydy, pany, ryfa, sovy, romo;
+	logic rene, tuxy, suvu, seko, suzu, tave, tevo, vetu, xahy, xofo, xaco;
+	logic tufu, taxa, tozo, tate, teke;
+	logic wyka, wody, wobo, wyko, xolo;
+	logic vevy, vogu, veza, vyto, veha, vace, vovo, vulo;
+	logic xeja, xamo, xahe, xulo, wuju;
+
 	dffr_bp dffr_sobu(clk5, '1, teky, sobu);
 	dffr_bp dffr_suda(clk4, '1, sobu, suda);
 	nand_srlatch latch_taka(seca, veku, taka,);
@@ -30,8 +48,6 @@ module window_map_lookup(
 	assign #T_AND  ryce = !suda && sobu;
 	assign #T_NOR  seca = !(ryce || rosy || atej);
 
-	logic nojo, paga, pezo, nupa, naze, pebo, pomo, nevu;
-	logic palo, nele, pafu, roge, sary;
 	dffr_bp dffr_sary(talu, nreset_video, roge, sary);
 	assign #T_XNOR nojo = ff4a_d4 == v[4];
 	assign #T_XNOR paga = ff4a_d5 == v[5];
@@ -46,8 +62,6 @@ module window_map_lookup(
 	assign #T_NAND pafu = !(nele && naze && pebo && pomo && nevu);
 	assign #T_INV  roge = !pafu;
 
-	logic lebo, laxe, lyzu, laxu, mesu, nyva, lovy, myso;
-	logic nako, nofu, moce, lury, nogu, lony, neny, lusu;
 	dffr_bp dffr_lyzu(clk2,  nxymu, laxu,  lyzu);
 	dffr_bp dffr_laxu(lebo,  nyxu,  !laxu, laxu);
 	dffr_bp dffr_mesu(!laxu, nyxu,  !mesu, mesu);
@@ -74,16 +88,6 @@ module window_map_lookup(
 	assign #T_AND  neta = nogu && lena;
 	assign #T_INV  lena = !lusu;
 
-	logic repu, rejo, nezo, nory, nono, pase, mylo, puwu, puho, nytu;
-	logic puky, nufa, nogy, nuko, nopa, nuny, nyfo;
-	logic roco, pyco, mehe, nunu, pynu, nocu, wazy, syny;
-	logic paha, paso, pecu, ryku, roga, rubu, roze, suha, syby, sozu, rone;
-	logic moxe, pohu, nyze, puxa, puku, rydy, pany, ryfa, sovy, romo;
-	logic rene, tuxy, suvu, seko, suzu, tave, tevo, vetu, xahy, xofo, xaco;
-	logic tufu, taxa, tozo, tate, teke;
-	logic wyka, wody, wobo, wyko, xolo;
-	logic vevy, vogu, veza, vyto, veha, vace, vovo, vulo;
-	logic xeja, xamo, xahe, xulo, wuju;
 	dffr_bp dffr_nopa(clk2,  nreset_video, pynu,  nopa);
 	dffr_bp dffr_pyco(roco,  nreset_video, nuko,  pyco);
 	dffr_bp dffr_nunu(mehe,  nreset_video, pyco,  nunu);

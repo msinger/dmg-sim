@@ -19,6 +19,12 @@ module background(
 	logic atad, behu, apyh, babe, abod, bewy, byca, acul;
 	logic atad_c, behu_c, apyh_c, babe_c, abod_c, bewy_c, byca_c, acul_c;
 	logic amuv, coxo, cove, axep, afeb, alel, coly, ajan;
+
+	logic xoga, xura, tajo, xenu, xyke, xaba, tafu, xuho;
+	logic tede, woka, xala, wede, tyra, tufo, xyru, wevo;
+	logic xuku, wedy, xely, wuja, tyko, tena, tuwu, wubu;
+	logic vezo, wuru, vosa, wyfu, xete, woda, vumo;
+
 	assign #T_INV  axad = !pore;
 	assign #T_AND  acen = potu && axad;
 	assign #T_AND  asul = axad && neta;
@@ -75,10 +81,6 @@ module background(
 	assign nma[3]  = coly;
 	assign nma[4]  = ajan;
 
-	logic xoga, xura, tajo, xenu, xyke, xaba, tafu, xuho;
-	logic tede, woka, xala, wede, tyra, tufo, xyru, wevo;
-	logic xuku, wedy, xely, wuja, tyko, tena, tuwu, wubu;
-	logic vezo, wuru, vosa, wyfu, xete, woda, vumo;
 	dffsr dffsr_vezo(clkpipe, tede, woka, '1,   vezo);
 	dffsr dffsr_wuru(clkpipe, xala, wede, vezo, wuru);
 	dffsr dffsr_vosa(clkpipe, tyra, tufo, wuru, vosa);

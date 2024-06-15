@@ -17,6 +17,23 @@ module ch2_regs(
 	);
 
 	logic agyn, asyp, bygo, coro, bacu, budu, bamy, bera, ceka, cecy;
+
+	logic kypu, jenu, kysa, jupy, jany, jefu;
+	logic ff19_d0, ff19_d1, ff19_d2;
+
+	logic enuf, jybu, fyry, guru, gure, gexa, gere, jede;
+	logic gata, fore, gage, gura, gufe, hava, hore, hyfu;
+	logic hupe, gene, hyry, horo, here, havu, hyre, huvu;
+
+	logic dosa, exuc, hude, esur, fyxo, fery, guza, futy, edep;
+	logic fofe, fova, fedy, fome, fora, goda, gumy, gupu;
+	logic done, dynu, ezof, cyvo, fuxo, gano, goca, gane, gane_nq;
+	logic fava, fajy, fegu, fose, gero, gaky, gadu, gazo;
+	logic foge, fape, deta, gote, etap, hypo;
+	logic gala, hero, hepu, hevy, jeke, jaro, huna;
+
+	logic gado, huma, evyf, fazo, emer, gojy;
+
 	drlatch latch_bamy(bacu, napu_reset2, d[7], bamy);
 	drlatch latch_bera(bacu, napu_reset2, d[6], bera);
 	assign #T_NAND agyn = !(apu_wr && ff16);
@@ -36,8 +53,6 @@ module ch2_regs(
 	assign d[7] = ceka;
 	assign d[6] = cecy;
 
-	logic kypu, jenu, kysa, jupy, jany, jefu;
-	logic ff19_d0, ff19_d1, ff19_d2;
 	drlatch latch_jupy(jenu, kypu, d[2], jupy);
 	drlatch latch_jany(jenu, kypu, d[1], jany);
 	drlatch latch_jefu(jenu, kypu, d[0], jefu);
@@ -48,9 +63,6 @@ module ch2_regs(
 	assign ff19_d1 = jany;
 	assign ff19_d0 = jefu;
 
-	logic enuf, jybu, fyry, guru, gure, gexa, gere, jede;
-	logic gata, fore, gage, gura, gufe, hava, hore, hyfu;
-	logic hupe, gene, hyry, horo, here, havu, hyre, huvu;
 	drlatch latch_gata(enuf, jybu, d[4], gata);
 	drlatch latch_fore(enuf, jybu, d[3], fore);
 	drlatch latch_gage(enuf, jybu, d[7], gage);
@@ -96,12 +108,6 @@ module ch2_regs(
 	assign d[1] = hyre;
 	assign d[0] = huvu;
 
-	logic dosa, exuc, hude, esur, fyxo, fery, guza, futy, edep;
-	logic fofe, fova, fedy, fome, fora, goda, gumy, gupu;
-	logic done, dynu, ezof, cyvo, fuxo, gano, goca, gane, gane_nq;
-	logic fava, fajy, fegu, fose, gero, gaky, gadu, gazo;
-	logic foge, fape, deta, gote, etap, hypo;
-	logic gala, hero, hepu, hevy, jeke, jaro, huna;
 	drlatch latch_fofe(dosa,  hude, d[0], fofe);
 	drlatch latch_fova(dosa,  hude, d[1], fova);
 	drlatch latch_fedy(dosa,  hude, d[2], fedy);
@@ -156,7 +162,6 @@ module ch2_regs(
 	assign d[1]      = jaro;
 	assign d[0]      = huna;
 
-	logic gado, huma, evyf, fazo, emer, gojy;
 	drlatch latch_emer(!evyf, fazo, d[6], emer);
 	assign #T_INV  gado = !ncpu_rd;
 	assign #T_NAND huma = !(ff19 && gado);

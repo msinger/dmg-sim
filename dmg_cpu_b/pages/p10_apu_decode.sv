@@ -16,6 +16,15 @@ module apu_decode(
 	);
 
 	logic amus, byko, akug, atoz, acat;
+
+	logic boxy, awet, bezy, avun, asad, acom, baro, atup, ateg, buno, banu, cona, doxy, bafu, bogy, tace, nff1x;
+	logic ff2x, nff2x;
+
+	logic dyte, doso, afob, dupa, abub, deno, acol;
+	logic dupo, datu, daza, dura, duvu, dofa, damy, dufe, duno, dewa, dejy, dona, dafy, emos;
+	logic ekag, esot, egen, exat, emax, etuf, gany, dyva, cafy, covy, cora, dutu, ekez, edaf;
+	logic cuge, caxe, covo, doza, danu, dara, feny, duja, dugo, emor, dusa, deco, gefo, xxx6;
+
 	assign #T_NOR  amus = !(a[7] || a[4] || a[3] || a[2] || a[1] || a[0]);
 	assign #T_AND  anap = amus && ffxx;
 	assign #T_INV  byko = !a[5];
@@ -25,8 +34,6 @@ module apu_decode(
 	assign ff00wr = atoz;
 	assign ff00rd = acat;
 
-	logic boxy, awet, bezy, avun, asad, acom, baro, atup, ateg, buno, banu, cona, doxy, bafu, bogy, tace, nff1x;
-	logic ff2x, nff2x;
 	assign #T_INV  boxy = !a[5];
 	assign #T_OR   awet = a[4] || boxy || a[6] || a[7];
 	assign #T_OR   bezy = awet || nffxx;
@@ -51,10 +58,6 @@ module apu_decode(
 	assign apu_wr  = bogy;
 	assign namp_en = tace;
 
-	logic dyte, doso, afob, dupa, abub, deno, acol;
-	logic dupo, datu, daza, dura, duvu, dofa, damy, dufe, duno, dewa, dejy, dona, dafy, emos;
-	logic ekag, esot, egen, exat, emax, etuf, gany, dyva, cafy, covy, cora, dutu, ekez, edaf;
-	logic cuge, caxe, covo, doza, danu, dara, feny, duja, dugo, emor, dusa, deco, gefo, xxx6;
 	assign #T_INV  dyte = !a[0];
 	assign #T_INV  doso = !dyte;
 	assign #T_INV  afob = !a[1];

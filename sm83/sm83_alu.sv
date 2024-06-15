@@ -8,7 +8,9 @@
 
 module sm83_alu
 	#(
-		parameter int ALU_WIDTH = 4
+		parameter  int ALU_WIDTH   = 4,
+		localparam int WORD_SIZE   = ALU_WIDTH * 2,
+		localparam int BITNUM_SIZE = $clog2(WORD_SIZE)
 	) (
 		input  logic                   clk,
 
@@ -50,15 +52,23 @@ module sm83_alu
 		output logic                   daa_h_eq_9        /* Higher A equals 9? */
 	);
 
-	localparam int WORD_SIZE   = ALU_WIDTH * 2;
-	localparam int BITNUM_SIZE = $clog2(WORD_SIZE);
-
 	typedef logic [ALU_WIDTH-1:0] hword_t;
 
 	typedef struct packed {
 		hword_t h;
 		hword_t l;
 	} word_t;
+
+	hword_t core_op_a, core_op_b, core_result;
+	word_t  op_a, op_b;
+
+	word_t shifted;
+	word_t op_bs;
+	word_t bus;
+
+	hword_t res_lo;
+
+	word_t result;
 
 	function automatic logic [1:0] alu_slice(logic a, b, c_in);
 		logic nc, r, c_out;
@@ -67,8 +77,6 @@ module sm83_alu
 		c_out     = !(no_carry_out | nc);
 		alu_slice = { c_out, r };
 	endfunction
-
-	hword_t core_op_a, core_op_b, core_result;
 
 	always_comb begin
 		hword_t r;
@@ -79,8 +87,6 @@ module sm83_alu
 		core_result = r;
 		carry       = c;
 	end
-
-	word_t op_a, op_b;
 
 	always_comb unique case (1)
 		op_low:             core_op_a = op_a.l;
@@ -93,8 +99,6 @@ module sm83_alu
 		op_b_high:             core_op_b = negate ? ~op_b.h : op_b.h;
 		$isunknown(op_b_high): core_op_b = 'x;
 	endcase
-
-	word_t shifted;
 
 	/* shift_l and shift_r must not be set at the same time */
 	assume property (!shift_l || !shift_r);
@@ -109,10 +113,7 @@ module sm83_alu
 	assign shift_dbh = din[WORD_SIZE-1];
 	assign shift_dbl = din[0];
 
-	word_t op_bs;
 	assign op_bs = 1 << bsel;
-
-	word_t bus;
 
 	/* only one of *_oe can be set at the same time */
 	assume property ($onehot0({ result_oe, shift_oe, op_a_oe, bs_oe }));
@@ -148,14 +149,13 @@ module sm83_alu
 	assign daa_h_gt_9 = op_a.h > 9;
 	assign daa_h_eq_9 = op_a.h == 9;
 
-	hword_t res_lo;
 	always_ff @(posedge clk) if (op_low) res_lo <= core_result;
 	initial res_lo = 0;
 
-	word_t result;
 	assign result = { core_result, res_lo };
 
 	assign dout = bus;
 	assign zero = !bus;
 	assign sign = bus[WORD_SIZE-1];
+
 endmodule

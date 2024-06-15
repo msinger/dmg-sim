@@ -15,6 +15,7 @@ module pixel_mux(
 	logic wufu, waly, moka, mufa, nura, nelo, paty, pero, ravo, remy;
 	logic lyle, lozo, mexa, luku, maby, soba, vyco, ledo, lyky, lopu, laru;
 	logic muve, nupo, nale, nypo, nuxo, numa, pobu;
+
 	assign #T_AND  woxa = ff40_d1 && spr_pix_a[7];
 	assign #T_AND  xula = ff40_d1 && spr_pix_b[7];
 	assign #T_AND  tade = ff40_d0 && bg_pix_b_7;

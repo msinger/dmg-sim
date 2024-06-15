@@ -22,6 +22,26 @@ module sys_decode(
 	);
 
 	logic ubet, uvar, upoj, unor, umut;
+
+	logic ubal, ujyv, lexy, tapu, tedo, dyky, ajas, cupa, asot, pin_nc;
+
+	logic ryfo, semy, sapa, rolo, refa;
+
+	logic zyra, zage, zabu, zoke, zera, zufy, zyky, zyga, zovy, zuko, zuvy, zyba, zole, zaje, zubu, zapy;
+	logic zete, zefu, zyro, zapa, bootrom_na7, bootrom_na6, bootrom_na3, bootrom_na2;
+	logic bootrom_na5_na4, bootrom_na5_a4, bootrom_a5_na4, bootrom_a5_a4;
+	logic bootrom_na1_na0, bootrom_na1_a0, bootrom_a1_na0, bootrom_a1_a0;
+
+	logic apet, aper, amut, buro;
+
+	logic leco, raru, rowe, ryke, ryne, rase, rejy, reka, romy;
+
+	logic wale, woly, wuta;
+
+	logic tona, syke, bako, tuna, rycu, rope, soha;
+
+	logic tyro, tufa, texe, sato, tuge, tepu, sypu, tera, yaza, yula, tulo, zoro, zadu, zufa, zado, zery;
+
 	assign #T_INV  ubet = !nt1;
 	assign #T_INV  uvar = !nt2;
 	assign #T_NAND upoj = !(ubet && uvar && reset);
@@ -31,7 +51,6 @@ module sys_decode(
 	assign t1_nt2    = unor;
 	assign nt1_t2    = umut;
 
-	logic ubal, ujyv, lexy, tapu, tedo, dyky, ajas, cupa, asot, pin_nc;
 	assign #T_MUXI ubal = !(t1_nt2 ? wr_in : cpu_wr_sync);
 	assign #T_MUXI ujyv = !(t1_nt2 ? rd_b  : cpu_raw_rd);
 	assign #T_INV  lexy = !from_cpu6;
@@ -47,7 +66,6 @@ module sys_decode(
 	assign cpu_rd  = tedo;
 	assign cpu_rd2 = asot;
 
-	logic ryfo, semy, sapa, rolo, refa;
 	assign #T_AND  ryfo = a[2] && a00_07 && ffxx;
 	assign #T_NOR  semy = !(a[7] || a[6] || a[5] || a[4]);
 	assign #T_AND  sapa = a[0] && a[1] && a[2] && a[3];
@@ -57,10 +75,6 @@ module sys_decode(
 	assign nff0f_rd  = rolo;
 	assign nff0f_wr  = refa;
 
-	logic zyra, zage, zabu, zoke, zera, zufy, zyky, zyga, zovy, zuko, zuvy, zyba, zole, zaje, zubu, zapy;
-	logic zete, zefu, zyro, zapa, bootrom_na7, bootrom_na6, bootrom_na3, bootrom_na2;
-	logic bootrom_na5_na4, bootrom_na5_a4, bootrom_a5_na4, bootrom_a5_a4;
-	logic bootrom_na1_na0, bootrom_na1_a0, bootrom_a1_na0, bootrom_a1_a0;
 	assign #T_INV  zyra = !a[7];
 	assign #T_INV  zage = !a[6];
 	assign #T_INV  zabu = !a[3];
@@ -94,7 +108,6 @@ module sys_decode(
 	assign bootrom_a1_na0  = zyro;
 	assign bootrom_a1_a0   = zapa;
 
-	logic apet, aper, amut, buro;
 	assign #T_OR   apet = t1_nt2 || nt1_t2;
 	assign #T_NAND aper = !(apet && a[5] && a[6] && cpu_wr && anap);
 	dffr_bp dffr_amut(aper, nreset2, d[1], amut);
@@ -102,7 +115,6 @@ module sys_decode(
 	assign ff60_d1 = amut;
 	assign ff60_d0 = buro;
 
-	logic leco, raru, rowe, ryke, ryne, rase, rejy, reka, romy;
 	assign #T_NOR  leco = !(bedo || t1_nt2);
 	assign #T_TRI  raru = leco ? !0 : 'z;
 	assign #T_TRI  rowe = leco ? !0 : 'z;
@@ -121,13 +133,11 @@ module sys_decode(
 	assign d[4] = reka;
 	assign d[0] = romy;
 
-	logic wale, woly, wuta;
 	assign #T_NAND wale = !(a[0] && a[1] && a[2] && a[3] && a[4] && a[5] && a[6]);
 	assign #T_NAND woly = !(wale && a[7] && ffxx);
 	assign #T_INV  wuta = !woly;
 	assign hram_cs = wuta;
 
-	logic tona, syke, bako, tuna, rycu, rope, soha;
 	assign #T_INV  tona = !a[8];
 	assign #T_NAND tuna = !(a[15] && a[14] && a[13] && a[12] && a[11] && a[10] && a[9]);
 	assign #T_NOR  syke = !(tona || tuna);
@@ -140,7 +150,6 @@ module sys_decode(
 	assign nffxx     = bako;
 	assign nfexxffxx = tuna;
 
-	logic tyro, tufa, texe, sato, tuge, tepu, sypu, tera, yaza, yula, tulo, zoro, zadu, zufa, zado, zery;
 	dffr_bp dffr_tepu(tuge, nreset2, sato, tepu);
 	assign #T_NOR  tyro = !(a[7] || a[5] || a[3] || a[2] || a[1] || a[0]);
 	assign #T_AND  tufa = a[4] && a[6];

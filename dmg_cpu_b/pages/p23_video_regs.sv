@@ -20,6 +20,25 @@ module video_regs(
 
 	logic wyze, wuza, vycu, voxu, myce, mypa, nofe, nuku, mypu, muvo, meby, noke;
 	logic mufe, lova, muka, mara, mele, muly, lole, moko;
+
+	logic waxu, weko, vomy, vefu, nafu, mela, nyro, naga, nulo, nuka, nene, neso;
+	logic mera, loka, poda, pygu, mega, polo, pela, punu;
+
+	logic avog, arur, beba, amun, cyxu, bake, bemy, cuzy, cabu, duzu, daty, gubo;
+	logic cuga, casy, cedu, cata, doxe, ekob, edos, wony;
+
+	logic anyp, bedy, buwy, cavo, fezu, funy, dede, foty, foha, fymo, gave, fujo;
+	logic gonu, gyza, cusa, gyzo, gune, goba, ware, godo;
+
+	logic vyre, wyce, xubo, xylo, xafo, xymo, xona, wymo, wexu, woky, vyxe;
+	logic xero, wuka, wyju, xebu, vato, voke, vaha, wypo;
+
+	logic xyly, xufa, weku, wane, sota, syry, salo, sedy, vevo, vafa, vuce, raha;
+	logic race, retu, redy, razu, vafe, vazu, vojo, pufy;
+
+	logic wafu, varo, wata, xaga, xepo, xuhy, xowo, xuce, wury, myfa;
+	logic vyne, wama, wuva, wojy, weze, wavo, vega, lyco;
+
 	drlatch latch_myce(!voxu, nreset8, d[5], myce);
 	drlatch latch_mypa(!voxu, nreset8, d[0], mypa);
 	drlatch latch_nofe(!voxu, nreset8, d[1], nofe);
@@ -57,8 +76,6 @@ module video_regs(
 	assign d[3] = lole;
 	assign d[2] = moko;
 
-	logic waxu, weko, vomy, vefu, nafu, mela, nyro, naga, nulo, nuka, nene, neso;
-	logic mera, loka, poda, pygu, mega, polo, pela, punu;
 	drlatch latch_nafu(!vefu, nreset8, d[7], nafu);
 	drlatch latch_mela(!vefu, nreset8, d[3], mela);
 	drlatch latch_nyro(!vefu, nreset8, d[1], nyro);
@@ -96,8 +113,6 @@ module video_regs(
 	assign d[5] = pela;
 	assign d[0] = punu;
 
-	logic avog, arur, beba, amun, cyxu, bake, bemy, cuzy, cabu, duzu, daty, gubo;
-	logic cuga, casy, cedu, cata, doxe, ekob, edos, wony;
 	drlatch latch_cyxu(!amun, nreset6, d[2], cyxu);
 	drlatch latch_bake(!amun, nreset6, d[7], bake);
 	drlatch latch_bemy(!amun, nreset6, d[4], bemy);
@@ -135,8 +150,6 @@ module video_regs(
 	assign d[0] = edos;
 	assign d[3] = wony;
 
-	logic anyp, bedy, buwy, cavo, fezu, funy, dede, foty, foha, fymo, gave, fujo;
-	logic gonu, gyza, cusa, gyzo, gune, goba, ware, godo;
 	drlatch latch_fezu(!cavo, nreset6, d[2], fezu);
 	drlatch latch_funy(!cavo, nreset6, d[7], funy);
 	drlatch latch_dede(!cavo, nreset6, d[4], dede);
@@ -174,8 +187,6 @@ module video_regs(
 	assign d[0] = ware;
 	assign d[3] = godo;
 
-	logic vyre, wyce, xubo, xylo, xafo, xymo, xona, wymo, wexu, woky, vyxe;
-	logic xero, wuka, wyju, xebu, vato, voke, vaha, wypo;
 	drlatch latch_xylo(!xubo, xare, d[1], xylo);
 	drlatch latch_xafo(!xubo, xare, d[3], xafo);
 	drlatch latch_xymo(!xubo, xare, d[2], xymo);
@@ -214,8 +225,6 @@ module video_regs(
 	assign d[6] = vaha;
 	assign d[0] = wypo;
 
-	logic xyly, xufa, weku, wane, sota, syry, salo, sedy, vevo, vafa, vuce, raha;
-	logic race, retu, redy, razu, vafe, vazu, vojo, pufy;
 	drlatch latch_sota(!wane, nreset9, d[4], sota);
 	drlatch latch_syry(!wane, nreset9, d[0], syry);
 	drlatch latch_salo(!wane, nreset9, d[3], salo);
@@ -253,8 +262,6 @@ module video_regs(
 	assign d[1] = vojo;
 	assign d[7] = pufy;
 
-	logic wafu, varo, wata, xaga, xepo, xuhy, xowo, xuce, wury, myfa;
-	logic vyne, wama, wuva, wojy, weze, wavo, vega, lyco;
 	assign #T_AND  wafu = cpu_rd2 && ff44;
 	assign #T_INV  varo = !wafu;
 	assign #T_INV  wata = !v[4];

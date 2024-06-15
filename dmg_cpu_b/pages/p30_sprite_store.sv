@@ -35,6 +35,13 @@ module sprite_store(
 	logic xufo, xute, xotu, xyfe, yzor, yber, dewu, cana, dysy, fofo;
 	logic zetu, zece, zave, woko, zumu, zedy, gofo, wehe, ajal, buky;
 	logic ygus, ysok, yzep, wyte, zony, ywak, fyhy, gyho, bozu, cufo;
+
+	tri logic weza_tri, wuco_tri, wyda_tri, zysu_tri, wyse_tri, wuzy_tri;
+	tri logic wenu_tri, cucu_tri, cuca_tri, cega_tri;
+	logic     weza_cap = $random, wuco_cap = $random, wyda_cap = $random, zysu_cap = $random;
+	logic     wyse_cap = $random, wuzy_cap = $random;
+	logic     wenu_cap = $random, cucu_cap = $random, cuca_cap = $random, cega_cap = $random;
+
 	dffr_b dffr_xecu(!cyke, '1, oam_a[7], xecu);
 	dffr_b dffr_yduf(!cyke, '1, oam_a[6], yduf);
 	dffr_b dffr_xobe(!cyke, '1, oam_a[5], xobe);
@@ -375,11 +382,6 @@ module sprite_store(
 	assign cuca = cuca_tri;
 
 	/* Icarus doesn't support trireg, so we do it like this: */
-	tri logic weza_tri, wuco_tri, wyda_tri, zysu_tri, wyse_tri, wuzy_tri;
-	tri logic wenu_tri, cucu_tri, cuca_tri, cega_tri;
-	logic     weza_cap = $random, wuco_cap = $random, wyda_cap = $random, zysu_cap = $random;
-	logic     wyse_cap = $random, wuzy_cap = $random;
-	logic     wenu_cap = $random, cucu_cap = $random, cuca_cap = $random, cega_cap = $random;
 	always @(weza_tri) weza_cap = weza_tri;
 	always @(wuco_tri) wuco_cap = wuco_tri;
 	always @(wyda_tri) wyda_cap = wyda_tri;

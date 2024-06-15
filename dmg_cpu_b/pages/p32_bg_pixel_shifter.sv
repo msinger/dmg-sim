@@ -16,6 +16,10 @@ module bg_pixel_shifter(
 	logic ruco, noly, revy, lomy, ryle, loxa, soja, nobo;
 	logic seno, soly, nexa, nyxo, sebo, ryja, luja, lydu;
 	logic sywe, raja, leru, lodo, ryjy, raga, nady, naja;
+
+	logic tomy, taca, sady, rysa, sobo, setu, ralu, sohu;
+	logic myde, nozo, moju, macu, nepo, modu, neda, pybo;
+
 	dlatch_a latch_legu(!loma, md[0], legu);
 	dlatch_a latch_muku(!loma, md[2], muku);
 	dlatch_a latch_megu(!loma, md[4], megu);
@@ -88,8 +92,6 @@ module bg_pixel_shifter(
 	assign #T_NAND nady = !(nobo && loze);
 	assign #T_NAND naja = !(loze && nefo);
 
-	logic tomy, taca, sady, rysa, sobo, setu, ralu, sohu;
-	logic myde, nozo, moju, macu, nepo, modu, neda, pybo;
 	dffsr dffsr_tomy(clkpipe, tuxe, seja, '0,   tomy);
 	dffsr dffsr_taca(clkpipe, soly, seno, tomy, taca);
 	dffsr dffsr_sady(clkpipe, ruce, sure, taca, sady);

@@ -12,6 +12,14 @@ module timer(
 	);
 
 	logic sara, sora, uvyr, ubot, sabo, samy, sopu, ukap, teko, supe, rote, ryla, tecy, sogu;
+
+	logic muzu, meke, mexu, teda, rega, povy, peru, rate, ruby, rage, peda, nuga, mugy;
+	logic soku, racy, ravy, sosy, somu, suro, rowu, puso, nydu, mery, moba;
+
+	logic tovy, tuby, tyju, tope, mulo;
+	logic peto, muru, nyke, seta, sabu, tyru, sufy, tyva, reva, nola, pyre, sapu, sete, supo, sotu, salu;
+	logic refu, nyku, petu, rato, roke, sala, syru, soce, pyma, nada, nero, pagu, puxy, rolu, rugy, repa;
+
 	dffr_bp dffr_sabo(sara, nreset2, d[2], sabo);
 	dffr_bp dffr_samy(sara, nreset2, d[1], samy);
 	dffr_bp dffr_sopu(sara, nreset2, d[0], sopu);
@@ -30,8 +38,6 @@ module timer(
 	assign d[1] = rote;
 	assign d[0] = ryla;
 
-	logic muzu, meke, mexu, teda, rega, povy, peru, rate, ruby, rage, peda, nuga, mugy;
-	logic soku, racy, ravy, sosy, somu, suro, rowu, puso, nydu, mery, moba;
 	tffd tffd_rega(sogu, mexu, puxy, rega);
 	tffd tffd_povy(rega, mexu, nero, povy);
 	tffd tffd_peru(povy, mexu, nada, peru);
@@ -66,9 +72,6 @@ module timer(
 	assign d[7] = puso;
 	assign int_timer = moba;
 
-	logic tovy, tuby, tyju, tope, mulo;
-	logic peto, muru, nyke, seta, sabu, tyru, sufy, tyva, reva, nola, pyre, sapu, sete, supo, sotu, salu;
-	logic refu, nyku, petu, rato, roke, sala, syru, soce, pyma, nada, nero, pagu, puxy, rolu, rugy, repa;
 	dffr_bp dffr_peto(tyju, nreset2, d[6], peto);
 	dffr_bp dffr_muru(tyju, nreset2, d[2], muru);
 	dffr_bp dffr_nyke(tyju, nreset2, d[1], nyke);

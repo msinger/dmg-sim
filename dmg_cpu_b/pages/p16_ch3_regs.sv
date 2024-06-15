@@ -20,6 +20,23 @@ module ch3_regs(
 
 	logic gejo, gucy, gove, guxe, fuvo, gugu, fasy, fevo, geko;
 	logic fabo, gaze, gyta, gyra, faju, goma, foba, fury, gulo, gofy, ngofy, fako, epyx, gavu;
+
+	logic dery, geto, emut, gajy;
+
+	logic kota, jafa, kuha, kyho, kuly;
+	logic kogu, kana, jove, jypo, jefe, jaxa, jovy, koga;
+
+	logic dovo, egad, hoxa, gute, hovo;
+	logic kamy, kora, jeza, juke, jude, kesy, kafu, jofo;
+
+	logic fovo, heky, gory, hoto, gawa, haca;
+
+	logic huda, juzo, kopy, jemo, jacy, jety;
+
+	logic gunu, fuva, hufo, jura, juvy;
+
+	logic haga, guro, guzu, huky, hody, jotu, henu, huco, hamu;
+
 	dffr_bp dffr_gara(fabo,      fury, ngofy, gara);
 	dffr_bp dffr_gyta(fabo,      gaze, gara,  gyta);
 	dffr_bp dffr_gyra(cery_2mhz, gaze, gyta,  gyra);
@@ -46,7 +63,6 @@ module ch3_regs(
 	assign nff1a_d7 = !guxe;
 	assign d[7]     = geko;
 
-	logic dery, geto, emut, gajy;
 	assign #T_NAND dery = !(apu_wr && ff1b);
 	assign #T_INV  geto = !dery;
 	assign #T_INV  emut = !dery;
@@ -55,8 +71,6 @@ module ch3_regs(
 	assign ff1b_wr1 = emut;
 	assign ff1b_wr2 = gajy;
 
-	logic kota, jafa, kuha, kyho, kuly;
-	logic kogu, kana, jove, jypo, jefe, jaxa, jovy, koga;
 	drlatch latch_kogu(kota, kuha, d[7], kogu);
 	drlatch latch_kana(kota, kuha, d[6], kana);
 	drlatch latch_jove(kota, kuha, d[5], jove);
@@ -79,8 +93,6 @@ module ch3_regs(
 	assign ff1d_d1 = jovy;
 	assign ff1d_d0 = koga;
 
-	logic dovo, egad, hoxa, gute, hovo;
-	logic kamy, kora, jeza, juke, jude, kesy, kafu, jofo;
 	assign #T_INV  dovo = !ncpu_rd;
 	assign #T_NAND egad = !(net03 && dovo);
 	assign #T_INV  hoxa = !ff1d;
@@ -96,7 +108,6 @@ module ch3_regs(
 	assign #T_TRI  jofo = !hovo ? !nkutu : 'z;
 	assign d = { kamy, kora, jeza, juke, jude, kesy, kafu, jofo };
 
-	logic fovo, heky, gory, hoto, gawa, haca;
 	drlatch latch_hoto(!fovo, heky, d[6], hoto);
 	assign #T_AND  anuj = from_cpu5 && apu_wr;
 	assign #T_NAND fovo = !(anuj && ff1e);
@@ -108,7 +119,6 @@ module ch3_regs(
 	assign nff1e_d6 = !hoto;
 	assign d[6]     = haca;
 
-	logic huda, juzo, kopy, jemo, jacy, jety;
 	drlatch latch_jemo(huda, kopy, d[0], jemo);
 	drlatch latch_jacy(huda, kopy, d[2], jacy);
 	drlatch latch_jety(huda, kopy, d[1], jety);
@@ -119,7 +129,6 @@ module ch3_regs(
 	assign ff1e_d2 = jacy;
 	assign ff1e_d1 = jety;
 
-	logic gunu, fuva, hufo, jura, juvy;
 	assign #T_INV  gunu = !ff1e;
 	assign #T_OR   fuva = gunu || egad;
 	assign #T_TRI  hufo = !fuva ? !njapu : 'z;
@@ -129,7 +138,6 @@ module ch3_regs(
 	assign d[1] = jura;
 	assign d[0] = juvy;
 
-	logic haga, guro, guzu, huky, hody, jotu, henu, huco, hamu;
 	drlatch latch_huky(haga, guro, d[6], huky);
 	drlatch latch_hody(haga, guro, d[5], hody);
 	assign #T_AND  haga = apu_wr && ff1c;

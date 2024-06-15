@@ -27,6 +27,16 @@ module channel3(
 	logic fety, foto, etan, gyry, dero, jeco, hony, geno;
 	logic efar, erus, efuz, exel, efal, bole, agyl, afum, axol;
 	logic fapy, faro, fote, fana, fera;
+
+	logic gedo, fygo, fozu, ezas, calu, doru, davo, coka, ered;
+
+	logic guda, fexu, gepy, genu, falu;
+	logic gevo, fory, gatu, gapo, gemo, foro, fave, fyru;
+
+	logic goka, gemy, gege, ezag, evug, doky, dore, bary, byka, bopa, bely;
+
+	logic beno;
+
 	dffr_bp dffr_huno(jyfo,  gafu, !huno, huno);
 	dffr_bp dffr_fety(!efal, gyry, !fety, fety);
 	dffr_bp dffr_efar(dero,  etan, !efar, efar);
@@ -93,7 +103,6 @@ module channel3(
 	assign d[3] = fana;
 	assign d[4] = fera;
 
-	logic gedo, fygo, fozu, ezas, calu, doru, davo, coka, ered;
 	dffr_bp dffr_davo(ajer_2mhz, calu, doru, davo);
 	nor_srlatch latch_fozu(gara, fygo, fozu,);
 	assign #T_AND  gedo = fexu && ff1e_d6;
@@ -106,8 +115,6 @@ module channel3(
 	assign ch3_active  = coka;
 	assign nch3_active = ered;
 
-	logic guda, fexu, gepy, genu, falu;
-	logic gevo, fory, gatu, gapo, gemo, foro, fave, fyru;
 	dffr_bp dffr_fexu(!fyru, guda, !fexu, fexu);
 	tffd tffd_gevo(genu, ff1b_wr2, d[0], gevo);
 	tffd tffd_fory(gevo, ff1b_wr2, d[1], fory);
@@ -122,7 +129,6 @@ module channel3(
 	assign #T_INV  genu = !gepy;
 	assign #T_INV  falu = !(!gapo);
 
-	logic goka, gemy, gege, ezag, evug, doky, dore, bary, byka, bopa, bely;
 	assign #T_NOR  goka = !(nff1c_d6 || ff1c_d5);
 	assign #T_NOR  gemy = !(nff1c_d6 || nff1c_d5);
 	assign #T_NOR  gege = !(ff1c_d6 || nff1c_d5);
@@ -136,7 +142,6 @@ module channel3(
 	assign #T_AND  bely = ch3_active && dore;
 	assign wave_dac_d = { bely, bopa, byka, bary };
 
-	logic beno;
 	assign #T_MUX  beno = ch3_active ? butu_512khz : wave_ram_rd;
 	assign #T_INV  atok = !beno;
 

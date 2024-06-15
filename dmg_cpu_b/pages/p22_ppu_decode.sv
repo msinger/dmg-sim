@@ -11,6 +11,7 @@ module ppu_decode(
 	logic xaly, wutu, wero, xola, xeno, xusy, xera, wado, wesa, walo, wepo;
 	logic weta, wyle, woru, wate, wyvo, wety, wofa, wavu, wage, webu, vama, wybo;
 	logic xayo, xogy, voca, xeda, vyga, xayu, vary, xavy, vumy, xaro, tego, wera;
+
 	assign #T_NOR  xaly = !(a[7] || a[5] || a[4]);
 	assign #T_NAND wutu = !(ffxx && a[6] && xaly);
 	assign #T_INV  wero = !wutu;

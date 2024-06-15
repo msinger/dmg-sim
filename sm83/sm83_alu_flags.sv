@@ -51,6 +51,8 @@ module sm83_alu_flags(
 	localparam int H = 5;
 	localparam int C = 4;
 
+	logic hc_reg, sec_c_reg;
+
 	assign dout[Z]   = zero;
 	assign dout[N]   = neg;
 	assign dout[H]   = half_carry;
@@ -78,8 +80,6 @@ module sm83_alu_flags(
 			flags_alu: neg <= sign_in;
 		endcase
 	end
-
-	logic hc_reg, sec_c_reg;
 
 	function automatic logic write_carry(int bitnum);
 		assume (flags_bus != flags_alu);
@@ -122,4 +122,5 @@ module sm83_alu_flags(
 		carry      = c;
 		half_carry = hc;
 	end
+
 endmodule
