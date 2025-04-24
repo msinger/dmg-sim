@@ -116,14 +116,21 @@ module video_control(
 	assign #T_NOR  xaty = !(acyl || nxymu);
 	assign #T_INV  rypo = !semu;
 	assign #T_INV  ryju = !sepa;
-	assign #T_TRI  puzo = !vave ? !(!roxe) : 'z;
-	assign #T_TRI  sasy = !vave ? !(!refe) : 'z;
-	assign #T_TRI  pofo = !vave ? !(!rufo) : 'z;
-	assign #T_TRI  pote = !vave ? !(!rugu) : 'z;
-	assign #T_TRI  teby = tobe ? !sadu : 'z;
-	assign #T_TRI  wuga = tobe ? !xaty : 'z;
+
+	// FF41 (STAT) can change in the mid of a cycle and because the internal
+	// bus uses dynamic logic, this change is observable on the bus, where
+	// consecutive values are ANDed together. So in this specific case, we
+	// need to make sure to simulate the dynamic logic by only driving
+	// 0 values in the bus.
+	assign #T_TRI  puzo = !vave ? (!(!roxe) ? 1'bz : 1'b0) : 'z;
+	assign #T_TRI  sasy = !vave ? (!(!refe) ? 1'bz : 1'b0) : 'z;
+	assign #T_TRI  pofo = !vave ? (!(!rufo) ? 1'bz : 1'b0) : 'z;
+	assign #T_TRI  pote = !vave ? (!(!rugu) ? 1'bz : 1'b0) : 'z;
+	assign #T_TRI  teby = tobe ? (!sadu ? 1'bz : 1'b0) : 'z;
+	assign #T_TRI  wuga = tobe ? (!xaty ? 1'bz : 1'b0) : 'z;
 	assign #T_OR   pago = nreset9 || ryju;
-	assign #T_TRI  sego = tobe ? !nrupo : 'z;
+	assign #T_TRI  sego = tobe ? (!nrupo ? 1'bz : 1'b0) : 'z;
+
 	assign nnype = !nype;
 	assign int_vbl     = paru;
 	assign int_oam     = tapa;
