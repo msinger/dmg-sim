@@ -158,7 +158,7 @@ Results of Mooneye GB tests:
 | acceptance/ppu/intr\_2\_0\_timing              | PASS   |
 | acceptance/ppu/intr\_2\_mode0\_timing          | PASS   |
 | acceptance/ppu/intr\_2\_mode0\_timing\_sprites | PASS   |
-| acceptance/ppu/intr\_2\_mode3\_timing          | FAIL   |
+| acceptance/ppu/intr\_2\_mode3\_timing          | PASS   |
 | acceptance/ppu/intr\_2\_oam\_ok\_timing        | PASS   |
 | acceptance/ppu/lcdon\_timing-dmgABCmgbS        | FAIL   |
 | acceptance/ppu/lcdon\_write\_timing-GS         | FAIL   |
