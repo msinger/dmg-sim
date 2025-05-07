@@ -884,8 +884,8 @@ module dmg_cpu_b(
 	assign reg_ff40[5]    = p23_video_regs.wymo;
 	assign reg_ff40[6]    = p23_video_regs.woky;
 	assign reg_ff40[7]    = p23_video_regs.xona;
-	assign reg_ff41[0]    = p21_video_control.sadu;
-	assign reg_ff41[1]    = p21_video_control.xaty;
+	assign reg_ff41[0]    = !p21_video_control.sadu;
+	assign reg_ff41[1]    = !p21_video_control.xaty;
 	assign reg_ff41[2]    = !p21_video_control.nrupo;
 	assign reg_ff41[3]    = p21_video_control.roxe;
 	assign reg_ff41[4]    = p21_video_control.rufo;
