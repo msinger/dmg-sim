@@ -1117,9 +1117,9 @@ module dmg_cpu_b(
 	assign reg_obj6x[1] = !p31_sprite_x_matchers.yrac;
 	assign reg_obj6x[2] = !p31_sprite_x_matchers.ymem;
 	assign reg_obj6x[3] = !p31_sprite_x_matchers.yvag;
-	assign reg_obj6x[4] = !p31_sprite_x_matchers.zoly;
+	assign reg_obj6x[4] = !p31_sprite_x_matchers.zecu;
 	assign reg_obj6x[5] = !p31_sprite_x_matchers.zogo;
-	assign reg_obj6x[6] = !p31_sprite_x_matchers.zecu;
+	assign reg_obj6x[6] = !p31_sprite_x_matchers.zoly;
 	assign reg_obj6x[7] = !p31_sprite_x_matchers.zesa;
 	assign reg_obj4x[0] = !p31_sprite_x_matchers.wedu;
 	assign reg_obj4x[1] = !p31_sprite_x_matchers.ygaj;
