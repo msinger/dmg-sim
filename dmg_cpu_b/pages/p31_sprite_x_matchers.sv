@@ -85,9 +85,9 @@ module sprite_x_matchers(
 	drlatch latch_duko(!asys, doku, zocy, duko);
 	drlatch latch_desu(!asys, doku, ypur, desu);
 	drlatch latch_dazo(!asys, doku, yvok, dazo);
-	drlatch latch_zoly(!zape, xaho, cose, zoly);
+	drlatch latch_zecu(!zape, xaho, cose, zecu);
 	drlatch latch_zogo(!zape, xaho, arop, zogo);
-	drlatch latch_zecu(!zape, xaho, xatu, zecu);
+	drlatch latch_zoly(!zape, xaho, xatu, zoly);
 	drlatch latch_zesa(!zape, xaho, bady, zesa);
 	drlatch latch_ycol(!zape, xaho, zago, ycol);
 	drlatch latch_yrac(!zape, xaho, zocy, yrac);
