@@ -45,10 +45,10 @@ cd -- "$tmpdir"
 "$ROOT_DIR"/mkvid/mkimgs --raw <test.vid
 
 if [ -d "$TESTS_DIR/logs/$1" ]; then
-	convert -size 160x144 -depth 8 RGB:$(printf img%06d.rgb $FRAME) out.png
+	magick -size 160x144 -depth 8 RGB:$(printf img%06d.rgb $FRAME) out.png
 	mv out.png "$TESTS_DIR/logs/$1/"
 fi
 
-convert "$PNG_PATH" RGB:result.rgb
+magick "$PNG_PATH" RGB:result.rgb
 
 cmp $(printf img%06d.rgb $FRAME) result.rgb

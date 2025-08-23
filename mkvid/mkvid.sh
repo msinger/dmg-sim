@@ -33,7 +33,7 @@ if [ -n "$RAW" ]; then
 fi
 
 while [ -f $(printf img%06d.rgb $i) ]; do
-	convert -size $IMGSIZE -depth 8 RGB:$(printf img%06d.rgb $i) $(printf img%06d.png $i)
+	magick -size $IMGSIZE -depth 8 RGB:$(printf img%06d.rgb $i) $(printf img%06d.png $i)
 	((++i))
 done
 
