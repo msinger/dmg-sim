@@ -13,12 +13,13 @@ module dmg_cpu_b_test;
 	/* External cartridge bus */
 	logic            nrst;
 	logic            phi;
-	logic            nrd, nwr, ncs;
+	tri logic        nrd, nwr;
+	logic            ncs;
 	tri logic [15:0] a_pin;
 	tri logic [7:0]  d_pin;
 
 	/* External video bus */
-	logic            nmoe, nmwr, nmcs;
+	tri logic        nmoe, nmwr, nmcs;
 	logic     [12:0] ma_pin;
 	tri logic [7:0]  md_pin;
 
@@ -29,7 +30,7 @@ module dmg_cpu_b_test;
 
 	/* Button pins */
 	tri logic p10, p11, p12, p13;
-	logic     p14, p15;
+	tri logic p14, p15;
 
 	/* Display pins */
 	logic cpg, cp, cpl, fr, st, s;
