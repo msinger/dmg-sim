@@ -121,6 +121,59 @@ module dmg_cpu_b_gameboy;
 	logic [7:0]  cpu_d_out;
 	logic [15:0] cpu_a_out;
 
+	// See dmgcpu/ports.md
+	SM83Core cpu(
+		.M1(cpu_out_t1),         // out T1 
+		.CLK1(cpu_clkin_t2),     // in  T2 
+		.CLK2(cpu_clkin_t3),     // in  T3 
+		.CLK3(cpu_clkin_t4),     // in  T4 
+		.CLK4(cpu_clkin_t5),     // in  T5 
+		.CLK5(cpu_clkin_t6),     // in  T6 
+		.CLK6(cpu_clkin_t7),     // in  T7 
+		.CLK7(cpu_clkin_t8),     // in  T8 
+		.CLK8(cpu_clkin_t9),     // in  T9 
+		.CLK9(cpu_clkin_t10),    // in  T10
+		.CLK_ENA(cpu_clk_ena),   // out T11
+		.SYNC_RESET(cpu_in_t12), // in  T12
+		.RESET(cpu_in_t13),      // in  T13
+		.OSC_ENA(cpu_xo_ena),    // out T14
+		.OSC_STABLE(cpu_in_t15), // in  T15
+		// .in(cpu_in_t16),      // in  T16
+		.RD(cpu_raw_rd),         // out R1 
+		.WR(cpu_raw_wr),         // out R2 
+		.BUS_DISABLE(cpu_in_r3), // in  R3 
+		.MMIO_REQ(cpu_in_r4),    // in  R4 
+		.IPL_REQ(cpu_in_r5),     // in  R5 
+		.IPL_DISABLE(cpu_in_r6), // in  R6 
+		.MREQ(cpu_out_r7),       // out R7 
+
+		.CPU_IRQ_ACK({
+			cpu_irq7_ack, // out R28
+			cpu_irq6_ack, // out R26
+			cpu_irq5_ack, // out R24
+			cpu_irq4_ack, // out R22
+			cpu_irq3_ack, // out R20
+			cpu_irq2_ack, // out R18
+			cpu_irq1_ack, // out R16
+			cpu_irq0_ack  // out R14
+		}),
+
+		.CPU_IRQ_TRIG({
+			cpu_irq7_trig, // in  R29
+			cpu_irq6_trig, // in  R27
+			cpu_irq5_trig, // in  R25
+			cpu_irq4_trig, // in  R23
+			cpu_irq3_trig, // in  R21
+			cpu_irq2_trig, // in  R19
+			cpu_irq1_trig, // in  R17
+			cpu_irq0_trig  // in  R15
+		}),
+		.D(d),             // I/O B1-B8  
+		.A(cpu_a),         // out B9-B24 
+		.WAKE(cpu_wakeup), // in  B25 
+		.NMI(1'b0)
+	);
+
 	dmg_cpu_b dmg(.*, .t1('0), .t2('0), .vin(0.0), .unbonded_pad0('1), .unbonded_pad1());
 
 	task automatic xi_tick();
@@ -246,54 +299,15 @@ module dmg_cpu_b_gameboy;
 		end
 	end
 
-	sm83 cpu(.*);
-
 	assign ncyc        = !dmg.p1_clocks_reset.adyk && !dmg.p1_clocks_reset.alef;
-	assign cpu_a       = cpu_a_out;
-	assign d           = cpu_drv_d ? cpu_d_out : 'z;
 	assign din         = d;
-	assign cpu_out_r7  = (cpu_raw_rd || cpu_raw_wr) && !cpu_in_r4 && !cpu_in_r5;
 	assign clk_stable  = cpu_in_t15;
-	assign cpu_clk_ena = clk_ena;
 	assign reset       = cpu_in_t12;
 	assign areset      = cpu_in_t13;
-
-	initial cpu_a_out  = 0;
-	initial cpu_raw_rd = 0;
-	initial cpu_raw_wr = 0;
 
 	/* CPU must not drive data bus when cpu_clkin_t3 (BEDO) is low or cpu_clkin_t2 (BOWA) is high,
 	 * otherwise it collides with 0xff driven on the right side of page 5. */
 	assign cpu_drv_d = cpu_raw_wr && cpu_clkin_t3 && !cpu_clkin_t2;
-
-	always @(posedge cpu_clkin_t3) if (rd && !cpu_in_t12 && !cpu_in_t13) begin :read_cycle
-		cpu_a_out  <= adr;
-		cpu_raw_rd <= 1;
-		@(posedge cpu_clkin_t2);
-		cpu_raw_rd <= 0;
-		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
-			cpu_a_out[15:8] <= 0;
-	end
-
-	always @(posedge cpu_clkin_t3) if (wr && !cpu_in_t12 && !cpu_in_t13) begin :write_cycle
-		cpu_a_out  <= adr;
-		cpu_d_out  <= '1;
-		cpu_raw_wr <= 1;
-		@(posedge cpu_clkin_t5);
-		cpu_d_out  <= dout;
-		@(posedge cpu_clkin_t2);
-		cpu_raw_wr <= 0;
-		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
-			cpu_a_out[15:8] <= 0;
-	end
-
-	always @(posedge cpu_clkin_t10, posedge cpu_in_t12, posedge cpu_in_t13) if (cpu_in_t12 || cpu_in_t13) begin
-		disable read_cycle;
-		disable write_cycle;
-		cpu_raw_rd <= 0;
-		cpu_raw_wr <= 0;
-		cpu_a_out  <= 0;
-	end
 
 	assign irq[0] = cpu_irq0_trig;
 	assign irq[1] = cpu_irq1_trig;
@@ -303,17 +317,6 @@ module dmg_cpu_b_gameboy;
 	assign irq[5] = cpu_irq5_trig;
 	assign irq[6] = cpu_irq6_trig;
 	assign irq[7] = cpu_irq7_trig;
-
-	always_ff @(posedge clk) begin
-		cpu_irq0_ack <= iack[0];
-		cpu_irq1_ack <= iack[1];
-		cpu_irq2_ack <= iack[2];
-		cpu_irq3_ack <= iack[3];
-		cpu_irq4_ack <= iack[4];
-		cpu_irq5_ack <= iack[5];
-		cpu_irq6_ack <= iack[6];
-		cpu_irq7_ack <= iack[7];
-	end
 
 	program test;
 		int sample_idx;
@@ -370,9 +373,6 @@ module dmg_cpu_b_gameboy;
 			nrst = 0;
 
 			clk   = 0;
-
-			cpu_out_t1   = 0;
-			cpu_xo_ena   = 1;
 
 			cyc(64);
 			nrst = 1;
