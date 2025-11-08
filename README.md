@@ -4,9 +4,8 @@ DMG Sim
 SystemVerilog code for simulating a Game Boy system with Icarus Verilog.
 Most of the code is derived from the schematics in
 [furrtek/DMG-CPU-Inside](https://github.com/furrtek/DMG-CPU-Inside).
-The SM83 CPU core is not part of these schematics. I used the schematics in
-[gdevic/A-Z80](https://github.com/gdevic/A-Z80) to get an inspiration how the
-SM83 core could function internally and implemented it in a similar way.
+The SM83 CPU core is generated from the netlist files in
+[msinger/dmg-schematics](https://github.com/msinger/dmg-schematics).
 
 
 Files in this repo
@@ -18,7 +17,8 @@ Files in this repo
 | ./dmg\_cpu\_b/cells/timing\_param.sv | Defines the delay times for all the different cell types.                           |
 | ./dmg\_cpu\_b/cells/\*.sv            | Modules for flip-flop and latch cells that are used in the DMG-CPU B chip.          |
 | ./dmg\_cpu\_b/dmg\_cpu\_b.sv         | Module describing a DMG-CPU B chip without CPU. (Basically combining all 36 pages.) |
-| ./sm83/\*.sv                         | The SM83 CPU core.                                                                  |
+| ./sm83/cells/\*.sv                   | Modules implementing all cells in the SM83 CPU core.                                |
+| ./sm83/sm83.sv                       | The SM83 CPU core.                                                                  |
 | ./dmg\_cpu\_b\_test.sv               | Top level module for testing the simulated DMG-CPU B chip without a CPU.            |
 | ./dmg\_cpu\_b\_gameboy.sv            | Top level module that simulates a complete Game Boy system with CPU.                |
 | ./snd\_dump.sv                       | Code for dumping the APU's sound output to a file.                                  |

@@ -1,0 +1,26 @@
+`default_nettype none
+
+module sm83_nand2_in1_n_c #(
+		parameter real L_y = 11
+	) (
+		input  logic in1_n, in2,
+		output logic y
+	);
+
+	import sm83_timing::*;
+
+	assign y = !(!in1_n & in2);
+
+	specify
+		specparam T_rise_in1 = tpd_elmore( 17, R_pmos_ohm(3*L_unit));
+		specparam T_fall_in1 = tpd_elmore( 17, R_nmos_ohm(3*L_unit));
+		specparam T_rise_y   = tpd_elmore(L_y, R_pmos_ohm(3*L_unit));
+		specparam T_fall_y   = tpd_elmore(L_y, R_nmos_ohm(3*L_unit) * 2);
+
+		(in1_n *> y) = (T_fall_in1 + T_rise_y, T_rise_in1 + T_fall_y);
+		(in2   *> y) = (T_rise_y, T_fall_y);
+	endspecify
+
+endmodule
+
+`default_nettype wire

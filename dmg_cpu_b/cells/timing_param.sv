@@ -1,6 +1,6 @@
 `default_nettype none
 
-parameter time T_INV     = 2ns;
+parameter time T_INV     = 0ns;//2ns;
 parameter time T_NAND    = T_INV;
 parameter time T_NOR     = T_INV;
 parameter time T_AND     = 2 * T_INV;

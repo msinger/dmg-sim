@@ -103,23 +103,8 @@ module dmg_cpu_b_gameboy;
 	logic         mbc5_ncs_ram;
 
 	logic           clk;
-	logic           reset, areset;
+	logic           reset;
 	logic           ncyc;
-
-	logic [15:0]    adr;
-	logic [7:0]     din, dout;
-	logic           rd;
-	logic           wr;
-
-	logic [7:0]     irq;
-	logic [7:0]     iack;
-
-	logic           clk_ena;
-	logic           clk_stable;
-
-	logic        cpu_drv_d;
-	logic [7:0]  cpu_d_out;
-	logic [15:0] cpu_a_out;
 
 	dmg_cpu_b dmg(.*, .t1('0), .t2('0), .vin(0.0), .unbonded_pad0('1), .unbonded_pad1());
 
@@ -246,74 +231,282 @@ module dmg_cpu_b_gameboy;
 		end
 	end
 
-	sm83 cpu(.*);
+	sm83 cpu(
+		.m1(cpu_out_t1),
+		.adr_clk_n(cpu_clkin_t2),
+		.adr_clk_p(cpu_clkin_t3),
+		.phi_clk_p(cpu_clkin_t4),
+		.phi_clk_n(cpu_clkin_t5),
+		.t4_clk_n(cpu_clkin_t6),
+		.t4_clk_p(cpu_clkin_t7),
+		.buke(cpu_clkin_t8),
+		.main_clk_n(cpu_clkin_t9),
+		.main_clk_p(cpu_clkin_t10),
+		.halt_n(cpu_clk_ena),
+		.sync_reset(cpu_in_t12),
+		.async_reset(cpu_in_t13),
+		.stop_n(cpu_xo_ena),
+		.osc_stable(cpu_in_t15),
+		.nmi(cpu_in_t16),
+		.rd(cpu_raw_rd),
+		.wr(cpu_raw_wr),
+		.unor(cpu_in_r3),
+		.syro(cpu_in_r4),
+		.tutu(cpu_in_r5),
+		.umut(cpu_in_r6),
+		.mreq(cpu_out_r7),
+		.inta0(cpu_irq0_ack),
+		.int0(cpu_irq0_trig),
+		.inta1(cpu_irq1_ack),
+		.int1(cpu_irq1_trig),
+		.inta2(cpu_irq2_ack),
+		.int2(cpu_irq2_trig),
+		.inta3(cpu_irq3_ack),
+		.int3(cpu_irq3_trig),
+		.inta4(cpu_irq4_ack),
+		.int4(cpu_irq4_trig),
+		.inta5(cpu_irq5_ack),
+		.int5(cpu_irq5_trig),
+		.inta6(cpu_irq6_ack),
+		.int6(cpu_irq6_trig),
+		.inta7(cpu_irq7_ack),
+		.int7(cpu_irq7_trig),
+		.d0(d[0]),
+		.d1(d[1]),
+		.d2(d[2]),
+		.d3(d[3]),
+		.d4(d[4]),
+		.d5(d[5]),
+		.d6(d[6]),
+		.d7(d[7]),
+		.a0(cpu_a[0]),
+		.a1(cpu_a[1]),
+		.a2(cpu_a[2]),
+		.a3(cpu_a[3]),
+		.a4(cpu_a[4]),
+		.a5(cpu_a[5]),
+		.a6(cpu_a[6]),
+		.a7(cpu_a[7]),
+		.a8(cpu_a[8]),
+		.a9(cpu_a[9]),
+		.a10(cpu_a[10]),
+		.a11(cpu_a[11]),
+		.a12(cpu_a[12]),
+		.a13(cpu_a[13]),
+		.a14(cpu_a[14]),
+		.a15(cpu_a[15]),
+		.wake(cpu_wakeup)
+	);
 
-	assign ncyc        = !dmg.p1_clocks_reset.adyk && !dmg.p1_clocks_reset.alef;
-	assign cpu_a       = cpu_a_out;
-	assign d           = cpu_drv_d ? cpu_d_out : 'z;
-	assign din         = d;
-	assign cpu_out_r7  = (cpu_raw_rd || cpu_raw_wr) && !cpu_in_r4 && !cpu_in_r5;
-	assign clk_stable  = cpu_in_t15;
-	assign cpu_clk_ena = clk_ena;
-	assign reset       = cpu_in_t12;
-	assign areset      = cpu_in_t13;
+	keeper #(16) a_keeper(cpu_a);
+	keeper #(8)  d_keeper(d);
 
-	initial cpu_a_out  = 0;
-	initial cpu_raw_rd = 0;
-	initial cpu_raw_wr = 0;
+	logic [7:0] sm83_db;
+	assign sm83_db[0] = cpu.db0;
+	assign sm83_db[1] = cpu.db1;
+	assign sm83_db[2] = cpu.db2;
+	assign sm83_db[3] = cpu.db3;
+	assign sm83_db[4] = cpu.db4;
+	assign sm83_db[5] = cpu.db5;
+	assign sm83_db[6] = cpu.db6;
+	assign sm83_db[7] = cpu.db7;
 
-	/* CPU must not drive data bus when cpu_clkin_t3 (BEDO) is low or cpu_clkin_t2 (BOWA) is high,
-	 * otherwise it collides with 0xff driven on the right side of page 5. */
-	assign cpu_drv_d = cpu_raw_wr && cpu_clkin_t3 && !cpu_clkin_t2;
+	logic [7:0] sm83_op1b;
+	assign sm83_op1b[0] = !cpu.op1bus0_n;
+	assign sm83_op1b[1] = !cpu.op1bus1_n;
+	assign sm83_op1b[2] = !cpu.op1bus2_n;
+	assign sm83_op1b[3] = !cpu.op1bus3_n;
+	assign sm83_op1b[4] = !cpu.op1bus4_n;
+	assign sm83_op1b[5] = !cpu.op1bus5_n;
+	assign sm83_op1b[6] = !cpu.op1bus6_n;
+	assign sm83_op1b[7] = !cpu.op1bus7_n;
 
-	always @(posedge cpu_clkin_t3) if (rd && !cpu_in_t12 && !cpu_in_t13) begin :read_cycle
-		cpu_a_out  <= adr;
-		cpu_raw_rd <= 1;
-		@(posedge cpu_clkin_t2);
-		cpu_raw_rd <= 0;
-		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
-			cpu_a_out[15:8] <= 0;
-	end
+	logic [7:0] sm83_op2b;
+	assign sm83_op2b[0] = !cpu.op2bus0_n;
+	assign sm83_op2b[1] = !cpu.op2bus1_n;
+	assign sm83_op2b[2] = !cpu.op2bus2_n;
+	assign sm83_op2b[3] = !cpu.op2bus3_n;
+	assign sm83_op2b[4] = !cpu.op2bus4_n;
+	assign sm83_op2b[5] = !cpu.op2bus5_n;
+	assign sm83_op2b[6] = !cpu.op2bus6_n;
+	assign sm83_op2b[7] = !cpu.op2bus7_n;
 
-	always @(posedge cpu_clkin_t3) if (wr && !cpu_in_t12 && !cpu_in_t13) begin :write_cycle
-		cpu_a_out  <= adr;
-		cpu_d_out  <= '1;
-		cpu_raw_wr <= 1;
-		@(posedge cpu_clkin_t5);
-		cpu_d_out  <= dout;
-		@(posedge cpu_clkin_t2);
-		cpu_raw_wr <= 0;
-		if (!cpu_in_r4 && !cpu_in_r5) /* Higher address byte is supposed to go low after external memory access */
-			cpu_a_out[15:8] <= 0;
-	end
+	logic [7:0] sm83_res;
+	assign sm83_res[0] = cpu.res0;
+	assign sm83_res[1] = cpu.res1;
+	assign sm83_res[2] = cpu.res2;
+	assign sm83_res[3] = cpu.res3;
+	assign sm83_res[4] = cpu.res4;
+	assign sm83_res[5] = cpu.res5;
+	assign sm83_res[6] = cpu.res6;
+	assign sm83_res[7] = cpu.res7;
 
-	always @(posedge cpu_clkin_t10, posedge cpu_in_t12, posedge cpu_in_t13) if (cpu_in_t12 || cpu_in_t13) begin
-		disable read_cycle;
-		disable write_cycle;
-		cpu_raw_rd <= 0;
-		cpu_raw_wr <= 0;
-		cpu_a_out  <= 0;
-	end
+	logic [15:0] sm83_hi_lo_bus;
+	assign sm83_hi_lo_bus[0]  = !cpu.lo_bus0_n;
+	assign sm83_hi_lo_bus[1]  = !cpu.lo_bus1_n;
+	assign sm83_hi_lo_bus[2]  = !cpu.lo_bus2_n;
+	assign sm83_hi_lo_bus[3]  = !cpu.lo_bus3_n;
+	assign sm83_hi_lo_bus[4]  = !cpu.lo_bus4_n;
+	assign sm83_hi_lo_bus[5]  = !cpu.lo_bus5_n;
+	assign sm83_hi_lo_bus[6]  = !cpu.lo_bus6_n;
+	assign sm83_hi_lo_bus[7]  = !cpu.lo_bus7_n;
+	assign sm83_hi_lo_bus[8]  = !cpu.hi_bus0_n;
+	assign sm83_hi_lo_bus[9]  = !cpu.hi_bus1_n;
+	assign sm83_hi_lo_bus[10] = !cpu.hi_bus2_n;
+	assign sm83_hi_lo_bus[11] = !cpu.hi_bus3_n;
+	assign sm83_hi_lo_bus[12] = !cpu.hi_bus4_n;
+	assign sm83_hi_lo_bus[13] = !cpu.hi_bus5_n;
+	assign sm83_hi_lo_bus[14] = !cpu.hi_bus6_n;
+	assign sm83_hi_lo_bus[15] = !cpu.hi_bus7_n;
 
-	assign irq[0] = cpu_irq0_trig;
-	assign irq[1] = cpu_irq1_trig;
-	assign irq[2] = cpu_irq2_trig;
-	assign irq[3] = cpu_irq3_trig;
-	assign irq[4] = cpu_irq4_trig;
-	assign irq[5] = cpu_irq5_trig;
-	assign irq[6] = cpu_irq6_trig;
-	assign irq[7] = cpu_irq7_trig;
+	logic [15:0] sm83_idu_cpl_mask;
+	assign sm83_idu_cpl_mask[0]  = cpu.idu_chain_a_y_n0;
+	assign sm83_idu_cpl_mask[1]  = cpu.idu_chain_a_y_n1;
+	assign sm83_idu_cpl_mask[2]  = cpu.idu_chain_a_y_n2;
+	assign sm83_idu_cpl_mask[3]  = cpu.idu_chain_a_y_n3;
+	assign sm83_idu_cpl_mask[4]  = cpu.idu_chain_a_y_n4;
+	assign sm83_idu_cpl_mask[5]  = cpu.idu_chain_a_y_n5;
+	assign sm83_idu_cpl_mask[6]  = cpu.idu_chain_a_y_n6;
+	assign sm83_idu_cpl_mask[7]  = cpu.idu_chain_a_y_n7;
+	assign sm83_idu_cpl_mask[8]  = cpu.idu_chain_b_y_n0;
+	assign sm83_idu_cpl_mask[9]  = cpu.idu_chain_b_y_n1;
+	assign sm83_idu_cpl_mask[10] = cpu.idu_chain_b_y_n2;
+	assign sm83_idu_cpl_mask[11] = cpu.idu_chain_b_y_n3;
+	assign sm83_idu_cpl_mask[12] = cpu.idu_chain_b_y_n4;
+	assign sm83_idu_cpl_mask[13] = cpu.idu_chain_b_y_n5;
+	assign sm83_idu_cpl_mask[14] = cpu.idu_chain_b_y_n6;
+	assign sm83_idu_cpl_mask[15] = cpu.idu_chain_b_y_n7;
 
-	always_ff @(posedge clk) begin
-		cpu_irq0_ack <= iack[0];
-		cpu_irq1_ack <= iack[1];
-		cpu_irq2_ack <= iack[2];
-		cpu_irq3_ack <= iack[3];
-		cpu_irq4_ack <= iack[4];
-		cpu_irq5_ack <= iack[5];
-		cpu_irq6_ack <= iack[6];
-		cpu_irq7_ack <= iack[7];
-	end
+	logic [15:0] sm83_idu_chain_ena;
+	assign sm83_idu_chain_ena[0]  = cpu.idu_mux_l0;
+	assign sm83_idu_chain_ena[1]  = cpu.idu_mux_l1;
+	assign sm83_idu_chain_ena[2]  = cpu.idu_mux_l2;
+	assign sm83_idu_chain_ena[3]  = cpu.idu_mux_l3;
+	assign sm83_idu_chain_ena[4]  = cpu.idu_mux_l4;
+	assign sm83_idu_chain_ena[5]  = cpu.idu_mux_l5;
+	assign sm83_idu_chain_ena[6]  = cpu.idu_mux_l6;
+	assign sm83_idu_chain_ena[7]  = cpu.idu_mux_l7;
+	assign sm83_idu_chain_ena[8]  = cpu.idu_mux_h0;
+	assign sm83_idu_chain_ena[9]  = cpu.idu_mux_h1;
+	assign sm83_idu_chain_ena[10] = cpu.idu_mux_h2;
+	assign sm83_idu_chain_ena[11] = cpu.idu_mux_h3;
+	assign sm83_idu_chain_ena[12] = cpu.idu_mux_h4;
+	assign sm83_idu_chain_ena[13] = cpu.idu_mux_h5;
+	assign sm83_idu_chain_ena[14] = cpu.idu_mux_h6;
+	assign sm83_idu_chain_ena[15] = 0;
+
+	logic [15:0] sm83_idu_out;
+	assign sm83_idu_out[0]  = cpu.idu_xor_l0;
+	assign sm83_idu_out[1]  = cpu.idu_xor_l1;
+	assign sm83_idu_out[2]  = cpu.idu_xor_l2;
+	assign sm83_idu_out[3]  = cpu.idu_xor_l3;
+	assign sm83_idu_out[4]  = cpu.idu_xor_l4;
+	assign sm83_idu_out[5]  = cpu.idu_xor_l5;
+	assign sm83_idu_out[6]  = cpu.idu_xor_l6;
+	assign sm83_idu_out[7]  = cpu.idu_xor_l7;
+	assign sm83_idu_out[8]  = cpu.idu_xor_h0;
+	assign sm83_idu_out[9]  = cpu.idu_xor_h1;
+	assign sm83_idu_out[10] = cpu.idu_xor_h2;
+	assign sm83_idu_out[11] = cpu.idu_xor_h3;
+	assign sm83_idu_out[12] = cpu.idu_xor_h4;
+	assign sm83_idu_out[13] = cpu.idu_xor_h5;
+	assign sm83_idu_out[14] = cpu.idu_xor_h6;
+	assign sm83_idu_out[15] = cpu.idu_xor_h7;
+
+	logic [7:0] sm83_ir;
+	assign sm83_ir[0] = cpu.ir0;
+	assign sm83_ir[1] = cpu.ir1;
+	assign sm83_ir[2] = cpu.ir2;
+	assign sm83_ir[3] = cpu.ir3;
+	assign sm83_ir[4] = cpu.ir4;
+	assign sm83_ir[5] = cpu.ir5;
+	assign sm83_ir[6] = cpu.ir6;
+	assign sm83_ir[7] = cpu.ir7;
+
+	logic [7:0] sm83_reg_a;
+	assign sm83_reg_a[0] = cpu.reg_a0;
+	assign sm83_reg_a[1] = cpu.reg_a1;
+	assign sm83_reg_a[2] = cpu.reg_a2;
+	assign sm83_reg_a[3] = cpu.reg_a3;
+	assign sm83_reg_a[4] = cpu.reg_a4;
+	assign sm83_reg_a[5] = cpu.reg_a5;
+	assign sm83_reg_a[6] = cpu.reg_a6;
+	assign sm83_reg_a[7] = cpu.reg_a7;
+
+	logic [15:0] sm83_hl;
+	assign sm83_hl[0]  = cpu.reg_l0;
+	assign sm83_hl[1]  = cpu.reg_l1;
+	assign sm83_hl[2]  = cpu.reg_l2;
+	assign sm83_hl[3]  = cpu.reg_l3;
+	assign sm83_hl[4]  = cpu.reg_l4;
+	assign sm83_hl[5]  = cpu.reg_l5;
+	assign sm83_hl[6]  = cpu.reg_l6;
+	assign sm83_hl[7]  = cpu.reg_l7;
+	assign sm83_hl[8]  = cpu.reg_h0;
+	assign sm83_hl[9]  = cpu.reg_h1;
+	assign sm83_hl[10] = cpu.reg_h2;
+	assign sm83_hl[11] = cpu.reg_h3;
+	assign sm83_hl[12] = cpu.reg_h4;
+	assign sm83_hl[13] = cpu.reg_h5;
+	assign sm83_hl[14] = cpu.reg_h6;
+	assign sm83_hl[15] = cpu.reg_h7;
+
+	logic [15:0] sm83_pc;
+	assign sm83_pc[0]  = cpu.reg_pcl0;
+	assign sm83_pc[1]  = cpu.reg_pcl1;
+	assign sm83_pc[2]  = cpu.reg_pcl2;
+	assign sm83_pc[3]  = cpu.reg_pcl3;
+	assign sm83_pc[4]  = cpu.reg_pcl4;
+	assign sm83_pc[5]  = cpu.reg_pcl5;
+	assign sm83_pc[6]  = cpu.reg_pcl6;
+	assign sm83_pc[7]  = cpu.reg_pcl7;
+	assign sm83_pc[8]  = cpu.reg_pch0;
+	assign sm83_pc[9]  = cpu.reg_pch1;
+	assign sm83_pc[10] = cpu.reg_pch2;
+	assign sm83_pc[11] = cpu.reg_pch3;
+	assign sm83_pc[12] = cpu.reg_pch4;
+	assign sm83_pc[13] = cpu.reg_pch5;
+	assign sm83_pc[14] = cpu.reg_pch6;
+	assign sm83_pc[15] = cpu.reg_pch7;
+
+	logic [15:0] sm83_sp;
+	assign sm83_sp[0]  = cpu.reg_spl0;
+	assign sm83_sp[1]  = cpu.reg_spl1;
+	assign sm83_sp[2]  = cpu.reg_spl2;
+	assign sm83_sp[3]  = cpu.reg_spl3;
+	assign sm83_sp[4]  = cpu.reg_spl4;
+	assign sm83_sp[5]  = cpu.reg_spl5;
+	assign sm83_sp[6]  = cpu.reg_spl6;
+	assign sm83_sp[7]  = cpu.reg_spl7;
+	assign sm83_sp[8]  = cpu.reg_sph0;
+	assign sm83_sp[9]  = cpu.reg_sph1;
+	assign sm83_sp[10] = cpu.reg_sph2;
+	assign sm83_sp[11] = cpu.reg_sph3;
+	assign sm83_sp[12] = cpu.reg_sph4;
+	assign sm83_sp[13] = cpu.reg_sph5;
+	assign sm83_sp[14] = cpu.reg_sph6;
+	assign sm83_sp[15] = cpu.reg_sph7;
+
+	logic [15:0] sm83_wz;
+	assign sm83_wz[0]  = cpu.reg_z0;
+	assign sm83_wz[1]  = cpu.reg_z1;
+	assign sm83_wz[2]  = cpu.reg_z2;
+	assign sm83_wz[3]  = cpu.reg_z3;
+	assign sm83_wz[4]  = cpu.reg_z4;
+	assign sm83_wz[5]  = cpu.reg_z5;
+	assign sm83_wz[6]  = cpu.reg_z6;
+	assign sm83_wz[7]  = cpu.reg_z7;
+	assign sm83_wz[8]  = cpu.reg_w0;
+	assign sm83_wz[9]  = cpu.reg_w1;
+	assign sm83_wz[10] = cpu.reg_w2;
+	assign sm83_wz[11] = cpu.reg_w3;
+	assign sm83_wz[12] = cpu.reg_w4;
+	assign sm83_wz[13] = cpu.reg_w5;
+	assign sm83_wz[14] = cpu.reg_w6;
+	assign sm83_wz[15] = cpu.reg_w7;
+
+	assign ncyc  = !dmg.p1_clocks_reset.adyk && !dmg.p1_clocks_reset.alef;
+	assign reset = cpu_in_t12;
 
 	program test;
 		int sample_idx;
@@ -371,9 +564,6 @@ module dmg_cpu_b_gameboy;
 
 			clk   = 0;
 
-			cpu_out_t1   = 0;
-			cpu_xo_ena   = 1;
-
 			cyc(64);
 			nrst = 1;
 
@@ -428,46 +618,6 @@ module dmg_cpu_b_gameboy;
 			$finish;
 		end
 	endprogram
-
-	/* HALT/EI/DI instruction test code */
-	/*
-	initial irq = 0;
-	// For halt.gb:
-	//localparam int ser_int_ht = 4;  // interrupt before halt  (iff IME=0, instruction after halt executes two times)
-	//localparam int ser_int_ht = 5;  // no unclocked cycles    (iff IME=0, instruction after halt executes two times; otherwise, iff IME=1, HALT executes two times)
-	//localparam int ser_int_ht = 12; // no unclocked cycles    (iff IME=0, instruction after halt executes two times; otherwise, iff IME=1, HALT executes two times)
-	//localparam int ser_int_ht = 13; // one unclocked cycle
-	//localparam int ser_int_ht = 24; // one unclocked cycle
-	//localparam int ser_int_ht = 25; // two unclocked cycles
-	// For eidi.gb:
-	//localparam int ser_int_ht = 4;  // interrupt before EI; one NOP executed and one more fetched
-	//localparam int ser_int_ht = 20; // interrupt after EI; still one NOP executed and one more fetched
-	//localparam int ser_int_ht = 21; // interrupt after EI; two NOPs executed
-	//localparam int ser_int_ht = 4;  // interrupt before DI; DI aborted after fetch
-	//localparam int ser_int_ht = 5;  // interrupt blocked by DI
-	always @(posedge clk) begin
-		int ht;
-		irq[3] = 0;
-		if (adr == 'hff02 && cpu_raw_wr && din == 'h80 && cpu.t4) begin
-			ht = -14;
-			begin :ser_int_wait
-				forever begin
-					@(posedge clk);
-					ht++;
-					if (ht == ser_int_ht)
-						disable ser_int_wait;
-					@(negedge clk);
-					ht++;
-					if (ht == ser_int_ht)
-						disable ser_int_wait;
-				end
-			end
-			#61ns;
-			irq[3] = 1;
-			@(posedge iack[3]);
-		end
-	end
-	*/
 
 endmodule
 
