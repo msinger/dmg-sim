@@ -327,7 +327,7 @@ module sm83_decoder1 #(
 	localparam realtime T_fall_y41 = tpd_elmore(L_y41, R_nmos_ohm(8*L_unit) * 6 + R_nmos_ohm(6*L_unit) * 2);
 	localparam realtime T_Z_y41    = tpd_z(, T_fall_y41);
 	bufif1 (highz1, strong0) #(0, T_fall_y41, T_Z_y41)
-		(y41, '0, in5 & in19 & in22 & in24 & in26 & in27 & (in7 | in10 | in12) & (in13 | in16 | in18));
+		(y41, '0, in6 & in19 & in22 & in24 & in26 & in27 & (in7 | in10 | in12) & (in13 | in16 | in18));
 
 	localparam realtime T_fall_y42 = tpd_elmore(L_y42, R_nmos_ohm(8*L_unit) * 5);
 	localparam realtime T_Z_y42    = tpd_z(, T_fall_y42);
@@ -392,12 +392,12 @@ module sm83_decoder1 #(
 	localparam realtime T_fall_y54 = tpd_elmore(L_y54, R_nmos_ohm(8*L_unit) * 14);
 	localparam realtime T_Z_y54    = tpd_z(, T_fall_y54);
 	bufif1 (highz1, strong0) #(0, T_fall_y54, T_Z_y54)
-		(y54, '0, in1 & in3 & in4 & in8 & in10 & in12 & in13 & in16 & in17 & in19 & in21 & in24 & in26 & in27);
+		(y54, '0, in1 & in4 & in6 & in8 & in10 & in12 & in13 & in16 & in17 & in19 & in21 & in24 & in26 & in27);
 
 	localparam realtime T_fall_y55 = tpd_elmore(L_y55, R_nmos_ohm(8*L_unit) * 13);
 	localparam realtime T_Z_y55    = tpd_z(, T_fall_y55);
 	bufif1 (highz1, strong0) #(0, T_fall_y55, T_Z_y55)
-		(y55, '0, in1 & in3 & in8 & in10 & in12 & in13 & in15 & in17 & in19 & in21 & in24 & in26 & in27);
+		(y55, '0, in1 & in4 & in8 & in10 & in12 & in13 & in15 & in17 & in19 & in21 & in24 & in26 & in27);
 
 	localparam realtime T_fall_y56 = tpd_elmore(L_y56, R_nmos_ohm(14*L_unit) * 5 +
 	                                                   R_nmos_ohm( 8*L_unit) * 2 +
@@ -504,12 +504,12 @@ module sm83_decoder1 #(
 	localparam realtime T_fall_y76 = tpd_elmore(L_y76, R_nmos_ohm(8*L_unit) * 6);
 	localparam realtime T_Z_y76    = tpd_z(, T_fall_y76);
 	bufif1 (highz1, strong0) #(0, T_fall_y76, T_Z_y76)
-		(y76, '0, in1 & in4 & in5 & in24 & in26 & in27);
+		(y76, '0, in1 & in4 & in5 & in24 & in25 & in27);
 
 	localparam realtime T_fall_y77 = tpd_elmore(L_y77, R_nmos_ohm(8*L_unit) * 6);
 	localparam realtime T_Z_y77    = tpd_z(, T_fall_y77);
 	bufif1 (highz1, strong0) #(0, T_fall_y77, T_Z_y77)
-		(y77, '0, in2 & in4 & in5 & in24 & in26 & in27);
+		(y77, '0, in2 & in4 & in5 & in24 & in25 & in27);
 
 	localparam realtime T_fall_y78 = tpd_elmore(L_y78, R_nmos_ohm(8*L_unit) * 6);
 	localparam realtime T_Z_y78    = tpd_z(, T_fall_y78);
