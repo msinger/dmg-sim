@@ -1,6 +1,6 @@
 `default_nettype none
 
-module sm83_not_reg_b_wr #(
+module sm83_not_reg_b_we #(
 		parameter real L_y = 32
 	) (
 		input  logic in,

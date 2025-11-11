@@ -1,6 +1,6 @@
 `default_nettype none
 
-module sm83_not2_reg_pc_wr #(
+module sm83_not2_reg_pc_we #(
 		parameter real L_a_y = 27,
 		parameter real L_b_y = 56
 	) (

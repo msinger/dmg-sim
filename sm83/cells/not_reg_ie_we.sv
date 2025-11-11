@@ -1,7 +1,7 @@
 `default_nettype none
 
-module sm83_not_reg_wr #(
-		parameter real L_y = 32
+module sm83_not_reg_ie_we #(
+		parameter real L_y = 25
 	) (
 		input  logic in,
 		output logic y
@@ -12,8 +12,8 @@ module sm83_not_reg_wr #(
 	assign y = !in;
 
 	specify
-		specparam T_rise_y = tpd_elmore(L_y, R_pmos_ohm(14*L_unit));
-		specparam T_fall_y = tpd_elmore(L_y, R_nmos_ohm( 9*L_unit));
+		specparam T_rise_y = tpd_elmore(L_y, R_pmos_ohm(12.5*L_unit));
+		specparam T_fall_y = tpd_elmore(L_y, R_nmos_ohm( 9.0*L_unit));
 
 		(in *> y) = (T_rise_y, T_fall_y);
 	endspecify
