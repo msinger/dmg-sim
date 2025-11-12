@@ -29,7 +29,7 @@ module sm83_reg_bus_pch_a_bit6 #(
 	localparam realtime T_rise_c_y  = tpd_elmore(L_c_y, R_pmos_ohm(15*L_unit));
 	localparam realtime T_fall_c_ya = tpd_elmore(L_c_y, R_nmos_ohm( 8*L_unit) * 2);
 	localparam realtime T_fall_c_yb = tpd_elmore(L_c_y, R_nmos_ohm( 8*L_unit) * 3);
-	localparam realtime T_Z_c_y     = (0.2 * T_rise_c_y) > T_Z_min ? (0.2 * T_rise_c_y) : T_Z_min;
+	localparam realtime T_Z_c_y     = tpd_z(T_rise_c_y);
 	bufif0 (strong1, highz0) #(T_rise_c_y, 0, T_Z_c_y) (c_y, '1, pch_n);
 	assign #(0, T_fall_c_ya, T_Z_c_y) c_y = (pch_n & c_zero_a) ? 0 : 'z;
 	assign #(0, T_fall_c_yb, T_Z_c_y) c_y = (pch_n & c_zero_b1 & c_zero_b2) ? 0 : 'z;

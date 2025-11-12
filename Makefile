@@ -37,7 +37,6 @@ dmg_cpu_b/pages/p35_pixel_mux.sv \
 dmg_cpu_b/pages/p36_palettes.sv
 
 DMG_CPU_B_CELLS = \
-dmg_cpu_b/cells/timing_param.sv \
 dmg_cpu_b/cells/nor_srlatch.sv \
 dmg_cpu_b/cells/nand_srlatch.sv \
 dmg_cpu_b/cells/dlatch_a.sv \
@@ -51,6 +50,7 @@ dmg_cpu_b/cells/tffd.sv
 
 DMG_CPU_B = \
 dmg_cpu_b/dmg_cpu_b.sv \
+dmg_cpu_b/timing-$(TIMING).sv \
 $(DMG_CPU_B_CELLS) \
 $(DMG_CPU_B_PAGES)
 
@@ -201,7 +201,7 @@ sm83/cells/xor_idu_l.sv
 
 SM83 = \
 sm83/sm83.sv \
-sm83/timing.sv \
+sm83/timing-$(TIMING).sv \
 $(SM83_CELLS)
 
 COMMON_FILES = \
@@ -260,6 +260,8 @@ CH_DUMP =
 BOOTROM = DMG_ROM.bin
 ROM =
 SECS = 6.0
+# Delays are calculated at compile time, so you should run "make clean" when changing timing.
+TIMING = nodelay
 
 ifeq ($(DUMP),vcd)
 VVP_DUMP_FLAGS = -vcd +DUMPFILE=$1.vcd

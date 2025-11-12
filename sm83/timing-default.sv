@@ -44,14 +44,12 @@ package sm83_timing;
 	endfunction
 
 	function automatic realtime tpd_elmore(real L_um, real R_drv_ohm, real C_extra_F = 0.0);
-		//return tpd_elmore_s(L_um, R_drv_ohm, C_extra_F) * 1s; // scaled to timeunit
-		return 0.0s;
+		return tpd_elmore_s(L_um, R_drv_ohm, C_extra_F) * 1s; // scaled to timeunit
 	endfunction
 
 	function automatic realtime tpd_z(realtime T_plh = 0.0s, realtime T_phl = 0.0s, realtime T_min = T_Z_min);
 		const realtime T_pd = (T_plh >= T_phl) ? T_plh : T_phl;
-		//return (0.2 * T_pd) > T_min ? (0.2 * T_pd) : T_min;
-		return 0.0s;
+		return (0.2 * T_pd) > T_min ? (0.2 * T_pd) : T_min;
 	endfunction
 
 endpackage
