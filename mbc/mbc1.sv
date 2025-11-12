@@ -20,7 +20,7 @@ module mbc1(
 	logic [1:0] ram_bank;
 	logic       mode;
 
-	always_ff @(negedge nwr, negedge nrst) begin
+	always_ff @(posedge nwr, negedge nrst) begin
 		if (!nrst) begin
 			ena      <= 0;
 			rom_bank <= 0;

@@ -16,7 +16,7 @@ module mbc5(
 	logic [8:0] rom_bank;
 	logic [3:0] ram_bank;
 
-	always_ff @(negedge nwr, negedge nrst) begin
+	always_ff @(posedge nwr, negedge nrst) begin
 		if (!nrst) begin
 			ena      <= 0;
 			rom_bank <= 0;
