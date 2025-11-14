@@ -96,7 +96,7 @@ module dmg_cpu_b(
 	tri logic  [7:0]  md;
 	tri0 logic [12:0] nma;
 
-	logic [7:0] d_cap = $random, md_cap = $random;
+	logic [7:0] md_cap = $random;
 
 	logic [7:0]  d_a, d_in, d_d, md_a, md_in, md_out;
 	logic [15:0] a_a, a_c, a_d, dma_a;
@@ -413,9 +413,7 @@ module dmg_cpu_b(
 	assign cpu_irq7_trig = 0;
 
 	/* Icarus doesn't support trireg, so we do it like this: */
-	always @(d) d_cap = d;
 	always @(md) md_cap = md;
-	assign (weak1, weak0) d = d_cap;
 	assign (weak1, weak0) md = md_cap;
 
 	assign d_in  = ~d_pin;
