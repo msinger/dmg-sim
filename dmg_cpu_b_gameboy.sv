@@ -63,22 +63,8 @@ module dmg_cpu_b_gameboy;
 	logic cpu_in_r5;        /* CPU in  R5  - High when address is 0x00xx and boot ROM is still visible */
 	logic cpu_in_r6;        /* CPU in  R6  - High when T1=0 T2=1 */
 	logic cpu_out_r7;       /* CPU out R7  - External memory request; active-high */
-	logic cpu_irq0_ack;     /* CPU out R14 - IRQ0 acknowledge; active-high */
-	logic cpu_irq0_trig;    /* CPU in  R15 - IRQ0 trigger; active-high */
-	logic cpu_irq1_ack;     /* CPU out R16 - IRQ1 acknowledge; active-high */
-	logic cpu_irq1_trig;    /* CPU in  R17 - IRQ1 trigger; active-high */
-	logic cpu_irq2_ack;     /* CPU out R18 - IRQ2 acknowledge; active-high */
-	logic cpu_irq2_trig;    /* CPU in  R19 - IRQ2 trigger; active-high */
-	logic cpu_irq3_ack;     /* CPU out R20 - IRQ3 acknowledge; active-high */
-	logic cpu_irq3_trig;    /* CPU in  R21 - IRQ3 trigger; active-high */
-	logic cpu_irq4_ack;     /* CPU out R22 - IRQ4 acknowledge; active-high */
-	logic cpu_irq4_trig;    /* CPU in  R23 - IRQ4 trigger; active-high */
-	logic cpu_irq5_ack;     /* CPU out R24 - IRQ5 acknowledge; active-high */
-	logic cpu_irq5_trig;    /* CPU in  R25 - IRQ5 trigger; active-high */
-	logic cpu_irq6_ack;     /* CPU out R26 - IRQ6 acknowledge; active-high */
-	logic cpu_irq6_trig;    /* CPU in  R27 - IRQ6 trigger; active-high */
-	logic cpu_irq7_ack;     /* CPU out R28 - IRQ7 acknowledge; active-high */
-	logic cpu_irq7_trig;    /* CPU in  R29 - IRQ7 trigger; active-high */
+	logic [7:0] cpu_irq_ack;
+	logic [7:0] cpu_irq_trig;
 	tri logic [7:0]  d;     /* CPU I/O B1-B8  */
 	tri logic [15:0] cpu_a; /* CPU out B9-B24 */
 	logic cpu_wakeup;       /* CPU in  B25 - Wake from STOP mode; active-high */
@@ -106,7 +92,17 @@ module dmg_cpu_b_gameboy;
 	logic           reset;
 	logic           ncyc;
 
-	dmg_cpu_b dmg(.*, .t1('0), .t2('0), .vin(0.0), .unbonded_pad0('1), .unbonded_pad1());
+	dmg_cpu_b dmg(
+		.*, .t1('0), .t2('0), .vin(0.0), .unbonded_pad0('1), .unbonded_pad1(),
+		.cpu_irq0_trig(cpu_irq_trig[0]), .cpu_irq0_ack(cpu_irq_ack[0]),
+		.cpu_irq1_trig(cpu_irq_trig[1]), .cpu_irq1_ack(cpu_irq_ack[1]),
+		.cpu_irq2_trig(cpu_irq_trig[2]), .cpu_irq2_ack(cpu_irq_ack[2]),
+		.cpu_irq3_trig(cpu_irq_trig[3]), .cpu_irq3_ack(cpu_irq_ack[3]),
+		.cpu_irq4_trig(cpu_irq_trig[4]), .cpu_irq4_ack(cpu_irq_ack[4]),
+		.cpu_irq5_trig(cpu_irq_trig[5]), .cpu_irq5_ack(cpu_irq_ack[5]),
+		.cpu_irq6_trig(cpu_irq_trig[6]), .cpu_irq6_ack(cpu_irq_ack[6]),
+		.cpu_irq7_trig(cpu_irq_trig[7]), .cpu_irq7_ack(cpu_irq_ack[7])
+	);
 
 	task automatic xi_tick();
 		/* Simulate the 4 MiHz crystal that is attached to the XI and XO pins */
@@ -255,46 +251,10 @@ module dmg_cpu_b_gameboy;
 		.tutu(cpu_in_r5),
 		.umut(cpu_in_r6),
 		.mreq(cpu_out_r7),
-		.inta0(cpu_irq0_ack),
-		.int0(cpu_irq0_trig),
-		.inta1(cpu_irq1_ack),
-		.int1(cpu_irq1_trig),
-		.inta2(cpu_irq2_ack),
-		.int2(cpu_irq2_trig),
-		.inta3(cpu_irq3_ack),
-		.int3(cpu_irq3_trig),
-		.inta4(cpu_irq4_ack),
-		.int4(cpu_irq4_trig),
-		.inta5(cpu_irq5_ack),
-		.int5(cpu_irq5_trig),
-		.inta6(cpu_irq6_ack),
-		.int6(cpu_irq6_trig),
-		.inta7(cpu_irq7_ack),
-		.int7(cpu_irq7_trig),
-		.d0(d[0]),
-		.d1(d[1]),
-		.d2(d[2]),
-		.d3(d[3]),
-		.d4(d[4]),
-		.d5(d[5]),
-		.d6(d[6]),
-		.d7(d[7]),
-		.a0(cpu_a[0]),
-		.a1(cpu_a[1]),
-		.a2(cpu_a[2]),
-		.a3(cpu_a[3]),
-		.a4(cpu_a[4]),
-		.a5(cpu_a[5]),
-		.a6(cpu_a[6]),
-		.a7(cpu_a[7]),
-		.a8(cpu_a[8]),
-		.a9(cpu_a[9]),
-		.a10(cpu_a[10]),
-		.a11(cpu_a[11]),
-		.a12(cpu_a[12]),
-		.a13(cpu_a[13]),
-		.a14(cpu_a[14]),
-		.a15(cpu_a[15]),
+		.inta(cpu_irq_ack),
+		.\int (cpu_irq_trig),
+		.d(d),
+		.a(cpu_a),
 		.wake(cpu_wakeup)
 	);
 
