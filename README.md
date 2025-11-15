@@ -110,7 +110,7 @@ Results of Blargg's tests:
 | ------------- | ------ |
 | cpu\_instrs   | PASS   |
 | dmg\_sound    | FAIL   |
-| halt\_bug     | FAIL   |
+| halt\_bug     | PASS   |
 | instr\_timing | PASS   |
 | mem\_timing   | PASS   |
 | mem\_timing-2 | FAIL   |
