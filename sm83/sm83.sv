@@ -38,7 +38,6 @@ module sm83 #(
 		parameter real L_db5         = 3460.447,
 		parameter real L_db6         = 3577.412,
 		parameter real L_db7         = 3700.271,
-		parameter real L_dec1_y28_buf = 1319.713,
 		parameter real L_inta0       = 57.91037,
 		parameter real L_inta1       = 72.03969,
 		parameter real L_inta2       = 69.50525,
@@ -57,29 +56,28 @@ module sm83 #(
 		output tri logic [7:0] db,
 		input      logic [7:0] \int ,
 		output     logic [7:0] inta,
-		output     logic halt_n,
-		output     logic stop_n,
 		input      logic adr_clk_n,
-		input      logic adr_clk_p,
+		output     logic halt_n,
+		input      logic main_clk_n,
+		input      logic phi_clk_n,
+		output     logic stop_n,
+		input      logic t4_clk_n,
+		input      logic adr_clk,
 		input      logic async_reset,
 		input      logic buke,
 		output     logic m1,
 		output     logic wr,
 		output     logic prefix_cb,
-		output     logic dec1_y28_buf,
 		output     logic irq_head_d_y,
-		input      logic main_clk_n,
-		input      logic main_clk_p,
+		input      logic main_clk,
 		output     logic mreq,
 		input      logic nmi,
 		input      logic osc_stable,
-		input      logic phi_clk_n,
-		input      logic phi_clk_p,
+		input      logic phi_clk,
 		output     logic rd,
 		input      logic sync_reset,
 		input      logic syro,
-		input      logic t4_clk_n,
-		input      logic t4_clk_p,
+		input      logic t4_clk,
 		input      logic tutu,
 		input      logic umut,
 		input      logic unor,
@@ -414,6 +412,7 @@ module sm83 #(
 	logic     ctl_op_aux_alu_m0;
 	logic     ctl_op_bit;
 	logic     ctl_op_bit_b_hl_m1;
+	logic     ctl_op_bit_buf;
 	logic     ctl_op_call_cc_nn_m1;
 	logic     ctl_op_call_m0;
 	logic     ctl_op_call_m1;
@@ -882,9 +881,9 @@ module sm83 #(
 			.in31(reg_z[6]),
 			.in32(reg_z[4]),
 			.in33(reg_z[5]),
-			.in34(dec1_y28_buf),
-			.in35(adr_clk_p),
-			.in36(t4_clk_p),
+			.in34(ctl_op_bit_buf),
+			.in35(adr_clk),
+			.in36(t4_clk),
 			.in37(res_carry[7]),
 			.in38(dec3_y11),
 			.in39(dec1_y99_buf),
@@ -938,7 +937,7 @@ module sm83 #(
 			.L_q(517.2026)
 		) alu_dff_inst (
 			.d(reg_z[7]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk_n(phi_clk_n),
 			.q(alu_dff)
@@ -948,7 +947,7 @@ module sm83 #(
 			.L_in(103.5926),
 			.L_y(336.5017)
 		) alu_not1_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(op1dec_n[0]),
 			.y(op1dec[0])
 		);
@@ -957,7 +956,7 @@ module sm83 #(
 			.L_in(142.9388),
 			.L_y(1063.551)
 		) alu_not10_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(carry_in_n),
 			.y(carry_in)
 		);
@@ -980,7 +979,7 @@ module sm83 #(
 			.L_in(131.3439),
 			.L_y(363.9996)
 		) alu_not2_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(op1dec_n[1]),
 			.y(op1dec[1])
 		);
@@ -989,7 +988,7 @@ module sm83 #(
 			.L_in(109.0415),
 			.L_y(302.0342)
 		) alu_not3_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(op1dec_n[2]),
 			.y(op1dec[2])
 		);
@@ -998,7 +997,7 @@ module sm83 #(
 			.L_in(120.3195),
 			.L_y(319.268)
 		) alu_not4_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(op1dec_n[3]),
 			.y(op1dec[3])
 		);
@@ -1007,7 +1006,7 @@ module sm83 #(
 			.L_in(108.2812),
 			.L_y(368.3715)
 		) alu_not5_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(op1dec_n[4]),
 			.y(op1dec[4])
 		);
@@ -1016,7 +1015,7 @@ module sm83 #(
 			.L_in(108.3445),
 			.L_y(318.4442)
 		) alu_not6_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(op1dec_n[5]),
 			.y(op1dec[5])
 		);
@@ -1025,7 +1024,7 @@ module sm83 #(
 			.L_in(98.96736),
 			.L_y(370.2721)
 		) alu_not7_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(op1dec_n[6]),
 			.y(op1dec[6])
 		);
@@ -1034,7 +1033,7 @@ module sm83 #(
 			.L_in(145.0929),
 			.L_y(392.3214)
 		) alu_not8_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(op1dec_n[7]),
 			.y(op1dec[7])
 		);
@@ -1062,7 +1061,7 @@ module sm83 #(
 			.ao221_in2(dec3_y20),
 			.ao221_in3(dec3_y5),
 			.ao221_in5_n(shift[0]),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.tap_xor(alu_pggen_tap_xor[0]),
 			.tap_nand(alu_pggen_tap_nand[0]),
 			.tap_and(gen[0]),
@@ -1084,7 +1083,7 @@ module sm83 #(
 			.ao221_in2(dec3_y20),
 			.ao221_in3(dec3_y5),
 			.ao221_in5_n(shift[1]),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.tap_xor(alu_pggen_tap_xor[1]),
 			.tap_nand(alu_pggen_tap_nand[1]),
 			.tap_and(gen[1]),
@@ -1106,7 +1105,7 @@ module sm83 #(
 			.ao221_in2(dec3_y20),
 			.ao221_in3(dec3_y5),
 			.ao221_in5_n(shift[2]),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.tap_xor(alu_pggen_tap_xor[2]),
 			.tap_nand(alu_pggen_tap_nand[2]),
 			.tap_and(gen[2]),
@@ -1128,7 +1127,7 @@ module sm83 #(
 			.ao221_in2(dec3_y20),
 			.ao221_in3(dec3_y5),
 			.ao221_in5_n(shift[3]),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.tap_xor(alu_pggen_tap_xor[3]),
 			.tap_nand(alu_pggen_tap_nand[3]),
 			.tap_and(gen[3]),
@@ -1150,7 +1149,7 @@ module sm83 #(
 			.ao221_in2(dec3_y20),
 			.ao221_in3(dec3_y5),
 			.ao221_in5_n(shift[4]),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.tap_xor(alu_pggen_tap_xor[4]),
 			.tap_nand(alu_pggen_tap_nand[4]),
 			.tap_and(gen[4]),
@@ -1172,7 +1171,7 @@ module sm83 #(
 			.ao221_in2(dec3_y20),
 			.ao221_in3(dec3_y5),
 			.ao221_in5_n(shift[5]),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.tap_xor(alu_pggen_tap_xor[5]),
 			.tap_nand(alu_pggen_tap_nand[5]),
 			.tap_and(gen[5]),
@@ -1194,7 +1193,7 @@ module sm83 #(
 			.ao221_in2(dec3_y20),
 			.ao221_in3(dec3_y5),
 			.ao221_in5_n(shift[6]),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.tap_xor(alu_pggen_tap_xor[6]),
 			.tap_nand(alu_pggen_tap_nand[6]),
 			.tap_and(gen[6]),
@@ -1216,7 +1215,7 @@ module sm83 #(
 			.ao221_in2(dec3_y20),
 			.ao221_in3(dec3_y5),
 			.ao221_in5_n(shift[7]),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.tap_xor(alu_pggen_tap_xor[7]),
 			.tap_nand(alu_pggen_tap_nand[7]),
 			.tap_and(gen[7]),
@@ -1322,7 +1321,7 @@ module sm83 #(
 			.L_y6(100.9315),
 			.L_y7(143.3189)
 		) alu_shifter_inst (
-			.ena(adr_clk_p),
+			.ena(adr_clk),
 			.l(dec3_y1),
 			.r(dec3_y2),
 			.rl(dec3_y7),
@@ -1371,7 +1370,7 @@ module sm83 #(
 			.a(db[0]),
 			.b(d[0]),
 			.oe_n(unor),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.inj_d(res[0]),
 			.inj_en(dec3_y38)
 		);
@@ -1383,7 +1382,7 @@ module sm83 #(
 			.a(db[1]),
 			.b(d[1]),
 			.oe_n(unor),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.inj_d(res[1]),
 			.inj_en(dec3_y38)
 		);
@@ -1395,7 +1394,7 @@ module sm83 #(
 			.a(db[2]),
 			.b(d[2]),
 			.oe_n(unor),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.inj_d(res[2]),
 			.inj_en(dec3_y38)
 		);
@@ -1407,7 +1406,7 @@ module sm83 #(
 			.a(db[3]),
 			.b(d[3]),
 			.oe_n(unor),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.inj_d(res[3]),
 			.inj_en(dec3_y38)
 		);
@@ -1419,7 +1418,7 @@ module sm83 #(
 			.a(db[4]),
 			.b(d[4]),
 			.oe_n(unor),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.inj_d(res[4]),
 			.inj_en(dec3_y38)
 		);
@@ -1431,7 +1430,7 @@ module sm83 #(
 			.a(db[5]),
 			.b(d[5]),
 			.oe_n(unor),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.inj_d(res[5]),
 			.inj_en(dec3_y38)
 		);
@@ -1443,7 +1442,7 @@ module sm83 #(
 			.a(db[6]),
 			.b(d[6]),
 			.oe_n(unor),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.inj_d(res[6]),
 			.inj_en(dec3_y38)
 		);
@@ -1455,7 +1454,7 @@ module sm83 #(
 			.a(db[7]),
 			.b(d[7]),
 			.oe_n(unor),
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.inj_d(res[7]),
 			.inj_en(dec3_y38)
 		);
@@ -1586,7 +1585,7 @@ module sm83 #(
 			.L_b_in(24.01319),
 			.L_b_y(139.6459)
 		) dec1_not1_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ldx_nn_a_m2_n),
 			.a_y(ctl_op_ldx_nn_a_m2),
 			.b_in(ctl_op_ldx_a_nn_m2_n),
@@ -1599,7 +1598,7 @@ module sm83 #(
 			.L_b_in(24.39338),
 			.L_b_y(118.9889)
 		) dec1_not10_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_jr_m1_n),
 			.a_y(ctl_op_jr_m1),
 			.b_in(ctl_op_m7_n),
@@ -1612,7 +1611,7 @@ module sm83 #(
 			.L_b_in(24.4567),
 			.L_b_y(73.81369)
 		) dec1_not11_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_jr_m0_n),
 			.a_y(ctl_op_jr_m0),
 			.b_in(ctl_op_add_sp_e_m2_n),
@@ -1625,7 +1624,7 @@ module sm83 #(
 			.L_b_in(24.64675),
 			.L_b_y(119.3057)
 		) dec1_not12_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_res_b_r_m0_n),
 			.a_y(ctl_op_res_b_r_m0),
 			.b_in(ctl_op_ldhl_sp_e_m2_n),
@@ -1638,7 +1637,7 @@ module sm83 #(
 			.L_b_in(23.82309),
 			.L_b_y(371.0325)
 		) dec1_not13_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_res_b_hl_m1_n),
 			.a_y(ctl_op_res_b_hl_m1),
 			.b_in(ctl_op_rxxa_n),
@@ -1651,7 +1650,7 @@ module sm83 #(
 			.L_b_in(24.13991),
 			.L_b_y(281.3156)
 		) dec1_not14_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_bit_n),
 			.a_y(ctl_op_bit),
 			.b_in(ctl_op_ld_a_xxx_m1_n),
@@ -1664,7 +1663,7 @@ module sm83 #(
 			.L_b_in(24.20326),
 			.L_b_y(117.3415)
 		) dec1_not15_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_xxx_a_m0_n),
 			.a_y(ctl_op_ld_xxx_a_m0),
 			.b_in(ctl_op_ld_a_xxx_m0_n),
@@ -1677,7 +1676,7 @@ module sm83 #(
 			.L_b_in(24.45675),
 			.L_b_y(110.7522)
 		) dec1_not16_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_n_a_m0_n),
 			.a_y(ctl_op_ld_n_a_m0),
 			.b_in(ctl_op_ld_c_a_m0_n),
@@ -1690,7 +1689,7 @@ module sm83 #(
 			.L_b_in(23.82312),
 			.L_b_y(115.3141)
 		) dec1_not17_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_n_a_m1_n),
 			.a_y(ctl_op_ld_n_a_m1),
 			.b_in(ctl_op_ld_r_hl_m0_n),
@@ -1703,7 +1702,7 @@ module sm83 #(
 			.L_b_in(24.01316),
 			.L_b_y(409.7453)
 		) dec1_not18_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_add_hl_ss_m0_n),
 			.a_y(ctl_op_add_hl_ss_m0),
 			.b_in(ctl_op_aux_alu_m0_n),
@@ -1716,7 +1715,7 @@ module sm83 #(
 			.L_b_in(24.07649),
 			.L_b_y(118.482)
 		) dec1_not19_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_dec_ss_m0_n),
 			.a_y(ctl_op_dec_ss_m0),
 			.b_in(ctl_op_inc_ss_m0_n),
@@ -1729,7 +1728,7 @@ module sm83 #(
 			.L_b_in(26.16745),
 			.L_b_y(60.19141)
 		) dec1_not2_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_alu_n),
 			.a_y(ctl_op_alu),
 			.b_in(ctl_op_ldx_a_nn_m3_n),
@@ -1742,7 +1741,7 @@ module sm83 #(
 			.L_b_in(24.07658),
 			.L_b_y(783.8822)
 		) dec1_not20_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_push_qq_m0_n),
 			.a_y(ctl_op_push_qq_m0),
 			.b_in(ctl_op_push_qq_m1_n),
@@ -1755,7 +1754,7 @@ module sm83 #(
 			.L_b_in(24.4567),
 			.L_b_y(584.1736)
 		) dec1_not21_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_r_r_m0_n),
 			.a_y(ctl_op_ld_r_r_m0),
 			.b_in(ctl_op_ld_or_halt_n),
@@ -1768,7 +1767,7 @@ module sm83 #(
 			.L_b_in(23.75979),
 			.L_b_y(1275.108)
 		) dec1_not22_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_jp_m0_n),
 			.a_y(ctl_op_jp_m0),
 			.b_in(ctl_op_cb_shift_n),
@@ -1781,7 +1780,7 @@ module sm83 #(
 			.L_b_in(23.82312),
 			.L_b_y(108.9781)
 		) dec1_not23_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_jp_m1_n),
 			.a_y(ctl_op_jp_m1),
 			.b_in(ctl_op_jp_m2_n),
@@ -1794,7 +1793,7 @@ module sm83 #(
 			.L_b_in(24.71022),
 			.L_b_y(156.3076)
 		) dec1_not24_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_hl_n_m1_n),
 			.a_y(ctl_op_ld_hl_n_m1),
 			.b_in(ctl_op_add_hl_ss_m1_n),
@@ -1807,7 +1806,7 @@ module sm83 #(
 			.L_b_in(24.07658),
 			.L_b_y(659.9194)
 		) dec1_not25_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(dec1_y49_n),
 			.a_y(dec1_y49),
 			.b_in(dec1_y50_n),
@@ -1820,7 +1819,7 @@ module sm83 #(
 			.L_b_in(24.39333),
 			.L_b_y(153.9634)
 		) dec1_not26_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_pop_qq_m0_n),
 			.a_y(ctl_op_pop_qq_m0),
 			.b_in(ctl_op_push_qq_m2_n),
@@ -1833,7 +1832,7 @@ module sm83 #(
 			.L_b_in(23.56972),
 			.L_b_y(101.5651)
 		) dec1_not27_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_pop_qq_m1_n),
 			.a_y(ctl_op_pop_qq_m1),
 			.b_in(ctl_op_add_sp_e_m1_n),
@@ -1846,7 +1845,7 @@ module sm83 #(
 			.L_b_in(24.33),
 			.L_b_y(101.4383)
 		) dec1_not28_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_set_b_r_m0_n),
 			.a_y(ctl_op_set_b_r_m0),
 			.b_in(ctl_op_ldhl_sp_e_m1_n),
@@ -1859,7 +1858,7 @@ module sm83 #(
 			.L_b_in(24.45677),
 			.L_b_y(107.3308)
 		) dec1_not29_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_set_b_hl_m1_n),
 			.a_y(ctl_op_set_b_hl_m1),
 			.b_in(ctl_op_res_or_set_b_hl_m0_n),
@@ -1872,7 +1871,7 @@ module sm83 #(
 			.L_b_in(24.5201),
 			.L_b_y(77.36177)
 		) dec1_not3_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_jp_cc_nn_m1_n),
 			.a_y(ctl_op_jp_cc_nn_m1),
 			.b_in(ctl_op_call_cc_nn_m1_n),
@@ -1885,7 +1884,7 @@ module sm83 #(
 			.L_b_in(24.77357),
 			.L_b_y(1735.794)
 		) dec1_not30_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_a_n_m1_n),
 			.a_y(ctl_op_ld_a_n_m1),
 			.b_in(ctl_op_pop_qq_m2_n),
@@ -1898,7 +1897,7 @@ module sm83 #(
 			.L_b_in(23.63305),
 			.L_b_y(122.2203)
 		) dec1_not31_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_nn_sp_m2_n),
 			.a_y(ctl_op_ld_nn_sp_m2),
 			.b_in(ctl_op_ld_nn_sp_m0_n),
@@ -1911,7 +1910,7 @@ module sm83 #(
 			.L_b_in(24.7101),
 			.L_b_y(572.7054)
 		) dec1_not32_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_add_sp_e_m0_n),
 			.a_y(ctl_op_add_sp_e_m0),
 			.b_in(ctl_op_ld_sp_hl_m0_n),
@@ -1924,7 +1923,7 @@ module sm83 #(
 			.L_b_in(23.94979),
 			.L_b_y(119.1156)
 		) dec1_not33_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_add_sp_e_m3_n),
 			.a_y(ctl_op_add_sp_e_m3),
 			.b_in(ctl_op_ldhl_sp_e_m0_n),
@@ -1937,7 +1936,7 @@ module sm83 #(
 			.L_b_in(23.6964),
 			.L_b_y(2022.321)
 		) dec1_not34_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_nn_sp_m1_n),
 			.a_y(ctl_op_ld_nn_sp_m1),
 			.b_in(ctl_op_ld_nn_sp_m3_n),
@@ -1950,7 +1949,7 @@ module sm83 #(
 			.L_b_in(23.94984),
 			.L_b_y(113.2866)
 		) dec1_not35_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_hl_r_m0_n),
 			.a_y(ctl_op_ld_hl_r_m0),
 			.b_in(ctl_op_inc_or_dec_hl_m0_n),
@@ -1963,7 +1962,7 @@ module sm83 #(
 			.L_b_in(24.39335),
 			.L_b_y(113.7935)
 		) dec1_not36_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_a_c_m0_n),
 			.a_y(ctl_op_ld_a_c_m0),
 			.b_in(ctl_op_inc_or_dec_hl_m1_n),
@@ -1976,7 +1975,7 @@ module sm83 #(
 			.L_b_in(23.75979),
 			.L_b_y(127.6691)
 		) dec1_not37_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_a_n_m0_n),
 			.a_y(ctl_op_ld_a_n_m0),
 			.b_in(ctl_op_rst_t_m1_n),
@@ -1989,7 +1988,7 @@ module sm83 #(
 			.L_b_in(24.52012),
 			.L_b_y(125.5149)
 		) dec1_not38_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_int_entry_m5_n),
 			.a_y(ctl_int_entry_m5),
 			.b_in(ctl_op_rst_t_m0_n),
@@ -2002,7 +2001,7 @@ module sm83 #(
 			.L_b_in(23.69642),
 			.L_b_y(125.4516)
 		) dec1_not39_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_int_entry_m4_n),
 			.a_y(ctl_int_entry_m4),
 			.b_in(ctl_int_entry_m0_n),
@@ -2015,7 +2014,7 @@ module sm83 #(
 			.L_b_in(24.3934),
 			.L_b_y(75.71906)
 		) dec1_not4_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_jr_cc_e_m0_n),
 			.a_y(ctl_op_jr_cc_e_m0),
 			.b_in(ctl_op_ret_cc_m0_n),
@@ -2028,7 +2027,7 @@ module sm83 #(
 			.L_b_in(24.64677),
 			.L_b_y(115.2507)
 		) dec1_not40_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ret_or_reti_m0_n),
 			.a_y(ctl_op_ret_or_reti_m0),
 			.b_in(ctl_op_alu_a_r_n),
@@ -2041,7 +2040,7 @@ module sm83 #(
 			.L_b_in(24.2033),
 			.L_b_y(617.0791)
 		) dec1_not41_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ret_cc_m1_n),
 			.a_y(ctl_op_ret_cc_m1),
 			.b_in(ctl_op_jp_hl_n),
@@ -2054,7 +2053,7 @@ module sm83 #(
 			.L_b_in(24.64684),
 			.L_b_y(119.4325)
 		) dec1_not42_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_retx_m3_n),
 			.a_y(ctl_op_retx_m3),
 			.b_in(ctl_op_retx_m2_n),
@@ -2067,7 +2066,7 @@ module sm83 #(
 			.L_b_in(23.94979),
 			.L_b_y(125.8951)
 		) dec1_not43_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_hli_m0_n),
 			.a_y(ctl_op_ld_hli_m0),
 			.b_in(ctl_op_ld_hld_m0_n),
@@ -2080,7 +2079,7 @@ module sm83 #(
 			.L_b_in(23.94991),
 			.L_b_y(115.7575)
 		) dec1_not44_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_dd_nn_m1_n),
 			.a_y(ctl_op_ld_dd_nn_m1),
 			.b_in(ctl_op_ld_dd_nn_m0_n),
@@ -2093,7 +2092,7 @@ module sm83 #(
 			.L_b_in(23.94981),
 			.L_b_y(119.8126)
 		) dec1_not45_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_dd_nn_m2_n),
 			.a_y(ctl_op_ld_dd_nn_m2),
 			.b_in(ctl_op_inc_or_dec_r_n),
@@ -2106,7 +2105,7 @@ module sm83 #(
 			.L_b_in(24.26665),
 			.L_b_y(112.2095)
 		) dec1_not46_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(dec1_y92_n),
 			.a_y(dec1_y92),
 			.b_in(ctl_op_alu_a_hl_m0_n),
@@ -2119,7 +2118,7 @@ module sm83 #(
 			.L_b_in(23.633),
 			.L_b_y(2068.43)
 		) dec1_not47_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_rst_t_m2_n),
 			.a_y(ctl_op_rst_t_m2),
 			.b_in(ctl_int_entry_m6_n),
@@ -2132,7 +2131,7 @@ module sm83 #(
 			.L_b_in(24.01319),
 			.L_b_y(118.4187)
 		) dec1_not48_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_cb_hl_m0_n),
 			.a_y(ctl_op_cb_hl_m0),
 			.b_in(ctl_op_cb_r_n),
@@ -2145,7 +2144,7 @@ module sm83 #(
 			.L_b_in(24.20335),
 			.L_b_y(112.4629)
 		) dec1_not49_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_bit_b_hl_m1_n),
 			.a_y(ctl_op_bit_b_hl_m1),
 			.b_in(ctl_op_cb_shift_or_res_m1_n),
@@ -2158,7 +2157,7 @@ module sm83 #(
 			.L_b_in(24.07656),
 			.L_b_y(118.6721)
 		) dec1_not5_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_a_ffxx_n),
 			.a_y(ctl_op_ld_a_ffxx),
 			.b_in(ctl_op_call_m0_n),
@@ -2171,7 +2170,7 @@ module sm83 #(
 			.L_b_in(24.83691),
 			.L_b_y(160.5532)
 		) dec1_not50_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_a_c_or_ldx_a_nn_n),
 			.a_y(ctl_op_ld_a_c_or_ldx_a_nn),
 			.b_in(ctl_op_inc_or_dec_m_n),
@@ -2184,7 +2183,7 @@ module sm83 #(
 			.L_b_in(24.01316),
 			.L_b_y(582.8429)
 		) dec1_not51_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_halt_n),
 			.a_y(ctl_op_halt),
 			.b_in(ctl_op_nop_or_stop_n),
@@ -2197,7 +2196,7 @@ module sm83 #(
 			.L_b_in(25.15368),
 			.L_b_y(L_prefix_cb)
 		) dec1_not52_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_jr_m2_n),
 			.a_y(ctl_op_jr_m2),
 			.b_in(ctl_op_cb_prefix_n),
@@ -2210,7 +2209,7 @@ module sm83 #(
 			.L_b_in(23.94986),
 			.L_b_y(117.6584)
 		) dec1_not53_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ldx_m0_n),
 			.a_y(ctl_op_ldx_m0),
 			.b_in(ctl_op_ldx_m1_n),
@@ -2221,7 +2220,7 @@ module sm83 #(
 			.L_in(24.77352),
 			.L_y(120.8264)
 		) dec1_not54_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec1_y107_n),
 			.y(dec1_y107)
 		);
@@ -2267,7 +2266,7 @@ module sm83 #(
 			.L_b_in(24.83689),
 			.L_b_y(118.2286)
 		) dec1_not6_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_call_m2_n),
 			.a_y(ctl_op_call_m2),
 			.b_in(ctl_op_call_m1_n),
@@ -2350,7 +2349,7 @@ module sm83 #(
 			.L_b_in(23.82316),
 			.L_b_y(122.7271)
 		) dec1_not7_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_call_m3_n),
 			.a_y(ctl_op_call_m3),
 			.b_in(ctl_op_call_m4_n),
@@ -2384,7 +2383,7 @@ module sm83 #(
 			.L_b_in(24.71017),
 			.L_b_y(910.1583)
 		) dec1_not8_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_x_n_m0_n),
 			.a_y(ctl_op_ld_x_n_m0),
 			.b_in(ctl_op_ld_x_n_n),
@@ -2397,7 +2396,7 @@ module sm83 #(
 			.L_b_in(24.26668),
 			.L_b_y(118.482)
 		) dec1_not9_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_in(ctl_op_ld_r_n_m2_n),
 			.a_y(ctl_op_ld_r_n_m2),
 			.b_in(ctl_op_m6_n),
@@ -2426,10 +2425,10 @@ module sm83 #(
 		);
 
 	sm83_buf_dec2 #(
-			.L_y(L_dec1_y28_buf)
+			.L_y(1319.713)
 		) dec2_buf4_inst (
 			.in(ctl_op_bit),
-			.y(dec1_y28_buf)
+			.y(ctl_op_bit_buf)
 		);
 
 	sm83_buf_dec2 #(
@@ -2555,7 +2554,7 @@ module sm83 #(
 			.L_in(117.9752),
 			.L_y(628.6649)
 		) dec2_not21_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec2_y20_n),
 			.y(dec2_y20)
 		);
@@ -2682,28 +2681,28 @@ module sm83 #(
 	sm83_pch_dec2_a #(
 			.L_y(128.7463)
 		) dec2_pch1_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.y(dec2_y6_n)
 		);
 
 	sm83_pch_dec2_c #(
 			.L_y(87.11906)
 		) dec2_pch2_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.y(dec2_y10_n)
 		);
 
 	sm83_pch_dec2_c #(
 			.L_y(73.30678)
 		) dec2_pch3_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.y(dec2_y11_n)
 		);
 
 	sm83_pch_dec2_b #(
 			.L_y(135.9692)
 		) dec2_pch4_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.y(dec2_y17_n)
 		);
 
@@ -2711,7 +2710,7 @@ module sm83 #(
 			.L_in1(72.16634),
 			.L_y(1356.144)
 		) dec3_nor1_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in1(dec3_y56_n),
 			.in2(t4_clk_n),
 			.y(dec3_nor1)
@@ -2721,7 +2720,7 @@ module sm83 #(
 			.L_in1(183.4254),
 			.L_y(1387.824)
 		) dec3_nor2_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in1(dec3_y58_n),
 			.in2(dec3_not68),
 			.y(dec3_nor2)
@@ -2731,7 +2730,7 @@ module sm83 #(
 			.L_in(68.93494),
 			.L_y(1022.494)
 		) dec3_not1_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y1_n),
 			.y(dec3_y1)
 		);
@@ -2740,7 +2739,7 @@ module sm83 #(
 			.L_in(61.20518),
 			.L_y(568.7138)
 		) dec3_not10_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y10_n),
 			.y(dec3_y10)
 		);
@@ -2749,7 +2748,7 @@ module sm83 #(
 			.L_in(137.2998),
 			.L_y(836.1541)
 		) dec3_not11_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y11_n),
 			.y(dec3_y11)
 		);
@@ -2758,7 +2757,7 @@ module sm83 #(
 			.L_in(119.4324),
 			.L_y(641.3873)
 		) dec3_not12_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y12_n),
 			.y(dec3_y12)
 		);
@@ -2767,7 +2766,7 @@ module sm83 #(
 			.L_in(114.8705),
 			.L_y(739.8479)
 		) dec3_not13_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y13_n),
 			.y(dec3_y13)
 		);
@@ -2776,7 +2775,7 @@ module sm83 #(
 			.L_in(198.9485),
 			.L_y(529.8747)
 		) dec3_not14_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y14_n),
 			.y(dec3_y14)
 		);
@@ -2785,7 +2784,7 @@ module sm83 #(
 			.L_in(177.6597),
 			.L_y(818.6035)
 		) dec3_not15_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y15_n),
 			.y(dec3_y15)
 		);
@@ -2803,7 +2802,7 @@ module sm83 #(
 			.L_in(68.74487),
 			.L_y(1024.712)
 		) dec3_not17_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y17_n),
 			.y(dec3_y17)
 		);
@@ -2812,7 +2811,7 @@ module sm83 #(
 			.L_in(53.72878),
 			.L_y(352.591)
 		) dec3_not18_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y18_n),
 			.y(dec3_y18)
 		);
@@ -2821,7 +2820,7 @@ module sm83 #(
 			.L_in(65.64032),
 			.L_y(1313.319)
 		) dec3_not19_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y19_n),
 			.y(dec3_y19)
 		);
@@ -2830,7 +2829,7 @@ module sm83 #(
 			.L_in(50.81425),
 			.L_y(1098.715)
 		) dec3_not2_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y2_n),
 			.y(dec3_y2)
 		);
@@ -2839,7 +2838,7 @@ module sm83 #(
 			.L_in(171.007),
 			.L_y(1668.44)
 		) dec3_not20_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y20_n),
 			.y(dec3_y20)
 		);
@@ -2848,7 +2847,7 @@ module sm83 #(
 			.L_in(143.8892),
 			.L_y(346.0118)
 		) dec3_not21_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y21_n),
 			.y(dec3_y21)
 		);
@@ -2857,7 +2856,7 @@ module sm83 #(
 			.L_in(52.39824),
 			.L_y(791.6124)
 		) dec3_not22_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y22_n),
 			.y(dec3_y22)
 		);
@@ -2866,7 +2865,7 @@ module sm83 #(
 			.L_in(53.15852),
 			.L_y(1072.675)
 		) dec3_not23_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y23_n),
 			.y(dec3_y23)
 		);
@@ -2875,7 +2874,7 @@ module sm83 #(
 			.L_in(63.35942),
 			.L_y(507.1284)
 		) dec3_not24_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y24_n),
 			.y(dec3_y24)
 		);
@@ -2884,7 +2883,7 @@ module sm83 #(
 			.L_in(75.01752),
 			.L_y(572.8328)
 		) dec3_not25_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y25_n),
 			.y(dec3_y25)
 		);
@@ -2893,7 +2892,7 @@ module sm83 #(
 			.L_in(186.53),
 			.L_y(1360.96)
 		) dec3_not26_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y26_n),
 			.y(dec3_y26)
 		);
@@ -2902,7 +2901,7 @@ module sm83 #(
 			.L_in(61.71207),
 			.L_y(991.5748)
 		) dec3_not27_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y27_n),
 			.y(dec3_y27)
 		);
@@ -2911,7 +2910,7 @@ module sm83 #(
 			.L_in(61.58532),
 			.L_y(488.3742)
 		) dec3_not28_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y28_n),
 			.y(dec3_y28)
 		);
@@ -2929,7 +2928,7 @@ module sm83 #(
 			.L_in(74.63734),
 			.L_y(203.7004)
 		) dec3_not3_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y3_n),
 			.y(dec3_y3)
 		);
@@ -2947,7 +2946,7 @@ module sm83 #(
 			.L_in(90.54046),
 			.L_y(515.8725)
 		) dec3_not31_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y31_n),
 			.y(dec3_y31)
 		);
@@ -2956,7 +2955,7 @@ module sm83 #(
 			.L_in(89.90703),
 			.L_y(511.4374)
 		) dec3_not32_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y32_n),
 			.y(dec3_y32)
 		);
@@ -2965,7 +2964,7 @@ module sm83 #(
 			.L_in(88.06954),
 			.L_y(358.6774)
 		) dec3_not33_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y33_n),
 			.y(dec3_y33)
 		);
@@ -2974,7 +2973,7 @@ module sm83 #(
 			.L_in(53.03177),
 			.L_y(919.2179)
 		) dec3_not34_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y34_n),
 			.y(dec3_y34)
 		);
@@ -2983,7 +2982,7 @@ module sm83 #(
 			.L_in(190.9019),
 			.L_y(480.8344)
 		) dec3_not35_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y35_n),
 			.y(dec3_y35)
 		);
@@ -2992,7 +2991,7 @@ module sm83 #(
 			.L_in(184.4392),
 			.L_y(1651.907)
 		) dec3_not36_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y36_n),
 			.y(dec3_y36)
 		);
@@ -3001,7 +3000,7 @@ module sm83 #(
 			.L_in(112.9697),
 			.L_y(389.0099)
 		) dec3_not37_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y37_n),
 			.y(dec3_y37)
 		);
@@ -3028,7 +3027,7 @@ module sm83 #(
 			.L_in(127.7959),
 			.L_y(1194.895)
 		) dec3_not4_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y4_n),
 			.y(dec3_y4)
 		);
@@ -3055,7 +3054,7 @@ module sm83 #(
 			.L_in(78.37552),
 			.L_y(1076.646)
 		) dec3_not42_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y42_n),
 			.y(dec3_y42)
 		);
@@ -3064,7 +3063,7 @@ module sm83 #(
 			.L_in(137.1959),
 			.L_y(1684.031)
 		) dec3_not43_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y43_n),
 			.y(dec3_y43)
 		);
@@ -3073,7 +3072,7 @@ module sm83 #(
 			.L_in(184.4938),
 			.L_y(1636.573)
 		) dec3_not44_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y44_n),
 			.y(dec3_y44)
 		);
@@ -3082,7 +3081,7 @@ module sm83 #(
 			.L_in(178.42),
 			.L_y(1716.154)
 		) dec3_not45_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y45_n),
 			.y(dec3_y45)
 		);
@@ -3091,7 +3090,7 @@ module sm83 #(
 			.L_in(89.7169),
 			.L_y(1570.806)
 		) dec3_not46_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y46_n),
 			.y(dec3_y46)
 		);
@@ -3100,7 +3099,7 @@ module sm83 #(
 			.L_in(186.0237),
 			.L_y(1573.404)
 		) dec3_not47_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y47_n),
 			.y(dec3_y47)
 		);
@@ -3109,7 +3108,7 @@ module sm83 #(
 			.L_in(182.1582),
 			.L_y(1599.255)
 		) dec3_not48_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y48_n),
 			.y(dec3_y48)
 		);
@@ -3127,7 +3126,7 @@ module sm83 #(
 			.L_in(207.7554),
 			.L_y(1009.76)
 		) dec3_not5_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y5_n),
 			.y(dec3_y5)
 		);
@@ -3163,7 +3162,7 @@ module sm83 #(
 			.L_in(81.86031),
 			.L_y(1531.65)
 		) dec3_not53_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y53_n),
 			.y(dec3_y53)
 		);
@@ -3172,7 +3171,7 @@ module sm83 #(
 			.L_in(181.2712),
 			.L_y(1539.126)
 		) dec3_not54_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y54_n),
 			.y(dec3_y54)
 		);
@@ -3181,7 +3180,7 @@ module sm83 #(
 			.L_in(194.1331),
 			.L_y(1562.76)
 		) dec3_not55_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y55_n),
 			.y(dec3_y55)
 		);
@@ -3199,7 +3198,7 @@ module sm83 #(
 			.L_in(179.4971),
 			.L_y(1530.184)
 		) dec3_not57_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y59_n),
 			.y(dec3_y59)
 		);
@@ -3208,7 +3207,7 @@ module sm83 #(
 			.L_in(123.8042),
 			.L_y(1390.549)
 		) dec3_not58_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(ctl_reg_w_we_n),
 			.y(ctl_reg_w_we)
 		);
@@ -3217,7 +3216,7 @@ module sm83 #(
 			.L_in(116.898),
 			.L_y(1565.547)
 		) dec3_not59_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(ctl_reg_z_we_n),
 			.y(ctl_reg_z_we)
 		);
@@ -3226,7 +3225,7 @@ module sm83 #(
 			.L_in(60.50823),
 			.L_y(873.5993)
 		) dec3_not6_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y6_n),
 			.y(dec3_y6)
 		);
@@ -3235,7 +3234,7 @@ module sm83 #(
 			.L_in(56.83332),
 			.L_y(2053.921)
 		) dec3_not60_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(ctl_reg_sp_we_n),
 			.y(ctl_reg_sp_we)
 		);
@@ -3244,7 +3243,7 @@ module sm83 #(
 			.L_in(100.9948),
 			.L_y(1333.462)
 		) dec3_not61_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y63_n),
 			.y(dec3_y63)
 		);
@@ -3253,7 +3252,7 @@ module sm83 #(
 			.L_in(96.62305),
 			.L_y(1364.381)
 		) dec3_not62_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y64_n),
 			.y(dec3_y64)
 		);
@@ -3262,7 +3261,7 @@ module sm83 #(
 			.L_in(48.27992),
 			.L_y(476.2726)
 		) dec3_not63_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y65_n),
 			.y(dec3_y65)
 		);
@@ -3271,7 +3270,7 @@ module sm83 #(
 			.L_in(110.182),
 			.L_y(1342.015)
 		) dec3_not64_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y66_n),
 			.y(dec3_y66)
 		);
@@ -3280,7 +3279,7 @@ module sm83 #(
 			.L_in(81.73366),
 			.L_y(490.4019)
 		) dec3_not65_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y67_n),
 			.y(dec3_y67)
 		);
@@ -3289,7 +3288,7 @@ module sm83 #(
 			.L_in(86.48551),
 			.L_y(1248.307)
 		) dec3_not66_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y68_n),
 			.y(dec3_y68)
 		);
@@ -3298,7 +3297,7 @@ module sm83 #(
 			.L_in(69.25186),
 			.L_y(2074.956)
 		) dec3_not67_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(ctl_reg_pc_we_n),
 			.y(ctl_reg_pc_we)
 		);
@@ -3321,7 +3320,7 @@ module sm83 #(
 			.L_in(51.13102),
 			.L_y(885.004)
 		) dec3_not7_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y7_n),
 			.y(dec3_y7)
 		);
@@ -3365,7 +3364,7 @@ module sm83 #(
 			.L_in(61.33183),
 			.L_y(556.2954)
 		) dec3_not8_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y8_n),
 			.y(dec3_y8)
 		);
@@ -3374,7 +3373,7 @@ module sm83 #(
 			.L_in(51.57453),
 			.L_y(563.5817)
 		) dec3_not9_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in(dec3_y9_n),
 			.y(dec3_y9)
 		);
@@ -3514,7 +3513,7 @@ module sm83 #(
 			.in24(table_cb_buf_n),
 			.in25(in_intr),
 			.in26(in_intr_buf_n),
-			.in27(adr_clk_p),
+			.in27(adr_clk),
 			.y1(ctl_op_ldx_nn_a_m2_n),
 			.y2(ctl_op_ldx_a_nn_m2_n),
 			.y3(ctl_op_ldx_a_nn_m3_n),
@@ -3656,7 +3655,7 @@ module sm83 #(
 			.L_y29(712.4767),
 			.L_y30(798.8004)
 		) decoder2_inst (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.in1(dec2_y20),
 			.in2(ctl_op_jr_m2),
 			.in3(ctl_op_jr_m1),
@@ -3903,7 +3902,7 @@ module sm83 #(
 			.in44(ctl_op_rxxa),
 			.in45(ctl_op_aux_alu_m0),
 			.in46(dec2_y11),
-			.in47(dec1_y28_buf),
+			.in47(ctl_op_bit_buf),
 			.in48(ctl_op_ld_or_halt),
 			.in49(ctl_op_push_qq_m1),
 			.in50(dec2_y13),
@@ -3930,7 +3929,7 @@ module sm83 #(
 			.in71(dec2_y30),
 			.in72(xdqf),
 			.in73(vequ_tap_in1),
-			.in74(adr_clk_p),
+			.in74(adr_clk),
 			.in75(opcode[5]),
 			.in76(opcode_n_buf2[5]),
 			.in77(opcode[4]),
@@ -3941,7 +3940,7 @@ module sm83 #(
 			.in82(opcode[1]),
 			.in83(opcode[0]),
 			.in84(opcode_n_buf2[0]),
-			.in85(adr_clk_p),
+			.in85(adr_clk),
 			.in86(dec1_y104_buf),
 			.in87(ctl_int_entry_m6),
 			.in88(opcode_n_buf2[2]),
@@ -4025,7 +4024,7 @@ module sm83 #(
 		) flag_c_inst (
 			.d(new_flag_c_n),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk_n(ctl_flags_c_we),
 			.q(flag_c_n),
@@ -4039,7 +4038,7 @@ module sm83 #(
 		) flag_h_inst (
 			.d(new_flag_h_n),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk_n(ctl_flags_znh_we),
 			.q(flag_h_n),
@@ -4053,7 +4052,7 @@ module sm83 #(
 		) flag_n_inst (
 			.d(new_flag_n_n),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk_n(ctl_flags_znh_we),
 			.q(flag_n_n),
@@ -4067,7 +4066,7 @@ module sm83 #(
 		) flag_z_inst (
 			.d(new_flag_z_n),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk_n(ctl_flags_znh_we),
 			.q(flag_z_n),
@@ -4685,11 +4684,11 @@ module sm83 #(
 			.L_gated_q_n(111.069)
 		) irq_latch_inst0 (
 			.d(irq_nand2_nand3[0]),
-			.ena(phi_clk_p),
+			.ena(phi_clk),
 			.ena_n(phi_clk_n),
 			.q(irq_latch[0]),
 			.q_n(irq_latch_n[0]),
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.ena_q_n(irq_prio_nand_b_y[0]),
 			.gated_q_n(irq_latch_gated_q_n[0])
 		);
@@ -4700,11 +4699,11 @@ module sm83 #(
 			.L_gated_q_n(110.942)
 		) irq_latch_inst1 (
 			.d(irq_nand2_nand3[1]),
-			.ena(phi_clk_p),
+			.ena(phi_clk),
 			.ena_n(phi_clk_n),
 			.q(irq_latch[1]),
 			.q_n(irq_latch_n[1]),
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.ena_q_n(irq_prio_nand_b_y[1]),
 			.gated_q_n(irq_latch_gated_q_n[1])
 		);
@@ -4715,11 +4714,11 @@ module sm83 #(
 			.L_gated_q_n(111.7659)
 		) irq_latch_inst2 (
 			.d(irq_nand2_nand3[2]),
-			.ena(phi_clk_p),
+			.ena(phi_clk),
 			.ena_n(phi_clk_n),
 			.q(irq_latch[2]),
 			.q_n(irq_latch_n[2]),
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.ena_q_n(irq_prio_nand_b_y[2]),
 			.gated_q_n(irq_latch_gated_q_n[2])
 		);
@@ -4730,11 +4729,11 @@ module sm83 #(
 			.L_gated_q_n(111.2591)
 		) irq_latch_inst3 (
 			.d(irq_nand2_nand3[3]),
-			.ena(phi_clk_p),
+			.ena(phi_clk),
 			.ena_n(phi_clk_n),
 			.q(irq_latch[3]),
 			.q_n(irq_latch_n[3]),
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.ena_q_n(irq_prio_nand_b_y[3]),
 			.gated_q_n(irq_latch_gated_q_n[3])
 		);
@@ -4745,11 +4744,11 @@ module sm83 #(
 			.L_gated_q_n(111.1957)
 		) irq_latch_inst4 (
 			.d(irq_nand2_nand3[4]),
-			.ena(phi_clk_p),
+			.ena(phi_clk),
 			.ena_n(phi_clk_n),
 			.q(irq_latch[4]),
 			.q_n(irq_latch_n[4]),
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.ena_q_n(irq_prio_nand_b_y[4]),
 			.gated_q_n(irq_latch_gated_q_n[4])
 		);
@@ -4760,11 +4759,11 @@ module sm83 #(
 			.L_gated_q_n(112.1461)
 		) irq_latch_inst5 (
 			.d(irq_nand2_nand3[5]),
-			.ena(phi_clk_p),
+			.ena(phi_clk),
 			.ena_n(phi_clk_n),
 			.q(irq_latch[5]),
 			.q_n(irq_latch_n[5]),
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.ena_q_n(irq_prio_nand_b_y[5]),
 			.gated_q_n(irq_latch_gated_q_n[5])
 		);
@@ -4775,11 +4774,11 @@ module sm83 #(
 			.L_gated_q_n(117.8484)
 		) irq_latch_inst6 (
 			.d(irq_nand2_nand3[6]),
-			.ena(phi_clk_p),
+			.ena(phi_clk),
 			.ena_n(phi_clk_n),
 			.q(irq_latch[6]),
 			.q_n(irq_latch_n[6]),
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.ena_q_n(irq_prio_nand_b_y[6]),
 			.gated_q_n(irq_latch_gated_q_n[6])
 		);
@@ -4789,11 +4788,11 @@ module sm83 #(
 			.L_gated_q_n(114.7438)
 		) irq_latch_inst7 (
 			.d(irq_nand2_nand3[7]),
-			.ena(phi_clk_p),
+			.ena(phi_clk),
 			.ena_n(phi_clk_n),
 			.q(),
 			.q_n(irq_latch_n[7]),
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.ena_q_n(irq_prio_nand_b_y[7]),
 			.gated_q_n(irq_latch_gated_q_n[7])
 		);
@@ -4913,7 +4912,7 @@ module sm83 #(
 			.L_dist_nor_y_n(764.9379),
 			.L_dist_nor_y_p(764.9379)
 		) irq_prio_inst0 (
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.and_in1(ctl_int_entry_m6),
 			.and_y(inta[0]),
 			.and_in2_nand_a_in2(irq_latch_gated_q_n[0]),
@@ -4947,7 +4946,7 @@ module sm83 #(
 			.L_dist_nor_y_n(764.9379),
 			.L_dist_nor_y_p(70.70909)
 		) irq_prio_inst1 (
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.and_in1(ctl_int_entry_m6),
 			.and_y(inta[1]),
 			.and_in2_nand_a_in2(irq_latch_gated_q_n[1]),
@@ -4982,7 +4981,7 @@ module sm83 #(
 			.L_dist_nor_y_n(764.9379),
 			.L_dist_nor_y_p(70.58234)
 		) irq_prio_inst2 (
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.and_in1(ctl_int_entry_m6),
 			.and_y(inta[2]),
 			.and_in2_nand_a_in2(irq_latch_gated_q_n[2]),
@@ -5020,7 +5019,7 @@ module sm83 #(
 			.L_dist_nor_y_n(764.9379),
 			.L_dist_nor_y_p(70.83584)
 		) irq_prio_inst3 (
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.and_in1(ctl_int_entry_m6),
 			.and_y(inta[3]),
 			.and_in2_nand_a_in2(irq_latch_gated_q_n[3]),
@@ -5061,7 +5060,7 @@ module sm83 #(
 			.L_dist_nor_y_n(764.9379),
 			.L_dist_nor_y_p(72.99004)
 		) irq_prio_inst4 (
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.and_in1(ctl_int_entry_m6),
 			.and_y(inta[4]),
 			.and_in2_nand_a_in2(irq_latch_gated_q_n[4]),
@@ -5103,7 +5102,7 @@ module sm83 #(
 			.L_dist_nor_y_n(764.9379),
 			.L_dist_nor_y_p(72.79996)
 		) irq_prio_inst5 (
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.and_in1(ctl_int_entry_m6),
 			.and_y(inta[5]),
 			.and_in2_nand_a_in2(irq_latch_gated_q_n[5]),
@@ -5146,7 +5145,7 @@ module sm83 #(
 			.L_dist_nor_y_n(764.9379),
 			.L_dist_nor_y_p(73.43349)
 		) irq_prio_inst6 (
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.and_in1(ctl_int_entry_m6),
 			.and_a_y(inta[6]),
 			.and_b_y(int_vector6),
@@ -5191,7 +5190,7 @@ module sm83 #(
 			.L_dist_nor_y_n(764.9379),
 			.L_dist_nor_y_p(73.49692)
 		) irq_prio_inst7 (
-			.pch_n(t4_clk_p),
+			.pch_n(t4_clk),
 			.and_in1(ctl_int_entry_m6),
 			.and_a_y(inta[7]),
 			.and_b_y(int_vector7),
@@ -5224,7 +5223,7 @@ module sm83 #(
 			.L_q(184.6292)
 		) reg_a_inst0 (
 			.d(new_reg_hi[0]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_a_we_buf_n),
 			.clk_n(ctl_reg_a_we),
@@ -5235,7 +5234,7 @@ module sm83 #(
 			.L_q(539.1253)
 		) reg_a_inst1 (
 			.d(new_reg_hi[1]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_a_we_buf_n),
 			.clk_n(ctl_reg_a_we),
@@ -5246,7 +5245,7 @@ module sm83 #(
 			.L_q(460.8139)
 		) reg_a_inst2 (
 			.d(new_reg_hi[2]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_a_we_buf_n),
 			.clk_n(ctl_reg_a_we),
@@ -5257,7 +5256,7 @@ module sm83 #(
 			.L_q(387.5061)
 		) reg_a_inst3 (
 			.d(new_reg_hi[3]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_a_we_buf_n),
 			.clk_n(ctl_reg_a_we),
@@ -5268,7 +5267,7 @@ module sm83 #(
 			.L_q(538.6149)
 		) reg_a_inst4 (
 			.d(new_reg_hi[4]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_a_we_buf_n),
 			.clk_n(ctl_reg_a_we),
@@ -5279,7 +5278,7 @@ module sm83 #(
 			.L_q(201.2294)
 		) reg_a_inst5 (
 			.d(new_reg_hi[5]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_a_we_buf_n),
 			.clk_n(ctl_reg_a_we),
@@ -5290,7 +5289,7 @@ module sm83 #(
 			.L_q(390.6741)
 		) reg_a_inst6 (
 			.d(new_reg_hi[6]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_a_we_buf_n),
 			.clk_n(ctl_reg_a_we),
@@ -5301,7 +5300,7 @@ module sm83 #(
 			.L_q(486.4894)
 		) reg_a_inst7 (
 			.d(new_reg_hi[7]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_a_we_buf_n),
 			.clk_n(ctl_reg_a_we),
@@ -5428,7 +5427,7 @@ module sm83 #(
 			.L_q(79.45262)
 		) reg_b_inst0 (
 			.d(new_reg_hi[0]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_b_we_buf_n),
 			.clk_n(ctl_reg_b_we),
@@ -5439,7 +5438,7 @@ module sm83 #(
 			.L_q(81.03665)
 		) reg_b_inst1 (
 			.d(new_reg_hi[1]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_b_we_buf_n),
 			.clk_n(ctl_reg_b_we),
@@ -5450,7 +5449,7 @@ module sm83 #(
 			.L_q(80.27632)
 		) reg_b_inst2 (
 			.d(new_reg_hi[2]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_b_we_buf_n),
 			.clk_n(ctl_reg_b_we),
@@ -5461,7 +5460,7 @@ module sm83 #(
 			.L_q(79.38934)
 		) reg_b_inst3 (
 			.d(new_reg_hi[3]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_b_we_buf_n),
 			.clk_n(ctl_reg_b_we),
@@ -5472,7 +5471,7 @@ module sm83 #(
 			.L_q(80.02293)
 		) reg_b_inst4 (
 			.d(new_reg_hi[4]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_b_we_buf_n),
 			.clk_n(ctl_reg_b_we),
@@ -5483,7 +5482,7 @@ module sm83 #(
 			.L_q(79.76939)
 		) reg_b_inst5 (
 			.d(new_reg_hi[5]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_b_we_buf_n),
 			.clk_n(ctl_reg_b_we),
@@ -5494,7 +5493,7 @@ module sm83 #(
 			.L_q(79.26254)
 		) reg_b_inst6 (
 			.d(new_reg_hi[6]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_b_we_buf_n),
 			.clk_n(ctl_reg_b_we),
@@ -5505,7 +5504,7 @@ module sm83 #(
 			.L_q(80.46649)
 		) reg_b_inst7 (
 			.d(new_reg_hi[7]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_b_we_buf_n),
 			.clk_n(ctl_reg_b_we),
@@ -5646,7 +5645,7 @@ module sm83 #(
 			.L_c_y(1133.182),
 			.L_c_y_n(1218.077)
 		) reg_bus_pch_a_inst0 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(db[0]),
 			.b_y(op1bus_n[0]),
 			.b_y_n(op1val[0]),
@@ -5662,7 +5661,7 @@ module sm83 #(
 			.L_c_y(1134.133),
 			.L_c_y_n(1207.127)
 		) reg_bus_pch_a_inst1 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(db[1]),
 			.b_y(op1bus_n[1]),
 			.b_y_n(op1val[1]),
@@ -5678,7 +5677,7 @@ module sm83 #(
 			.L_c_y(1134.64),
 			.L_c_y_n(1314.233)
 		) reg_bus_pch_a_inst2 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(db[2]),
 			.b_y(op1bus_n[2]),
 			.b_y_n(op1val[2]),
@@ -5694,7 +5693,7 @@ module sm83 #(
 			.L_c_y(1133.879),
 			.L_c_y_n(1438.06)
 		) reg_bus_pch_a_inst3 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(db[3]),
 			.b_y(op1bus_n[3]),
 			.b_y_n(op1val[3]),
@@ -5710,7 +5709,7 @@ module sm83 #(
 			.L_c_y(1133.373),
 			.L_c_y_n(1383.86)
 		) reg_bus_pch_a_inst4 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(db[4]),
 			.b_y(op1bus_n[4]),
 			.b_y_n(op1val[4]),
@@ -5728,7 +5727,7 @@ module sm83 #(
 			.L_c_y(1131.472),
 			.L_c_y_n(1500.013)
 		) reg_bus_pch_a_inst5 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(db[5]),
 			.b_y(op1bus_n[5]),
 			.b_y_n(op1val[5]),
@@ -5746,7 +5745,7 @@ module sm83 #(
 			.L_c_y(1134.83),
 			.L_c_y_n(1694.116)
 		) reg_bus_pch_a_inst6 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(db[6]),
 			.b_y(op1bus_n[6]),
 			.b_y_n(op1val[6]),
@@ -5764,7 +5763,7 @@ module sm83 #(
 			.L_c_y(1134.64),
 			.L_c_y_n(1698.424)
 		) reg_bus_pch_a_inst7 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(db[7]),
 			.b_y(op1bus_n[7]),
 			.b_y_n(op1val[7]),
@@ -5779,7 +5778,7 @@ module sm83 #(
 			.L_a_y(1104.417),
 			.L_b_y(991.511)
 		) reg_bus_pch_b_inst0 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(idu_in_n[0]),
 			.b_y(idu_in_n[8])
 		);
@@ -5788,7 +5787,7 @@ module sm83 #(
 			.L_a_y(1102.96),
 			.L_b_y(992.5247)
 		) reg_bus_pch_b_inst1 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(idu_in_n[1]),
 			.b_y(idu_in_n[9])
 		);
@@ -5797,7 +5796,7 @@ module sm83 #(
 			.L_a_y(1102.453),
 			.L_b_y(993.0314)
 		) reg_bus_pch_b_inst2 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(idu_in_n[2]),
 			.b_y(idu_in_n[10])
 		);
@@ -5806,7 +5805,7 @@ module sm83 #(
 			.L_a_y(1102.643),
 			.L_b_y(991.3843)
 		) reg_bus_pch_b_inst3 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(idu_in_n[3]),
 			.b_y(idu_in_n[11])
 		);
@@ -5815,7 +5814,7 @@ module sm83 #(
 			.L_a_y(1100.489),
 			.L_b_y(991.3843)
 		) reg_bus_pch_b_inst4 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(idu_in_n[4]),
 			.b_y(idu_in_n[12])
 		);
@@ -5824,7 +5823,7 @@ module sm83 #(
 			.L_a_y(1100.806),
 			.L_b_y(990.9408)
 		) reg_bus_pch_b_inst5 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(idu_in_n[5]),
 			.b_y(idu_in_n[13])
 		);
@@ -5833,7 +5832,7 @@ module sm83 #(
 			.L_a_y(1102.39),
 			.L_b_y(1005.577)
 		) reg_bus_pch_b_inst6 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(idu_in_n[6]),
 			.b_y(idu_in_n[14])
 		);
@@ -5842,7 +5841,7 @@ module sm83 #(
 			.L_a_y(1100.489),
 			.L_b_y(992.0176)
 		) reg_bus_pch_b_inst7 (
-			.pch_n(adr_clk_p),
+			.pch_n(adr_clk),
 			.a_y(idu_in_n[7]),
 			.b_y(idu_in_n[15])
 		);
@@ -5851,7 +5850,7 @@ module sm83 #(
 			.L_q(56.07314)
 		) reg_c_inst0 (
 			.d(new_reg_lo[0]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_c_we_buf_n),
 			.clk_n(ctl_reg_c_we),
@@ -5862,7 +5861,7 @@ module sm83 #(
 			.L_q(55.31286)
 		) reg_c_inst1 (
 			.d(new_reg_lo[1]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_c_we_buf_n),
 			.clk_n(ctl_reg_c_we),
@@ -5873,7 +5872,7 @@ module sm83 #(
 			.L_q(56.13641)
 		) reg_c_inst2 (
 			.d(new_reg_lo[2]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_c_we_buf_n),
 			.clk_n(ctl_reg_c_we),
@@ -5884,7 +5883,7 @@ module sm83 #(
 			.L_q(55.56615)
 		) reg_c_inst3 (
 			.d(new_reg_lo[3]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_c_we_buf_n),
 			.clk_n(ctl_reg_c_we),
@@ -5895,7 +5894,7 @@ module sm83 #(
 			.L_q(55.50278)
 		) reg_c_inst4 (
 			.d(new_reg_lo[4]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_c_we_buf_n),
 			.clk_n(ctl_reg_c_we),
@@ -5906,7 +5905,7 @@ module sm83 #(
 			.L_q(54.80587)
 		) reg_c_inst5 (
 			.d(new_reg_lo[5]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_c_we_buf_n),
 			.clk_n(ctl_reg_c_we),
@@ -5917,7 +5916,7 @@ module sm83 #(
 			.L_q(54.7425)
 		) reg_c_inst6 (
 			.d(new_reg_lo[6]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_c_we_buf_n),
 			.clk_n(ctl_reg_c_we),
@@ -5928,7 +5927,7 @@ module sm83 #(
 			.L_q(55.62962)
 		) reg_c_inst7 (
 			.d(new_reg_lo[7]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_c_we_buf_n),
 			.clk_n(ctl_reg_c_we),
@@ -5946,7 +5945,7 @@ module sm83 #(
 			.L_q(66.46407)
 		) reg_d_inst0 (
 			.d(new_reg_hi[0]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_d_we_buf_n),
 			.clk_n(ctl_reg_d_we),
@@ -5957,7 +5956,7 @@ module sm83 #(
 			.L_q(67.2243)
 		) reg_d_inst1 (
 			.d(new_reg_hi[1]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_d_we_buf_n),
 			.clk_n(ctl_reg_d_we),
@@ -5968,7 +5967,7 @@ module sm83 #(
 			.L_q(66.84406)
 		) reg_d_inst2 (
 			.d(new_reg_hi[2]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_d_we_buf_n),
 			.clk_n(ctl_reg_d_we),
@@ -5979,7 +5978,7 @@ module sm83 #(
 			.L_q(66.78088)
 		) reg_d_inst3 (
 			.d(new_reg_hi[3]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_d_we_buf_n),
 			.clk_n(ctl_reg_d_we),
@@ -5990,7 +5989,7 @@ module sm83 #(
 			.L_q(67.41447)
 		) reg_d_inst4 (
 			.d(new_reg_hi[4]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_d_we_buf_n),
 			.clk_n(ctl_reg_d_we),
@@ -6001,7 +6000,7 @@ module sm83 #(
 			.L_q(67.09766)
 		) reg_d_inst5 (
 			.d(new_reg_hi[5]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_d_we_buf_n),
 			.clk_n(ctl_reg_d_we),
@@ -6012,7 +6011,7 @@ module sm83 #(
 			.L_q(67.54112)
 		) reg_d_inst6 (
 			.d(new_reg_hi[6]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_d_we_buf_n),
 			.clk_n(ctl_reg_d_we),
@@ -6023,7 +6022,7 @@ module sm83 #(
 			.L_q(67.22421)
 		) reg_d_inst7 (
 			.d(new_reg_hi[7]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_d_we_buf_n),
 			.clk_n(ctl_reg_d_we),
@@ -6177,7 +6176,7 @@ module sm83 #(
 			.L_q(76.41145)
 		) reg_e_inst0 (
 			.d(new_reg_lo[0]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_e_we_buf_n),
 			.clk_n(ctl_reg_e_we),
@@ -6188,7 +6187,7 @@ module sm83 #(
 			.L_q(77.8054)
 		) reg_e_inst1 (
 			.d(new_reg_lo[1]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_e_we_buf_n),
 			.clk_n(ctl_reg_e_we),
@@ -6199,7 +6198,7 @@ module sm83 #(
 			.L_q(77.04498)
 		) reg_e_inst2 (
 			.d(new_reg_lo[2]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_e_we_buf_n),
 			.clk_n(ctl_reg_e_we),
@@ -6210,7 +6209,7 @@ module sm83 #(
 			.L_q(77.48849)
 		) reg_e_inst3 (
 			.d(new_reg_lo[3]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_e_we_buf_n),
 			.clk_n(ctl_reg_e_we),
@@ -6221,7 +6220,7 @@ module sm83 #(
 			.L_q(77.42517)
 		) reg_e_inst4 (
 			.d(new_reg_lo[4]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_e_we_buf_n),
 			.clk_n(ctl_reg_e_we),
@@ -6232,7 +6231,7 @@ module sm83 #(
 			.L_q(77.55182)
 		) reg_e_inst5 (
 			.d(new_reg_lo[5]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_e_we_buf_n),
 			.clk_n(ctl_reg_e_we),
@@ -6243,7 +6242,7 @@ module sm83 #(
 			.L_q(76.34798)
 		) reg_e_inst6 (
 			.d(new_reg_lo[6]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_e_we_buf_n),
 			.clk_n(ctl_reg_e_we),
@@ -6254,7 +6253,7 @@ module sm83 #(
 			.L_q(75.65112)
 		) reg_e_inst7 (
 			.d(new_reg_lo[7]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_e_we_buf_n),
 			.clk_n(ctl_reg_e_we),
@@ -6272,7 +6271,7 @@ module sm83 #(
 			.L_q(88.00626)
 		) reg_h_inst0 (
 			.d(new_reg_hi[0]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_h_we_buf_n),
 			.clk_n(ctl_reg_h_we),
@@ -6283,7 +6282,7 @@ module sm83 #(
 			.L_q(87.56268)
 		) reg_h_inst1 (
 			.d(new_reg_hi[1]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_h_we_buf_n),
 			.clk_n(ctl_reg_h_we),
@@ -6294,7 +6293,7 @@ module sm83 #(
 			.L_q(88.06957)
 		) reg_h_inst2 (
 			.d(new_reg_hi[2]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_h_we_buf_n),
 			.clk_n(ctl_reg_h_we),
@@ -6305,7 +6304,7 @@ module sm83 #(
 			.L_q(88.13294)
 		) reg_h_inst3 (
 			.d(new_reg_hi[3]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_h_we_buf_n),
 			.clk_n(ctl_reg_h_we),
@@ -6316,7 +6315,7 @@ module sm83 #(
 			.L_q(88.32302)
 		) reg_h_inst4 (
 			.d(new_reg_hi[4]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_h_we_buf_n),
 			.clk_n(ctl_reg_h_we),
@@ -6327,7 +6326,7 @@ module sm83 #(
 			.L_q(88.57643)
 		) reg_h_inst5 (
 			.d(new_reg_hi[5]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_h_we_buf_n),
 			.clk_n(ctl_reg_h_we),
@@ -6338,7 +6337,7 @@ module sm83 #(
 			.L_q(87.87952)
 		) reg_h_inst6 (
 			.d(new_reg_hi[6]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_h_we_buf_n),
 			.clk_n(ctl_reg_h_we),
@@ -6349,7 +6348,7 @@ module sm83 #(
 			.L_q(87.43596)
 		) reg_h_inst7 (
 			.d(new_reg_hi[7]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_h_we_buf_n),
 			.clk_n(ctl_reg_h_we),
@@ -6521,7 +6520,7 @@ module sm83 #(
 		) reg_ie_inst0 (
 			.d(db[0]),
 			.r(sync_reset),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ie_we_n),
 			.clk_n(ie_we),
@@ -6535,7 +6534,7 @@ module sm83 #(
 		) reg_ie_inst1 (
 			.d(db[1]),
 			.r(sync_reset),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ie_we_n),
 			.clk_n(ie_we),
@@ -6549,7 +6548,7 @@ module sm83 #(
 		) reg_ie_inst2 (
 			.d(db[2]),
 			.r(sync_reset),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ie_we_n),
 			.clk_n(ie_we),
@@ -6563,7 +6562,7 @@ module sm83 #(
 		) reg_ie_inst3 (
 			.d(db[3]),
 			.r(sync_reset),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ie_we_n),
 			.clk_n(ie_we),
@@ -6577,7 +6576,7 @@ module sm83 #(
 		) reg_ie_inst4 (
 			.d(db[4]),
 			.r(sync_reset),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ie_we_n),
 			.clk_n(ie_we),
@@ -6591,7 +6590,7 @@ module sm83 #(
 		) reg_ie_inst5 (
 			.d(db[5]),
 			.r(sync_reset),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ie_we_n),
 			.clk_n(ie_we),
@@ -6605,7 +6604,7 @@ module sm83 #(
 		) reg_ie_inst6 (
 			.d(db[6]),
 			.r(sync_reset),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ie_we_n),
 			.clk_n(ie_we),
@@ -6619,7 +6618,7 @@ module sm83 #(
 		) reg_ie_inst7 (
 			.d(db[7]),
 			.r(sync_reset),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ie_we_n),
 			.clk_n(ie_we),
@@ -6638,7 +6637,7 @@ module sm83 #(
 			.L_q(2979.35)
 		) reg_ir_inst0 (
 			.d(db[0]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_fetch_buf_n),
 			.clk_n(ctl_fetch),
@@ -6649,7 +6648,7 @@ module sm83 #(
 			.L_q(3077.304)
 		) reg_ir_inst1 (
 			.d(db[1]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_fetch_buf_n),
 			.clk_n(ctl_fetch),
@@ -6660,7 +6659,7 @@ module sm83 #(
 			.L_q(3186.978)
 		) reg_ir_inst2 (
 			.d(db[2]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_fetch_buf_n),
 			.clk_n(ctl_fetch),
@@ -6671,7 +6670,7 @@ module sm83 #(
 			.L_q(5311.949)
 		) reg_ir_inst3 (
 			.d(db[3]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_fetch_buf_n),
 			.clk_n(ctl_fetch),
@@ -6682,7 +6681,7 @@ module sm83 #(
 			.L_q(6853.198)
 		) reg_ir_inst4 (
 			.d(db[4]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_fetch_buf_n),
 			.clk_n(ctl_fetch),
@@ -6693,7 +6692,7 @@ module sm83 #(
 			.L_q(6244.999)
 		) reg_ir_inst5 (
 			.d(db[5]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_fetch_buf_n),
 			.clk_n(ctl_fetch),
@@ -6704,7 +6703,7 @@ module sm83 #(
 			.L_q(2623.017)
 		) reg_ir_inst6 (
 			.d(db[6]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_fetch_buf_n),
 			.clk_n(ctl_fetch),
@@ -6715,7 +6714,7 @@ module sm83 #(
 			.L_q(3435.917)
 		) reg_ir_inst7 (
 			.d(db[7]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_fetch_buf_n),
 			.clk_n(ctl_fetch),
@@ -6733,7 +6732,7 @@ module sm83 #(
 			.L_q(53.8555)
 		) reg_l_inst0 (
 			.d(new_reg_lo[0]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_l_we_buf_n),
 			.clk_n(ctl_reg_l_we),
@@ -6744,7 +6743,7 @@ module sm83 #(
 			.L_q(54.42571)
 		) reg_l_inst1 (
 			.d(new_reg_lo[1]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_l_we_buf_n),
 			.clk_n(ctl_reg_l_we),
@@ -6755,7 +6754,7 @@ module sm83 #(
 			.L_q(54.17229)
 		) reg_l_inst2 (
 			.d(new_reg_lo[2]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_l_we_buf_n),
 			.clk_n(ctl_reg_l_we),
@@ -6766,7 +6765,7 @@ module sm83 #(
 			.L_q(53.7287)
 		) reg_l_inst3 (
 			.d(new_reg_lo[3]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_l_we_buf_n),
 			.clk_n(ctl_reg_l_we),
@@ -6777,7 +6776,7 @@ module sm83 #(
 			.L_q(54.36231)
 		) reg_l_inst4 (
 			.d(new_reg_lo[4]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_l_we_buf_n),
 			.clk_n(ctl_reg_l_we),
@@ -6788,7 +6787,7 @@ module sm83 #(
 			.L_q(53.91887)
 		) reg_l_inst5 (
 			.d(new_reg_lo[5]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_l_we_buf_n),
 			.clk_n(ctl_reg_l_we),
@@ -6799,7 +6798,7 @@ module sm83 #(
 			.L_q(54.23564)
 		) reg_l_inst6 (
 			.d(new_reg_lo[6]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_l_we_buf_n),
 			.clk_n(ctl_reg_l_we),
@@ -6810,7 +6809,7 @@ module sm83 #(
 			.L_q(54.10892)
 		) reg_l_inst7 (
 			.d(new_reg_lo[7]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_l_we_buf_n),
 			.clk_n(ctl_reg_l_we),
@@ -6927,7 +6926,7 @@ module sm83 #(
 			.in7(dec1_y20_buf),
 			.in8(reg_pcl[0]),
 			.in9(dec3_y34),
-			.in10(t4_clk_p),
+			.in10(t4_clk),
 			.in11(dec2_y29),
 			.in12(reg_z[0]),
 			.in13(dec3_y68),
@@ -6960,7 +6959,7 @@ module sm83 #(
 			.in7(dec1_y20_buf),
 			.in8(reg_pcl[1]),
 			.in9(dec3_y34),
-			.in10(t4_clk_p),
+			.in10(t4_clk),
 			.in11(dec2_y29),
 			.in12(reg_z[1]),
 			.in13(dec3_y68),
@@ -6993,7 +6992,7 @@ module sm83 #(
 			.in7(dec1_y20_buf),
 			.in8(reg_pcl[2]),
 			.in9(dec3_y34),
-			.in10(t4_clk_p),
+			.in10(t4_clk),
 			.in11(dec2_y29),
 			.in12(reg_z[2]),
 			.in13(dec3_y68),
@@ -7026,7 +7025,7 @@ module sm83 #(
 			.in7(dec1_y20_buf),
 			.in8(reg_pcl[3]),
 			.in9(dec3_y34),
-			.in10(t4_clk_p),
+			.in10(t4_clk),
 			.in11(dec2_y29),
 			.in12(reg_z[3]),
 			.in13(dec3_y68),
@@ -7062,7 +7061,7 @@ module sm83 #(
 			.in7(dec1_y20_buf),
 			.in8(reg_pcl[4]),
 			.in9(dec3_y34),
-			.in10(t4_clk_p),
+			.in10(t4_clk),
 			.in11(dec2_y29),
 			.in12(reg_z[4]),
 			.in13(dec3_y68),
@@ -7098,7 +7097,7 @@ module sm83 #(
 			.in7(dec1_y20_buf),
 			.in8(reg_pcl[5]),
 			.in9(dec3_y34),
-			.in10(t4_clk_p),
+			.in10(t4_clk),
 			.in11(dec2_y29),
 			.in12(reg_z[5]),
 			.in13(dec3_y68),
@@ -7134,7 +7133,7 @@ module sm83 #(
 			.in7(dec1_y20_buf),
 			.in8(reg_pcl[6]),
 			.in9(dec3_y34),
-			.in10(t4_clk_p),
+			.in10(t4_clk),
 			.in11(dec2_y29),
 			.in12(reg_z[6]),
 			.in13(dec3_y68),
@@ -7168,7 +7167,7 @@ module sm83 #(
 			.in7(dec1_y20_buf),
 			.in8(reg_pcl[7]),
 			.in9(dec3_y34),
-			.in10(t4_clk_p),
+			.in10(t4_clk),
 			.in11(dec2_y29),
 			.in12(reg_z[7]),
 			.in13(dec3_y68),
@@ -7193,7 +7192,7 @@ module sm83 #(
 			.d(new_reg_pch_n[0]),
 			.pch_n(buke),
 			.s_n(pch_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_hi_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7209,7 +7208,7 @@ module sm83 #(
 			.d(new_reg_pch_n[1]),
 			.pch_n(buke),
 			.s_n(pch_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_hi_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7225,7 +7224,7 @@ module sm83 #(
 			.d(new_reg_pch_n[2]),
 			.pch_n(buke),
 			.s_n(pch_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_hi_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7241,7 +7240,7 @@ module sm83 #(
 			.d(new_reg_pch_n[3]),
 			.pch_n(buke),
 			.s_n(pch_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_hi_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7257,7 +7256,7 @@ module sm83 #(
 			.d(new_reg_pch_n[4]),
 			.pch_n(buke),
 			.s_n(pch_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_hi_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7273,7 +7272,7 @@ module sm83 #(
 			.d(new_reg_pch_n[5]),
 			.pch_n(buke),
 			.s_n(pch_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_hi_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7289,7 +7288,7 @@ module sm83 #(
 			.d(new_reg_pch_n[6]),
 			.pch_n(buke),
 			.s_n(pch_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_hi_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7305,7 +7304,7 @@ module sm83 #(
 			.d(new_reg_pch_n[7]),
 			.pch_n(buke),
 			.s_n(pch_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_hi_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7331,7 +7330,7 @@ module sm83 #(
 			.d(new_reg_pcl_n[0]),
 			.pch_n(buke),
 			.s_n(pcl_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_lo_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7347,7 +7346,7 @@ module sm83 #(
 			.d(new_reg_pcl_n[1]),
 			.pch_n(buke),
 			.s_n(pcl_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_lo_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7363,7 +7362,7 @@ module sm83 #(
 			.d(new_reg_pcl_n[2]),
 			.pch_n(buke),
 			.s_n(pcl_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_lo_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7379,7 +7378,7 @@ module sm83 #(
 			.d(new_reg_pcl_n[3]),
 			.pch_n(buke),
 			.s_n(pcl_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_lo_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7395,7 +7394,7 @@ module sm83 #(
 			.d(new_reg_pcl_n[4]),
 			.pch_n(buke),
 			.s_n(pcl_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_lo_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7411,7 +7410,7 @@ module sm83 #(
 			.d(new_reg_pcl_n[5]),
 			.pch_n(buke),
 			.s_n(pcl_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_lo_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7427,7 +7426,7 @@ module sm83 #(
 			.d(new_reg_pcl_n[6]),
 			.pch_n(buke),
 			.s_n(pcl_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_lo_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7443,7 +7442,7 @@ module sm83 #(
 			.d(new_reg_pcl_n[7]),
 			.pch_n(buke),
 			.s_n(pcl_reset_n),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_pc_we_buf_lo_n),
 			.clk_n(ctl_reg_pc_we),
@@ -7483,7 +7482,7 @@ module sm83 #(
 			.in11(opcode[5]),
 			.in12(dec1_y47_buf),
 			.in13(dec3_y66),
-			.in14(t4_clk_p),
+			.in14(t4_clk),
 			.in15(dec3_y64),
 			.in16(reg_w[0]),
 			.in17(dec3_y63),
@@ -7521,7 +7520,7 @@ module sm83 #(
 			.in11(opcode[5]),
 			.in12(dec1_y47_buf),
 			.in13(dec3_y66),
-			.in14(t4_clk_p),
+			.in14(t4_clk),
 			.in15(dec3_y64),
 			.in16(reg_w[1]),
 			.in17(dec3_y63),
@@ -7559,7 +7558,7 @@ module sm83 #(
 			.in11(opcode[5]),
 			.in12(dec1_y47_buf),
 			.in13(dec3_y66),
-			.in14(t4_clk_p),
+			.in14(t4_clk),
 			.in15(dec3_y64),
 			.in16(reg_w[2]),
 			.in17(dec3_y63),
@@ -7597,7 +7596,7 @@ module sm83 #(
 			.in11(opcode[5]),
 			.in12(dec1_y47_buf),
 			.in13(dec3_y66),
-			.in14(t4_clk_p),
+			.in14(t4_clk),
 			.in15(dec3_y64),
 			.in16(reg_w[3]),
 			.in17(dec3_y63),
@@ -7635,7 +7634,7 @@ module sm83 #(
 			.in11(opcode[5]),
 			.in12(dec1_y47_buf),
 			.in13(dec3_y66),
-			.in14(t4_clk_p),
+			.in14(t4_clk),
 			.in15(dec3_y64),
 			.in16(reg_w[4]),
 			.in17(dec3_y63),
@@ -7673,7 +7672,7 @@ module sm83 #(
 			.in11(opcode[5]),
 			.in12(dec1_y47_buf),
 			.in13(dec3_y66),
-			.in14(t4_clk_p),
+			.in14(t4_clk),
 			.in15(dec3_y64),
 			.in16(reg_w[5]),
 			.in17(dec3_y63),
@@ -7711,7 +7710,7 @@ module sm83 #(
 			.in11(opcode[5]),
 			.in12(dec1_y47_buf),
 			.in13(dec3_y66),
-			.in14(t4_clk_p),
+			.in14(t4_clk),
 			.in15(dec3_y64),
 			.in16(reg_w[6]),
 			.in17(dec3_y63),
@@ -7749,7 +7748,7 @@ module sm83 #(
 			.in11(opcode[5]),
 			.in12(dec1_y47_buf),
 			.in13(dec3_y66),
-			.in14(t4_clk_p),
+			.in14(t4_clk),
 			.in15(dec3_y64),
 			.in16(reg_w[7]),
 			.in17(dec3_y63),
@@ -7772,7 +7771,7 @@ module sm83 #(
 		) reg_sph_inst0 (
 			.d(new_reg_sph_n[0]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_hi_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7787,7 +7786,7 @@ module sm83 #(
 		) reg_sph_inst1 (
 			.d(new_reg_sph_n[1]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_hi_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7802,7 +7801,7 @@ module sm83 #(
 		) reg_sph_inst2 (
 			.d(new_reg_sph_n[2]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_hi_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7817,7 +7816,7 @@ module sm83 #(
 		) reg_sph_inst3 (
 			.d(new_reg_sph_n[3]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_hi_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7832,7 +7831,7 @@ module sm83 #(
 		) reg_sph_inst4 (
 			.d(new_reg_sph_n[4]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_hi_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7847,7 +7846,7 @@ module sm83 #(
 		) reg_sph_inst5 (
 			.d(new_reg_sph_n[5]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_hi_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7862,7 +7861,7 @@ module sm83 #(
 		) reg_sph_inst6 (
 			.d(new_reg_sph_n[6]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_hi_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7877,7 +7876,7 @@ module sm83 #(
 		) reg_sph_inst7 (
 			.d(new_reg_sph_n[7]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_hi_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7899,7 +7898,7 @@ module sm83 #(
 		) reg_spl_inst0 (
 			.d(new_reg_spl_n[0]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_lo_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7914,7 +7913,7 @@ module sm83 #(
 		) reg_spl_inst1 (
 			.d(new_reg_spl_n[1]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_lo_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7929,7 +7928,7 @@ module sm83 #(
 		) reg_spl_inst2 (
 			.d(new_reg_spl_n[2]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_lo_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7944,7 +7943,7 @@ module sm83 #(
 		) reg_spl_inst3 (
 			.d(new_reg_spl_n[3]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_lo_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7959,7 +7958,7 @@ module sm83 #(
 		) reg_spl_inst4 (
 			.d(new_reg_spl_n[4]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_lo_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7974,7 +7973,7 @@ module sm83 #(
 		) reg_spl_inst5 (
 			.d(new_reg_spl_n[5]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_lo_n),
 			.clk_n(ctl_reg_sp_we),
@@ -7989,7 +7988,7 @@ module sm83 #(
 		) reg_spl_inst6 (
 			.d(new_reg_spl_n[6]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_lo_n),
 			.clk_n(ctl_reg_sp_we),
@@ -8004,7 +8003,7 @@ module sm83 #(
 		) reg_spl_inst7 (
 			.d(new_reg_spl_n[7]),
 			.pch_n(buke),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_sp_we_buf_lo_n),
 			.clk_n(ctl_reg_sp_we),
@@ -8023,7 +8022,7 @@ module sm83 #(
 			.L_q_n(656.9099)
 		) reg_w_inst0 (
 			.d(new_reg_w_n[0]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_w_we_buf_n),
 			.clk_n(ctl_reg_w_we),
@@ -8034,7 +8033,7 @@ module sm83 #(
 			.L_q_n(658.4306)
 		) reg_w_inst1 (
 			.d(new_reg_w_n[1]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_w_we_buf_n),
 			.clk_n(ctl_reg_w_we),
@@ -8045,7 +8044,7 @@ module sm83 #(
 			.L_q_n(657.3538)
 		) reg_w_inst2 (
 			.d(new_reg_w_n[2]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_w_we_buf_n),
 			.clk_n(ctl_reg_w_we),
@@ -8056,7 +8055,7 @@ module sm83 #(
 			.L_q_n(657.2269)
 		) reg_w_inst3 (
 			.d(new_reg_w_n[3]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_w_we_buf_n),
 			.clk_n(ctl_reg_w_we),
@@ -8067,7 +8066,7 @@ module sm83 #(
 			.L_q_n(656.9101)
 		) reg_w_inst4 (
 			.d(new_reg_w_n[4]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_w_we_buf_n),
 			.clk_n(ctl_reg_w_we),
@@ -8078,7 +8077,7 @@ module sm83 #(
 			.L_q_n(658.8109)
 		) reg_w_inst5 (
 			.d(new_reg_w_n[5]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_w_we_buf_n),
 			.clk_n(ctl_reg_w_we),
@@ -8089,7 +8088,7 @@ module sm83 #(
 			.L_q_n(657.7336)
 		) reg_w_inst6 (
 			.d(new_reg_w_n[6]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_w_we_buf_n),
 			.clk_n(ctl_reg_w_we),
@@ -8100,7 +8099,7 @@ module sm83 #(
 			.L_q_n(657.0367)
 		) reg_w_inst7 (
 			.d(new_reg_w_n[7]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_w_we_buf_n),
 			.clk_n(ctl_reg_w_we),
@@ -8406,7 +8405,7 @@ module sm83 #(
 			.L_q_n(608.3767)
 		) reg_z_inst0 (
 			.d(new_reg_z_n[0]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_z_we_buf_n),
 			.clk_n(ctl_reg_z_we),
@@ -8417,7 +8416,7 @@ module sm83 #(
 			.L_q_n(607.6166)
 		) reg_z_inst1 (
 			.d(new_reg_z_n[1]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_z_we_buf_n),
 			.clk_n(ctl_reg_z_we),
@@ -8428,7 +8427,7 @@ module sm83 #(
 			.L_q_n(608.6303)
 		) reg_z_inst2 (
 			.d(new_reg_z_n[2]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_z_we_buf_n),
 			.clk_n(ctl_reg_z_we),
@@ -8439,7 +8438,7 @@ module sm83 #(
 			.L_q_n(608.5669)
 		) reg_z_inst3 (
 			.d(new_reg_z_n[3]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_z_we_buf_n),
 			.clk_n(ctl_reg_z_we),
@@ -8450,7 +8449,7 @@ module sm83 #(
 			.L_q_n(2305.746)
 		) reg_z_inst4 (
 			.d(new_reg_z_n[4]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_z_we_buf_n),
 			.clk_n(ctl_reg_z_we),
@@ -8461,7 +8460,7 @@ module sm83 #(
 			.L_q_n(2264.402)
 		) reg_z_inst5 (
 			.d(new_reg_z_n[5]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_z_we_buf_n),
 			.clk_n(ctl_reg_z_we),
@@ -8472,7 +8471,7 @@ module sm83 #(
 			.L_q_n(2417.375)
 		) reg_z_inst6 (
 			.d(new_reg_z_n[6]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_z_we_buf_n),
 			.clk_n(ctl_reg_z_we),
@@ -8483,7 +8482,7 @@ module sm83 #(
 			.L_q_n(3175.844)
 		) reg_z_inst7 (
 			.d(new_reg_z_n[7]),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.ena_n(t4_clk_n),
 			.clk(ctl_reg_z_we_buf_n),
 			.clk_n(ctl_reg_z_we),
@@ -8584,7 +8583,7 @@ module sm83 #(
 			.L_q(167.5223)
 		) xaym_inst (
 			.d(wudz),
-			.clk(main_clk_p),
+			.clk(main_clk),
 			.clk_n(main_clk_n),
 			.q(mcyc[0])
 		);
@@ -8593,7 +8592,7 @@ module sm83 #(
 			.L_q(461.0666)
 		) xdqf_inst (
 			.d(vequ),
-			.clk(main_clk_p),
+			.clk(main_clk),
 			.clk_n(main_clk_n),
 			.q(xdqf)
 		);
@@ -8602,7 +8601,7 @@ module sm83 #(
 			.L_q(184.3758)
 		) xirf_inst (
 			.d(ween),
-			.clk(main_clk_p),
+			.clk(main_clk),
 			.clk_n(main_clk_n),
 			.q(mcyc[1])
 		);
@@ -8637,7 +8636,7 @@ module sm83 #(
 			.L_q(164.3542)
 		) xufu_inst (
 			.d(werf),
-			.clk(main_clk_p),
+			.clk(main_clk),
 			.clk_n(main_clk_n),
 			.q(mcyc[2])
 		);
@@ -8648,7 +8647,7 @@ module sm83 #(
 			.d(ctl_op_cb_prefix),
 			.clk(xuri),
 			.clk_n(ctl_fetch),
-			.ena(t4_clk_p),
+			.ena(t4_clk),
 			.r(ynkw),
 			.q(xurg)
 		);
@@ -8689,7 +8688,7 @@ module sm83 #(
 			.L_q(47.13942)
 		) ydxa_inst (
 			.d(nmi_n),
-			.clk(main_clk_p),
+			.clk(main_clk),
 			.clk_n(main_clk_n),
 			.q(ydxa)
 		);
@@ -8749,7 +8748,7 @@ module sm83 #(
 		) yodp_inst (
 			.d(ydxa),
 			.ena(main_clk_n),
-			.ena_n(main_clk_p),
+			.ena_n(main_clk),
 			.q_n(yodp)
 		);
 
@@ -8757,7 +8756,7 @@ module sm83 #(
 			.L_q(35.98814)
 		) yoii_inst (
 			.d(irq_head_c_y),
-			.clk(main_clk_p),
+			.clk(main_clk),
 			.clk_n(main_clk_n),
 			.q(yoii)
 		);
@@ -8774,7 +8773,7 @@ module sm83 #(
 			.L_q(40.99353)
 		) ysbt_inst (
 			.d(ctl_op_halt),
-			.clk(main_clk_p),
+			.clk(main_clk),
 			.clk_n(main_clk_n),
 			.q(ysbt)
 		);
@@ -8783,7 +8782,7 @@ module sm83 #(
 			.L_q(L_zacw_q)
 		) zacw_inst (
 			.d(zfex),
-			.clk(main_clk_p),
+			.clk(main_clk),
 			.clk_n(main_clk_n),
 			.q(zacw)
 		);
@@ -8810,7 +8809,7 @@ module sm83 #(
 			.L_q(145.093)
 		) zaza_inst (
 			.d(zorp),
-			.clk(main_clk_p),
+			.clk(main_clk),
 			.clk_n(main_clk_n),
 			.q(zaza)
 		);
@@ -8872,7 +8871,7 @@ module sm83 #(
 		) zivv_inst (
 			.d(zoxc),
 			.clk(adr_clk_n),
-			.clk_n(adr_clk_p),
+			.clk_n(adr_clk),
 			.q(zivv)
 		);
 
@@ -8895,7 +8894,7 @@ module sm83 #(
 			.L_q(102.0087)
 		) zkai_inst (
 			.d(ziul),
-			.clk(main_clk_p),
+			.clk(main_clk),
 			.clk_n(main_clk_n),
 			.q(zkai)
 		);
@@ -8904,7 +8903,7 @@ module sm83 #(
 			.L_q(531.8436)
 		) zkdu_inst (
 			.d(zrsy),
-			.clk(main_clk_p),
+			.clk(main_clk),
 			.clk_n(main_clk_n),
 			.q(zkdu)
 		);
@@ -8962,7 +8961,7 @@ module sm83 #(
 			.L_q(154.9137)
 		) zorp_inst (
 			.d(ziks),
-			.clk(main_clk_p),
+			.clk(main_clk),
 			.clk_n(main_clk_n),
 			.q(zorp)
 		);
@@ -8987,7 +8986,7 @@ module sm83 #(
 			.L_q(1017.489)
 		) zrby_inst (
 			.d(zloz),
-			.clk(main_clk_p),
+			.clk(main_clk),
 			.clk_n(main_clk_n),
 			.q(zrby)
 		);
