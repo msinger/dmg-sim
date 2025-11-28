@@ -66,6 +66,7 @@ module dmg_cpu_b_gameboy;
 	logic [7:0] cpu_irq_ack;
 	logic [7:0] cpu_irq_trig;
 	tri logic [7:0]  d;     /* CPU I/O B1-B8  */
+	tri logic [7:0]  db;
 	tri logic [15:0] cpu_a; /* CPU out B9-B24 */
 	logic cpu_wakeup;       /* CPU in  B25 - Wake from STOP mode; active-high */
 
@@ -229,37 +230,39 @@ module dmg_cpu_b_gameboy;
 
 	sm83 cpu(
 		.m1(cpu_out_t1),
-		.adr_clk_n(cpu_clkin_t2),
-		.adr_clk(cpu_clkin_t3),
-		.phi_clk(cpu_clkin_t4),
-		.phi_clk_n(cpu_clkin_t5),
-		.t4_clk_n(cpu_clkin_t6),
-		.t4_clk(cpu_clkin_t7),
-		.buke(cpu_clkin_t8),
-		.main_clk_n(cpu_clkin_t9),
-		.main_clk(cpu_clkin_t10),
+		.exec_phase_n(cpu_clkin_t2),
+		.exec_phase(cpu_clkin_t3),
+		.data_phase_n(cpu_clkin_t4),
+		.data_phase(cpu_clkin_t5),
+		.write_phase_n(cpu_clkin_t6),
+		.write_phase(cpu_clkin_t7),
+		.pch_phase_n(cpu_clkin_t8),
+		.clk_n(cpu_clkin_t9),
+		.clk(cpu_clkin_t10),
 		.halt_n(cpu_clk_ena),
-		.sync_reset(cpu_in_t12),
-		.async_reset(cpu_in_t13),
+		.sys_reset(cpu_in_t12),
+		.pwron_reset(cpu_in_t13),
 		.stop_n(cpu_xo_ena),
-		.osc_stable(cpu_in_t15),
+		.clk_ready(cpu_in_t15),
 		.nmi(cpu_in_t16),
 		.rd(cpu_raw_rd),
 		.wr(cpu_raw_wr),
-		.unor(cpu_in_r3),
-		.syro(cpu_in_r4),
-		.tutu(cpu_in_r5),
-		.umut(cpu_in_r6),
+		.oe_n(cpu_in_r3),
+		.internal_access(cpu_in_r4),
+		.shadow_access(cpu_in_r5),
+		.shadow_override(cpu_in_r6),
 		.mreq(cpu_out_r7),
 		.inta(cpu_irq_ack),
 		.\int (cpu_irq_trig),
 		.d(d),
+		.db(db),
 		.a(cpu_a),
 		.wake(cpu_wakeup)
 	);
 
 	keeper #(16) a_keeper(cpu_a);
 	keeper #(8)  d_keeper(d);
+	keeper #(8)  db_keeper(db);
 
 	logic [15:0] sm83_bc;
 	assign sm83_bc[7:0]  = cpu.reg_c;
