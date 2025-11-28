@@ -257,7 +257,8 @@ module dmg_cpu_b_gameboy;
 		.d(d),
 		.db(db),
 		.a(cpu_a),
-		.wake(cpu_wakeup)
+		.wake(cpu_wakeup),
+		.test_freeze('0)
 	);
 
 	keeper #(16) a_keeper(cpu_a);

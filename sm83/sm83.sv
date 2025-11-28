@@ -81,6 +81,7 @@ module sm83 #(
 		input      logic shadow_access,
 		input      logic shadow_override,
 		input      logic sys_reset,
+		input      logic test_freeze,
 		input      logic wake,
 		input      logic write_phase
 	);
@@ -8507,7 +8508,7 @@ module sm83 #(
 		);
 
 	sm83_tie #(
-			.L_gnd(32966.6),
+			.L_gnd(32487.91),
 			.L_vdd(25766.37)
 		) supply_inst (
 			.gnd(gnd),
@@ -8615,7 +8616,7 @@ module sm83 #(
 		) xtip_inst (
 			.in1(xurg),
 			.in2(xudo),
-			.in3(gnd),
+			.in3(test_freeze),
 			.y(table_cb_n)
 		);
 
@@ -8663,7 +8664,7 @@ module sm83 #(
 	sm83_nor3 #(
 			.L_y(58.1639)
 		) xygb_inst (
-			.in1(gnd),
+			.in1(test_freeze),
 			.in2(idle),
 			.in3(int_entry),
 			.y(in_intr_n)
@@ -8674,7 +8675,7 @@ module sm83 #(
 		) ycnf_inst (
 			.in1(halt),
 			.in2(sys_reset),
-			.in3(gnd),
+			.in3(test_freeze),
 			.y(idle)
 		);
 
