@@ -84,7 +84,7 @@ sm83/cells/dff_cc_ee_q_x2_reg_bit.sv \
 sm83/cells/dff_cc_q.sv \
 sm83/cells/dff_cc_q_alt.sv \
 sm83/cells/dffn_ee_pch_d_alu_flag.sv \
-sm83/cells/dffn_ee_q_alu_tmp.sv \
+sm83/cells/dffn_ee_q_alu_sign.sv \
 sm83/cells/dffr_cc_ee_reg_ie_bit.sv \
 sm83/cells/dffre_cc_q.sv \
 sm83/cells/dffs_cc_ee_pch_d_reg_pc_bit.sv \

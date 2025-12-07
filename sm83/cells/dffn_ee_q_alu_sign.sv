@@ -1,6 +1,6 @@
 `default_nettype none
 
-module sm83_dffn_ee_q_alu_tmp #(
+module sm83_dffn_ee_q_alu_sign #(
 		parameter real L_q = 84
 	) (
 		input  logic d, clk_n, ena, ena_n,
