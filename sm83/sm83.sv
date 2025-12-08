@@ -207,6 +207,7 @@ module sm83 #(
 	tri logic ctl_op_cb_prefix_n;
 	tri logic ctl_op_cb_r_n;
 	tri logic ctl_op_cb_rxx_or_sxx_or_swap_or_res_m1_n;
+	tri logic ctl_op_cb_rxx_or_sxx_or_swap_or_set_or_res_exec_n;
 	tri logic ctl_op_cb_rxx_or_sxx_or_swap_n;
 	tri logic ctl_op_cp_n;
 	tri logic ctl_op_cpl_m0_n;
@@ -220,6 +221,7 @@ module sm83 #(
 	tri logic ctl_op_inc_or_dec_m_n;
 	tri logic ctl_op_inc_or_dec_r_n;
 	tri logic ctl_op_inc_or_dec_ss_m0_n;
+	tri logic ctl_op_inc_or_dec_ss_or_ld_dd_nn_or_pop_qq_exec_n;
 	tri logic ctl_op_inc_ss_m0_n;
 	tri logic ctl_op_jp_cc_nn_m1_n;
 	tri logic ctl_op_jp_hl_n;
@@ -295,6 +297,7 @@ module sm83 #(
 	tri logic ctl_op_ret_cc_m0_n;
 	tri logic ctl_op_ret_cc_m1_n;
 	tri logic ctl_op_ret_or_reti_m0_n;
+	tri logic ctl_op_reti_m3_n;
 	tri logic ctl_op_retx_m2_n;
 	tri logic ctl_op_retx_m3_n;
 	tri logic ctl_op_rl_n;
@@ -337,6 +340,7 @@ module sm83 #(
 	tri logic ctl_reg_e_to_op2_en_n;
 	logic     ctl_reg_e_we_buf_n;
 	tri logic ctl_reg_e_we_n;
+	tri logic ctl_reg_gp_we_mask_n;
 	tri logic ctl_reg_h_to_op2_en_n;
 	logic     ctl_reg_h_we_buf_n;
 	tri logic ctl_reg_h_we_n;
@@ -363,13 +367,9 @@ module sm83 #(
 	logic     ctl_reg_z_we_buf_n;
 	tri logic ctl_reg_z_we_n;
 	logic     data_phase_buf_n;
-	tri logic dec1_y107_n;
-	tri logic dec1_y49_n;
-	tri logic dec1_y50_n;
-	tri logic dec2_y30_n;
-	tri logic dec3_y14_n;
-	tri logic dec3_y37_n;
-	tri logic dec3_y42_n;
+	logic     dec1_y107_n;
+	logic     dec1_y49_n;
+	logic     dec1_y50_n;
 	logic     flag_c_n;
 	logic     flag_h_n;
 	logic     flag_n_n;
@@ -384,6 +384,7 @@ module sm83 #(
 	tri logic new_flag_h_n;
 	tri logic new_flag_n_n;
 	tri logic new_flag_z_n;
+	logic     nmi_entry_n;
 	logic     nmi_n;
 	logic     res_carry_n;
 	logic     res_hcarry_n;
@@ -418,6 +419,7 @@ module sm83 #(
 	logic     ctl_int_entry_m5;
 	logic     ctl_int_entry_m6;
 	logic     ctl_mread;
+	logic     ctl_mread_lsb;
 	logic     ctl_mreq;
 	logic     ctl_mwrite;
 	logic     ctl_op_add_a_x_or_adc_a_x;
@@ -457,6 +459,7 @@ module sm83 #(
 	logic     ctl_op_cb_r;
 	logic     ctl_op_cb_rxx_or_sxx_or_swap;
 	logic     ctl_op_cb_rxx_or_sxx_or_swap_or_res_m1;
+	logic     ctl_op_cb_rxx_or_sxx_or_swap_or_set_or_res_exec;
 	logic     ctl_op_cp;
 	logic     ctl_op_cpl_m0;
 	logic     ctl_op_daa_m0;
@@ -471,6 +474,7 @@ module sm83 #(
 	logic     ctl_op_inc_or_dec_m_or_ld_or_halt;
 	logic     ctl_op_inc_or_dec_r;
 	logic     ctl_op_inc_or_dec_ss_m0;
+	logic     ctl_op_inc_or_dec_ss_or_ld_dd_nn_or_pop_qq_exec;
 	logic     ctl_op_inc_ss_m0;
 	logic     ctl_op_jp_cc_nn_m1;
 	logic     ctl_op_jp_hl;
@@ -548,6 +552,7 @@ module sm83 #(
 	logic     ctl_op_ret_cc_m0;
 	logic     ctl_op_ret_cc_m1;
 	logic     ctl_op_ret_or_reti_m0;
+	logic     ctl_op_reti_m3;
 	logic     ctl_op_retx_m2;
 	logic     ctl_op_retx_m3;
 	logic     ctl_op_rl;
@@ -587,6 +592,7 @@ module sm83 #(
 	logic     ctl_reg_de_to_idu_en;
 	logic     ctl_reg_e_to_op2_en;
 	logic     ctl_reg_e_we;
+	logic     ctl_reg_gp_we_mask;
 	logic     ctl_reg_h_to_op2_en;
 	logic     ctl_reg_h_we;
 	logic     ctl_reg_hl_to_idu_en;
@@ -604,18 +610,17 @@ module sm83 #(
 	logic     ctl_reg_wz_to_reg_sp_en;
 	logic     ctl_reg_z_to_op2_en;
 	logic     ctl_reg_z_we;
+	logic     ctl_sel_reg_w;
+	logic     ctl_sel_reg_z;
 	logic     daa_hi_ge9;
 	logic     daa_hi_gt9;
 	logic     daa_lo_gt9;
-	logic     dec1_y107;
-	logic     dec1_y49;
-	logic     dec1_y50;
-	logic     dec2_y30;
-	logic     dec3_y14;
-	logic     dec3_y37;
-	logic     dec3_y42;
+	tri logic dec1_y107;
+	tri logic dec1_y49;
+	tri logic dec1_y50;
 	tri logic dec3_y56;
 	tri logic dec3_y58;
+	logic     ffff;
 	logic     flag_c;
 	logic     flag_h;
 	logic     flag_n;
@@ -623,22 +628,20 @@ module sm83 #(
 	logic     gnd;
 	logic     halt;
 	logic     idle;
-	logic     idu_ctl_y1;
+	logic     idu_at8;
 	logic     idu_dec;
 	logic     idu_inc;
 	logic     ie_we_n;
 	logic     ie_we;
 	logic     ime_state;
 	logic     in_intr;
+	logic     int_pending;
+	logic     int_take;
 	logic     int_vector3;
 	logic     int_vector4;
 	logic     int_vector5;
 	logic     int_vector6;
 	logic     int_vector7;
-	logic     irq_head_a_y;
-	logic     irq_head_b_y;
-	logic     irq_head_c_y;
-	logic     irq_head_e_y;
 	tri logic irq_prio_dist_nand_a_y;
 	tri logic irq_prio_dist_nand_a_y_n1;
 	tri logic irq_prio_dist_nand_a_y_n2;
@@ -664,6 +667,7 @@ module sm83 #(
 	tri logic irq_prio_dist_nor_y_p6;
 	tri logic irq_prio_dist_nor_y_p7;
 	tri logic irq_prio_nand_a_y;
+	logic     nmi_entry;
 	logic     oe;
 	logic     opcode3_n_buf3;
 	logic     pch_reset_n;
@@ -676,13 +680,10 @@ module sm83 #(
 	logic     stop;
 	logic     table_cb;
 	logic     vdd;
-	logic     vequ;
-	logic     vequ_tap_in1;
 	logic     wafr;
 	logic     ween;
 	logic     werf;
 	logic     wudz;
-	logic     xdqf;
 	logic     xogs;
 	logic     xudo;
 	logic     xurg;
@@ -709,7 +710,6 @@ module sm83 #(
 	logic     zorp;
 	logic     zowa;
 	logic     zoxc;
-	logic     zrby;
 	logic     zrsy;
 	logic     zudn;
 	logic     zwlm;
@@ -1802,10 +1802,10 @@ module sm83 #(
 			.L_b_y(659.9194)
 		) dec1_not25_inst (
 			.pch_n(exec_phase),
-			.a_in(dec1_y49_n),
-			.a_y(dec1_y49),
-			.b_in(dec1_y50_n),
-			.b_y(dec1_y50)
+			.a_in(dec1_y49),
+			.a_y(dec1_y49_n),
+			.b_in(dec1_y50),
+			.b_y(dec1_y50_n)
 		);
 
 	sm83_not2_pch_dec1 #(
@@ -2216,8 +2216,8 @@ module sm83 #(
 			.L_y(120.8264)
 		) dec1_not54_inst (
 			.pch_n(exec_phase),
-			.in(dec1_y107_n),
-			.y(dec1_y107)
+			.in(dec1_y107),
+			.y(dec1_y107_n)
 		);
 
 	sm83_not_dec1 #(
@@ -2627,8 +2627,8 @@ module sm83 #(
 	sm83_not_x1_dec2 #(
 			.L_y(1099.159)
 		) dec2_not31_inst (
-			.in(dec2_y30_n),
-			.y(dec2_y30)
+			.in(ctl_reg_gp_we_mask_n),
+			.y(ctl_reg_gp_we_mask)
 		);
 
 	sm83_not_x1_dec2 #(
@@ -2771,8 +2771,8 @@ module sm83 #(
 			.L_y(529.8747)
 		) dec3_not14_inst (
 			.pch_n(exec_phase),
-			.in(dec3_y14_n),
-			.y(dec3_y14)
+			.in(ctl_op_inc_or_dec_ss_or_ld_dd_nn_or_pop_qq_exec_n),
+			.y(ctl_op_inc_or_dec_ss_or_ld_dd_nn_or_pop_qq_exec)
 		);
 
 	sm83_not_pch_dec3_a #(
@@ -2996,8 +2996,8 @@ module sm83 #(
 			.L_y(389.0099)
 		) dec3_not37_inst (
 			.pch_n(exec_phase),
-			.in(dec3_y37_n),
-			.y(dec3_y37)
+			.in(ctl_op_cb_rxx_or_sxx_or_swap_or_set_or_res_exec_n),
+			.y(ctl_op_cb_rxx_or_sxx_or_swap_or_set_or_res_exec)
 		);
 
 	sm83_not_pch_dec3_b2 #(
@@ -3050,8 +3050,8 @@ module sm83 #(
 			.L_y(1076.646)
 		) dec3_not42_inst (
 			.pch_n(exec_phase),
-			.in(dec3_y42_n),
-			.y(dec3_y42)
+			.in(ctl_op_reti_m3_n),
+			.y(ctl_op_reti_m3)
 		);
 
 	sm83_not_pch_dec3_a #(
@@ -3557,8 +3557,8 @@ module sm83 #(
 			.y46(ctl_op_jp_m2_n),
 			.y47(ctl_op_add_hl_ss_m1_n),
 			.y48(ctl_op_ld_hl_n_m1_n),
-			.y49(dec1_y49_n),
-			.y50(dec1_y50_n),
+			.y49(dec1_y49),
+			.y50(dec1_y50),
 			.y51(ctl_op_push_qq_m2_n),
 			.y52(ctl_op_pop_qq_m0_n),
 			.y53(ctl_op_pop_qq_m1_n),
@@ -3615,7 +3615,7 @@ module sm83 #(
 			.y104(ctl_op_jr_m2_n),
 			.y105(ctl_op_ldx_m0_n),
 			.y106(ctl_op_ldx_m1_n),
-			.y107(dec1_y107_n)
+			.y107(dec1_y107)
 		);
 
 	sm83_decoder2 #(
@@ -3777,7 +3777,7 @@ module sm83 #(
 			.y27(ctl_reg_pcl_to_db_en_n),
 			.y28(ctl_idu_dec_n),
 			.y29(ctl_reg_wz_to_reg_pc_en_n),
-			.y30(dec2_y30_n)
+			.y30(ctl_reg_gp_we_mask_n)
 		);
 
 	sm83_decoder3 #(
@@ -3854,7 +3854,7 @@ module sm83 #(
 			.in1(ctl_op_or_or_set_exec),
 			.in2(ctl_op_add_or_adc_or_ldhl_exec),
 			.in3(ctl_op_sub_or_sbc_or_cp),
-			.in4(dec3_y14),
+			.in4(ctl_op_inc_or_dec_ss_or_ld_dd_nn_or_pop_qq_exec),
 			.in5(ctl_op_inc_or_dec_m_or_ld_or_halt),
 			.in6(ctl_op_add_sp_e_or_ldhl_sp_e_m2),
 			.in7(ctl_op_push_qq_m2_buf),
@@ -3871,7 +3871,7 @@ module sm83 #(
 			.in18(ctl_op_rxxa_or_daa_or_cpl_m0),
 			.in19(ctl_op_alu_buf),
 			.in20(ctl_op_alu_or_alu_cb_or_ld_or_halt),
-			.in21(dec3_y37),
+			.in21(ctl_op_cb_rxx_or_sxx_or_swap_or_set_or_res_exec),
 			.in22(data_phase),
 			.in23(ctl_op_add_hl_ss_m1_buf),
 			.in24(ctl_op_ld_n_a_or_ld_a_n_m1),
@@ -3910,7 +3910,7 @@ module sm83 #(
 			.in57(data_phase),
 			.in58(data_phase),
 			.in59(ctl_op_ld_xxx_a_or_ld_a_xxx_m0),
-			.in60(dec2_y30),
+			.in60(ctl_reg_gp_we_mask),
 			.in61(ctl_op_pop_qq_m2),
 			.in62(data_phase),
 			.in63(ctl_op_retx_m3),
@@ -3921,9 +3921,9 @@ module sm83 #(
 			.in68(ctl_op_inc_or_dec_m_buf),
 			.in69(ctl_push_or_pop_exec),
 			.in70(ctl_op_add_sp_e_m3),
-			.in71(dec2_y30),
-			.in72(xdqf),
-			.in73(vequ_tap_in1),
+			.in71(ctl_reg_gp_we_mask),
+			.in72(ctl_sel_reg_w),
+			.in73(ctl_sel_reg_z),
 			.in74(exec_phase),
 			.in75(opcode[5]),
 			.in76(opcode_n_buf2[5]),
@@ -3954,7 +3954,7 @@ module sm83 #(
 			.y11(ctl_op_add_or_adc_or_ldhl_exec_n),
 			.y12(ctl_op_sub_or_sbc_or_cp_n),
 			.y13(ctl_alu_inv_cin_n),
-			.y14(dec3_y14_n),
+			.y14(ctl_op_inc_or_dec_ss_or_ld_dd_nn_or_pop_qq_exec_n),
 			.y15(ctl_op_inc_or_dec_m_or_ld_or_halt_n),
 			.y16(ctl_op2_to_db_en_n),
 			.y17(ctl_op_swap_n),
@@ -3977,12 +3977,12 @@ module sm83 #(
 			.y34(ctl_ff_to_op1_en_n),
 			.y35(ctl_op_alu_or_alu_cb_or_ld_or_halt_n),
 			.y36(ctl_reg_a_to_op2_en_n),
-			.y37(dec3_y37_n),
+			.y37(ctl_op_cb_rxx_or_sxx_or_swap_or_set_or_res_exec_n),
 			.y38(ctl_alu_to_db_en_n),
 			.y39(ctl_reg_a_we_n),
 			.y40(ctl_reg_h_we_n),
 			.y41(ctl_reg_l_we_n),
-			.y42(dec3_y42_n),
+			.y42(ctl_op_reti_m3_n),
 			.y43(ctl_reg_hl_to_idu_en_n),
 			.y44(ctl_reg_h_to_op2_en_n),
 			.y45(ctl_reg_l_to_op2_en_n),
@@ -4082,7 +4082,7 @@ module sm83 #(
 			.aoi_buf_y(idu_chain_hi[0]),
 			.aoi_in1(idu_cpl_mask[7]),
 			.aoi_in2(idu_chain_ena[7]),
-			.aoi_in3(idu_ctl_y1),
+			.aoi_in3(idu_at8),
 			.aoi_y_n(idu_cpl_mask[8]),
 			.zero_ena(idu_chain_ena[0]),
 			.zero_y(idu_chain_lo[0]),
@@ -4290,7 +4290,7 @@ module sm83 #(
 			.in3(ctl_op_jr_m1_buf),
 			.in4(res_carry[7]),
 			.in5(ctl_idu_inc),
-			.y1(idu_ctl_y1),
+			.y1(idu_at8),
 			.y2(idu_dec),
 			.y3(idu_inc)
 		);
@@ -4649,7 +4649,7 @@ module sm83 #(
 	sm83_and2_irq #(
 			.L_y(863.3351)
 		) irq_and_inst (
-			.in1(irq_head_e_y),
+			.in1(ffff),
 			.in2(ctl_mwrite),
 			.y(ie_we)
 		);
@@ -4662,15 +4662,15 @@ module sm83 #(
 			.L_e_y(858.076)
 		) irq_head_inst (
 			.a_in(irq_prio_nand_a_y),
-			.a_y(irq_head_a_y),
-			.b_in(zrby),
-			.b_y(irq_head_b_y),
+			.a_y(int_take),
+			.b_in(nmi_entry),
+			.b_y(nmi_entry_n),
 			.c_in(irq_prio_dist_nor_y),
-			.c_y(irq_head_c_y),
+			.c_y(int_pending),
 			.d_in(irq_prio_dist_nand_b_y),
 			.d_y(ffxx),
 			.e_in(irq_prio_dist_nand_a_y),
-			.e_y(irq_head_e_y)
+			.e_y(ffff)
 		);
 
 	sm83_dlatch_ee_irq #(
@@ -4800,7 +4800,7 @@ module sm83 #(
 			.a_in2(\int [0]),
 			.a_y(irq_nand2_nand3[0]),
 			.b_in1(rd),
-			.b_in2(irq_head_e_y),
+			.b_in2(ffff),
 			.b_in3(reg_ie_n[0]),
 			.b_y(db[0])
 		);
@@ -4813,7 +4813,7 @@ module sm83 #(
 			.a_in2(\int [1]),
 			.a_y(irq_nand2_nand3[1]),
 			.b_in1(rd),
-			.b_in2(irq_head_e_y),
+			.b_in2(ffff),
 			.b_in3(reg_ie_n[1]),
 			.b_y(db[1])
 		);
@@ -4826,7 +4826,7 @@ module sm83 #(
 			.a_in2(\int [2]),
 			.a_y(irq_nand2_nand3[2]),
 			.b_in1(rd),
-			.b_in2(irq_head_e_y),
+			.b_in2(ffff),
 			.b_in3(reg_ie_n[2]),
 			.b_y(db[2])
 		);
@@ -4839,7 +4839,7 @@ module sm83 #(
 			.a_in2(\int [3]),
 			.a_y(irq_nand2_nand3[3]),
 			.b_in1(rd),
-			.b_in2(irq_head_e_y),
+			.b_in2(ffff),
 			.b_in3(reg_ie_n[3]),
 			.b_y(db[3])
 		);
@@ -4852,7 +4852,7 @@ module sm83 #(
 			.a_in2(\int [4]),
 			.a_y(irq_nand2_nand3[4]),
 			.b_in1(rd),
-			.b_in2(irq_head_e_y),
+			.b_in2(ffff),
 			.b_in3(reg_ie_n[4]),
 			.b_y(db[4])
 		);
@@ -4865,7 +4865,7 @@ module sm83 #(
 			.a_in2(\int [5]),
 			.a_y(irq_nand2_nand3[5]),
 			.b_in1(rd),
-			.b_in2(irq_head_e_y),
+			.b_in2(ffff),
 			.b_in3(reg_ie_n[5]),
 			.b_y(db[5])
 		);
@@ -4878,7 +4878,7 @@ module sm83 #(
 			.a_in2(\int [6]),
 			.a_y(irq_nand2_nand3[6]),
 			.b_in1(rd),
-			.b_in2(irq_head_e_y),
+			.b_in2(ffff),
 			.b_in3(reg_ie_n[6]),
 			.b_y(db[6])
 		);
@@ -4891,7 +4891,7 @@ module sm83 #(
 			.a_in2(\int [7]),
 			.a_y(irq_nand2_nand3[7]),
 			.b_in1(rd),
-			.b_in2(irq_head_e_y),
+			.b_in2(ffff),
 			.b_in3(reg_ie_n[7]),
 			.b_y(db[7])
 		);
@@ -4912,7 +4912,7 @@ module sm83 #(
 			.and_y(inta[0]),
 			.and_in2_nand_a_in2(irq_latch_gated_q_n[0]),
 			.nand_a_y(irq_prio_nand_a_y),
-			.nand_b_in2(irq_head_b_y),
+			.nand_b_in2(nmi_entry_n),
 			.nand_b_y(irq_prio_nand_b_y[0]),
 			.dist_nand_a_in1(ffxx),
 			.dist_nand_a_in2(a[0]),
@@ -4946,7 +4946,7 @@ module sm83 #(
 			.and_y(inta[1]),
 			.and_in2_nand_a_in2(irq_latch_gated_q_n[1]),
 			.nand_a_y(irq_prio_nand_a_y),
-			.nand_b_in2(irq_head_b_y),
+			.nand_b_in2(nmi_entry_n),
 			.nand_b_in3(irq_latch[0]),
 			.nand_b_y(irq_prio_nand_b_y[1]),
 			.nand_c_y(int_vector_n3),
@@ -4981,7 +4981,7 @@ module sm83 #(
 			.and_y(inta[2]),
 			.and_in2_nand_a_in2(irq_latch_gated_q_n[2]),
 			.nand_a_y(irq_prio_nand_a_y),
-			.nand_b_in2(irq_head_b_y),
+			.nand_b_in2(nmi_entry_n),
 			.nand_b_in3(irq_latch[1]),
 			.nand_b_in4(irq_latch[0]),
 			.nand_b_y(irq_prio_nand_b_y[2]),
@@ -5019,7 +5019,7 @@ module sm83 #(
 			.and_y(inta[3]),
 			.and_in2_nand_a_in2(irq_latch_gated_q_n[3]),
 			.nand_a_y(irq_prio_nand_a_y),
-			.nand_b_in2(irq_head_b_y),
+			.nand_b_in2(nmi_entry_n),
 			.nand_b_in3(irq_latch[2]),
 			.nand_b_in4(irq_latch[1]),
 			.nand_b_in5(irq_latch[0]),
@@ -5060,7 +5060,7 @@ module sm83 #(
 			.and_y(inta[4]),
 			.and_in2_nand_a_in2(irq_latch_gated_q_n[4]),
 			.nand_a_y(irq_prio_nand_a_y),
-			.nand_b_in2(irq_head_b_y),
+			.nand_b_in2(nmi_entry_n),
 			.nand_b_in3(irq_latch[3]),
 			.nand_b_in4(irq_latch[2]),
 			.nand_b_in5(irq_latch[1]),
@@ -5102,7 +5102,7 @@ module sm83 #(
 			.and_y(inta[5]),
 			.and_in2_nand_a_in2(irq_latch_gated_q_n[5]),
 			.nand_a_y(irq_prio_nand_a_y),
-			.nand_b_in2(irq_head_b_y),
+			.nand_b_in2(nmi_entry_n),
 			.nand_b_in3(irq_latch[4]),
 			.nand_b_in4(irq_latch[3]),
 			.nand_b_in5(irq_latch[2]),
@@ -5146,7 +5146,7 @@ module sm83 #(
 			.and_b_y(int_vector6),
 			.and_a_in2_nand_a_in2(irq_latch_gated_q_n[6]),
 			.nand_a_y(irq_prio_nand_a_y),
-			.nand_b_in2(irq_head_b_y),
+			.nand_b_in2(nmi_entry_n),
 			.nand_b_in3(irq_latch[5]),
 			.nand_b_in4(irq_latch[4]),
 			.nand_b_in5(irq_latch[3]),
@@ -5191,7 +5191,7 @@ module sm83 #(
 			.and_b_y(int_vector7),
 			.and_a_in2_nand_a_in2(irq_latch_gated_q_n[7]),
 			.nand_a_y(irq_prio_nand_a_y),
-			.nand_b_in2(irq_head_b_y),
+			.nand_b_in2(nmi_entry_n),
 			.nand_b_in3(irq_latch[6]),
 			.nand_b_in4(irq_latch[5]),
 			.nand_b_in5(irq_latch[4]),
@@ -8519,10 +8519,10 @@ module sm83 #(
 			.L_y(196.7943),
 			.L_tap_in1(367.421)
 		) vequ_inst (
-			.in1_n(xdqf),
+			.in1_n(ctl_sel_reg_w),
 			.in2(ctl_mread),
-			.y(vequ),
-			.tap_in1(vequ_tap_in1)
+			.y(ctl_mread_lsb),
+			.tap_in1(ctl_sel_reg_z)
 		);
 
 	sm83_nor2_e #(
@@ -8586,10 +8586,10 @@ module sm83 #(
 	sm83_dff_cc_q #(
 			.L_q(461.0666)
 		) xdqf_inst (
-			.d(vequ),
+			.d(ctl_mread_lsb),
 			.clk(clk),
 			.clk_n(clk_n),
-			.q(xdqf)
+			.q(ctl_sel_reg_w)
 		);
 
 	sm83_dff_cc_q #(
@@ -8707,7 +8707,7 @@ module sm83 #(
 	sm83_aoi21_a #(
 			.L_y(209.8464)
 		) yneu_inst (
-			.in1(zrby),
+			.in1(nmi_entry),
 			.in2(ctl_int_entry_m6),
 			.in3(sys_reset),
 			.y(yneu)
@@ -8750,7 +8750,7 @@ module sm83 #(
 	sm83_dff_cc_q #(
 			.L_q(35.98814)
 		) yoii_inst (
-			.d(irq_head_c_y),
+			.d(int_pending),
 			.clk(clk),
 			.clk_n(clk_n),
 			.q(yoii)
@@ -8795,7 +8795,7 @@ module sm83 #(
 	sm83_nand2_c #(
 			.L_y(87.43592)
 		) zaoc_inst (
-			.in1(irq_head_a_y),
+			.in1(int_take),
 			.in2(xogs),
 			.y(zaoc)
 		);
@@ -8816,7 +8816,7 @@ module sm83 #(
 			.in1(opcode[3]),
 			.in2(ctl_op_di_or_ei),
 			.in3(data_phase),
-			.in4(dec3_y42),
+			.in4(ctl_op_reti_m3),
 			.in5(zkdu),
 			.y(zbpp),
 			.tap_in1_n(opcode3_n_buf3)
@@ -8940,7 +8940,7 @@ module sm83 #(
 			.L_y(11.59473)
 		) znda_inst (
 			.in1(sys_reset),
-			.in2(dec3_y42),
+			.in2(ctl_op_reti_m3),
 			.y(znda)
 		);
 
@@ -8983,7 +8983,7 @@ module sm83 #(
 			.d(zloz),
 			.clk(clk),
 			.clk_n(clk_n),
-			.q(zrby)
+			.q(nmi_entry)
 		);
 
 	sm83_srlatch_r_n #(
@@ -9115,6 +9115,7 @@ module sm83 #(
 	keeper ctl_op_cb_prefix_n_keeper(.n(ctl_op_cb_prefix_n));
 	keeper ctl_op_cb_r_n_keeper(.n(ctl_op_cb_r_n));
 	keeper ctl_op_cb_rxx_or_sxx_or_swap_or_res_m1_n_keeper(.n(ctl_op_cb_rxx_or_sxx_or_swap_or_res_m1_n));
+	keeper ctl_op_cb_rxx_or_sxx_or_swap_or_set_or_res_exec_n_keeper(.n(ctl_op_cb_rxx_or_sxx_or_swap_or_set_or_res_exec_n));
 	keeper ctl_op_cb_rxx_or_sxx_or_swap_n_keeper(.n(ctl_op_cb_rxx_or_sxx_or_swap_n));
 	keeper ctl_op_cp_n_keeper(.n(ctl_op_cp_n));
 	keeper ctl_op_cpl_m0_n_keeper(.n(ctl_op_cpl_m0_n));
@@ -9128,6 +9129,7 @@ module sm83 #(
 	keeper ctl_op_inc_or_dec_m_n_keeper(.n(ctl_op_inc_or_dec_m_n));
 	keeper ctl_op_inc_or_dec_r_n_keeper(.n(ctl_op_inc_or_dec_r_n));
 	keeper ctl_op_inc_or_dec_ss_m0_n_keeper(.n(ctl_op_inc_or_dec_ss_m0_n));
+	keeper ctl_op_inc_or_dec_ss_or_ld_dd_nn_or_pop_qq_exec_n_keeper(.n(ctl_op_inc_or_dec_ss_or_ld_dd_nn_or_pop_qq_exec_n));
 	keeper ctl_op_inc_ss_m0_n_keeper(.n(ctl_op_inc_ss_m0_n));
 	keeper ctl_op_jp_cc_nn_m1_n_keeper(.n(ctl_op_jp_cc_nn_m1_n));
 	keeper ctl_op_jp_hl_n_keeper(.n(ctl_op_jp_hl_n));
@@ -9201,6 +9203,7 @@ module sm83 #(
 	keeper ctl_op_ret_cc_m0_n_keeper(.n(ctl_op_ret_cc_m0_n));
 	keeper ctl_op_ret_cc_m1_n_keeper(.n(ctl_op_ret_cc_m1_n));
 	keeper ctl_op_ret_or_reti_m0_n_keeper(.n(ctl_op_ret_or_reti_m0_n));
+	keeper ctl_op_reti_m3_n_keeper(.n(ctl_op_reti_m3_n));
 	keeper ctl_op_retx_m2_n_keeper(.n(ctl_op_retx_m2_n));
 	keeper ctl_op_retx_m3_n_keeper(.n(ctl_op_retx_m3_n));
 	keeper ctl_op_rl_n_keeper(.n(ctl_op_rl_n));
@@ -9238,6 +9241,7 @@ module sm83 #(
 	keeper ctl_reg_de_to_idu_en_n_keeper(.n(ctl_reg_de_to_idu_en_n));
 	keeper ctl_reg_e_to_op2_en_n_keeper(.n(ctl_reg_e_to_op2_en_n));
 	keeper ctl_reg_e_we_n_keeper(.n(ctl_reg_e_we_n));
+	keeper ctl_reg_gp_we_mask_n_keeper(.n(ctl_reg_gp_we_mask_n));
 	keeper ctl_reg_h_to_op2_en_n_keeper(.n(ctl_reg_h_to_op2_en_n));
 	keeper ctl_reg_h_we_n_keeper(.n(ctl_reg_h_we_n));
 	keeper ctl_reg_hl_to_idu_en_n_keeper(.n(ctl_reg_hl_to_idu_en_n));
@@ -9255,13 +9259,6 @@ module sm83 #(
 	keeper ctl_reg_wz_to_reg_sp_en_n_keeper(.n(ctl_reg_wz_to_reg_sp_en_n));
 	keeper ctl_reg_z_to_op2_en_n_keeper(.n(ctl_reg_z_to_op2_en_n));
 	keeper ctl_reg_z_we_n_keeper(.n(ctl_reg_z_we_n));
-	keeper dec1_y107_n_keeper(.n(dec1_y107_n));
-	keeper dec1_y49_n_keeper(.n(dec1_y49_n));
-	keeper dec1_y50_n_keeper(.n(dec1_y50_n));
-	keeper dec2_y30_n_keeper(.n(dec2_y30_n));
-	keeper dec3_y14_n_keeper(.n(dec3_y14_n));
-	keeper dec3_y37_n_keeper(.n(dec3_y37_n));
-	keeper dec3_y42_n_keeper(.n(dec3_y42_n));
 	keeper int_vector_n_keeper3(.n(int_vector_n3));
 	keeper int_vector_n_keeper4(.n(int_vector_n4));
 	keeper int_vector_n_keeper5(.n(int_vector_n5));
@@ -9270,6 +9267,9 @@ module sm83 #(
 	keeper new_flag_n_n_keeper(.n(new_flag_n_n));
 	keeper new_flag_z_n_keeper(.n(new_flag_z_n));
 	keeper alu_cond_fail_n_keeper(.n(alu_cond_fail_n));
+	keeper dec1_y107_keeper(.n(dec1_y107));
+	keeper dec1_y49_keeper(.n(dec1_y49));
+	keeper dec1_y50_keeper(.n(dec1_y50));
 	keeper dec3_y56_keeper(.n(dec3_y56));
 	keeper dec3_y58_keeper(.n(dec3_y58));
 	keeper irq_prio_dist_nand_a_y_keeper(.n(irq_prio_dist_nand_a_y));
