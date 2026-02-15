@@ -86,7 +86,7 @@ wait:
 	dec de              ; 2 cyc
 	jr wait             ; 3 cyc
 
-.section .hide
+.section .hide,"ax"
 hide_boot:
 .global hide_boot
 	ld a, 1
