@@ -1,9 +1,9 @@
 `default_nettype none
 
 module vid_dump(
-		input int   t,
-		input logic cpg, cp, cpl, fr, st, s,
-		input logic ld0, ld1
+		input int         t,
+		input logic       cpg, cp, cpl, fr, st, s,
+		input logic [1:0] ld
 	);
 
 	task automatic video_dump_loop(input int f);
@@ -28,7 +28,7 @@ module vid_dump(
 			begin
 				@(negedge cp);
 				if (pxidx < 160) /* Still space in line buffer? */
-					line[pxidx] = { ld1, ld0 };
+					line[pxidx] = ld;
 				if (pxidx < 161)
 					pxidx++;
 				if (st) /* Horizontal sync active at pixel clock edge? */
@@ -41,7 +41,7 @@ module vid_dump(
 				byte pxout;
 				@(posedge cpl);
 				if (pxidx < 160) /* Still space in line buffer? */
-					line[pxidx] = { ld1, ld0 };
+					line[pxidx] = ld;
 				if (pxidx < 161)
 					pxidx++;
 				if (dis || lineidx >= 144)

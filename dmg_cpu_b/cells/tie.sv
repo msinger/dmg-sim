@@ -1,6 +1,6 @@
 `default_nettype none
 
-module sm83_tie #(
+module dmg_tie #(
 		parameter real L_gnd = 0,
 		parameter real L_vdd = 0
 	) (

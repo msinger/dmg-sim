@@ -1,58 +1,77 @@
-DMG_CPU_B_PAGES = \
-dmg_cpu_b/pages/p1_clocks_reset.sv \
-dmg_cpu_b/pages/p2_interrupts.sv \
-dmg_cpu_b/pages/p3_timer.sv \
-dmg_cpu_b/pages/p4_dma.sv \
-dmg_cpu_b/pages/p5_joypad_io.sv \
-dmg_cpu_b/pages/p6_serial_link.sv \
-dmg_cpu_b/pages/p7_sys_decode.sv \
-dmg_cpu_b/pages/p8_ext_cpu_busses.sv \
-dmg_cpu_b/pages/p9_apu_control.sv \
-dmg_cpu_b/pages/p10_apu_decode.sv \
-dmg_cpu_b/pages/p11_ch1_regs.sv \
-dmg_cpu_b/pages/p12_ch1_sweep.sv \
-dmg_cpu_b/pages/p13_channel1.sv \
-dmg_cpu_b/pages/p14_ch2_regs.sv \
-dmg_cpu_b/pages/p15_channel2.sv \
-dmg_cpu_b/pages/p16_ch3_regs.sv \
-dmg_cpu_b/pages/p17_wave_ram.sv \
-dmg_cpu_b/pages/p18_channel3.sv \
-dmg_cpu_b/pages/p19_ch4_regs.sv \
-dmg_cpu_b/pages/p20_channel4.sv \
-dmg_cpu_b/pages/p21_video_control.sv \
-dmg_cpu_b/pages/p22_ppu_decode.sv \
-dmg_cpu_b/pages/p23_video_regs.sv \
-dmg_cpu_b/pages/p24_lcd_control.sv \
-dmg_cpu_b/pages/p25_vram_interface.sv \
-dmg_cpu_b/pages/p26_background.sv \
-dmg_cpu_b/pages/p27_window_map_lookup.sv \
-dmg_cpu_b/pages/p28_oam.sv \
-dmg_cpu_b/pages/p29_sprite_control.sv \
-dmg_cpu_b/pages/p30_sprite_store.sv \
-dmg_cpu_b/pages/p31_sprite_x_matchers.sv \
-dmg_cpu_b/pages/p32_bg_pixel_shifter.sv \
-dmg_cpu_b/pages/p33_sprite_pixel_shifter.sv \
-dmg_cpu_b/pages/p34_sprite_palette_shifter.sv \
-dmg_cpu_b/pages/p35_pixel_mux.sv \
-dmg_cpu_b/pages/p36_palettes.sv
-
 DMG_CPU_B_CELLS = \
-dmg_cpu_b/cells/nor_srlatch.sv \
-dmg_cpu_b/cells/nand_srlatch.sv \
-dmg_cpu_b/cells/dlatch_a.sv \
-dmg_cpu_b/cells/dlatch_b.sv \
-dmg_cpu_b/cells/drlatch.sv \
-dmg_cpu_b/cells/dffr_a.sv \
-dmg_cpu_b/cells/dffr_b.sv \
-dmg_cpu_b/cells/dffr_bp.sv \
+dmg_cpu_b/cells/and2.sv \
+dmg_cpu_b/cells/and3.sv \
+dmg_cpu_b/cells/and4.sv \
+dmg_cpu_b/cells/ao21.sv \
+dmg_cpu_b/cells/ao222222.sv \
+dmg_cpu_b/cells/ao2222.sv \
+dmg_cpu_b/cells/ao222.sv \
+dmg_cpu_b/cells/ao22.sv \
+dmg_cpu_b/cells/audio.sv \
+dmg_cpu_b/cells/boot_rom.sv \
+dmg_cpu_b/cells/buf_if0.sv \
+dmg_cpu_b/cells/dffr_cc_q.sv \
+dmg_cpu_b/cells/dffr_cc.sv \
+dmg_cpu_b/cells/dffr.sv \
 dmg_cpu_b/cells/dffsr.sv \
-dmg_cpu_b/cells/tffd.sv
+dmg_cpu_b/cells/dlatch_ee_q.sv \
+dmg_cpu_b/cells/dlatch_ee.sv \
+dmg_cpu_b/cells/dlatch.sv \
+dmg_cpu_b/cells/drlatch_ee.sv \
+dmg_cpu_b/cells/eco_nand2.sv \
+dmg_cpu_b/cells/full_add.sv \
+dmg_cpu_b/cells/generic_sram.sv \
+dmg_cpu_b/cells/half_add.sv \
+dmg_cpu_b/cells/high_ram.sv \
+dmg_cpu_b/cells/muxi.sv \
+dmg_cpu_b/cells/mux.sv \
+dmg_cpu_b/cells/nand2.sv \
+dmg_cpu_b/cells/nand3.sv \
+dmg_cpu_b/cells/nand4.sv \
+dmg_cpu_b/cells/nand5.sv \
+dmg_cpu_b/cells/nand6.sv \
+dmg_cpu_b/cells/nand7.sv \
+dmg_cpu_b/cells/nand_latch.sv \
+dmg_cpu_b/cells/nor2.sv \
+dmg_cpu_b/cells/nor3.sv \
+dmg_cpu_b/cells/nor4.sv \
+dmg_cpu_b/cells/nor5.sv \
+dmg_cpu_b/cells/nor6.sv \
+dmg_cpu_b/cells/nor8.sv \
+dmg_cpu_b/cells/nor_latch.sv \
+dmg_cpu_b/cells/not_if0.sv \
+dmg_cpu_b/cells/not_if1.sv \
+dmg_cpu_b/cells/not_x1.sv \
+dmg_cpu_b/cells/not_x2.sv \
+dmg_cpu_b/cells/not_x3.sv \
+dmg_cpu_b/cells/not_x4.sv \
+dmg_cpu_b/cells/not_x6.sv \
+dmg_cpu_b/cells/oa21.sv \
+dmg_cpu_b/cells/oai21.sv \
+dmg_cpu_b/cells/oam.sv \
+dmg_cpu_b/cells/or2.sv \
+dmg_cpu_b/cells/or3.sv \
+dmg_cpu_b/cells/or4.sv \
+dmg_cpu_b/cells/pad_bidir_pu_latch.sv \
+dmg_cpu_b/cells/pad_bidir_pu.sv \
+dmg_cpu_b/cells/pad_bidir.sv \
+dmg_cpu_b/cells/pad_in_pu.sv \
+dmg_cpu_b/cells/pad_in.sv \
+dmg_cpu_b/cells/pad_out_diff.sv \
+dmg_cpu_b/cells/pad_out.sv \
+dmg_cpu_b/cells/pad_pass.sv \
+dmg_cpu_b/cells/pad_pass_tg.sv \
+dmg_cpu_b/cells/pad_xtal.sv \
+dmg_cpu_b/cells/tffnl.sv \
+dmg_cpu_b/cells/tie.sv \
+dmg_cpu_b/cells/wave_ram.sv \
+dmg_cpu_b/cells/xnor.sv \
+dmg_cpu_b/cells/xor.sv
 
 DMG_CPU_B = \
 dmg_cpu_b/dmg_cpu_b.sv \
 dmg_cpu_b/timing-$(TIMING).sv \
 $(DMG_CPU_B_CELLS) \
-$(DMG_CPU_B_PAGES)
 
 SM83_CELLS = \
 sm83/cells/alu_cgen.sv \
@@ -215,21 +234,6 @@ MBC = \
 mbc/mbc1.sv \
 mbc/mbc5.sv
 
-DMG_CPU_B_TEST_VVP_OUT = \
-dmg_cpu_b_test.vcd \
-dmg_cpu_b_test.fst \
-dmg_cpu_b_test.snd \
-dmg_cpu_b_test_ch1.snd \
-dmg_cpu_b_test_ch2.snd \
-dmg_cpu_b_test_ch3.snd \
-dmg_cpu_b_test_ch4.snd \
-dmg_cpu_b_test.vid
-
-DMG_CPU_B_TEST_OUT = \
-dmg_cpu_b_test.vvp \
-$(DMG_CPU_B_TEST_VVP_OUT) \
-dmg_cpu_b_test.mkv
-
 DMG_CPU_B_GAMEBOY_VVP_OUT = \
 dmg_cpu_b_gameboy.vcd \
 dmg_cpu_b_gameboy.fst \
@@ -282,26 +286,13 @@ endif
 VVP_SND_DUMP_FLAGS = +SND_FILE=$1.snd
 VVP_VID_DUMP_FLAGS = +VID_FILE=$1.vid
 
-all: sim-test sim-gameboy
+all: sim-gameboy
 
 clean:
-	rm -f $(DMG_CPU_B_TEST_OUT) $(DMG_CPU_B_GAMEBOY_OUT) mkvid/mkimgs
+	rm -f $(DMG_CPU_B_GAMEBOY_OUT) mkvid/mkimgs
 	rm -rf tests/logs
 
-.PHONY: all clean sim-test sim-gameboy
-
-dmg_cpu_b_test.vvp: dmg_cpu_b_test.sv $(DMG_CPU_B) $(COMMON_FILES) $(AV_DUMP) $(TIMESCALE)
-	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_test.sv $(COMMON_FILES) $(DMG_CPU_B)
-
-sim-test $(DMG_CPU_B_TEST_VVP_OUT): dmg_cpu_b_test.vvp
-	$(VVP) $(VVP_FLAGS) $< $(call VVP_DUMP_FLAGS,dmg_cpu_b_test) \
-	                       $(call VVP_CH_DUMP_FLAGS,dmg_cpu_b_test) \
-	                       $(call VVP_SND_DUMP_FLAGS,dmg_cpu_b_test) \
-	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_test) \
-	                       +BOOTROM=$(BOOTROM)
-
-dmg_cpu_b_test.mkv: mkvid/mkimgs mkvid/mkvid.sh dmg_cpu_b_test.vid dmg_cpu_b_test.snd
-	mkvid/mkvid.sh dmg_cpu_b_test
+.PHONY: all clean sim-gameboy
 
 dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(COMMON_FILES) $(AV_DUMP) $(MBC) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_gameboy.sv $(COMMON_FILES) $(DMG_CPU_B) $(SM83) $(MBC)

@@ -2,9 +2,7 @@ DMG Sim
 =======
 
 SystemVerilog code for simulating a Game Boy system with Icarus Verilog.
-Most of the code is derived from the schematics in
-[furrtek/DMG-CPU-Inside](https://github.com/furrtek/DMG-CPU-Inside).
-The SM83 CPU core is generated from the netlist files in
+Most of the code is generated from the netlist files in
 [msinger/dmg-schematics](https://github.com/msinger/dmg-schematics).
 
 
@@ -13,14 +11,11 @@ Files in this repo
 
 | File(s)                              | Description                                                                         |
 | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| ./dmg\_cpu\_b/pages/\*.sv            | The 36 pages of Furrtek's schematics.                                               |
-| ./dmg\_cpu\_b/cells/timing\_param.sv | Defines the delay times for all the different cell types.                           |
-| ./dmg\_cpu\_b/cells/\*.sv            | Modules for flip-flop and latch cells that are used in the DMG-CPU B chip.          |
-| ./dmg\_cpu\_b/dmg\_cpu\_b.sv         | Module describing a DMG-CPU B chip without CPU. (Basically combining all 36 pages.) |
+| ./dmg\_cpu\_b/cells/\*.sv            | Modules implementing all standard cells of the DMG-CPU B chip.                      |
+| ./dmg\_cpu\_b/dmg\_cpu\_b.sv         | The DMG-CPU B chip.                                                                 |
 | ./sm83/cells/\*.sv                   | Modules implementing all cells in the SM83 CPU core.                                |
 | ./sm83/sm83.sv                       | The SM83 CPU core.                                                                  |
-| ./dmg\_cpu\_b\_test.sv               | Top level module for testing the simulated DMG-CPU B chip without a CPU.            |
-| ./dmg\_cpu\_b\_gameboy.sv            | Top level module that simulates a complete Game Boy system with CPU.                |
+| ./dmg\_cpu\_b\_gameboy.sv            | Top level module that simulates a complete Game Boy system.                         |
 | ./snd\_dump.sv                       | Code for dumping the APU's sound output to a file.                                  |
 | ./vid\_dump.sv                       | Code for dumping the PPU's video signals to a file.                                 |
 | ./mkvid/mkimgs.c                     | C code for extracting raw RGB frames from video signal dumps.                       |
@@ -31,26 +26,26 @@ Files in this repo
 Usage
 -----
 
-There are two main targets in the Makefile:
+The default make target (sim-gameboy) simulates a complete Game Boy system (dmg\_cpu\_b\_gameboy.sv).
+Run
+```
+make sim-gameboy
+```
+or just
+```
+make
+```
+to start the simulation.
 
- * sim-test: Simulates DMG-CPU B chip without a CPU (dmg\_cpu\_b\_test.sv)
- * sim-gameboy: Simulates a complete Game Boy system with CPU (dmg\_cpu\_b\_gameboy.sv)
+The simulation can produce any of the folowing files:
 
-Make without arguments (or make all) runs both simulations.
-
-Each simulation can produce any of the folowing files (% stands for either *test* or *gameboy*):
-
-| File(s)                       | Description                                                                                             |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------- |
-| ./dmg\_cpu\_b\_%.snd          | The APU's sound output. All four channels mixed into one 16 bit PCM file with 65536 Hz stereo.          |
-| ./dmg\_cpu\_b\_%\_ch[1-4].snd | One 8 bit PCM file with 65536 Hz mono for each channel. Only if CH\_DUMP=y is set on make command line. |
-| ./dmg\_cpu\_b\_%.vid          | The PPU's video signal dump. Can be used to extract images for a video.                                 |
+| File(s)                             | Description                                                                                             |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| ./dmg\_cpu\_b\_gameboy.snd          | The APU's sound output. All four channels mixed into one 16 bit PCM file with 65536 Hz stereo.          |
+| ./dmg\_cpu\_b\_gameboy\_ch[1-4].snd | One 8 bit PCM file with 65536 Hz mono for each channel. Only if CH\_DUMP=y is set on make command line. |
+| ./dmg\_cpu\_b\_gameboy.vid          | The PPU's video signal dump. Can be used to extract images for a video.                                 |
 
 To produce a playable video file from those dumps, run
-```
-make dmg_cpu_b_test.mkv
-```
-or
 ```
 make dmg_cpu_b_gameboy.mkv
 ```
@@ -87,7 +82,7 @@ simulate:
 make sim-gameboy ROM=path/to/romfile.gb SECS=10.0
 ```
 
-The simulation takes about 45 minutes per simulated second on a Ryzen 5 3600. If you just want to generate a
+The simulation takes about 73 minutes per simulated second on a Ryzen 5 3600. If you just want to generate a
 video, you can safe some time by disabling the signal dump:
 ```
 make sim-gameboy DUMP=
