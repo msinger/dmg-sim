@@ -108,7 +108,7 @@ Results of Blargg's tests:
 | halt\_bug     |   ✅   |
 | instr\_timing |   ✅   |
 | mem\_timing   |   ✅   |
-| mem\_timing-2 |   ❌   |
+| mem\_timing-2 |   ✅   |
 | oam\_bug      |   ❌   |
 
 Results of Mooneye GB tests:
@@ -143,7 +143,7 @@ Results of Mooneye GB tests:
 | acceptance/ld\_hl\_sp\_e\_timing               |   ✅   |
 | acceptance/oam\_dma/basic                      |   ✅   |
 | acceptance/oam\_dma/reg\_read                  |   ✅   |
-| acceptance/oam\_dma/sources-dmgABCmgbS         |   ❌   |
+| acceptance/oam\_dma/sources-dmgABCmgbS         |   ✅   |
 | acceptance/oam\_dma\_restart                   |   ✅   |
 | acceptance/oam\_dma\_start                     |   ✅   |
 | acceptance/oam\_dma\_timing                    |   ✅   |
@@ -153,9 +153,9 @@ Results of Mooneye GB tests:
 | acceptance/ppu/intr\_2\_0\_timing              |   ✅   |
 | acceptance/ppu/intr\_2\_mode0\_timing          |   ✅   |
 | acceptance/ppu/intr\_2\_mode0\_timing\_sprites |   ✅   |
-| acceptance/ppu/intr\_2\_mode3\_timing          |   ❌   |
+| acceptance/ppu/intr\_2\_mode3\_timing          |   ✅   |
 | acceptance/ppu/intr\_2\_oam\_ok\_timing        |   ✅   |
-| acceptance/ppu/lcdon\_timing-dmgABCmgbS        |   ❌   |
+| acceptance/ppu/lcdon\_timing-dmgABCmgbS        |   ✅   |
 | acceptance/ppu/lcdon\_write\_timing-GS         |   ❌   |
 | acceptance/ppu/stat\_irq\_blocking             |   ✅   |
 | acceptance/ppu/stat\_lyc\_onoff                |   ✅   |
