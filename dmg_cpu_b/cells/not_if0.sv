@@ -1,7 +1,8 @@
 `default_nettype none
 
 module dmg_not_if0 #(
-		parameter real L_y = 54
+		parameter real L_y   = 54,
+		parameter real W_y_p = 35
 	) (
 		input  logic in, ena_n,
 		output logic y
@@ -16,7 +17,7 @@ module dmg_not_if0 #(
 		specparam T_fall_not1 = tpd_elmore(153, R_nmos_ohm(35*L_unit));
 		specparam T_rise_not2 = tpd_elmore( 90, R_pmos_ohm(35*L_unit));
 		specparam T_fall_not2 = tpd_elmore( 90, R_nmos_ohm(35*L_unit));
-		specparam T_rise_y    = tpd_elmore(L_y, R_pmos_ohm(35*L_unit) * 2);
+		specparam T_rise_y    = tpd_elmore(L_y, R_pmos_ohm(W_y_p*L_unit) * 2);
 		specparam T_fall_y    = tpd_elmore(L_y, R_nmos_ohm(35*L_unit) * 2);
 		specparam T_Z_y       = tpd_z(tpd_elmore(L_y, R_pmos_ohm(35*L_unit) * 2),
 		                              tpd_elmore(L_y, R_nmos_ohm(35*L_unit) * 2));

@@ -4912,7 +4912,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_if0 #(
-			.L_y(38893.62)
+			.L_y(38893.62),
+			.W_y_p(310)
 		) ajec_inst (
 			.in(const0),
 			.ena_n(afop),
@@ -4994,7 +4995,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_if0 #(
-			.L_y(33777.41)
+			.L_y(33777.41),
+			.W_y_p(310)
 		) akaj_inst (
 			.in(const0),
 			.ena_n(afop),
@@ -5368,7 +5370,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_if0 #(
-			.L_y(36878.58)
+			.L_y(36878.58),
+			.W_y_p(310)
 		) anoc_inst (
 			.in(const0),
 			.ena_n(afop),
@@ -5676,7 +5679,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_if0 #(
-			.L_y(31397.37)
+			.L_y(31397.37),
+			.W_y_p(310)
 		) arar_inst (
 			.in(const0),
 			.ena_n(afop),
@@ -5941,7 +5945,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_if0 #(
-			.L_y(33977.16)
+			.L_y(33977.16),
+			.W_y_p(310)
 		) asuz_inst (
 			.in(const0),
 			.ena_n(afop),
@@ -5995,7 +6000,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_if0 #(
-			.L_y(35163.97)
+			.L_y(35163.97),
+			.W_y_p(310)
 		) ataj_inst (
 			.in(const0),
 			.ena_n(afop),
@@ -7160,7 +7166,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_x6 #(
-			.L_y(4657.472)
+			.L_y(4657.472),
+			.W_y(350)
 		) bavy_inst (
 			.in(data_phase),
 			.y(data_phase_n)
@@ -7273,7 +7280,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_if0 #(
-			.L_y(31524.23)
+			.L_y(31524.23),
+			.W_y_p(310)
 		) beda_inst (
 			.in(const0),
 			.ena_n(afop),
@@ -7448,7 +7456,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_x4 #(
-			.L_y(4657.472)
+			.L_y(4657.472),
+			.W_y(350)
 		) beko_inst (
 			.in(data_phase),
 			.y(data_phase_n)
@@ -7540,7 +7549,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_if0 #(
-			.L_y(33882.07)
+			.L_y(33882.07),
+			.W_y_p(310)
 		) benu_inst (
 			.in(const0),
 			.ena_n(afop),
@@ -7683,7 +7693,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_x6 #(
-			.L_y(11854.05)
+			.L_y(11854.05),
+			.W_y(350)
 		) beva_inst (
 			.in(byry),
 			.y(data_phase)
@@ -7983,7 +7994,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_x4 #(
-			.L_y(4338.19)
+			.L_y(4338.19),
+			.W_y(350)
 		) bolo_inst (
 			.in(clk_t4),
 			.y(clk_t4_n)
@@ -8351,7 +8363,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_x4 #(
-			.L_y(11854.05)
+			.L_y(11854.05),
+			.W_y(350)
 		) bude_inst (
 			.in(byry),
 			.y(data_phase)
@@ -8384,7 +8397,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_x4 #(
-			.L_y(11760.55)
+			.L_y(11760.55),
+			.W_y(350)
 		) bufa_inst (
 			.in(beru),
 			.y(clk_t4)
@@ -8841,7 +8855,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_x6 #(
-			.L_y(4338.19)
+			.L_y(4338.19),
+			.W_y(350)
 		) byda_inst (
 			.in(clk_t4),
 			.y(clk_t4_n)
@@ -9001,7 +9016,8 @@ module dmg_cpu_b #(
 		);
 
 	dmg_not_x6 #(
-			.L_y(11760.55)
+			.L_y(11760.55),
+			.W_y(350)
 		) byly_inst (
 			.in(beru),
 			.y(clk_t4)
