@@ -15,7 +15,7 @@ module sm83_nand2_nand3_od_irq #(
 
 	localparam realtime T_fall_b_y = tpd_elmore(L_b_y, R_nmos_ohm(9*L_unit) * 3);
 	localparam realtime T_Z_b_y    = tpd_z(, T_fall_b_y);
-	assign (highz1, strong0) #(0, T_fall_b_y, T_Z_b_y) b_y = (b_in1 & b_in2 & b_in3) ? 0 : 'z;
+	assign (highz1, strong0) #(T_Z_b_y, T_fall_b_y, T_Z_b_y) b_y = (b_in1 & b_in2 & b_in3) ? 0 : 'z;
 
 	specify
 		specparam T_rise_a_y = tpd_elmore(L_a_y, R_pmos_ohm(3*L_unit));

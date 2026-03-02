@@ -23,7 +23,7 @@ module sm83_alu_pggen #(
 
 	localparam realtime T_rise_buf = tpd_elmore(L_ao221_in5_n, R_pmos_ohm(5*L_unit));
 	localparam realtime T_Z_buf    = tpd_z(T_rise_buf);
-	bufif0 (strong1, highz0) #(T_rise_buf, 0, T_Z_buf) (ao221_in5_n, '1, pch_n);
+	bufif0 (strong1, highz0) #(T_rise_buf, T_Z_buf, T_Z_buf) (ao221_in5_n, '1, pch_n);
 
 	specify
 		specparam T_rise_xornand  = tpd_elmore(        31, R_pmos_ohm( 5*L_unit));

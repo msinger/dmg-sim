@@ -20,9 +20,9 @@ module dmg_pad_xtal #(
 	localparam realtime T_rise_mux_d0 = tpd_elmore(130, R_pmos_ohm(7*L_unit));
 	localparam realtime T_rise_mux_d1 = tpd_elmore(130, R_pmos_ohm(33));
 	localparam realtime T_fall_mux_d1 = tpd_elmore(130, R_nmos_ohm(28));
-	bufif0 (strong1, highz0) #(T_rise_mux_d0, 0) (clk, '1, ena);
-	bufif0 (strong1, highz0) #(T_rise_mux_d1, 0) (clk, in_pad, ena_n);
-	bufif1 (highz1, strong0) #(0, T_fall_mux_d1) (clk, in_pad, ena);
+	bufif0 (strong1, highz0) #(T_rise_mux_d0, T_fall_mux_d1) (clk, '1, ena);
+	bufif0 (strong1, highz0) #(T_rise_mux_d1, T_fall_mux_d1) (clk, in_pad, ena_n);
+	bufif1 (highz1, strong0) #(T_rise_mux_d1, T_fall_mux_d1) (clk, in_pad, ena);
 	keeper clk_keeper(clk);
 
 	localparam realtime T_rise_out_pad = tpd_elmore(L_out_pad, R_pmos_ohm(62));

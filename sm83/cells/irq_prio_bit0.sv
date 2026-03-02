@@ -26,16 +26,16 @@ module sm83_irq_prio_bit0 #(
 	localparam realtime T_rise_nand_a_y = tpd_elmore(L_nand_a_y, R_pmos_ohm(13*L_unit));
 	localparam realtime T_fall_nand_a_y = tpd_elmore(L_nand_a_y, R_nmos_ohm( 6*L_unit) * 2);
 	localparam realtime T_Z_nand_a_y    = tpd_z(T_rise_nand_a_y, T_fall_nand_a_y);
-	bufif0 (strong1, highz0) #(T_rise_nand_a_y, 0, T_Z_nand_a_y) (nand_a_y, '1, pch_n);
-	bufif1 (highz1, strong0) #(0, T_fall_nand_a_y, T_Z_nand_a_y) (nand_a_y, '0, pch_n & and_in2_nand_a_in2);
+	bufif0 (strong1, highz0) #(T_rise_nand_a_y, T_fall_nand_a_y, T_Z_nand_a_y) (nand_a_y, '1, pch_n);
+	bufif1 (highz1, strong0) #(T_rise_nand_a_y, T_fall_nand_a_y, T_Z_nand_a_y) (nand_a_y, '0, pch_n & and_in2_nand_a_in2);
 
 	localparam realtime T_fall_nand_b_y = tpd_elmore(L_nand_b_y, R_nmos_ohm(6*L_unit) * 2);
 	localparam realtime T_Z_nand_b_y    = tpd_z(, T_fall_nand_b_y);
-	bufif1 (highz1, strong0) #(0, T_fall_nand_b_y, T_Z_nand_b_y) (nand_b_y, '0, pch_n & nand_b_in2);
+	bufif1 (highz1, strong0) #(T_Z_nand_b_y, T_fall_nand_b_y, T_Z_nand_b_y) (nand_b_y, '0, pch_n & nand_b_in2);
 
 	localparam realtime T_rise_dist_nand_a_y_p = tpd_elmore(L_dist_nand_a_y_p, R_pmos_ohm(3*L_unit));
 	localparam realtime T_Z_dist_nand_a_y_p    = tpd_z(T_rise_dist_nand_a_y_p);
-	bufif0 (strong1, highz0) #(T_rise_dist_nand_a_y_p, 0, T_Z_dist_nand_a_y_p)
+	bufif0 (strong1, highz0) #(T_rise_dist_nand_a_y_p, T_Z_dist_nand_a_y_p, T_Z_dist_nand_a_y_p)
 		(dist_nand_a_y_p, '1, dist_nand_a_in1 & dist_nand_a_in2);
 
 	localparam realtime T_fall_dist_nand_a_y_n = tpd_elmore(L_dist_nand_a_y_n, R_nmos_ohm(3*L_unit) * 2);
@@ -46,7 +46,7 @@ module sm83_irq_prio_bit0 #(
 
 	localparam realtime T_rise_dist_nand_b_y_p = tpd_elmore(L_dist_nand_b_y_p, R_pmos_ohm(3*L_unit));
 	localparam realtime T_Z_dist_nand_b_y_p    = tpd_z(T_rise_dist_nand_b_y_p);
-	bufif0 (strong1, highz0) #(T_rise_dist_nand_b_y_p, 0, T_Z_dist_nand_b_y_p)
+	bufif0 (strong1, highz0) #(T_rise_dist_nand_b_y_p, T_Z_dist_nand_b_y_p, T_Z_dist_nand_b_y_p)
 		(dist_nand_b_y_p, '1, dist_nand_b_in);
 
 	localparam realtime T_fall_dist_nand_b_y_n = tpd_elmore(L_dist_nand_b_y_n, R_nmos_ohm(3*L_unit));

@@ -104,22 +104,22 @@ module dmg_boot_rom #(
 	localparam realtime T_fall_d6 = tpd_elmore(L_d6, R_nmos_ohm(100*L_unit) * 2);
 	localparam realtime T_rise_d7 = tpd_elmore(L_d7, R_pmos_ohm(136*L_unit) * 2);
 	localparam realtime T_fall_d7 = tpd_elmore(L_d7, R_nmos_ohm(100*L_unit) * 2);
-	bufif0 (strong1, highz0) #(T_rise_d0, 0) (d0, bl_data[0], oe_n);
-	bufif1 (highz1, strong0) #(0, T_fall_d0) (d0, bl_data[0], oe);
-	bufif0 (strong1, highz0) #(T_rise_d1, 0) (d1, bl_data[1], oe_n);
-	bufif1 (highz1, strong0) #(0, T_fall_d1) (d1, bl_data[1], oe);
-	bufif0 (strong1, highz0) #(T_rise_d2, 0) (d2, bl_data[2], oe_n);
-	bufif1 (highz1, strong0) #(0, T_fall_d2) (d2, bl_data[2], oe);
-	bufif0 (strong1, highz0) #(T_rise_d3, 0) (d3, bl_data[3], oe_n);
-	bufif1 (highz1, strong0) #(0, T_fall_d3) (d3, bl_data[3], oe);
-	bufif0 (strong1, highz0) #(T_rise_d4, 0) (d4, bl_data[4], oe_n);
-	bufif1 (highz1, strong0) #(0, T_fall_d4) (d4, bl_data[4], oe);
-	bufif0 (strong1, highz0) #(T_rise_d5, 0) (d5, bl_data[5], oe_n);
-	bufif1 (highz1, strong0) #(0, T_fall_d5) (d5, bl_data[5], oe);
-	bufif0 (strong1, highz0) #(T_rise_d6, 0) (d6, bl_data[6], oe_n);
-	bufif1 (highz1, strong0) #(0, T_fall_d6) (d6, bl_data[6], oe);
-	bufif0 (strong1, highz0) #(T_rise_d7, 0) (d7, bl_data[7], oe_n);
-	bufif1 (highz1, strong0) #(0, T_fall_d7) (d7, bl_data[7], oe);
+	bufif0 (strong1, highz0) #(T_rise_d0, T_fall_d0) (d0, bl_data[0], oe_n);
+	bufif1 (highz1, strong0) #(T_rise_d0, T_fall_d0) (d0, bl_data[0], oe);
+	bufif0 (strong1, highz0) #(T_rise_d1, T_fall_d1) (d1, bl_data[1], oe_n);
+	bufif1 (highz1, strong0) #(T_rise_d1, T_fall_d1) (d1, bl_data[1], oe);
+	bufif0 (strong1, highz0) #(T_rise_d2, T_fall_d2) (d2, bl_data[2], oe_n);
+	bufif1 (highz1, strong0) #(T_rise_d2, T_fall_d2) (d2, bl_data[2], oe);
+	bufif0 (strong1, highz0) #(T_rise_d3, T_fall_d3) (d3, bl_data[3], oe_n);
+	bufif1 (highz1, strong0) #(T_rise_d3, T_fall_d3) (d3, bl_data[3], oe);
+	bufif0 (strong1, highz0) #(T_rise_d4, T_fall_d4) (d4, bl_data[4], oe_n);
+	bufif1 (highz1, strong0) #(T_rise_d4, T_fall_d4) (d4, bl_data[4], oe);
+	bufif0 (strong1, highz0) #(T_rise_d5, T_fall_d5) (d5, bl_data[5], oe_n);
+	bufif1 (highz1, strong0) #(T_rise_d5, T_fall_d5) (d5, bl_data[5], oe);
+	bufif0 (strong1, highz0) #(T_rise_d6, T_fall_d6) (d6, bl_data[6], oe_n);
+	bufif1 (highz1, strong0) #(T_rise_d6, T_fall_d6) (d6, bl_data[6], oe);
+	bufif0 (strong1, highz0) #(T_rise_d7, T_fall_d7) (d7, bl_data[7], oe_n);
+	bufif1 (highz1, strong0) #(T_rise_d7, T_fall_d7) (d7, bl_data[7], oe);
 
 endmodule
 

@@ -11,7 +11,7 @@ module sm83_nand2_od_a_dbus #(
 
 	localparam realtime T_fall_y = tpd_elmore(L_y, R_nmos_ohm(12*L_unit) * 2);
 	localparam realtime T_Z_y    = tpd_z(, T_fall_y);
-	assign (highz1, strong0) #(0, T_fall_y, T_Z_y) y = (in1 & in2) ? 0 : 'z;
+	assign (highz1, strong0) #(T_Z_y, T_fall_y, T_Z_y) y = (in1 & in2) ? 0 : 'z;
 
 endmodule
 

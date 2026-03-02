@@ -12,11 +12,11 @@ module sm83_reg_bus_pch_b #(
 
 	localparam realtime T_rise_a_y = tpd_elmore(L_a_y, R_pmos_ohm(6*L_unit));
 	localparam realtime T_Z_a_y    = tpd_z(T_rise_a_y);
-	bufif0 (strong1, highz0) #(T_rise_a_y, 0, T_Z_a_y) (a_y, '1, pch_n);
+	bufif0 (strong1, highz0) #(T_rise_a_y, T_Z_a_y, T_Z_a_y) (a_y, '1, pch_n);
 
 	localparam realtime T_rise_b_y = tpd_elmore(L_b_y, R_pmos_ohm(6*L_unit));
 	localparam realtime T_Z_b_y    = tpd_z(T_rise_b_y);
-	bufif0 (strong1, highz0) #(T_rise_b_y, 0, T_Z_b_y) (b_y, '1, pch_n);
+	bufif0 (strong1, highz0) #(T_rise_b_y, T_Z_b_y, T_Z_b_y) (b_y, '1, pch_n);
 
 endmodule
 

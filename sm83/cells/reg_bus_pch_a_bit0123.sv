@@ -20,17 +20,17 @@ module sm83_reg_bus_pch_a_bit0123 #(
 
 	localparam realtime T_rise_a_y = tpd_elmore(L_a_y, R_pmos_ohm(10*L_unit));
 	localparam realtime T_Z_a_y    = tpd_z(T_rise_a_y);
-	bufif0 (strong1, highz0) #(T_rise_a_y, 0, T_Z_a_y) (a_y, '1, pch_n);
+	bufif0 (strong1, highz0) #(T_rise_a_y, T_Z_a_y, T_Z_a_y) (a_y, '1, pch_n);
 
 	localparam realtime T_rise_b_y = tpd_elmore(L_b_y, R_pmos_ohm(15*L_unit));
 	localparam realtime T_Z_b_y    = tpd_z(T_rise_b_y);
-	bufif0 (strong1, highz0) #(T_rise_b_y, 0, T_Z_b_y) (b_y, '1, pch_n);
+	bufif0 (strong1, highz0) #(T_rise_b_y, T_Z_b_y, T_Z_b_y) (b_y, '1, pch_n);
 
 	localparam realtime T_rise_c_y = tpd_elmore(L_c_y, R_pmos_ohm(15*L_unit));
 	localparam realtime T_fall_c_y = tpd_elmore(L_c_y, R_nmos_ohm( 8*L_unit) * 2);
 	localparam realtime T_Z_c_y    = tpd_z(T_rise_c_y, T_fall_c_y);
-	bufif0 (strong1, highz0) #(T_rise_c_y, 0, T_Z_c_y) (c_y, '1, pch_n);
-	assign #(0, T_fall_c_y, T_Z_c_y) c_y = (pch_n & c_zero) ? 0 : 'z;
+	bufif0 (strong1, highz0) #(T_rise_c_y, T_fall_c_y, T_Z_c_y) (c_y, '1, pch_n);
+	assign #(T_rise_c_y, T_fall_c_y, T_Z_c_y) c_y = (pch_n & c_zero) ? 0 : 'z;
 
 	specify
 		specparam T_rise_b_y_n = tpd_elmore(L_b_y_n, R_pmos_ohm(15*L_unit));

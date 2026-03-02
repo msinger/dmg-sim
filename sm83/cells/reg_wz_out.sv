@@ -30,24 +30,24 @@ module sm83_reg_wz_out #(
 
 	localparam realtime T_fall_oai31_y = tpd_elmore(L_oai31_y, R_nmos_ohm(8*L_unit) * 2);
 	localparam realtime T_Z_oai31_y    = tpd_z(, T_fall_oai31_y);
-	assign (highz1, strong0) #(0, T_fall_oai31_y, T_Z_oai31_y)
+	assign (highz1, strong0) #(T_Z_oai31_y, T_fall_oai31_y, T_Z_oai31_y)
 		oai31_y = ((oai_ena1 | oai_ena2 | oai_ena3) & oai31_in_nand_in_aoi_a_in2) ? 0 : 'z;
 
 	localparam realtime T_fall_oai21_y = tpd_elmore(L_oai21_y, R_nmos_ohm(8*L_unit) * 2);
 	localparam realtime T_Z_oai21_y    = tpd_z(, T_fall_oai21_y);
-	assign (highz1, strong0) #(0, T_fall_oai21_y, T_Z_oai21_y)
+	assign (highz1, strong0) #(T_Z_oai21_y, T_fall_oai21_y, T_Z_oai21_y)
 		oai21_y = ((oai_ena1 | oai_ena2) & oai21_in_aoi_b_in2) ? 0 : 'z;
 
 	localparam realtime T_fall_nand_y = tpd_elmore(L_nand_y, R_nmos_ohm(8*L_unit) * 2);
 	localparam realtime T_Z_nand_y    = tpd_z(, T_fall_nand_y);
-	assign (highz1, strong0) #(0, T_fall_nand_y, T_Z_nand_y)
+	assign (highz1, strong0) #(T_Z_nand_y, T_fall_nand_y, T_Z_nand_y)
 		nand_y = (nand_ena & oai31_in_nand_in_aoi_a_in2) ? 0 : 'z;
 
 	localparam realtime T_rise_aoi_a_y = tpd_elmore(93, R_pmos_ohm(8*L_unit));
 	localparam realtime T_fall_aoi_a_y = tpd_elmore(93, R_nmos_ohm(8*L_unit) * 2);
 	localparam realtime T_Z_aoi_a_y    = tpd_z(T_rise_aoi_a_y, T_fall_aoi_a_y);
-	bufif0 (strong1, highz0) #(T_rise_aoi_a_y, 0, T_Z_aoi_a_y) (aoi_a_y, '1, pch_n);
-	assign (highz1, strong0) #(0, T_fall_aoi_a_y, T_Z_aoi_a_y)
+	bufif0 (strong1, highz0) #(T_rise_aoi_a_y, T_fall_aoi_a_y, T_Z_aoi_a_y) (aoi_a_y, '1, pch_n);
+	assign (highz1, strong0) #(T_rise_aoi_a_y, T_fall_aoi_a_y, T_Z_aoi_a_y)
 		aoi_a_y = ((aoi_ena1 & aoi_in1) |
 		           (aoi_ena2 & oai31_in_nand_in_aoi_a_in2) |
 		           (aoi_ena3 & aoi_a_in3_muxi_a_d1)) ? 0 : 'z;
@@ -60,8 +60,8 @@ module sm83_reg_wz_out #(
 	localparam realtime T_rise_aoi_b_y = tpd_elmore(L_aoi_b_y, R_pmos_ohm(6*L_unit));
 	localparam realtime T_fall_aoi_b_y = tpd_elmore(L_aoi_b_y, R_nmos_ohm(8*L_unit) * 2);
 	localparam realtime T_Z_aoi_b_y    = tpd_z(T_rise_aoi_b_y, T_fall_aoi_b_y);
-	bufif0 (strong1, highz0) #(T_rise_aoi_b_y, 0, T_Z_aoi_b_y) (aoi_b_y, '1, pch_n);
-	assign (highz1, strong0) #(0, T_fall_aoi_b_y, T_Z_aoi_b_y)
+	bufif0 (strong1, highz0) #(T_rise_aoi_b_y, T_fall_aoi_b_y, T_Z_aoi_b_y) (aoi_b_y, '1, pch_n);
+	assign (highz1, strong0) #(T_rise_aoi_b_y, T_fall_aoi_b_y, T_Z_aoi_b_y)
 		aoi_b_y = ((aoi_ena1 & aoi_in1) |
 		           (aoi_ena2 & oai21_in_aoi_b_in2) |
 		           (aoi_ena3 & aoi_b_in3_muxi_b_d1)) ? 0 : 'z;

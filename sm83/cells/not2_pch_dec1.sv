@@ -18,11 +18,11 @@ module sm83_not2_pch_dec1 #(
 
 	localparam realtime T_rise_buf_a = tpd_elmore(L_a_in, R_pmos_ohm(8*L_unit));
 	localparam realtime T_Z_buf_a    = tpd_z(T_rise_buf_a);
-	bufif0 (strong1, highz0) #(T_rise_buf_a, 0, T_Z_buf_a) (a_in, '1, pch_n);
+	bufif0 (strong1, highz0) #(T_rise_buf_a, T_Z_buf_a, T_Z_buf_a) (a_in, '1, pch_n);
 
 	localparam realtime T_rise_buf_b = tpd_elmore(L_b_in, R_pmos_ohm(8*L_unit));
 	localparam realtime T_Z_buf_b    = tpd_z(T_rise_buf_b);
-	bufif0 (strong1, highz0) #(T_rise_buf_b, 0, T_Z_buf_b) (b_in, '1, pch_n);
+	bufif0 (strong1, highz0) #(T_rise_buf_b, T_Z_buf_b, T_Z_buf_b) (b_in, '1, pch_n);
 
 	specify
 		specparam T_rise_a_y = tpd_elmore(L_a_y, R_pmos_ohm(17*L_unit));

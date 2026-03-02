@@ -25,7 +25,7 @@ module sm83_dff_cc_ee_pch_d_reg_sp_bit #(
 
 	localparam realtime T_rise_d = tpd_elmore(L_d, R_pmos_ohm(5*L_unit));
 	localparam realtime T_Z_d    = tpd_z(T_rise_d);
-	bufif0 (strong1, highz0) #(T_rise_d, 0, T_Z_d) (d, '1, pch_n);
+	bufif0 (strong1, highz0) #(T_rise_d, T_Z_d, T_Z_d) (d, '1, pch_n);
 
 	specify
 		specparam T_rise_buf1 = tpd_elmore(   49, R_pmos_ohm( 3*L_unit) * 2);
