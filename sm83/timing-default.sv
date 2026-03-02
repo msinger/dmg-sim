@@ -49,7 +49,7 @@ package sm83_timing;
 
 	function automatic realtime tpd_z(realtime T_plh = 0.0s, realtime T_phl = 0.0s, realtime T_min = T_Z_min);
 		const realtime T_pd = (T_plh >= T_phl) ? T_plh : T_phl;
-		return (0.2 * T_pd) > T_min ? (0.2 * T_pd) : T_min;
+		return (0.6 * T_pd) > T_min ? (0.6 * T_pd) : T_min;
 	endfunction
 
 endpackage
