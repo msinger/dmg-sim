@@ -1066,7 +1066,7 @@ module dmg_cpu_b_gameboy;
 					vdump.video_dump_loop(fvid);
 				end
 
-				begin
+				begin :time_dump
 					@(negedge sys_reset);
 					$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
 					$display("System reset done -- will simulate %s seconds", time_str);
@@ -1089,6 +1089,22 @@ module dmg_cpu_b_gameboy;
 
 					disable tick_tick;
 					disable video_dump;
+					disable sim_regs;
+				end
+
+				begin :sim_regs
+					forever begin
+						@(posedge nwr);
+						case ({ncs, a})
+							'h0e5a5: begin
+								$display("System self-terminated by writing to address 0xe5a5");
+								disable tick_tick;
+								disable video_dump;
+								disable time_dump;
+								disable sim_regs;
+							end
+						endcase
+					end
 				end
 			join
 
