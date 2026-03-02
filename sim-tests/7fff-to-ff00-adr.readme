@@ -1,0 +1,18 @@
+##############
+
+When using a logic analyzer on the Game Boy its cartridge connector, you
+see that the upper address lines (A14-A8) will go low after reading from
+the cartridge. The lower address lines (A7-A0) will keep their value
+however. This is odd, because according to the schematics all address
+lines (A14-A0) are treated the same: The CPU sets them to 0 at the end
+of a memory access. The behaviour we see on the logic analyzer results
+from the lower address lines being roughly double the length than the
+upper ones. So they have roughly double the delay until they settle on a
+new value. This additional delay causes the 1-to-0 change to arrive too
+late, after the ADDR_LATCH signal goes low, so the lower address lines
+will get held by the latch as they were during the memory access.
+
+Check for this in GTKWave:
+ * Address at cartridge bus must be 0x80ff at primary marker.
+
+##############

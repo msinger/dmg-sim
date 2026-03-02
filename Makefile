@@ -291,6 +291,7 @@ all: sim-gameboy
 clean:
 	rm -f $(DMG_CPU_B_GAMEBOY_OUT) mkvid/mkimgs
 	rm -rf tests/logs
+	rm -f sim-tests/*.o sim-tests/*.elf sim-tests/*.fst sim-tests/*.bootrom sim-tests/*.cartrom
 
 .PHONY: all clean sim-gameboy
 
