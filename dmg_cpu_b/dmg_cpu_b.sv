@@ -1563,6 +1563,7 @@ module dmg_cpu_b #(
 	logic     dma_a7;
 	logic     dma_a8;
 	logic     dma_a9;
+	logic     dma_addr_ext;
 	logic     dma_phi;
 	logic     dma_phi2;
 	logic     dma_run;
@@ -2608,7 +2609,6 @@ module dmg_cpu_b #(
 	logic     luja;
 	logic     luke;
 	logic     lula;
-	logic     luma;
 	logic     lumo;
 	logic     lumy;
 	logic     luna;
@@ -5187,7 +5187,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(272.2658)
 		) amer_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a3),
 			.d0(aret),
 			.y(amer)
@@ -5206,7 +5206,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(1318.828)
 		) amet_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a0),
 			.d0(alor),
 			.y(amet)
@@ -5538,7 +5538,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(306.5311)
 		) apok_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a2),
 			.d0(alyr),
 			.y(apok)
@@ -5938,7 +5938,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(586.7657)
 		) asur_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a7),
 			.d0(arym),
 			.y(asur)
@@ -6081,7 +6081,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(338.406)
 		) atem_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a4),
 			.d0(avys),
 			.y(atem)
@@ -6132,7 +6132,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(503.8909)
 		) atol_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a1),
 			.d0(apur),
 			.y(atol)
@@ -6141,7 +6141,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(908.438)
 		) atov_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a5),
 			.d0(atev),
 			.y(atov)
@@ -6236,7 +6236,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(1209.391)
 		) atyr_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a6),
 			.d0(aros),
 			.y(atyr)
@@ -9771,7 +9771,7 @@ module dmg_cpu_b #(
 	dmg_not_x2 #(
 			.L_y(1727.093)
 		) cede_inst (
-			.in(luma),
+			.in(dma_addr_ext),
 			.y(cede)
 		);
 
@@ -23645,7 +23645,7 @@ module dmg_cpu_b #(
 			.L_y(11329.97)
 		) luma_inst (
 			.in(mory),
-			.y(luma)
+			.y(dma_addr_ext)
 		);
 
 	dmg_not_x1 #(
@@ -24122,7 +24122,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(434.2971)
 		) male_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a11),
 			.d0(lumy),
 			.y(male)
@@ -24139,7 +24139,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(534.1719)
 		) mano_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a8),
 			.d0(luno),
 			.y(mano)
@@ -24200,7 +24200,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(624.7501)
 		) masu_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a9),
 			.d0(lysa),
 			.y(masu)
@@ -24669,7 +24669,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(345.8436)
 		) mojy_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a12),
 			.d0(lobu),
 			.y(mojy)
@@ -24804,7 +24804,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(540.5471)
 		) muce_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a13),
 			.d0(lonu),
 			.y(muce)
@@ -26479,7 +26479,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(377.4534)
 		) pamy_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a10),
 			.d0(pate),
 			.y(pamy)
@@ -26671,7 +26671,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(398.1726)
 		) pege_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a14),
 			.d0(nyre),
 			.y(pege)
@@ -27177,7 +27177,7 @@ module dmg_cpu_b #(
 			.L_y(683.9846)
 		) puva_inst (
 			.in1(nevy),
-			.in2(luma),
+			.in2(dma_addr_ext),
 			.y(puva)
 		);
 
@@ -31200,7 +31200,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(436.4218)
 		) tazy_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a15),
 			.d0(sepy),
 			.y(tazy)
@@ -32423,7 +32423,7 @@ module dmg_cpu_b #(
 	dmg_mux #(
 			.L_y(6901.474)
 		) tyho_inst (
-			.sel(luma),
+			.sel(dma_addr_ext),
 			.d1(dma_a15),
 			.d0(toza),
 			.y(tyho)
@@ -32491,7 +32491,7 @@ module dmg_cpu_b #(
 	dmg_nor2 #(
 			.L_y(107.3123)
 		) tymu_inst (
-			.in1(luma),
+			.in1(dma_addr_ext),
 			.in2(moty),
 			.y(tymu)
 		);
