@@ -9,25 +9,50 @@ module dmg_dffr_cc_q #(
 
 	import dmg_timing::*;
 
-	logic ff;
+	generate
+		if (nodelay) begin
 
-	initial ff = 0;
-	initial q  = 0;
+			logic ff, clk_buf, clk_n_buf, r_n_buf;
 
-	always_latch if ((d && !clk) || (!d && clk_n) || !r_n)   ff <= d & r_n;
-	always_latch if ((ff && !clk_n) || (!ff && clk) || !r_n) q  <= ff & r_n;
+			initial ff = 0;
+			initial q  = 0;
 
-	specify
-		specparam T_rise_buf  = tpd_elmore( 59, R_pmos_ohm( 8*L_unit));
-		specparam T_fall_buf  = tpd_elmore( 59, R_nmos_ohm( 8*L_unit));
-		specparam T_rise_nand = tpd_elmore(115, R_pmos_ohm( 8*L_unit));
-		specparam T_fall_nand = tpd_elmore(115, R_nmos_ohm( 8*L_unit) * 2);
-		specparam T_rise_q    = tpd_elmore(L_q, R_pmos_ohm(35*L_unit));
-		specparam T_fall_q    = tpd_elmore(L_q, R_nmos_ohm(35*L_unit));
+			always @* clk_buf   <= clk;
+			always @* clk_n_buf <= clk_n;
+			always @* r_n_buf   <= r_n;
 
-		(clk, clk_n *> q) = (T_rise_buf + T_fall_nand + T_rise_q, T_fall_buf + T_rise_nand + T_fall_q);
-		(r_n        *> q) = (T_fall_nand + T_rise_q, T_rise_nand + T_fall_q);
-	endspecify
+			always_latch if ((d && !clk_buf) || (!d && clk_n_buf) || !r_n_buf)   ff <= d & r_n_buf;
+			always_latch if ((ff && !clk_n_buf) || (!ff && clk_buf) || !r_n_buf) q  <= ff & r_n_buf;
+
+		end else begin
+
+			localparam realtime T_rise_mux1  = tpd_elmore( 44, R_pmos_ohm( 8*L_unit));
+			localparam realtime T_fall_mux1  = tpd_elmore( 44, R_nmos_ohm( 8*L_unit));
+			localparam realtime T_rise_nand1 = tpd_elmore( 42, R_pmos_ohm( 8*L_unit));
+			localparam realtime T_fall_nand1 = tpd_elmore( 42, R_nmos_ohm( 8*L_unit) * 2);
+			localparam realtime T_rise_not1  = tpd_elmore( 63, R_pmos_ohm( 8*L_unit));
+			localparam realtime T_fall_not1  = tpd_elmore( 63, R_nmos_ohm( 8*L_unit));
+			localparam realtime T_rise_mux2  = tpd_elmore( 59, R_pmos_ohm( 8*L_unit));
+			localparam realtime T_fall_mux2  = tpd_elmore( 59, R_nmos_ohm( 8*L_unit));
+			localparam realtime T_rise_nand2 = tpd_elmore(115, R_pmos_ohm( 8*L_unit));
+			localparam realtime T_fall_nand2 = tpd_elmore(115, R_nmos_ohm( 8*L_unit) * 2);
+			localparam realtime T_rise_q     = tpd_elmore(L_q, R_pmos_ohm(35*L_unit));
+			localparam realtime T_fall_q     = tpd_elmore(L_q, R_nmos_ohm(35*L_unit));
+
+			logic and1, mux1, mux2, mux1_buf, mux2_buf;
+
+			initial mux1 = 0;
+			initial mux2 = 0;
+
+			always_latch if ((d && !clk) || (!d && clk_n) || !r_n)           mux1     <= d & r_n;
+			always_latch if ((and1 && !clk_n) || (!and1 && clk) || !r_n)     mux2     <= and1 & r_n;
+			assign #(T_rise_mux1, T_fall_mux1)                               mux1_buf  = mux1;
+			assign #(T_rise_mux2, T_fall_mux2)                               mux2_buf  = mux2;
+			assign #(T_fall_nand1 + T_rise_not1, T_rise_nand1 + T_fall_not1) and1      = r_n & mux1_buf;
+			assign #(T_fall_nand2 + T_rise_q, T_rise_nand2 + T_fall_q)       q         = r_n & mux2_buf;
+
+		end
+	endgenerate
 
 endmodule
 
