@@ -17,11 +17,10 @@ module dmg_muxi #(
 	tri logic mux;
 	localparam realtime T_rise_buf = tpd_elmore(93, R_pmos_ohm(6*L_unit));
 	localparam realtime T_fall_buf = tpd_elmore(93, R_nmos_ohm(6*L_unit));
-	localparam realtime T_Z_buf    = tpd_z(T_rise_buf);
-	bufif0 (strong1, highz0) #(T_rise_buf, T_fall_buf, T_Z_buf) (mux, d0, sel);
-	bufif1 (highz1, strong0) #(T_rise_buf, T_fall_buf, T_Z_buf) (mux, d0, sel_n);
-	bufif0 (strong1, highz0) #(T_rise_buf, T_fall_buf, T_Z_buf) (mux, d1, sel_n);
-	bufif1 (highz1, strong0) #(T_rise_buf, T_fall_buf, T_Z_buf) (mux, d1, sel);
+	bufif0 (strong1, highz0) #(T_rise_buf, T_fall_buf) (mux, d0, sel);
+	bufif1 (highz1, strong0) #(T_rise_buf, T_fall_buf) (mux, d0, sel_n);
+	bufif0 (strong1, highz0) #(T_rise_buf, T_fall_buf) (mux, d1, sel_n);
+	bufif1 (highz1, strong0) #(T_rise_buf, T_fall_buf) (mux, d1, sel);
 	keeper mux_keeper(mux);
 
 	localparam realtime T_rise_y = tpd_elmore(L_y, R_pmos_ohm(35*L_unit));
