@@ -984,6 +984,46 @@ module dmg_cpu_b_gameboy;
 	assign reg_obj2x[6] = !dmg.enor;
 	assign reg_obj2x[7] = !dmg.depy;
 
+	logic [7:0] ppu_pipe_a_in;
+	assign ppu_pipe_a_in[0] = dmg.legu;
+	assign ppu_pipe_a_in[1] = dmg.nudu;
+	assign ppu_pipe_a_in[2] = dmg.muku;
+	assign ppu_pipe_a_in[3] = dmg.luzo;
+	assign ppu_pipe_a_in[4] = dmg.megu;
+	assign ppu_pipe_a_in[5] = dmg.myjy;
+	assign ppu_pipe_a_in[6] = dmg.nasa;
+	assign ppu_pipe_a_in[7] = dmg.nefo;
+
+	logic [7:0] ppu_pipe_a;
+	assign ppu_pipe_a[0] = dmg.myde;
+	assign ppu_pipe_a[1] = dmg.nozo;
+	assign ppu_pipe_a[2] = dmg.moju;
+	assign ppu_pipe_a[3] = dmg.macu;
+	assign ppu_pipe_a[4] = dmg.nepo;
+	assign ppu_pipe_a[5] = dmg.modu;
+	assign ppu_pipe_a[6] = dmg.neda;
+	assign ppu_pipe_a[7] = dmg.bg_px_a;
+
+	logic [7:0] ppu_pipe_b_in;
+	assign ppu_pipe_b_in[0] = dmg.bg_tile0;
+	assign ppu_pipe_b_in[1] = dmg.bg_tile1;
+	assign ppu_pipe_b_in[2] = dmg.bg_tile2;
+	assign ppu_pipe_b_in[3] = dmg.bg_tile3;
+	assign ppu_pipe_b_in[4] = dmg.bg_tile4;
+	assign ppu_pipe_b_in[5] = dmg.bg_tile5;
+	assign ppu_pipe_b_in[6] = dmg.bg_tile6;
+	assign ppu_pipe_b_in[7] = dmg.bg_tile7;
+
+	logic [7:0] ppu_pipe_b;
+	assign ppu_pipe_b[0] = dmg.tomy;
+	assign ppu_pipe_b[1] = dmg.taca;
+	assign ppu_pipe_b[2] = dmg.sady;
+	assign ppu_pipe_b[3] = dmg.rysa;
+	assign ppu_pipe_b[4] = dmg.sobo;
+	assign ppu_pipe_b[5] = dmg.setu;
+	assign ppu_pipe_b[6] = dmg.ralu;
+	assign ppu_pipe_b[7] = dmg.bg_px_b;
+
 	assign sys_reset = dmg.cpu_sys_reset;
 
 	program test;
