@@ -130,17 +130,19 @@ module dmg_cpu_b_gameboy;
 	endtask
 
 	initial foreach (video_ram[i]) video_ram[i] = $random;
-	always_ff @(posedge nmwr) if (!nmcs) video_ram[ma] <= $isunknown(md) ? $random : md;
-	assign md = (!nmcs && !nmrd) ? video_ram[ma] : 'z;
+	/* VRAM write must be continous for Mooneye acceptance/ppu/lcdon_write_timing-GS test to pass. */
+	always_latch if (!nmcs && !nmwr && !$isunknown(ma)) video_ram[ma] = $isunknown(md) ? $random : md;
+	/* LH5164LN-10 datasheet says that /WE has precedence over /OE. */
+	assign md = (!nmcs && !nmrd && nmwr) ? (!$isunknown(ma) ? video_ram[ma] : 'x) : 'z;
 
 	initial foreach (work_ram[i]) work_ram[i] = $random;
-	always_ff @(posedge nwr) if (!ncs && a[14]) work_ram[a[12:0]] <= $isunknown(d) ? $random : d;
-	assign d = (!ncs && a[14] && !nrd) ? work_ram[a[12:0]] : 'z;
+	always_ff @(posedge nwr) if (!ncs && a[14] && !$isunknown(a[12:0])) work_ram[a[12:0]] <= $isunknown(d) ? $random : d;
+	assign d = (!ncs && a[14] && !nrd && nwr) ? (!$isunknown(a[12:0]) ? work_ram[a[12:0]] : 'x) : 'z;
 
-	assign d = (has_rom && cart_rom_cs && !nrd) ? cart_rom[cart_rom_adr] : 'z;
+	assign d = (has_rom && cart_rom_cs && !nrd) ? (!$isunknown(cart_rom_adr) ? cart_rom[cart_rom_adr]: 'x) : 'z;
 	initial foreach (cart_ram[i]) cart_ram[i] = $random;
-	always_ff @(posedge nwr) if (has_ram && cart_ram_cs) cart_ram[cart_ram_adr] <= $isunknown(d) ? $random : d;
-	assign d = (has_ram && cart_ram_cs && !nrd) ? cart_ram[cart_ram_adr] : 'z;
+	always_ff @(posedge nwr) if (has_ram && cart_ram_cs && !$isunknown(cart_ram_adr)) cart_ram[cart_ram_adr] <= $isunknown(d) ? $random : d;
+	assign d = (has_ram && cart_ram_cs && !nrd && nwr) ? (!$isunknown(cart_ram_adr) ? cart_ram[cart_ram_adr] : 'x) : 'z;
 
 	mbc1 mbc1_chip(
 		.nrst(nreset),
