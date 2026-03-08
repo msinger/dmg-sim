@@ -29,7 +29,7 @@ module dmg_oam #(
 		.wr(wr),
 		.bl_pch_n(bl_pch_n),
 		.wldrv_pch_n(wldrv_pch_n),
-		.wldrv_ena(!wldrv_pch_n)
+		.wldrv_ena(wldrv_pch_n)
 	);
 
 	localparam realtime T_rise_d0 = tpd_elmore(L_d0, R_pmos_ohm(120*L_unit) * 2);

@@ -781,23 +781,37 @@ module dmg_cpu_b_gameboy;
 	assign reg_obj_y_cmp[6] = dmg.xote_n;
 	assign reg_obj_y_cmp[7] = dmg.yzab_n;
 
+	/* Bits in OAM RAMs are stored inverted. OAM RAM A has its data line order reversed. */
+	function automatic logic [7:0] oam_a_decode(int col, adr);
+		logic [7:0] tmp;
+		tmp = dmg.oam_a_inst.sram_inst.mem[col][adr];
+		return ~{tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7]};
+	endfunction
+	function automatic logic [7:0] oam_b_decode(int col, adr);
+		return ~(dmg.oam_b_inst.sram_inst.mem[col][adr]);
+	endfunction
+	function automatic logic [31:0] oam_decode(int n);
+		int adr;
+		logic [7:0] b0, b1, b2, b3;
+		adr = n / 2;
+		b0 = oam_b_decode(n[0] ? 2 : 0, adr);
+		b1 = oam_a_decode(n[0] ? 2 : 0, adr);
+		b2 = oam_b_decode(n[0] ? 3 : 1, adr);
+		b3 = oam_a_decode(n[0] ? 3 : 1, adr);
+		return { b3, b2, b1, b0 };
+	endfunction
+
 	logic [31:0] obj0, obj1, obj2, obj3, obj4, obj5, obj6, obj7;
-	assign obj0 = { dmg.oam_a_inst.sram_inst.mem[1], dmg.oam_b_inst.sram_inst.mem[1],
-	                dmg.oam_a_inst.sram_inst.mem[0], dmg.oam_b_inst.sram_inst.mem[0] };
-	assign obj1 = { dmg.oam_a_inst.sram_inst.mem[3], dmg.oam_b_inst.sram_inst.mem[3],
-	                dmg.oam_a_inst.sram_inst.mem[2], dmg.oam_b_inst.sram_inst.mem[2] };
-	assign obj2 = { dmg.oam_a_inst.sram_inst.mem[5], dmg.oam_b_inst.sram_inst.mem[5],
-	                dmg.oam_a_inst.sram_inst.mem[4], dmg.oam_b_inst.sram_inst.mem[4] };
-	assign obj3 = { dmg.oam_a_inst.sram_inst.mem[7], dmg.oam_b_inst.sram_inst.mem[7],
-	                dmg.oam_a_inst.sram_inst.mem[6], dmg.oam_b_inst.sram_inst.mem[6] };
-	assign obj4 = { dmg.oam_a_inst.sram_inst.mem[9], dmg.oam_b_inst.sram_inst.mem[9],
-	                dmg.oam_a_inst.sram_inst.mem[8], dmg.oam_b_inst.sram_inst.mem[8] };
-	assign obj5 = { dmg.oam_a_inst.sram_inst.mem[11], dmg.oam_b_inst.sram_inst.mem[11],
-	                dmg.oam_a_inst.sram_inst.mem[10], dmg.oam_b_inst.sram_inst.mem[10] };
-	assign obj6 = { dmg.oam_a_inst.sram_inst.mem[13], dmg.oam_b_inst.sram_inst.mem[13],
-	                dmg.oam_a_inst.sram_inst.mem[12], dmg.oam_b_inst.sram_inst.mem[12] };
-	assign obj7 = { dmg.oam_a_inst.sram_inst.mem[15], dmg.oam_b_inst.sram_inst.mem[15],
-	                dmg.oam_a_inst.sram_inst.mem[14], dmg.oam_b_inst.sram_inst.mem[14] };
+	always_comb begin
+		obj0 = oam_decode(0);
+		obj1 = oam_decode(1);
+		obj2 = oam_decode(2);
+		obj3 = oam_decode(3);
+		obj4 = oam_decode(4);
+		obj5 = oam_decode(5);
+		obj6 = oam_decode(6);
+		obj7 = oam_decode(7);
+	end
 
 	logic [3:0] reg_obj0y, reg_obj1y, reg_obj2y, reg_obj3y, reg_obj4y;
 	logic [3:0] reg_obj5y, reg_obj6y, reg_obj7y, reg_obj8y, reg_obj9y;

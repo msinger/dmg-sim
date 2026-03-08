@@ -21,7 +21,7 @@ module dmg_wave_ram #(
 
 	logic [7:0] dout;
 
-	dmg_generic_sram #(.N(16)) sram_inst (
+	dmg_simplified_sram #(.N(16)) sram_inst (
 		.din({ din7, din6, din5, din4, din3, din2, din1, din0 }),
 		.dout(dout),
 		.col({ col3, col2, col1, col0 }),
@@ -30,7 +30,7 @@ module dmg_wave_ram #(
 		.wr(wr),
 		.bl_pch_n(bl_pch_n),
 		.wldrv_pch_n(wldrv_pch_n),
-		.wldrv_ena(!wldrv_pch_n)
+		.wldrv_ena(wldrv_pch_n)
 	);
 
 	localparam realtime T_rise_dout0 = tpd_elmore(L_dout0, R_pmos_ohm(120*L_unit));

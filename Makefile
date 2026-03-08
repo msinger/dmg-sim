@@ -62,6 +62,7 @@ dmg_cpu_b/cells/pad_out.sv \
 dmg_cpu_b/cells/pad_pass.sv \
 dmg_cpu_b/cells/pad_pass_tg.sv \
 dmg_cpu_b/cells/pad_xtal.sv \
+dmg_cpu_b/cells/simplified_sram.sv \
 dmg_cpu_b/cells/tffnl.sv \
 dmg_cpu_b/cells/tie.sv \
 dmg_cpu_b/cells/wave_ram.sv \
