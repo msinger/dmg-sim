@@ -12,74 +12,92 @@ module dmg_generic_sram #(
 		input  logic         wr, bl_pch_n, wldrv_pch_n, wldrv_ena
 	);
 
-	logic     [W-1:0] mem[4][N/4];
-	logic     [W-1:0] last_bl_data[4];
-	tri logic [W-1:0] common_bl_data;
-	int               last_wl_adr, wl_adr;
-	bit               wl_adr_valid;
+	logic     [W-1:0]   mem[4][N/4];
+	logic     [W-1:0]   bl[4];
+	tri logic [W-1:0]   com;
+	bit       [W-1:0]   last_good_com;
+	logic     [N/4-1:0] wl;
 
-	initial foreach (mem[i,j])        mem[i][j] = '0;
-	initial foreach (last_bl_data[i]) last_bl_data[i] = 'z;
-	initial last_wl_adr     = -1;
-	initial wl_adr_valid    = 0;
+	initial foreach (mem[i,j]) mem[i][j] = '0;
+	initial foreach (bl[i])    bl[i]     = 'z;
+	initial                    wl        = '0;
 
-	assign wl_adr = ((a == ~a_n) && wl_adr_valid) ? a[A-1:2] : -1;
-
-	always_latch begin
-		if (!wldrv_pch_n) begin
-			last_wl_adr  = -1;
-			wl_adr_valid = 1;
-		end else if (wldrv_ena) begin
-			if (last_wl_adr == -1 && wl_adr != -1)
-				last_wl_adr = wl_adr;
-			else if (wl_adr == -1 || last_wl_adr != wl_adr)
-				wl_adr_valid = 0;
+	/* Calculate which word lines are enabled.
+	 * Normally this is only one, but when address changes without precharging,
+	 * then multiple will stick enabled, short-circuiting selected bits within
+	 * each column. */
+	generate for (genvar i = 0; i < N/4; i++)
+		always @* if (!wldrv_pch_n)
+			wl[i] = 0;
+		else begin
+			logic tmp;
+			tmp = wldrv_ena;
+			for (int j = 2; (j < A) && (tmp !== 0); j++)
+				if (i & (1 << (j - 2)))
+					tmp &= a[j];
+				else
+					tmp &= a_n[j];
+			wl[i] |= tmp;
 		end
-	end
-
-	always_latch begin
-		if (!bl_pch_n)
-			foreach (last_bl_data[i])
-				last_bl_data[i] = 'z;
-
-		if (wr && bl_pch_n)
-			foreach (last_bl_data[i])
-				if (col[i]) last_bl_data[i] = din;
-
-		if (wl_adr != -1 && wl_adr < N/4 && wldrv_ena)
-			foreach (last_bl_data[i])
-				if (!$isunknown(last_bl_data[i])) mem[i][wl_adr] = last_bl_data[i];
-
-		if (bl_pch_n && wldrv_ena)
-			foreach (last_bl_data[i])
-				last_bl_data[i] = (wl_adr != -1 && wl_adr < N/4) ? mem[i][wl_adr] : 'z;
-	end
-
-	generate
-		for (genvar i = 0; i < 4; i++)
-			assign common_bl_data = col[i] ? last_bl_data[i] : 'z;
 	endgenerate
 
-	keeper #(W) common_bl_data_keeper(common_bl_data);
+	always_latch begin
+		/* Precharge bit lines if requested. */
+		if (!bl_pch_n)
+			foreach (bl[i])
+				bl[i] = 'z;
 
-	assign dout = ~(~common_bl_data); /* double complement to convert 'z -> 'x */
+		/* If write signal is enabled, set all selected bit lines to data input.
+		 * This should usually only be a single bit line, but during address line
+		 * state transitions multiple ones could temporarily be selected at once. */
+		if (wr)
+			foreach (bl[i])
+				if (col[i]) bl[i] = din;
 
-/*
+		/* Drive bits with enabled word lines onto their respective bit lines, but in a first come
+		 * first serve manner. In other words: The first bit that gets enabled after the bit line
+		 * was precharged defines its state. All bits that get enabled later will loose and
+		 * will eventually be overwritten down below. */
+		foreach (bl[i,k])
+			if (bl[i][k] === 'z)
+				foreach (wl[j])
+					if (wl[j])
+						bl[i][k] = mem[i][j][k];
+
+		/* If multiple bit lines are merged onto the common bit line and cause an undefined state,
+		 * resolve that by setting the last good state of the common bit line to all selected bit lines. */
+		foreach (com[k])
+			if ($isunknown(com[k]))
+				foreach (bl[i])
+					if (col[i] && bl[i][k] ==! 'z)
+						bl[i][k] = last_good_com[k];
+
+		/* Update any bits in memory for which word line is enabled and bit line is not undefined. */
+		foreach (bl[i])
+			foreach (wl[j])
+				if (wl[j])
+					for (int k = 0; k < W; k++)
+						if (!$isunknown(bl[i][k])) mem[i][j][k] = bl[i][k];
+	end
+
+	generate for (genvar i = 0; i < 4; i++)
+		assign com = col[i] ? bl[i] : 'z;
+	endgenerate
+
+	keeper #(W) com_keeper(com);
+
+	generate for (genvar i = 0; i < W; i++)
+		always @* if (!$isunknown(com[i])) last_good_com[i] = com[i];
+	endgenerate
+
+	assign dout = last_good_com;
+
 	// Just for debugging:
-	logic [W-1:0] a_bl0, a_bl1, a_bl2, a_bl3, b_bl0, b_bl1, b_bl2, b_bl3, a_com, b_com;
-	// OAM A has data lines complemented and bit order reversed
-	assign a_bl0 = ~{last_bl_data[0][0], last_bl_data[0][1], last_bl_data[0][2], last_bl_data[0][3], last_bl_data[0][4], last_bl_data[0][5], last_bl_data[0][6], last_bl_data[0][7]};
-	assign a_bl1 = ~{last_bl_data[1][0], last_bl_data[1][1], last_bl_data[1][2], last_bl_data[1][3], last_bl_data[1][4], last_bl_data[1][5], last_bl_data[1][6], last_bl_data[1][7]};
-	assign a_bl2 = ~{last_bl_data[2][0], last_bl_data[2][1], last_bl_data[2][2], last_bl_data[2][3], last_bl_data[2][4], last_bl_data[2][5], last_bl_data[2][6], last_bl_data[2][7]};
-	assign a_bl3 = ~{last_bl_data[3][0], last_bl_data[3][1], last_bl_data[3][2], last_bl_data[3][3], last_bl_data[3][4], last_bl_data[3][5], last_bl_data[3][6], last_bl_data[3][7]};
-	assign a_com = ~{common_bl_data[0], common_bl_data[1], common_bl_data[2], common_bl_data[3], common_bl_data[4], common_bl_data[5], common_bl_data[6], common_bl_data[7]};
-	// OAM B has data lines complemented but not reversed
-	assign b_bl0 = ~last_bl_data[0];
-	assign b_bl1 = ~last_bl_data[1];
-	assign b_bl2 = ~last_bl_data[2];
-	assign b_bl3 = ~last_bl_data[3];
-	assign b_com = ~common_bl_data;
-*/
+	logic [W-1:0] bl0, bl1, bl2, bl3;
+	assign bl0 = bl[0];
+	assign bl1 = bl[1];
+	assign bl2 = bl[2];
+	assign bl3 = bl[3];
 
 endmodule
 

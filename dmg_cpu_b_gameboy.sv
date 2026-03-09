@@ -784,11 +784,19 @@ module dmg_cpu_b_gameboy;
 	/* Bits in OAM RAMs are stored inverted. OAM RAM A has its data line order reversed. */
 	function automatic logic [7:0] oam_a_decode(int col, adr);
 		logic [7:0] tmp;
+`ifdef SIMPLIFIED_OAM
+		tmp = dmg.oam_a_inst.sram_inst.mem[{ adr, col[1:0] }];
+`else
 		tmp = dmg.oam_a_inst.sram_inst.mem[col][adr];
+`endif
 		return ~{tmp[0], tmp[1], tmp[2], tmp[3], tmp[4], tmp[5], tmp[6], tmp[7]};
 	endfunction
 	function automatic logic [7:0] oam_b_decode(int col, adr);
+`ifdef SIMPLIFIED_OAM
+		return ~(dmg.oam_b_inst.sram_inst.mem[{ adr, col[1:0] }]);
+`else
 		return ~(dmg.oam_b_inst.sram_inst.mem[col][adr]);
+`endif
 	endfunction
 	function automatic logic [31:0] oam_decode(int n);
 		int adr;

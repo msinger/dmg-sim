@@ -20,7 +20,14 @@ module dmg_oam #(
 
 	logic [7:0] dout;
 
-	dmg_generic_sram #(.N(80)) sram_inst (
+`ifdef SIMPLIFIED_OAM
+	dmg_simplified_sram
+`else
+	dmg_generic_sram
+`endif
+		#(.N(80))
+		sram_inst
+	(
 		.din({ d7, d6, d5, d4, d3, d2, d1, d0 }),
 		.dout(dout),
 		.col({ col3, col2, col1, col0 }),

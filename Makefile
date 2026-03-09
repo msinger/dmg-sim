@@ -287,6 +287,8 @@ endif
 VVP_SND_DUMP_FLAGS = +SND_FILE=$1.snd
 VVP_VID_DUMP_FLAGS = +VID_FILE=$1.vid
 
+SIMPLIFIED_OAM = y
+
 all: sim-gameboy
 
 clean:
@@ -297,7 +299,14 @@ clean:
 .PHONY: all clean sim-gameboy
 
 dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(COMMON_FILES) $(AV_DUMP) $(MBC) $(TIMESCALE)
-	$(IVERILOG) $(IVERILOG_FLAGS) -o $@ $(AV_DUMP) dmg_cpu_b_gameboy.sv $(COMMON_FILES) $(DMG_CPU_B) $(SM83) $(MBC)
+	$(IVERILOG) $(IVERILOG_FLAGS) \
+	            $(if $(SIMPLIFIED_OAM),-DSIMPLIFIED_OAM) \
+	            -o $@ $(AV_DUMP) \
+	            dmg_cpu_b_gameboy.sv \
+	            $(COMMON_FILES) \
+	            $(DMG_CPU_B) \
+	            $(SM83) \
+	            $(MBC)
 
 sim-gameboy $(DMG_CPU_B_GAMEBOY_VVP_OUT): dmg_cpu_b_gameboy.vvp
 	$(VVP) $(VVP_FLAGS) $< $(call VVP_DUMP_FLAGS,dmg_cpu_b_gameboy) \
