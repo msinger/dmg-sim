@@ -1,4 +1,5 @@
 .section .entry,"ax"
+	ld	sp, 0xffff
 	; Place RET insn at 0x8000
 	ld	a, 0xc9
 	ldx	(0x8000), a

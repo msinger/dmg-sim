@@ -1,0 +1,172 @@
+[*]
+[*] GTKWave Analyzer v3.3.125 (w)1999-2025 BSI
+[*] Tue Mar 10 09:24:09 2026
+[*]
+[dumpfile] "/home/michael/projects/dmg_sim/sim-tests/oam-bug.fst"
+[dumpfile_mtime] "Tue Mar 10 09:20:52 2026"
+[dumpfile_size] 7315380
+[savefile] "/home/michael/projects/dmg_sim/sim-tests/oam-bug.gtkw"
+[timestart] 33697823000
+[size] 1920 1153
+[pos] -1 -1
+*-19.200003 33700301000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] dmg_cpu_b_gameboy.
+[treeopen] dmg_cpu_b_gameboy.dmg.
+[treeopen] dmg_cpu_b_gameboy.dmg.cpu_inst.
+[treeopen] dmg_cpu_b_gameboy.dmg.oam_a_inst.
+[treeopen] dmg_cpu_b_gameboy.dmg.oam_b_inst.
+[sst_width] 269
+[signals_width] 202
+[sst_expanded] 1
+[sst_vpaned_height] 349
+@28
+dmg_cpu_b_gameboy.clk
+@22
+dmg_cpu_b_gameboy.obj0[31:0]
+dmg_cpu_b_gameboy.obj1[31:0]
+dmg_cpu_b_gameboy.obj2[31:0]
+dmg_cpu_b_gameboy.obj3[31:0]
+dmg_cpu_b_gameboy.obj4[31:0]
+dmg_cpu_b_gameboy.obj5[31:0]
+dmg_cpu_b_gameboy.obj6[31:0]
+dmg_cpu_b_gameboy.obj7[31:0]
+@28
+dmg_cpu_b_gameboy.dmg.fexx
+dmg_cpu_b_gameboy.dmg.oam_oe_n
+dmg_cpu_b_gameboy.dmg.oam_rd_n
+@200
+-OAM A
+@28
+dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wr
+dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.bl_pch_n
+dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wldrv_pch_n
+@c00022
+dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.col[3:0]
+@28
+(0)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.col[3:0]
+(1)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.col[3:0]
+(2)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.col[3:0]
+(3)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.col[3:0]
+@1401200
+-group_end
+@22
+dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.a[6:2]
+dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.a_n[6:2]
+@c00022
+dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+@28
+(0)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(1)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(2)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(3)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(4)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(5)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(6)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(7)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(8)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(9)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(10)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(11)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(12)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(13)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(14)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(15)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(16)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(17)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(18)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+(19)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.wl[19:0]
+@1401200
+-group_end
+@e2
+dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.bl0[7:0]
+dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.bl1[7:0]
+dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.bl2[7:0]
+dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.bl3[7:0]
+@c000e2
+dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.com[7:0]
+@28
+(0)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.com[7:0]
+(1)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.com[7:0]
+(2)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.com[7:0]
+(3)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.com[7:0]
+(4)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.com[7:0]
+(5)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.com[7:0]
+(6)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.com[7:0]
+(7)dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.com[7:0]
+@1401200
+-group_end
+@200
+-OAM B
+@28
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wr
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.bl_pch_n
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wldrv_pch_n
+@22
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.col[3:0]
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.a[6:2]
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.a_n[6:2]
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl[19:0]
+@62
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.bl0[7:0]
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.bl1[7:0]
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.bl2[7:0]
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.bl3[7:0]
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.com[7:0]
+@800200
+-CPU
+@28
+dmg_cpu_b_gameboy.dmg.cpu_inst.rd
+dmg_cpu_b_gameboy.dmg.cpu_inst.wr
+@c00022
+dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+@28
+(0)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(1)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(2)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(3)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(4)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(5)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(6)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(7)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(8)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(9)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(10)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(11)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(12)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(13)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(14)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(15)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+@1401200
+-group_end
+@c00022
+dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+@28
+(0)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(1)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(2)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(3)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(4)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(5)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(6)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(7)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+@1401200
+-group_end
+@22
+dmg_cpu_b_gameboy.dmg.cpu_inst.opcode[7:0]
+dmg_cpu_b_gameboy.dmg.cpu_inst.reg_a[7:0]
+dmg_cpu_b_gameboy.sm83_bc[15:0]
+dmg_cpu_b_gameboy.sm83_de[15:0]
+dmg_cpu_b_gameboy.sm83_hl[15:0]
+dmg_cpu_b_gameboy.sm83_pc[15:0]
+dmg_cpu_b_gameboy.sm83_sp[15:0]
+dmg_cpu_b_gameboy.sm83_wz[15:0]
+dmg_cpu_b_gameboy.dmg.cpu_inst.res[7:0]
+@28
+dmg_cpu_b_gameboy.dmg.cpu_inst.flag_c
+dmg_cpu_b_gameboy.dmg.cpu_inst.flag_h
+dmg_cpu_b_gameboy.dmg.cpu_inst.flag_n
+dmg_cpu_b_gameboy.dmg.cpu_inst.flag_z
+@1000200
+-CPU
+[pattern_trace] 1
+[pattern_trace] 0

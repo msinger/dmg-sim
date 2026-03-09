@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.125 (w)1999-2025 BSI
-[*] Mon Mar  2 21:50:26 2026
+[*] Mon Mar  9 13:11:21 2026
 [*]
 [dumpfile] "/home/michael/projects/dmg_sim/sim-tests/7fff-to-ff00-adr.fst"
-[dumpfile_mtime] "Mon Mar  2 21:47:35 2026"
-[dumpfile_size] 33695805
+[dumpfile_mtime] "Mon Mar  9 13:09:12 2026"
+[dumpfile_size] 1190998
 [savefile] "/home/michael/projects/dmg_sim/sim-tests/7fff-to-ff00-adr.gtkw"
-[timestart] 32013882900
+[timestart] 32016502000
 [size] 1920 1153
-[pos] 1279 -1
-*-15.600001 32013967700 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] 1279 0
+*-18.300001 32017372000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] dmg_cpu_b_gameboy.
 [treeopen] dmg_cpu_b_gameboy.dmg.
 [treeopen] dmg_cpu_b_gameboy.dmg.cpu_inst.
@@ -24,9 +24,9 @@ dmg_cpu_b_gameboy.clk
 @28
 dmg_cpu_b_gameboy.nrd
 dmg_cpu_b_gameboy.nwr
-@800023
+@800022
 dmg_cpu_b_gameboy.a[15:0]
-@29
+@28
 (0)dmg_cpu_b_gameboy.a[15:0]
 (1)dmg_cpu_b_gameboy.a[15:0]
 (2)dmg_cpu_b_gameboy.a[15:0]
@@ -43,7 +43,7 @@ dmg_cpu_b_gameboy.a[15:0]
 (13)dmg_cpu_b_gameboy.a[15:0]
 (14)dmg_cpu_b_gameboy.a[15:0]
 (15)dmg_cpu_b_gameboy.a[15:0]
-@1001201
+@1001200
 -group_end
 @22
 dmg_cpu_b_gameboy.d[7:0]
@@ -82,7 +82,7 @@ dmg_cpu_b_gameboy.cpg
 dmg_cpu_b_gameboy.cp
 dmg_cpu_b_gameboy.cpl
 dmg_cpu_b_gameboy.ld[1:0]
-@200
+@201
 -PPU
 @22
 dmg_cpu_b_gameboy.reg_ff40[7:0]

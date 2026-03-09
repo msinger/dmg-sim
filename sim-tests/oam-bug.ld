@@ -17,8 +17,7 @@ SECTIONS
 	.rom ORIGIN(rom) : AT(0x0100) {
 		. = ORIGIN(rom);
 		*(.rom .rom.*)
-		. = ORIGIN(rom) + LENGTH(rom) - 1;
-		*(.end_of_rom)
+		. = ORIGIN(rom) + LENGTH(rom);
 	}
 }
 ENTRY(_entry)
