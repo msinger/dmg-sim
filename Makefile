@@ -266,7 +266,7 @@ BOOTROM = DMG_ROM.bin
 ROM =
 SECS = 6.0
 # Delays are calculated at compile time, so you should run "make clean" when changing timing.
-TIMING = nodelay
+TIMING = default
 
 ifeq ($(DUMP),vcd)
 VVP_DUMP_FLAGS = -vcd +DUMPFILE=$1.vcd
@@ -287,6 +287,8 @@ endif
 VVP_SND_DUMP_FLAGS = +SND_FILE=$1.snd
 VVP_VID_DUMP_FLAGS = +VID_FILE=$1.vid
 
+# Selects simplified SRAM implementation for OAM which can't simulate OAM corruption bug but is much faster.
+# Run "make clean" when changing OAM type.
 SIMPLIFIED_OAM = y
 
 all: sim-gameboy
