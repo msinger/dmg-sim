@@ -7029,13 +7029,13 @@ module dmg_cpu_b #(
 		);
 
 	dmg_dffr #(
-			.L_q(184.8748)
+			.L_q_n(184.8748)
 		) bara_inst (
 			.d(\512hz ),
 			.clk(coke),
 			.r_n(atus),
-			.q(bara_n),
-			.q_n()
+			.q(),
+			.q_n(bara_n)
 		);
 
 	dmg_nand2 #(
