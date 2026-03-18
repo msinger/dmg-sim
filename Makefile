@@ -286,6 +286,7 @@ endif
 
 VVP_SND_DUMP_FLAGS = +SND_FILE=$1.snd
 VVP_VID_DUMP_FLAGS = +VID_FILE=$1.vid
+VVP_SAV_DUMP_FLAGS = +SAV_FILE=$1.sav
 
 # Selects simplified SRAM implementation for OAM which can't simulate OAM corruption bug but is much faster.
 # Run "make clean" when changing OAM type.
@@ -321,6 +322,7 @@ sim-gameboy $(DMG_CPU_B_GAMEBOY_VVP_OUT): dmg_cpu_b_gameboy.vvp
 	                       $(call VVP_CH_DUMP_FLAGS,dmg_cpu_b_gameboy) \
 	                       $(call VVP_SND_DUMP_FLAGS,dmg_cpu_b_gameboy) \
 	                       $(call VVP_VID_DUMP_FLAGS,dmg_cpu_b_gameboy) \
+	                       $(call VVP_SAV_DUMP_FLAGS,dmg_cpu_b_gameboy) \
 	                       +BOOTROM="$(BOOTROM)" \
 	                       +ROM="$(ROM)" \
 	                       +SECS=$(SECS)

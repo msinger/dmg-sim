@@ -57,6 +57,7 @@ The simulation can produce any of the following files:
 | ./dmg\_cpu\_b\_gameboy\_ch[1-4].snd | One 8 bit PCM file with 65536 Hz mono for each channel. Only if CH\_DUMP=y is set on make command line. |
 | ./dmg\_cpu\_b\_gameboy.vid          | The PPU's video signal dump. Can be used to extract images for a video.                                 |
 | ./dmg\_cpu\_b\_gameboy.fst          | Dump of all signals in the system. Can be opened with GTKWave or any other wave viewer.                 |
+| ./dmg\_cpu\_b\_gameboy.sav          | Cartridge SRAM gets dumped every 0.1 seconds.                                                           |
 
 To produce a playable video file from those dumps, run
 ```

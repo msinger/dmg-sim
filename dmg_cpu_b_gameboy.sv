@@ -140,7 +140,7 @@ module dmg_cpu_b_gameboy;
 	assign d = (!ncs && a[14] && !nrd && nwr) ? (!$isunknown(a[12:0]) ? work_ram[a[12:0]] : 'x) : 'z;
 
 	assign d = (has_rom && cart_rom_cs && !nrd) ? (!$isunknown(cart_rom_adr) ? cart_rom[cart_rom_adr]: 'x) : 'z;
-	initial foreach (cart_ram[i]) cart_ram[i] = $random;
+	initial foreach (cart_ram[i]) cart_ram[i] = '0;
 	always_ff @(posedge nwr) if (has_ram && cart_ram_cs && !$isunknown(cart_ram_adr)) cart_ram[cart_ram_adr] <= $isunknown(d) ? $random : d;
 	assign d = (has_ram && cart_ram_cs && !nrd && nwr) ? (!$isunknown(cart_ram_adr) ? cart_ram[cart_ram_adr] : 'x) : 'z;
 
@@ -1050,11 +1050,24 @@ module dmg_cpu_b_gameboy;
 
 	assign sys_reset = dmg.cpu_sys_reset;
 
+	task automatic dump_cart_ram(input string sav_file);
+		int f;
+
+		if (!has_ram) return;
+		if (sav_file == "") return;
+
+		f = $fopen(sav_file, "wb");
+		foreach (cart_ram[i])
+			$fwrite(f, "%c", cart_ram[i]);
+		$fflush(f);
+		$fclose(f);
+	endtask
+
 	program test;
 		int sample_idx;
 
 		initial begin
-			string dumpfile, ch_file, snd_file, vid_file;
+			string dumpfile, ch_file, snd_file, vid_file, sav_file;
 			string time_str, prev_time_str;
 			real   sim_seconds;
 			int    _;
@@ -1077,6 +1090,9 @@ module dmg_cpu_b_gameboy;
 			vid_file = "";
 			_ = $value$plusargs("VID_FILE=%s", vid_file);
 			dump_video = vid_file != "";
+
+			sav_file = "";
+			_ = $value$plusargs("SAV_FILE=%s", sav_file);
 
 			sim_seconds = 6.0; /* Enough time for the boot ROM */
 			_ = $value$plusargs("SECS=%f", sim_seconds);
@@ -1145,6 +1161,7 @@ module dmg_cpu_b_gameboy;
 								$display("%s seconds remaining", time_str);
 								$fflush(32'h8000_0001);
 								prev_time_str = time_str;
+								dump_cart_ram(sav_file);
 							end
 						end
 						@(posedge dmg.clk_1mhz_n);
@@ -1154,6 +1171,7 @@ module dmg_cpu_b_gameboy;
 					disable tick_tick;
 					disable video_dump;
 					disable sim_regs;
+					dump_cart_ram(sav_file);
 				end
 
 				begin :sim_regs
@@ -1165,6 +1183,7 @@ module dmg_cpu_b_gameboy;
 								disable tick_tick;
 								disable video_dump;
 								disable time_dump;
+								dump_cart_ram(sav_file);
 								disable sim_regs;
 							end
 						endcase
