@@ -291,6 +291,11 @@ VVP_VID_DUMP_FLAGS = +VID_FILE=$1.vid
 # Run "make clean" when changing OAM type.
 SIMPLIFIED_OAM = y
 
+# Selects simplified SRAM implementation for Wave RAM which can't simulate Wave RAM corruption bug (which is tested
+# by Blargg dmg_sound test #10) but is much faster.
+# Run "make clean" when changing Wave RAM type.
+SIMPLIFIED_WAVERAM = y
+
 all: sim-gameboy
 
 clean:
@@ -303,6 +308,7 @@ clean:
 dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(COMMON_FILES) $(AV_DUMP) $(MBC) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) \
 	            $(if $(SIMPLIFIED_OAM),-DSIMPLIFIED_OAM) \
+	            $(if $(SIMPLIFIED_WAVERAM),-DSIMPLIFIED_WAVERAM) \
 	            -o $@ $(AV_DUMP) \
 	            dmg_cpu_b_gameboy.sv \
 	            $(COMMON_FILES) \

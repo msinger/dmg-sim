@@ -19,9 +19,22 @@ module dmg_wave_ram #(
 
 	import dmg_timing::*;
 
+	localparam realtime T_rise_wl_n = tpd_elmore( 50, R_pmos_ohm(25.0*L_unit));
+	localparam realtime T_fall_wl_n = tpd_elmore( 50, R_nmos_ohm( 8.0*L_unit) * 5);
+	localparam realtime T_rise_wl   = tpd_elmore(620, R_pmos_ohm(22.5*L_unit));
+	localparam realtime T_fall_wl   = tpd_elmore(620, R_nmos_ohm(22.5*L_unit));
+
 	logic [7:0] dout;
 
-	dmg_simplified_sram #(.N(16)) sram_inst (
+`ifdef SIMPLIFIED_WAVERAM
+	dmg_simplified_sram #(
+`else
+	dmg_generic_sram #(
+`endif
+		.N(16),
+		.T_rise_wl(T_fall_wl_n + T_rise_wl),
+		.T_fall_wl(T_rise_wl_n + T_fall_wl)
+	) sram_inst (
 		.din({ din7, din6, din5, din4, din3, din2, din1, din0 }),
 		.dout(dout),
 		.col({ col3, col2, col1, col0 }),

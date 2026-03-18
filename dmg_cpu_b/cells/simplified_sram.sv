@@ -1,9 +1,11 @@
 `default_nettype none
 
 module dmg_simplified_sram #(
-		parameter int  N,
-		parameter int  W = 8,
-		parameter int  A = $clog2(N)
+		parameter int      N,
+		parameter int      W = 8,
+		parameter int      A = $clog2(N),
+		parameter realtime T_rise_wl = 0.0,
+		parameter realtime T_fall_wl = 0.0
 	) (
 		input  logic [W-1:0] din,
 		output logic [W-1:0] dout,

@@ -1,9 +1,11 @@
 `default_nettype none
 
 module dmg_generic_sram #(
-		parameter int  N,
-		parameter int  W = 8,
-		parameter int  A = $clog2(N)
+		parameter int      N,
+		parameter int      W         = 8,
+		parameter int      A         = $clog2(N),
+		parameter realtime T_rise_wl = 0.0,
+		parameter realtime T_fall_wl = 0.0
 	) (
 		input  logic [W-1:0] din,
 		output logic [W-1:0] dout,
@@ -16,11 +18,11 @@ module dmg_generic_sram #(
 	logic     [W-1:0]   bl[4];
 	tri logic [W-1:0]   com;
 	bit       [W-1:0]   last_good_com;
-	logic     [N/4-1:0] wl;
+	logic     [N/4-1:0] wl, wl_new;
 
 	initial foreach (mem[i,j]) mem[i][j] = '0;
 	initial foreach (bl[i])    bl[i]     = 'z;
-	initial                    wl        = '0;
+	initial                    wl_new    = '0;
 
 	/* Calculate which word lines are enabled.
 	 * Normally this is only one, but when address changes without precharging,
@@ -28,7 +30,7 @@ module dmg_generic_sram #(
 	 * each column. */
 	generate for (genvar i = 0; i < N/4; i++)
 		always @* if (!wldrv_pch_n)
-			wl[i] = 0;
+			wl_new[i] = 0;
 		else begin
 			logic tmp;
 			tmp = wldrv_ena;
@@ -37,9 +39,11 @@ module dmg_generic_sram #(
 					tmp &= a[j];
 				else
 					tmp &= a_n[j];
-			wl[i] |= tmp;
+			wl_new[i] |= tmp;
 		end
 	endgenerate
+
+	assign #(T_rise_wl, T_fall_wl) wl = wl_new;
 
 	always_latch begin
 		/* Precharge bit lines if requested. */

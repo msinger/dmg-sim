@@ -92,11 +92,17 @@ with 0 delays instead. Without delays, the simulation may run faster, but the ex
 on glitches that emerge from "bad timing". You need to run `make clean` when changing this variable, because delays in
 Verilog are compile time constants, meaning the code needs to be recompiled.
 
-`SIMPLIFY_OAM=y` *(default)*, `SIMPLIFY_OAM=`:  
-The default (`SIMPLIFY_OAM=y`) greatly increases simulation speed. It simulates the SRAM blocks of the OAM with reduced
-complexity. With this simplification, the infamous OAM bug is not present though. With `SIMPLIFY_OAM=`, the simplification
+`SIMPLIFIED_OAM=y` *(default)*, `SIMPLIFIED_OAM=`:  
+The default (`SIMPLIFIED_OAM=y`) greatly increases simulation speed. It simulates the SRAM blocks of the OAM with reduced
+complexity. With this simplification, the infamous OAM bug is not present though. With `SIMPLIFIED_OAM=`, the simplification
 is disabled and the simulation can predict which RAM rows will be corrupted by the OAM bug. You need to run `make clean`
 when changing this variable, because the code needs to be recompiled.
+
+`SIMPLIFIED_WAVERAM=y` *(default)*, `SIMPLIFIED_WAVERAM=`:  
+The default (`SIMPLIFIED_WAVERAM=y`) greatly increases simulation speed. It simulates the SRAM block of the Wave RAM with
+reduced complexity. With this simplification, Blargg's dmg\_sound test No. 10 won't pass. With `SIMPLIFIED_WAVERAM=`,
+the simplification is disabled and the simulation can predict which RAM rows or bytes will be corrupted by the wave restart
+bug. You need to run `make clean` when changing this variable, because the code needs to be recompiled.
 
 
 "Quickboot" boot ROM
