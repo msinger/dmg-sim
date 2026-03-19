@@ -1,5 +1,6 @@
 *.o
 *.elf
 *.fst
+*.sav
 *.bootrom
 *.cartrom
