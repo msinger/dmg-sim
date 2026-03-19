@@ -22,9 +22,12 @@ $OBJCOPY -I elf32-sm83 -O binary -j .rom  $TEST_NAME.elf $TEST_NAME.cartrom
 vvp -N "$ROOT_DIR"/dmg_cpu_b_gameboy.vvp \
 	-fst-speed \
 	+DUMPFILE="$TESTS_DIR"/$TEST_NAME.fst \
+	+SAV_FILE="$TESTS_DIR"/$TEST_NAME.sav \
 	+BOOTROM="$TESTS_DIR"/$TEST_NAME.bootrom \
 	+ROM="$TESTS_DIR"/$TEST_NAME.cartrom \
-	+SECS=1.0
+	+SECS=1.0 \
+	+MBC_TYPE=03 \
+	+RAM_SIZE=02
 
 set +x
 

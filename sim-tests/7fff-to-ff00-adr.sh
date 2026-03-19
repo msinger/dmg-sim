@@ -24,7 +24,9 @@ vvp -N "$ROOT_DIR"/dmg_cpu_b_gameboy.vvp \
 	+DUMPFILE="$TESTS_DIR"/$TEST_NAME.fst \
 	+BOOTROM="$TESTS_DIR"/$TEST_NAME.bootrom \
 	+ROM="$TESTS_DIR"/$TEST_NAME.cartrom \
-	+SECS=1.0
+	+SECS=1.0 \
+	+MBC_TYPE=00 \
+	+RAM_SIZE=00
 
 set +x
 cat $TEST_NAME.readme

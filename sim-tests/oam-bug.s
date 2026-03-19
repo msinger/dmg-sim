@@ -119,4 +119,17 @@ start:
 	nop
 	nop
 
+	ld	sp, 0xffff
+
+	ld	a, 0x0a
+	ldx	(0x0000), a
+
+	ld	bc, 0xfe00
+	ld	de, 160
+	ld	hl, 0xa000
+	call	memcpy
+
+	xor	a
+	ldx	(0x0000), a
+
 	ldx	(0xe5a5), a
