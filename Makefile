@@ -243,7 +243,8 @@ dmg_cpu_b_gameboy_ch1.snd \
 dmg_cpu_b_gameboy_ch2.snd \
 dmg_cpu_b_gameboy_ch3.snd \
 dmg_cpu_b_gameboy_ch4.snd \
-dmg_cpu_b_gameboy.vid
+dmg_cpu_b_gameboy.vid \
+dmg_cpu_b_gameboy.sav
 
 DMG_CPU_B_GAMEBOY_OUT = \
 dmg_cpu_b_gameboy.vvp \
@@ -297,6 +298,9 @@ SIMPLIFIED_OAM = y
 # Run "make clean" when changing Wave RAM type.
 SIMPLIFIED_WAVERAM = y
 
+MBC_TYPE =
+RAM_SIZE =
+
 all: sim-gameboy
 
 clean:
@@ -325,7 +329,9 @@ sim-gameboy $(DMG_CPU_B_GAMEBOY_VVP_OUT): dmg_cpu_b_gameboy.vvp
 	                       $(call VVP_SAV_DUMP_FLAGS,dmg_cpu_b_gameboy) \
 	                       +BOOTROM="$(BOOTROM)" \
 	                       +ROM="$(ROM)" \
-	                       +SECS=$(SECS)
+	                       +SECS=$(SECS) \
+	                       $(if $(MBC_TYPE),+MBC_TYPE=$(MBC_TYPE)) \
+	                       $(if $(RAM_SIZE),+RAM_SIZE=$(RAM_SIZE))
 
 dmg_cpu_b_gameboy.mkv: mkvid/mkimgs mkvid/mkvid.sh dmg_cpu_b_gameboy.vid dmg_cpu_b_gameboy.snd
 	mkvid/mkvid.sh dmg_cpu_b_gameboy
