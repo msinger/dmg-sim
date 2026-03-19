@@ -105,6 +105,12 @@ reduced complexity. With this simplification, Blargg's dmg\_sound test No. 10 wo
 the simplification is disabled and the simulation can predict which RAM rows or bytes will be corrupted by the wave restart
 bug. You need to run `make clean` when changing this variable, because the code needs to be recompiled.
 
+`MBC_TYPE=<hex>`:  
+By default, the MBC/cartridge type gets read from ROM address 0x147. This variable overrides that value.
+
+`RAM_SIZE=<hex>`:  
+By default, the cartridge SRAM size gets read from ROM address 0x149. This variable overrides that value.
+
 
 "Quickboot" boot ROM
 --------------------

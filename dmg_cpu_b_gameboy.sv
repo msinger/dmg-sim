@@ -193,6 +193,7 @@ module dmg_cpu_b_gameboy;
 		string rom_file;
 		int    f, _;
 		byte   mbc_type, ram_size;
+		bit    mbc_type_set, ram_size_set;
 
 		has_rom  = 0;
 		has_ram  = 0;
@@ -201,6 +202,12 @@ module dmg_cpu_b_gameboy;
 
 		rom_file = "";
 		_ = $value$plusargs("ROM=%s", rom_file);
+
+		mbc_type = 0;
+		mbc_type_set = $value$plusargs("MBC_TYPE=%x", mbc_type);
+
+		ram_size = 0;
+		ram_size_set = $value$plusargs("RAM_SIZE=%x", ram_size);
 
 		f = 0;
 		if (rom_file != "") begin
@@ -214,30 +221,30 @@ module dmg_cpu_b_gameboy;
 			has_rom = 1;
 		end
 
-		if (has_rom) begin
+		if (!mbc_type_set && has_rom)
 			mbc_type = cart_rom['h147];
+		if (!ram_size_set && has_rom)
 			ram_size = cart_rom['h149];
 
-			unique case (mbc_type)
-				'h00, 'h08, 'h09: ;
-				'h01, 'h02, 'h03: has_mbc1 = 1;
-				'h05, 'h06:       $error("MBC2 not supported yet.");
-				'h0b, 'h0c, 'h0d: $error("MMM01 not supported yet.");
-				'h0f, 'h10, 'h11,
-				'h12, 'h13:       $error("MBC3 not supported yet.");
-				'h19, 'h1a, 'h1b,
-				'h1c, 'h1d, 'h1e: has_mbc5 = 1;
-				'h20:             $error("MBC6 not supported yet.");
-				'h22:             $error("MBC7 not supported yet.");
-				'hfc:             $error("MAC-GBD not supported yet.");
-				'hfd:             $error("TAMA5 not supported yet.");
-				'hfe:             $error("HuC3 not supported yet.");
-				'hff:             $error("HuC1 not supported yet.");
-				default:          $error("Unsupported MBC type.");
-			endcase
+		unique case (mbc_type)
+			'h00, 'h08, 'h09: ;
+			'h01, 'h02, 'h03: has_mbc1 = 1;
+			'h05, 'h06:       $error("MBC2 not supported yet.");
+			'h0b, 'h0c, 'h0d: $error("MMM01 not supported yet.");
+			'h0f, 'h10, 'h11,
+			'h12, 'h13:       $error("MBC3 not supported yet.");
+			'h19, 'h1a, 'h1b,
+			'h1c, 'h1d, 'h1e: has_mbc5 = 1;
+			'h20:             $error("MBC6 not supported yet.");
+			'h22:             $error("MBC7 not supported yet.");
+			'hfc:             $error("MAC-GBD not supported yet.");
+			'hfd:             $error("TAMA5 not supported yet.");
+			'hfe:             $error("HuC3 not supported yet.");
+			'hff:             $error("HuC1 not supported yet.");
+			default:          $error("Unsupported MBC type.");
+		endcase
 
-			has_ram = |ram_size;
-		end
+		has_ram = |ram_size;
 	end
 
 	logic [15:0] sm83_bc;
