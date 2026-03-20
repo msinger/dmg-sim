@@ -6,11 +6,13 @@ TESTS_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" >/dev/null && pwd)
 ROOT_DIR=$TESTS_DIR/..
 
 PNG_PATH=$TESTS_DIR/data/$1/result.png
+PNG_ALT_PATH=$TESTS_DIR/data/$1/result-alt.png
+PNG_XFAIL_PATH=$TESTS_DIR/data/$1/result-xfail.png
 SETUP_PATH=$TESTS_DIR/data/$1/setup.sh
 ROM_PATH=$TESTS_DIR/roms/$1.gb
 
-if ! [ -r "$PNG_PATH" ]; then
-	echo Result picture for test not found: \""$PNG_PATH"\" >&2
+if ! [ -r "$PNG_PATH" -o -r "$PNG_XFAIL_PATH" ]; then
+	echo Result picture for test not found: \""$PNG_PATH"\" or \""$PNG_XFAIL_PATH"\" >&2
 	exit 1
 fi
 if ! [ -r "$SETUP_PATH" ]; then
@@ -49,6 +51,21 @@ if [ -d "$TESTS_DIR/logs/$1" ]; then
 	mv out.png "$TESTS_DIR/logs/$1/"
 fi
 
-magick "$PNG_PATH" RGB:result.rgb
-
-cmp $(printf img%06d.rgb $FRAME) result.rgb
+if [ -r "$PNG_PATH" ]; then
+	magick "$PNG_PATH" RGB:result.rgb
+	if cmp $(printf img%06d.rgb $FRAME) result.rgb; then
+		exit 0
+	if [ -r "$PNG_ALT_PATH" ]; then
+		magick "$PNG_ALT_PATH" RGB:result.rgb
+		if cmp $(printf img%06d.rgb $FRAME) result.rgb; then
+			exit 0
+		fi
+	fi
+fi
+if [ -r "$PNG_XFAIL_PATH" ]; then
+	magick "$PNG_XFAIL_PATH" RGB:result.rgb
+	if cmp $(printf img%06d.rgb $FRAME) result.rgb; then
+		exit 32
+	fi
+fi
+exit 1

@@ -3,6 +3,7 @@
 TESTS_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" >/dev/null && pwd)
 
 passes=0
+xfails=0
 fails=0
 
 for i in $(cd -- "$TESTS_DIR"/data; find * -name setup.sh -printf %h\\n | sort); do
@@ -37,11 +38,19 @@ for i in $(cd -- "$TESTS_DIR"/data; find * -name setup.sh -printf %h\\n | sort);
 	if [ $ret -eq 0 ]; then
 		((++passes))
 		printf "[\\x1b[92mPASS\\x1b[39m]\\n"
+	elif [ $ret -eq 32 ]; then
+		((++xfails))
+		printf "[\\x1b[93mXFAIL\\x1b[39m]\\n"
 	else
 		((++fails))
 		printf "[\\x1b[91mFAIL\\x1b[39m]\\n"
 	fi
 done
 
-printf "Tests passed: %d/%d\\n" $passes $((passes + fails))
-printf "Tests failed: %d\\n" $fails
+if [ $xfails -gt 0 ]; then
+	printf "Tests passed + expectedly failed: %d+%d/%d\\n" $passes $xfails $((passes + xfails + fails))
+	printf "Tests unexpectedly failed: %d\\n" $fails
+else
+	printf "Tests passed: %d/%d\\n" $passes $((passes + fails))
+	printf "Tests failed: %d\\n" $fails
+fi
