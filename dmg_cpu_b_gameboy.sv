@@ -1055,6 +1055,26 @@ module dmg_cpu_b_gameboy;
 	assign ppu_pipe_b[6] = dmg.ralu;
 	assign ppu_pipe_b[7] = dmg.bg_px_b;
 
+	logic [7:0] oam_a_latch;
+	assign oam_a_latch[0] = dmg.xyky_n;
+	assign oam_a_latch[1] = dmg.yrum_n;
+	assign oam_a_latch[2] = dmg.ysex_n;
+	assign oam_a_latch[3] = dmg.yvel_n;
+	assign oam_a_latch[4] = dmg.wyno_n;
+	assign oam_a_latch[5] = dmg.cyra_n;
+	assign oam_a_latch[6] = dmg.zuve_n;
+	assign oam_a_latch[7] = dmg.eced_n;
+
+	logic [7:0] oam_b_latch;
+	assign oam_b_latch[0] = dmg.ydyv_n;
+	assign oam_b_latch[1] = dmg.yceb_n;
+	assign oam_b_latch[2] = dmg.zuca_n;
+	assign oam_b_latch[3] = dmg.wone_n;
+	assign oam_b_latch[4] = dmg.zaxe_n;
+	assign oam_b_latch[5] = dmg.xafu_n;
+	assign oam_b_latch[6] = dmg.yses_n;
+	assign oam_b_latch[7] = dmg.zeca_n;
+
 	assign sys_reset = dmg.cpu_sys_reset;
 
 	task automatic dump_cart_ram(input string sav_file);
