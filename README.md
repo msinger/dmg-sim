@@ -248,9 +248,5 @@ Results of Mooneye GB tests:
 | acceptance/timer/tima\_reload                  |         ✅        |          ✅         |
 | acceptance/timer/tima\_write\_reloading        |         ✅        |          ✅         |
 | acceptance/timer/tma\_write\_reloading         |         ✅        |          ✅         |
-| madness/mgb\_oam\_dma\_halt\_sprites           |         🚫*       |          🚫*        |
+| madness/mgb\_oam\_dma\_halt\_sprites           |         ✅        |          ✅         |
 | manual-only/sprite\_priority                   |         ✅        |          ✅         |
-
-*\* madness/mgb\_oam\_dma\_halt\_sprites test behaves nondeterministic on real hardware, it shows a different
-    picture on individual DMG-CPU B devices, so there is no "correct" result we could test for. But I think it
-    will be worth looking into how this works anyway.*
