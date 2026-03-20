@@ -1093,7 +1093,7 @@ module dmg_cpu_b_gameboy;
 	/* Resolves conflicts on OAM data buses when DMA writes while PPU reads from OAM. This causes short-circuits ('x)
 	   on the OAM buses. We resolve them by forcing the ANDed values of both active drivers onto the buses while the
 	   conflict persists. This behaviour can be seen in the Mooneye madness/mgb_oam_dma_halt_sprites test. */
-	localparam bit oam_conflict_alt = 0; /* Some deviced produce "0" instead of "8". */
+	localparam bit oam_conflict_alt = 0; /* Some devices produce "0" instead of "8". */
 	bit oam_conflict;
 	assign oam_conflict = dmg.oam_oe && dmg.dma_addr_ext;
 
