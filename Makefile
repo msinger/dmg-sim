@@ -70,8 +70,8 @@ dmg_cpu_b/cells/xnor.sv \
 dmg_cpu_b/cells/xor.sv
 
 DMG_CPU_B = \
-dmg_cpu_b/dmg_cpu_b.sv \
 dmg_cpu_b/timing-$(TIMING).sv \
+dmg_cpu_b/dmg_cpu_b.sv \
 $(DMG_CPU_B_CELLS) \
 
 SM83_CELLS = \
@@ -220,8 +220,8 @@ sm83/cells/xor_idu_h.sv \
 sm83/cells/xor_idu_l.sv
 
 SM83 = \
-sm83/sm83.sv \
 sm83/timing-$(TIMING).sv \
+sm83/sm83.sv \
 $(SM83_CELLS)
 
 COMMON_FILES = \
@@ -315,11 +315,11 @@ dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(COMMON_FILES)
 	            $(if $(SIMPLIFIED_OAM),-DSIMPLIFIED_OAM) \
 	            $(if $(SIMPLIFIED_WAVERAM),-DSIMPLIFIED_WAVERAM) \
 	            -o $@ $(AV_DUMP) \
-	            dmg_cpu_b_gameboy.sv \
 	            $(COMMON_FILES) \
-	            $(DMG_CPU_B) \
 	            $(SM83) \
-	            $(MBC)
+	            $(DMG_CPU_B) \
+	            $(MBC) \
+	            dmg_cpu_b_gameboy.sv
 
 sim-gameboy $(DMG_CPU_B_GAMEBOY_VVP_OUT): dmg_cpu_b_gameboy.vvp
 	$(VVP) $(VVP_FLAGS) $< $(call VVP_DUMP_FLAGS,dmg_cpu_b_gameboy) \

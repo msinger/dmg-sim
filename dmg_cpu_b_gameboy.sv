@@ -1090,6 +1090,61 @@ module dmg_cpu_b_gameboy;
 		$fclose(f);
 	endtask
 
+	/* Resolves conflicts on OAM data buses when DMA writes while PPU reads from OAM. This causes short-circuits ('x)
+	   on the OAM buses. We resolve them by forcing the ANDed values of both active drivers onto the buses while the
+	   conflict persists. This behaviour can be seen in the Mooneye madness/mgb_oam_dma_halt_sprites test. */
+	localparam bit oam_conflict_alt = 0; /* Some deviced produce "0" instead of "8". */
+	bit oam_conflict;
+	assign oam_conflict = dmg.oam_oe && dmg.dma_addr_ext;
+
+	program solve_oam_conflict;
+
+		initial forever begin
+			@(posedge oam_conflict);
+
+			/* Icarus doesn't fully support procedural continuous assgignments. They are only evaluated once. We work
+			   around this by giving the signals some time to settle first. For nodelay runs, this code is executed
+			   in a program block, so it happens at the end of a cycle. */
+			#(dmg_timing::nodelay ? 0 : 20ns);
+
+			force dmg.oam_a_d0_n = !dmg.ralo & dmg.oam_a_inst.dout[7];
+			force dmg.oam_a_d1_n = !dmg.tune & dmg.oam_a_inst.dout[6];
+			force dmg.oam_a_d2_n = !dmg.sera & dmg.oam_a_inst.dout[5];
+			force dmg.oam_a_d3_n = !dmg.tenu & dmg.oam_a_inst.dout[4];
+			force dmg.oam_a_d4_n = !dmg.sysa & dmg.oam_a_inst.dout[3];
+			force dmg.oam_a_d5_n = !dmg.sugy & dmg.oam_a_inst.dout[2];
+			force dmg.oam_a_d6_n = !dmg.tube & dmg.oam_a_inst.dout[1];
+			force dmg.oam_a_d7_n = !dmg.syzo & dmg.oam_a_inst.dout[0];
+			force dmg.oam_b_d0_n = !dmg.ralo & dmg.oam_b_inst.dout[0];
+			force dmg.oam_b_d1_n = dmg.oam_b_inst.dout[1];
+			force dmg.oam_b_d2_n = !dmg.sera & dmg.oam_b_inst.dout[2];
+			force dmg.oam_b_d3_n = (oam_conflict_alt ? 1 : !dmg.tenu) & dmg.oam_b_inst.dout[3];
+			force dmg.oam_b_d4_n = !dmg.sysa & dmg.oam_b_inst.dout[4];
+			force dmg.oam_b_d5_n = !dmg.sugy & dmg.oam_b_inst.dout[5];
+			force dmg.oam_b_d6_n = !dmg.tube & dmg.oam_b_inst.dout[6];
+			force dmg.oam_b_d7_n = !dmg.syzo & dmg.oam_b_inst.dout[7];
+
+			@(negedge oam_conflict);
+
+			release dmg.oam_a_d0_n;
+			release dmg.oam_a_d1_n;
+			release dmg.oam_a_d2_n;
+			release dmg.oam_a_d3_n;
+			release dmg.oam_a_d4_n;
+			release dmg.oam_a_d5_n;
+			release dmg.oam_a_d6_n;
+			release dmg.oam_a_d7_n;
+			release dmg.oam_b_d0_n;
+			release dmg.oam_b_d1_n;
+			release dmg.oam_b_d2_n;
+			release dmg.oam_b_d3_n;
+			release dmg.oam_b_d4_n;
+			release dmg.oam_b_d5_n;
+			release dmg.oam_b_d6_n;
+			release dmg.oam_b_d7_n;
+		end
+	endprogram
+
 	program test;
 		int sample_idx;
 
