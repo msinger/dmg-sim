@@ -16,15 +16,12 @@ module dmg_simplified_sram #(
 
 	logic [W-1:0] mem[N];
 	logic [W-1:0] last_bl_data;
-	int           last_wl_adr, wl_adr, col_adr, adr;
-	bit           wl_adr_valid;
+	int           wl_adr, col_adr, adr;
 
 	initial foreach (mem[i]) mem[i] = '0;
 	initial last_bl_data  = 'x;
-	initial last_wl_adr   = -1;
-	initial wl_adr_valid  = 0;
 
-	assign wl_adr = ((a == ~a_n) && wl_adr_valid) ? { a[A-1:2], 2'b00 } : -1;
+	assign wl_adr = (a == ~a_n) ? { a[A-1:2], 2'b00 } : -1;
 
 	always_comb case (col)
 		'b0001:  col_adr = 0;
@@ -35,18 +32,6 @@ module dmg_simplified_sram #(
 	endcase
 
 	assign adr = (wl_adr < N) ? (wl_adr | col_adr) : -1;
-
-	always_latch begin
-		if (!wldrv_pch_n) begin
-			last_wl_adr  = -1;
-			wl_adr_valid = 1;
-		end else if (wldrv_ena) begin
-			if (last_wl_adr == -1 && wl_adr != -1)
-				last_wl_adr = wl_adr;
-			else if (wl_adr == -1 || last_wl_adr != wl_adr)
-				wl_adr_valid = 0;
-		end
-	end
 
 	always_latch begin
 		if (!bl_pch_n)
