@@ -7,7 +7,7 @@ module vid_dump(
 	);
 
 	task automatic video_dump_loop(input int f);
-		bit [1:0] line[0:159];
+		bit [1:0] line[160];
 		int       pxidx, lineidx;
 		bit       dis;
 
@@ -33,6 +33,15 @@ module vid_dump(
 					pxidx++;
 				if (st) /* Horizontal sync active at pixel clock edge? */
 					pxidx = 0;
+				disable video_event;
+			end
+
+			begin
+				@(negedge st);
+				if (pxidx < 160) /* Still space in line buffer? */
+					line[pxidx] = ld;
+				if (pxidx < 161)
+					pxidx++;
 				disable video_event;
 			end
 
