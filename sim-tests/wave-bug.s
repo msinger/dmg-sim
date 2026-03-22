@@ -40,7 +40,7 @@ start:
 	ld	hl, 0xff30
 	call	memcpy
 
-	ld	a, 0  ; <-- set loop iteration number (0-68) of Blargg dmg_sound test #10 here
+	ld	a, 15  ; <-- set loop iteration number (0-68) of Blargg dmg_sound test #10 here
 
 	add	a, 0x99
 	ld	b, a
