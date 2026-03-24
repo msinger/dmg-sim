@@ -341,20 +341,3 @@ mkvid/mkimgs: mkvid/mkimgs.c
 
 boot/quickboot.bin:
 	make -C boot
-
-.PHONY: test test-all test-cpu test-boot
-
-TEST_DEPENDENCIES = dmg_cpu_b_gameboy.vvp boot/quickboot.bin mkvid/mkimgs
-
-test: $(TEST_DEPENDENCIES)
-	tests/run_tests.sh "boot peripheral"
-
-test-all: $(TEST_DEPENDENCIES)
-	tests/run_tests.sh
-
-test-cpu: $(TEST_DEPENDENCIES)
-	tests/run_tests.sh cpu
-
-test-boot: $(TEST_DEPENDENCIES)
-	tests/run_tests.sh boot
-
