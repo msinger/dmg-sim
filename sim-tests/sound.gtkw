@@ -1,0 +1,236 @@
+[*]
+[*] GTKWave Analyzer v3.3.125 (w)1999-2025 BSI
+[*] Mon Mar 23 21:25:35 2026
+[*]
+[dumpfile] "/home/michael/projects/dmg_sim/sim-tests/sound.fst"
+[dumpfile_mtime] "Mon Mar 23 21:14:42 2026"
+[dumpfile_size] 86337209
+[savefile] "/home/michael/projects/dmg_sim/sim-tests/sound.gtkw"
+[timestart] 32406497152
+[size] 1920 1154
+[pos] -1 -1
+*-6.000004 32406497272 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] dmg_cpu_b_gameboy.
+[treeopen] dmg_cpu_b_gameboy.dmg.
+[treeopen] dmg_cpu_b_gameboy.dmg.cpu_inst.
+[treeopen] dmg_cpu_b_gameboy.dmg.dape_inst.
+[treeopen] dmg_cpu_b_gameboy.dmg.eros_inst.
+[treeopen] dmg_cpu_b_gameboy.dmg.wave_ram_inst.
+[sst_width] 269
+[signals_width] 164
+[sst_expanded] 1
+[sst_vpaned_height] 349
+@28
+dmg_cpu_b_gameboy.clk
+@c00200
+-ExtBUS
+@28
+dmg_cpu_b_gameboy.nrd
+dmg_cpu_b_gameboy.nwr
+@c00022
+dmg_cpu_b_gameboy.a[15:0]
+@28
+(0)dmg_cpu_b_gameboy.a[15:0]
+(1)dmg_cpu_b_gameboy.a[15:0]
+(2)dmg_cpu_b_gameboy.a[15:0]
+(3)dmg_cpu_b_gameboy.a[15:0]
+(4)dmg_cpu_b_gameboy.a[15:0]
+(5)dmg_cpu_b_gameboy.a[15:0]
+(6)dmg_cpu_b_gameboy.a[15:0]
+(7)dmg_cpu_b_gameboy.a[15:0]
+(8)dmg_cpu_b_gameboy.a[15:0]
+(9)dmg_cpu_b_gameboy.a[15:0]
+(10)dmg_cpu_b_gameboy.a[15:0]
+(11)dmg_cpu_b_gameboy.a[15:0]
+(12)dmg_cpu_b_gameboy.a[15:0]
+(13)dmg_cpu_b_gameboy.a[15:0]
+(14)dmg_cpu_b_gameboy.a[15:0]
+(15)dmg_cpu_b_gameboy.a[15:0]
+@1401200
+-group_end
+@22
+dmg_cpu_b_gameboy.d[7:0]
+@1401200
+-ExtBUS
+@c00200
+-VRAM
+@28
+dmg_cpu_b_gameboy.nmrd
+dmg_cpu_b_gameboy.nmwr
+@c00022
+dmg_cpu_b_gameboy.ma[12:0]
+@28
+(0)dmg_cpu_b_gameboy.ma[12:0]
+(1)dmg_cpu_b_gameboy.ma[12:0]
+(2)dmg_cpu_b_gameboy.ma[12:0]
+(3)dmg_cpu_b_gameboy.ma[12:0]
+(4)dmg_cpu_b_gameboy.ma[12:0]
+(5)dmg_cpu_b_gameboy.ma[12:0]
+(6)dmg_cpu_b_gameboy.ma[12:0]
+(7)dmg_cpu_b_gameboy.ma[12:0]
+(8)dmg_cpu_b_gameboy.ma[12:0]
+(9)dmg_cpu_b_gameboy.ma[12:0]
+(10)dmg_cpu_b_gameboy.ma[12:0]
+(11)dmg_cpu_b_gameboy.ma[12:0]
+(12)dmg_cpu_b_gameboy.ma[12:0]
+@1401200
+-group_end
+@22
+dmg_cpu_b_gameboy.md[7:0]
+@1401200
+-VRAM
+@c00200
+-LCD
+@28
+dmg_cpu_b_gameboy.s
+dmg_cpu_b_gameboy.st
+dmg_cpu_b_gameboy.fr
+dmg_cpu_b_gameboy.cpg
+dmg_cpu_b_gameboy.cp
+dmg_cpu_b_gameboy.cpl
+dmg_cpu_b_gameboy.ld[1:0]
+@1401200
+-LCD
+@c00200
+-PPU
+@22
+dmg_cpu_b_gameboy.reg_ff40[7:0]
+dmg_cpu_b_gameboy.reg_ff41[7:0]
+dmg_cpu_b_gameboy.reg_ff42[7:0]
+dmg_cpu_b_gameboy.reg_ff43[7:0]
+dmg_cpu_b_gameboy.reg_ff44[7:0]
+dmg_cpu_b_gameboy.reg_ff45[7:0]
+dmg_cpu_b_gameboy.reg_ff46[7:0]
+dmg_cpu_b_gameboy.reg_ff47[7:0]
+dmg_cpu_b_gameboy.reg_ff48[7:0]
+dmg_cpu_b_gameboy.reg_ff49[7:0]
+@1401200
+-PPU
+@c00200
+-APU
+@22
+dmg_cpu_b_gameboy.reg_ff10[7:0]
+dmg_cpu_b_gameboy.reg_ff11[7:0]
+dmg_cpu_b_gameboy.reg_ff12[7:0]
+dmg_cpu_b_gameboy.reg_ff13[7:0]
+dmg_cpu_b_gameboy.reg_ff14[7:0]
+dmg_cpu_b_gameboy.reg_ff16[7:0]
+dmg_cpu_b_gameboy.reg_ff17[7:0]
+dmg_cpu_b_gameboy.reg_ff18[7:0]
+dmg_cpu_b_gameboy.reg_ff19[7:0]
+dmg_cpu_b_gameboy.reg_ff1a[7:0]
+dmg_cpu_b_gameboy.reg_ff1b[7:0]
+dmg_cpu_b_gameboy.reg_ff1c[7:0]
+dmg_cpu_b_gameboy.reg_ff1d[7:0]
+dmg_cpu_b_gameboy.reg_ff1ds[7:0]
+dmg_cpu_b_gameboy.reg_ff1e[7:0]
+dmg_cpu_b_gameboy.reg_ff20[7:0]
+dmg_cpu_b_gameboy.reg_ff21[7:0]
+dmg_cpu_b_gameboy.reg_ff22[7:0]
+dmg_cpu_b_gameboy.reg_ff23[7:0]
+dmg_cpu_b_gameboy.reg_ff24[7:0]
+dmg_cpu_b_gameboy.reg_ff25[7:0]
+dmg_cpu_b_gameboy.reg_ff26[7:0]
+@1401200
+-APU
+@28
+dmg_cpu_b_gameboy.dmg.esut
+dmg_cpu_b_gameboy.dmg.eros
+dmg_cpu_b_gameboy.dmg.dape
+@800200
+-EROS
+@1000200
+-EROS
+@29
+dmg_cpu_b_gameboy.dmg.eros_inst.clk
+@28
+dmg_cpu_b_gameboy.dmg.eros_inst.clk_n
+dmg_cpu_b_gameboy.dmg.eros_inst.genblk1.mux1_buf
+dmg_cpu_b_gameboy.dmg.eros_inst.genblk1.mux2_buf
+@29
+dmg_cpu_b_gameboy.dmg.eros_inst.genblk1.and1
+@28
+dmg_cpu_b_gameboy.dmg.eros_inst.q
+dmg_cpu_b_gameboy.dmg.eros_inst.q_n
+@800200
+-DAPE
+@28
+dmg_cpu_b_gameboy.dmg.dape_inst.clk
+dmg_cpu_b_gameboy.dmg.dape_inst.clk_n
+dmg_cpu_b_gameboy.dmg.dape_inst.genblk1.mux1_buf
+dmg_cpu_b_gameboy.dmg.dape_inst.genblk1.mux2_buf
+dmg_cpu_b_gameboy.dmg.dape_inst.genblk1.and1
+dmg_cpu_b_gameboy.dmg.dape_inst.q
+dmg_cpu_b_gameboy.dmg.dape_inst.q_n
+@1000200
+-DAPE
+@c00200
+-Interrupts
+@28
+dmg_cpu_b_gameboy.dmg.cpu_inst.ime_state
+@22
+dmg_cpu_b_gameboy.dmg.cpu_inst.reg_ie[7:0]
+dmg_cpu_b_gameboy.reg_ff0f[7:0]
+dmg_cpu_b_gameboy.dmg.cpu_inst.int[7:0]
+dmg_cpu_b_gameboy.dmg.cpu_inst.inta[7:0]
+@1401200
+-Interrupts
+@c00200
+-CPU
+@28
+dmg_cpu_b_gameboy.dmg.cpu_inst.rd
+dmg_cpu_b_gameboy.dmg.cpu_inst.wr
+@c00022
+dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+@28
+(0)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(1)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(2)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(3)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(4)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(5)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(6)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(7)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(8)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(9)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(10)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(11)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(12)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(13)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(14)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+(15)dmg_cpu_b_gameboy.dmg.cpu_inst.a[15:0]
+@1401200
+-group_end
+@c00022
+dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+@28
+(0)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(1)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(2)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(3)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(4)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(5)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(6)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+(7)dmg_cpu_b_gameboy.dmg.cpu_inst.d[7:0]
+@1401200
+-group_end
+@22
+dmg_cpu_b_gameboy.dmg.cpu_inst.db[7:0]
+dmg_cpu_b_gameboy.dmg.cpu_inst.opcode[7:0]
+dmg_cpu_b_gameboy.dmg.cpu_inst.reg_a[7:0]
+dmg_cpu_b_gameboy.sm83_bc[15:0]
+dmg_cpu_b_gameboy.sm83_de[15:0]
+dmg_cpu_b_gameboy.sm83_hl[15:0]
+dmg_cpu_b_gameboy.sm83_pc[15:0]
+dmg_cpu_b_gameboy.sm83_sp[15:0]
+dmg_cpu_b_gameboy.sm83_wz[15:0]
+dmg_cpu_b_gameboy.dmg.cpu_inst.res[7:0]
+@28
+dmg_cpu_b_gameboy.dmg.cpu_inst.flag_c
+dmg_cpu_b_gameboy.dmg.cpu_inst.flag_h
+dmg_cpu_b_gameboy.dmg.cpu_inst.flag_n
+dmg_cpu_b_gameboy.dmg.cpu_inst.flag_z
+@1401200
+-CPU
+[pattern_trace] 1
+[pattern_trace] 0
