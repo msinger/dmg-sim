@@ -78,7 +78,7 @@ cartridge inserted. As of now, the simulation supports no-MBC, MBC1 and MBC5 car
 
 `SECS=<number-of-seconds>`:  
 Specifies how many seconds will be simulated until the simulation terminates. The default is 6.0 seconds.
-The simulation takes about 132 minutes of real time per simulated second on a Ryzen 5 3600 (with `TIMING=default`
+The simulation takes about 150 minutes of real time per simulated second on a Ryzen 5 3600 (with `TIMING=default`
 and `SIMPLIFIED_OAM=y`).
 
 `DUMP=fst` *(default)*, `DUMP=vcd`, `DUMP=`:  
