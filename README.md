@@ -149,21 +149,35 @@ Tests
 
 Results of Blargg's tests:
 
-| Test            | Result (no delay) | Result (with delay) |
-| --------------- | :---------------: | :-----------------: |
-| cgb\_sound      |         n/a       |          n/a        |
-| cpu\_instrs     |         ✅        |          ✅         |
-| dmg\_sound      |         ❌        |          ❌         |
-| halt\_bug       |         ✅        |          ✅         |
-| instr\_timing   |         ✅        |          ✅         |
-| interrupt\_time |         n/a       |          n/a        |
-| mem\_timing     |         ✅        |          ✅         |
-| oam\_bug        |         🚫*       |          🚫*        |
+| Test                                | Result (no delay) | Result (with delay) |
+| ----------------------------------- | :---------------: | :-----------------: |
+| cgb\_sound                          |         n/a       |          n/a        |
+| cpu\_instrs                         |         ✅        |          ✅         |
+| dmg\_sound/01-registers             |         ✅        |          ✅         |
+| dmg\_sound/02-len ctr               |         ✅        |          ✅         |
+| dmg\_sound/03-trigger               |         ✅        |          ✅         |
+| dmg\_sound/04-sweep                 |         ✅        |          ✅         |
+| dmg\_sound/05-sweep details         |         ✅        |          ✅         |
+| dmg\_sound/06-overflow on trigger   |         ✅        |          ✅         |
+| dmg\_sound/07-len sweep period sync |         ✅        |          ✅         |
+| dmg\_sound/08-len ctr during power  |         ✅        |          ✅         |
+| dmg\_sound/09-wave read while on    |         ✅        |          ✅         |
+| dmg\_sound/10-wave trigger while on |         🚫\*\*    |          🚫\*\*     |
+| dmg\_sound/11-regs after power      |         ✅        |          ✅         |
+| dmg\_sound/12-wave write while on   |         ✅        |          ✅         |
+| halt\_bug                           |         ✅        |          ✅         |
+| instr\_timing                       |         ✅        |          ✅         |
+| interrupt\_time                     |         n/a       |          n/a        |
+| mem\_timing                         |         ✅        |          ✅         |
+| oam\_bug                            |         🚫\*      |          🚫\*       |
 
 *\* oam\_bug tests depend on small differences in signal delays which could change with temperature. According to
     [SameBoy](https://github.com/LIJI32/SameBoy/blob/master/Core/memory.c) some edge cases indeed behave
     nondeterministic on real hardware, so this will most likely never behave "correctly" in a purely digital
     simulation.*
+
+*\*\* Re-triggering the wave channel produces a corruption inside the wave RAM that is very similar to the OAM bug.
+      The simulation can't always predict how exactly the bits in the RAM change.*
 
 Note: The Blargg tests suffixed with `-2` are not listed here, because they run exactly the same test code as the versions
 without the suffix, but with much slower boilerplate code stitched around them, so they just waste a lot of CPU time.
