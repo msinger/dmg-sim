@@ -1,3 +1,4 @@
 SECS=53.8
 FRAME=3438
 CATEGORY=cpu
+TYPE=multi

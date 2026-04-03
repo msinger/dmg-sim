@@ -2,21 +2,123 @@
 
 TESTS_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" >/dev/null && pwd)
 
-PARALLEL_TESTS=${1:-1}
-CATEGORY_FILTER=$2
-
-passes=0
-xfails=0
-fails=0
+PARALLEL_TESTS=1
+CATEGORY_FILTER=
+DO_MULTI=y
 
 TESTS=()
 
-for i in $(cd -- "$TESTS_DIR"/data; find * -name setup.sh -printf %h\\n | sort); do
-	if [ -n "$CATEGORY_FILTER" ]; then
-		SETUP_PATH=$TESTS_DIR/data/$i/setup.sh
-		CATEGORY=
-		. "$SETUP_PATH"
+function echo_help ( ) {
+	echo 'Usage: '"$(basename "$0")"' [OPTION]... [TEST]...'
+	echo
+	echo 'OPTIONs:'
+	echo '  -j [<N>]          Run <N> tests in parallel.'
+	echo '  -c <CATEGORY>     Filter for one or more test categories; either by'
+	echo '                      giving multiple -c options or by separating'
+	echo '                      categories by spaces within one argument.'
+	echo '  --multi           For multi ROM tests, run the multi ROM test, not'
+	echo '                      the single ROM ones.'
+	echo '  --single          For multi ROM tests, run the single ROM tests, not'
+	echo '                      the multi ROM one.'
+}
 
+function is_num ( ) {
+	case $1 in
+		'' | *[!0-9]*)
+			return 1
+			;;
+	esac
+}
+
+while [ $# -gt 0 ]; do
+	case $1 in
+		--)
+			shift
+			while [ $# -gt 0 ]; do
+				TESTS+=("$i")
+				shift
+			done
+			;;
+		--multi)
+			DO_MULTI=y
+			;;
+		--single)
+			DO_MULTI=
+			;;
+		--help)
+			echo_help
+			exit 0
+			;;
+		--*)
+			echo unknown long option \""$1"\" >&2
+			exit 3
+			;;
+		-*)
+			SOPTS=${1:1}
+			while [ ${#SOPTS} -gt 0 ]; do
+				case ${SOPTS:0:1} in
+					c)
+						if [ -n "${SOPTS:1}" ]; then
+							CATEGORY_FILTER="$CATEGORY_FILTER ${SOPTS:1}"
+							break
+						elif [ -n "$2" ]; then
+							shift
+							CATEGORY_FILTER="$CATEGORY_FILTER $1"
+							break
+						fi
+						echo option -c requires argument >&2
+						exit 3
+						;;
+					j)
+						if is_num "${SOPTS:1}"; then
+							PARALLEL_TESTS=${SOPTS:1}
+							break
+						elif [ -z "${SOPTS:1}" ] && is_num "$2"; then
+							shift
+							PARALLEL_TESTS=$1
+							break
+						fi
+						PARALLEL_TESTS=$(nproc)
+						;;
+					?)
+						echo_help
+						exit 0
+						;;
+					*)
+						echo unknown option -"${SOPTS:0:1}" >&2
+						exit 3
+						;;
+				esac
+				SOPTS=${SOPTS:1}
+			done
+			;;
+		*)
+			TESTS+=("$i")
+			;;
+	esac
+	shift
+done
+
+TESTS_GIVEN_ON_CMDLINE=
+if [ ${#TESTS[*]} -ne 0 ]; then
+	TESTS_GIVEN_ON_CMDLINE=y
+fi
+
+while read -d '' -r i; do
+	SETUP_PATH=$TESTS_DIR/data/$i/setup.sh
+	TYPE=
+	CATEGORY=
+	. "$SETUP_PATH"
+
+	if [ "$TYPE" == multi ] && [ -z "$DO_MULTI" ]; then
+		continue
+	fi
+
+	if [ "$TYPE" == single ] && [ -n "$DO_MULTI" ]; then
+		continue
+	fi
+
+	if [ -n "$TESTS_GIVEN_ON_CMDLINE" ] || [ -n "$CATEGORY_FILTER" ]; then
 		CATEGORY_MATCH=
 		for j in $CATEGORY_FILTER; do
 			for k in $CATEGORY; do
@@ -37,12 +139,22 @@ for i in $(cd -- "$TESTS_DIR"/data; find * -name setup.sh -printf %h\\n | sort);
 	fi
 
 	TESTS+=("$i")
-done
+done < <(cd -- "$TESTS_DIR"/data; find * -name setup.sh -printf %h\\0)
+
+TESTS_UNSORT=("${TESTS[@]}")
+TESTS=()
+while read -d '' -r i; do
+	TESTS+=("$i")
+done < <(printf %s\\0 "${TESTS_UNSORT[@]}" | sort -z | uniq -z)
 
 ACTIVE=()
 ACTIVE_PID=()
 
 CUR_DISP=0
+
+passes=0
+xfails=0
+fails=0
 
 trap "trap - TERM && kill -- -$$" INT TERM EXIT
 

@@ -1,0 +1,4 @@
+SECS=0.9
+FRAME=49
+CATEGORY=cpu
+TYPE=single

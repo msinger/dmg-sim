@@ -1,0 +1,4 @@
+SECS=3.2
+FRAME=190
+CATEGORY=cpu
+TYPE=single
