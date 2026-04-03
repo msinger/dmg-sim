@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export LC_ALL=C
+
 TESTS_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" >/dev/null && pwd)
 
 PARALLEL_TESTS=1
@@ -141,11 +143,23 @@ while read -d '' -r i; do
 	TESTS+=("$i")
 done < <(cd -- "$TESTS_DIR"/data; find * -name setup.sh -printf %h\\0)
 
-TESTS_UNSORT=("${TESTS[@]}")
-TESTS=()
+TESTS_W_LEN=()
 while read -d '' -r i; do
+	SETUP_PATH=$TESTS_DIR/data/$i/setup.sh
+	if ! [ -e "$SETUP_PATH" ]; then
+		echo "ERROR: Test '$i' is missing setup.sh file. (skipping)" >&2
+		continue
+	fi
+
+	. "$SETUP_PATH"
+
+	TESTS_W_LEN+=("$SECS $i")
+done < <(printf %s\\0 "${TESTS[@]}" | sort -z | uniq -z)
+
+TESTS=()
+while read -d '' -r l i; do
 	TESTS+=("$i")
-done < <(printf %s\\0 "${TESTS_UNSORT[@]}" | sort -z | uniq -z)
+done < <(printf %s\\0 "${TESTS_W_LEN[@]}" | sort -znr)
 
 ACTIVE=()
 ACTIVE_PID=()
