@@ -54,7 +54,7 @@ if [ -d "$TESTS_DIR/logs/$1" ]; then
 	magick -size 160x144 -depth 8 RGB:$(printf img%06d.rgb $FRAME) out.png
 	mv out.png "$TESTS_DIR/logs/$1/"
 	if [ -r test.sav ]; then
-		ln test.sav "$TESTS_DIR/logs/$1/out.sav"
+		cp test.sav "$TESTS_DIR/logs/$1/out.sav"
 	fi
 fi
 
