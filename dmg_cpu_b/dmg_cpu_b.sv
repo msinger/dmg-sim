@@ -6266,6 +6266,8 @@ module dmg_cpu_b #(
 	assign audio_port_lvolume_n[1] = lvolume1_n;
 	assign audio_port_lvolume_n[2] = lvolume2_n;
 	dmg_audio #(
+			.L_rout(2543.891),
+			.L_lout(2538.313)
 		) audio_inst (
 			.ena(amp_en),
 			.ena_n(amp_en_n),
