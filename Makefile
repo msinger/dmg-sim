@@ -21,6 +21,7 @@ dmg_cpu_b/cells/drlatch_ee.sv \
 dmg_cpu_b/cells/eco_nand2.sv \
 dmg_cpu_b/cells/full_add.sv \
 dmg_cpu_b/cells/generic_sram.sv \
+dmg_cpu_b/cells/ggnmos.sv \
 dmg_cpu_b/cells/half_add.sv \
 dmg_cpu_b/cells/high_ram.sv \
 dmg_cpu_b/cells/muxi.sv \

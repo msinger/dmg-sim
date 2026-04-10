@@ -18316,6 +18316,22 @@ module dmg_cpu_b #(
 			.y(geze)
 		);
 
+	dmg_ggnmos #(
+		) ggnmos_ne_inst (
+		);
+
+	dmg_ggnmos #(
+		) ggnmos_nw_inst (
+		);
+
+	dmg_ggnmos #(
+		) ggnmos_se_inst (
+		);
+
+	dmg_ggnmos #(
+		) ggnmos_sw_inst (
+		);
+
 	dmg_not_if0 #(
 			.L_y(35163.97)
 		) goba_inst (
