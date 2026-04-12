@@ -1217,8 +1217,8 @@ module dmg_cpu_b_gameboy;
 							write_bit4_as_int8(fch[4], dmg.ch4_out);
 						end
 						if (dump_sound) begin
-							write_real_as_int16(fmix, lout);
-							write_real_as_int16(fmix, rout);
+							write_real_as_int16(fmix, (((lout > 3.7) ? 3.7 : ((lout < 0.7) ? 0.7 : lout)) - 2.2) / 1.5);
+							write_real_as_int16(fmix, (((rout > 3.7) ? 3.7 : ((rout < 0.7) ? 0.7 : rout)) - 2.2) / 1.5);
 						end
 						sample_idx++;
 					end

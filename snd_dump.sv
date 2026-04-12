@@ -23,7 +23,7 @@ package snd_dump;
 	task automatic write_real_as_int16(input int f, real s);
 		int tmp;
 		tmp = $rtoi(s * 32767.0);
-		$fwrite(f, "%c%c", { 1'b0, tmp[14:8] }, tmp[7:0]);
+		$fwrite(f, "%c%c", { tmp[15:8] }, tmp[7:0]);
 	endtask
 
 endpackage
