@@ -11,7 +11,7 @@ package dmg_timing;
 	// Transistor drive constants
 	parameter real Lref_um     = 1.0;     // reference channel length for kR
 	parameter real Leff_um     = 1.2;     // guessed for DMG technology
-	parameter real kR_nmos_ref = 1.0e4;   // ohm*µm for Lref
+	parameter real kR_nmos_ref = 3.6e4;   // ohm*µm for Lref
 	parameter real gamma_pn    = 2.0;     // PMOS = gamma * NMOS resistance
 
 	parameter real Cint_stage_F = 0.5e-15; // F intrinsic capacitance added after each stage
