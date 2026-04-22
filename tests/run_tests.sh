@@ -6,7 +6,7 @@ TESTS_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" >/dev/null && pwd)
 
 PARALLEL_TESTS=1
 CATEGORY_FILTER=
-DO_MULTI=y
+DO_MULTI=
 
 TESTS=()
 
