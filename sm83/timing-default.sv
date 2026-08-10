@@ -3,19 +3,21 @@
 package sm83_timing;
 
 	// Wire parasitics
-	parameter real Rprime_wire = 0.05;    // ohm/µm
-	parameter real Cprime_wire = 0.2e-15; // F/µm
+	parameter real Rprime_wire    = 0.05;     // ohm/µm
+	parameter real Cprime_wire    = 0.2e-15;  // F/µm
 
 	// Transistor drive constants
-	parameter real Lref_um     = 1.0;     // reference channel length for kR
-	parameter real Leff_um     = 1.2;     // guessed for DMG technology
-	parameter real kR_nmos_ref = 3.6e4;   // ohm*µm for Lref
-	parameter real gamma_pn    = 2.0;     // PMOS = gamma * NMOS resistance
+	parameter real Lref_um        = 1.0;      // reference channel length for kR
+	parameter real Leff_um        = 1.2;      // guessed for DMG technology
+	parameter real kR_nmos_ref    = 3.6e4;    // ohm*µm for Lref
+	parameter real gamma_pn       = 2.0;      // PMOS = gamma * NMOS resistance
 
-	parameter real Cint_stage_F = 0.5e-15; // F intrinsic capacitance added after each stage
+	parameter real Cint_stage_F   = 0.5e-15;  // F intrinsic capacitance added after each stage
+
+	parameter real Cgate_per_um_F = 0.0e-15;  // F capacitance per transistor gate width
 
 	// Scale for converting Electric VLSI layout units to µm
-	parameter real L_unit      = 0.432;
+	parameter real L_unit         = 0.432;
 
 	parameter realtime T_Z_min = 5ps;
 
@@ -35,6 +37,10 @@ package sm83_timing;
 
 	function automatic real R_wire_ohm(real L_um);
 		return Rprime_wire * L_um;
+	endfunction
+
+	function automatic real C_gate_F(real W_um);
+		return Cgate_per_um_F * W_um;
 	endfunction
 
 	function automatic real tpd_elmore_s(real L_um, real R_drv_ohm, real C_extra_F = 0.0);

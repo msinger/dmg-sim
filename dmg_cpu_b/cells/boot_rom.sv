@@ -1,14 +1,80 @@
 `default_nettype none
 
+package dmg_boot_rom_param;
+
+	import dmg_timing::L_unit;
+
+	parameter real L_d0       = 0.0;
+	parameter real L_d1       = 0.0;
+	parameter real L_d2       = 0.0;
+	parameter real L_d3       = 0.0;
+	parameter real L_d4       = 0.0;
+	parameter real L_d5       = 0.0;
+	parameter real L_d6       = 0.0;
+	parameter real L_d7       = 0.0;
+	parameter real L_row0_n   = 0.0;
+	parameter real L_row1_n   = 0.0;
+	parameter real L_row2_n   = 0.0;
+	parameter real L_row3_n   = 0.0;
+	parameter real L_col0     = 0.0;
+	parameter real L_col1     = 0.0;
+	parameter real L_col2     = 0.0;
+	parameter real L_col3     = 0.0;
+	parameter real L_a2       = 0.0;
+	parameter real L_a3       = 0.0;
+	parameter real L_a6       = 0.0;
+	parameter real L_a7       = 0.0;
+	parameter real L_a2_n     = 0.0;
+	parameter real L_a3_n     = 0.0;
+	parameter real L_a6_n     = 0.0;
+	parameter real L_a7_n     = 0.0;
+	parameter real L_oe       = 0.0;
+	parameter real L_oe_n     = 0.0;
+	parameter real L_bl_pch_n = 0.0;
+	parameter real L_wl_pch   = 0.0;
+	parameter real L_wl_ena_n = 0.0;
+
+	parameter real W_gate_row0_n   =  180*L_unit;
+	parameter real W_gate_row1_n   =  180*L_unit;
+	parameter real W_gate_row2_n   =  180*L_unit;
+	parameter real W_gate_row3_n   =  180*L_unit;
+	parameter real W_gate_col0     =  432*L_unit;
+	parameter real W_gate_col1     =  432*L_unit;
+	parameter real W_gate_col2     =  432*L_unit;
+	parameter real W_gate_col3     =  432*L_unit;
+	parameter real W_gate_a2       =   76*L_unit;
+	parameter real W_gate_a3       =   81*L_unit;
+	parameter real W_gate_a6       =  544*L_unit;
+	parameter real W_gate_a7       =  600*L_unit;
+	parameter real W_gate_a2_n     =   76*L_unit;
+	parameter real W_gate_a3_n     =   81*L_unit;
+	parameter real W_gate_a6_n     =  544*L_unit;
+	parameter real W_gate_a7_n     =  600*L_unit;
+	parameter real W_gate_oe       =  800*L_unit;
+	parameter real W_gate_oe_n     = 1088*L_unit;
+	parameter real W_gate_bl_pch_n =  200*L_unit;
+	parameter real W_gate_wl_pch   =  112*L_unit;
+	parameter real W_gate_wl_ena_n =  163*L_unit;
+
+endpackage
+
 module dmg_boot_rom #(
-		parameter real L_d0 = 0,
-		parameter real L_d1 = 0,
-		parameter real L_d2 = 0,
-		parameter real L_d3 = 0,
-		parameter real L_d4 = 0,
-		parameter real L_d5 = 0,
-		parameter real L_d6 = 0,
-		parameter real L_d7 = 0
+		parameter real L_d0      = dmg_boot_rom_param::L_d0,
+		parameter real L_d1      = dmg_boot_rom_param::L_d1,
+		parameter real L_d2      = dmg_boot_rom_param::L_d2,
+		parameter real L_d3      = dmg_boot_rom_param::L_d3,
+		parameter real L_d4      = dmg_boot_rom_param::L_d4,
+		parameter real L_d5      = dmg_boot_rom_param::L_d5,
+		parameter real L_d6      = dmg_boot_rom_param::L_d6,
+		parameter real L_d7      = dmg_boot_rom_param::L_d7,
+		parameter real W_gate_d0 = 0,
+		parameter real W_gate_d1 = 0,
+		parameter real W_gate_d2 = 0,
+		parameter real W_gate_d3 = 0,
+		parameter real W_gate_d4 = 0,
+		parameter real W_gate_d5 = 0,
+		parameter real W_gate_d6 = 0,
+		parameter real W_gate_d7 = 0
 	) (
 		output tri logic d0, d1, d2, d3, d4, d5, d6, d7,
 		input      logic row0_n, row1_n, row2_n, row3_n,
@@ -88,22 +154,22 @@ module dmg_boot_rom #(
 			bl_data &= (adr != -1) ? mem[adr] : 'x;
 	end
 
-	localparam realtime T_rise_d0 = tpd_elmore(L_d0, R_pmos_ohm(136*L_unit) * 2);
-	localparam realtime T_fall_d0 = tpd_elmore(L_d0, R_nmos_ohm(100*L_unit) * 2);
-	localparam realtime T_rise_d1 = tpd_elmore(L_d1, R_pmos_ohm(136*L_unit) * 2);
-	localparam realtime T_fall_d1 = tpd_elmore(L_d1, R_nmos_ohm(100*L_unit) * 2);
-	localparam realtime T_rise_d2 = tpd_elmore(L_d2, R_pmos_ohm(136*L_unit) * 2);
-	localparam realtime T_fall_d2 = tpd_elmore(L_d2, R_nmos_ohm(100*L_unit) * 2);
-	localparam realtime T_rise_d3 = tpd_elmore(L_d3, R_pmos_ohm(136*L_unit) * 2);
-	localparam realtime T_fall_d3 = tpd_elmore(L_d3, R_nmos_ohm(100*L_unit) * 2);
-	localparam realtime T_rise_d4 = tpd_elmore(L_d4, R_pmos_ohm(136*L_unit) * 2);
-	localparam realtime T_fall_d4 = tpd_elmore(L_d4, R_nmos_ohm(100*L_unit) * 2);
-	localparam realtime T_rise_d5 = tpd_elmore(L_d5, R_pmos_ohm(136*L_unit) * 2);
-	localparam realtime T_fall_d5 = tpd_elmore(L_d5, R_nmos_ohm(100*L_unit) * 2);
-	localparam realtime T_rise_d6 = tpd_elmore(L_d6, R_pmos_ohm(136*L_unit) * 2);
-	localparam realtime T_fall_d6 = tpd_elmore(L_d6, R_nmos_ohm(100*L_unit) * 2);
-	localparam realtime T_rise_d7 = tpd_elmore(L_d7, R_pmos_ohm(136*L_unit) * 2);
-	localparam realtime T_fall_d7 = tpd_elmore(L_d7, R_nmos_ohm(100*L_unit) * 2);
+	localparam realtime T_rise_d0 = tpd_elmore(L_d0, 2*R_pmos_ohm(136*L_unit), C_gate_F(W_gate_d0));
+	localparam realtime T_fall_d0 = tpd_elmore(L_d0, 2*R_nmos_ohm(100*L_unit), C_gate_F(W_gate_d0));
+	localparam realtime T_rise_d1 = tpd_elmore(L_d1, 2*R_pmos_ohm(136*L_unit), C_gate_F(W_gate_d1));
+	localparam realtime T_fall_d1 = tpd_elmore(L_d1, 2*R_nmos_ohm(100*L_unit), C_gate_F(W_gate_d1));
+	localparam realtime T_rise_d2 = tpd_elmore(L_d2, 2*R_pmos_ohm(136*L_unit), C_gate_F(W_gate_d2));
+	localparam realtime T_fall_d2 = tpd_elmore(L_d2, 2*R_nmos_ohm(100*L_unit), C_gate_F(W_gate_d2));
+	localparam realtime T_rise_d3 = tpd_elmore(L_d3, 2*R_pmos_ohm(136*L_unit), C_gate_F(W_gate_d3));
+	localparam realtime T_fall_d3 = tpd_elmore(L_d3, 2*R_nmos_ohm(100*L_unit), C_gate_F(W_gate_d3));
+	localparam realtime T_rise_d4 = tpd_elmore(L_d4, 2*R_pmos_ohm(136*L_unit), C_gate_F(W_gate_d4));
+	localparam realtime T_fall_d4 = tpd_elmore(L_d4, 2*R_nmos_ohm(100*L_unit), C_gate_F(W_gate_d4));
+	localparam realtime T_rise_d5 = tpd_elmore(L_d5, 2*R_pmos_ohm(136*L_unit), C_gate_F(W_gate_d5));
+	localparam realtime T_fall_d5 = tpd_elmore(L_d5, 2*R_nmos_ohm(100*L_unit), C_gate_F(W_gate_d5));
+	localparam realtime T_rise_d6 = tpd_elmore(L_d6, 2*R_pmos_ohm(136*L_unit), C_gate_F(W_gate_d6));
+	localparam realtime T_fall_d6 = tpd_elmore(L_d6, 2*R_nmos_ohm(100*L_unit), C_gate_F(W_gate_d6));
+	localparam realtime T_rise_d7 = tpd_elmore(L_d7, 2*R_pmos_ohm(136*L_unit), C_gate_F(W_gate_d7));
+	localparam realtime T_fall_d7 = tpd_elmore(L_d7, 2*R_nmos_ohm(100*L_unit), C_gate_F(W_gate_d7));
 	bufif0 (strong1, highz0) #(T_rise_d0, T_fall_d0) (d0, bl_data[0], oe_n);
 	bufif1 (highz1, strong0) #(T_rise_d0, T_fall_d0) (d0, bl_data[0], oe);
 	bufif0 (strong1, highz0) #(T_rise_d1, T_fall_d1) (d1, bl_data[1], oe_n);
