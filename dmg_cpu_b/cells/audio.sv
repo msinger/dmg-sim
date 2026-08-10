@@ -1,8 +1,98 @@
 `default_nettype none
 
+package dmg_audio_param;
+
+	import dmg_timing::L_unit;
+
+	parameter real L_ch1_0      = 0.0;
+	parameter real L_ch1_1      = 0.0;
+	parameter real L_ch1_2      = 0.0;
+	parameter real L_ch1_3      = 0.0;
+	parameter real L_ch2_0      = 0.0;
+	parameter real L_ch2_1      = 0.0;
+	parameter real L_ch2_2      = 0.0;
+	parameter real L_ch2_3      = 0.0;
+	parameter real L_ch3_0      = 0.0;
+	parameter real L_ch3_1      = 0.0;
+	parameter real L_ch3_2      = 0.0;
+	parameter real L_ch3_3      = 0.0;
+	parameter real L_ch4_0      = 0.0;
+	parameter real L_ch4_1      = 0.0;
+	parameter real L_ch4_2      = 0.0;
+	parameter real L_ch4_3      = 0.0;
+	parameter real L_ena        = 0.0;
+	parameter real L_ena_n      = 0.0;
+	parameter real L_ch1_ena_n  = 0.0;
+	parameter real L_ch2_ena_n  = 0.0;
+	parameter real L_ch3_ena_n  = 0.0;
+	parameter real L_ch4_ena_n  = 0.0;
+	parameter real L_r_vin_ena  = 0.0;
+	parameter real L_rmixer0    = 0.0;
+	parameter real L_rmixer1    = 0.0;
+	parameter real L_rmixer2    = 0.0;
+	parameter real L_rmixer3    = 0.0;
+	parameter real L_l_vin_ena  = 0.0;
+	parameter real L_lmixer0    = 0.0;
+	parameter real L_lmixer1    = 0.0;
+	parameter real L_lmixer2    = 0.0;
+	parameter real L_lmixer3    = 0.0;
+	parameter real L_rvolume_n0 = 0.0;
+	parameter real L_rvolume_n1 = 0.0;
+	parameter real L_rvolume_n2 = 0.0;
+	parameter real L_lvolume_n0 = 0.0;
+	parameter real L_lvolume_n1 = 0.0;
+	parameter real L_lvolume_n2 = 0.0;
+	parameter real L_rout       = 0.0;
+	parameter real L_lout       = 0.0;
+	parameter real L_vin        = 0.0;
+
+	parameter real W_gate_ch1_0      =  78*L_unit;
+	parameter real W_gate_ch1_1      =  78*L_unit;
+	parameter real W_gate_ch1_2      =  78*L_unit;
+	parameter real W_gate_ch1_3      =  78*L_unit;
+	parameter real W_gate_ch2_0      =  78*L_unit;
+	parameter real W_gate_ch2_1      =  78*L_unit;
+	parameter real W_gate_ch2_2      =  78*L_unit;
+	parameter real W_gate_ch2_3      =  78*L_unit;
+	parameter real W_gate_ch3_0      =  78*L_unit;
+	parameter real W_gate_ch3_1      =  78*L_unit;
+	parameter real W_gate_ch3_2      =  78*L_unit;
+	parameter real W_gate_ch3_3      =  78*L_unit;
+	parameter real W_gate_ch4_0      =  78*L_unit;
+	parameter real W_gate_ch4_1      =  78*L_unit;
+	parameter real W_gate_ch4_2      =  78*L_unit;
+	parameter real W_gate_ch4_3      =  78*L_unit;
+	parameter real W_gate_ena        = 562*L_unit;
+	parameter real W_gate_ena_n      =  32*L_unit;
+	parameter real W_gate_ch1_ena_n  =  22*L_unit;
+	parameter real W_gate_ch2_ena_n  =  22*L_unit;
+	parameter real W_gate_ch3_ena_n  =  22*L_unit;
+	parameter real W_gate_ch4_ena_n  =  22*L_unit;
+	parameter real W_gate_r_vin_ena  =  80*L_unit;
+	parameter real W_gate_rmixer0    =  80*L_unit;
+	parameter real W_gate_rmixer1    =  80*L_unit;
+	parameter real W_gate_rmixer2    =  80*L_unit;
+	parameter real W_gate_rmixer3    =  80*L_unit;
+	parameter real W_gate_l_vin_ena  =  80*L_unit;
+	parameter real W_gate_lmixer0    =  80*L_unit;
+	parameter real W_gate_lmixer1    =  80*L_unit;
+	parameter real W_gate_lmixer2    =  80*L_unit;
+	parameter real W_gate_lmixer3    =  80*L_unit;
+	parameter real W_gate_rvolume_n0 = 576*L_unit;
+	parameter real W_gate_rvolume_n1 = 296*L_unit;
+	parameter real W_gate_rvolume_n2 = 156*L_unit;
+	parameter real W_gate_lvolume_n0 = 576*L_unit;
+	parameter real W_gate_lvolume_n1 = 296*L_unit;
+	parameter real W_gate_lvolume_n2 = 156*L_unit;
+	parameter real W_gate_vin        = 0;
+
+endpackage
+
 module dmg_audio #(
-		parameter real L_rout = 0,
-		parameter real L_lout = 0
+		parameter real L_rout      = dmg_audio_param::L_rout,
+		parameter real L_lout      = dmg_audio_param::L_lout,
+		parameter real W_gate_rout = 0,
+		parameter real W_gate_lout = 0
 	) (
 		input  logic [3:0] ch1, ch2, ch3, ch4,
 		input  logic       ena, ena_n, ch1_ena_n, ch2_ena_n, ch3_ena_n, ch4_ena_n,

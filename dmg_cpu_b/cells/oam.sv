@@ -1,14 +1,84 @@
 `default_nettype none
 
+package dmg_oam_param;
+
+	import dmg_timing::L_unit;
+
+	parameter real L_d0          = 0.0;
+	parameter real L_d1          = 0.0;
+	parameter real L_d2          = 0.0;
+	parameter real L_d3          = 0.0;
+	parameter real L_d4          = 0.0;
+	parameter real L_d5          = 0.0;
+	parameter real L_d6          = 0.0;
+	parameter real L_d7          = 0.0;
+	parameter real L_col0        = 0.0;
+	parameter real L_col1        = 0.0;
+	parameter real L_col2        = 0.0;
+	parameter real L_col3        = 0.0;
+	parameter real L_a2          = 0.0;
+	parameter real L_a3          = 0.0;
+	parameter real L_a4          = 0.0;
+	parameter real L_a5          = 0.0;
+	parameter real L_a6          = 0.0;
+	parameter real L_a2_n        = 0.0;
+	parameter real L_a3_n        = 0.0;
+	parameter real L_a4_n        = 0.0;
+	parameter real L_a5_n        = 0.0;
+	parameter real L_a6_n        = 0.0;
+	parameter real L_oe          = 0.0;
+	parameter real L_oe_n        = 0.0;
+	parameter real L_wr          = 0.0;
+	parameter real L_bl_pch_n    = 0.0;
+	parameter real L_wldrv_pch_n = 0.0;
+
+	parameter real W_gate_d0          =   24*L_unit;
+	parameter real W_gate_d1          =   24*L_unit;
+	parameter real W_gate_d2          =   24*L_unit;
+	parameter real W_gate_d3          =   24*L_unit;
+	parameter real W_gate_d4          =   24*L_unit;
+	parameter real W_gate_d5          =   24*L_unit;
+	parameter real W_gate_d6          =   24*L_unit;
+	parameter real W_gate_d7          =   24*L_unit;
+	parameter real W_gate_col0        = 1184*L_unit;
+	parameter real W_gate_col1        = 1184*L_unit;
+	parameter real W_gate_col2        = 1184*L_unit;
+	parameter real W_gate_col3        = 1184*L_unit;
+	parameter real W_gate_a2          =   80*L_unit;
+	parameter real W_gate_a3          =   80*L_unit;
+	parameter real W_gate_a4          =   80*L_unit;
+	parameter real W_gate_a5          =   64*L_unit;
+	parameter real W_gate_a6          =   32*L_unit;
+	parameter real W_gate_a2_n        =   80*L_unit;
+	parameter real W_gate_a3_n        =   80*L_unit;
+	parameter real W_gate_a4_n        =   80*L_unit;
+	parameter real W_gate_a5_n        =   96*L_unit;
+	parameter real W_gate_a6_n        =  128*L_unit;
+	parameter real W_gate_oe          =  640*L_unit;
+	parameter real W_gate_oe_n        =  960*L_unit;
+	parameter real W_gate_wr          =  192*L_unit;
+	parameter real W_gate_bl_pch_n    = 1632*L_unit;
+	parameter real W_gate_wldrv_pch_n =  660*L_unit;
+
+endpackage
+
 module dmg_oam #(
-		parameter real L_d0 = 0,
-		parameter real L_d1 = 0,
-		parameter real L_d2 = 0,
-		parameter real L_d3 = 0,
-		parameter real L_d4 = 0,
-		parameter real L_d5 = 0,
-		parameter real L_d6 = 0,
-		parameter real L_d7 = 0
+		parameter real L_d0      = dmg_oam_param::L_d0,
+		parameter real L_d1      = dmg_oam_param::L_d1,
+		parameter real L_d2      = dmg_oam_param::L_d2,
+		parameter real L_d3      = dmg_oam_param::L_d3,
+		parameter real L_d4      = dmg_oam_param::L_d4,
+		parameter real L_d5      = dmg_oam_param::L_d5,
+		parameter real L_d6      = dmg_oam_param::L_d6,
+		parameter real L_d7      = dmg_oam_param::L_d7,
+		parameter real W_gate_d0 = dmg_oam_param::W_gate_d0,
+		parameter real W_gate_d1 = dmg_oam_param::W_gate_d1,
+		parameter real W_gate_d2 = dmg_oam_param::W_gate_d2,
+		parameter real W_gate_d3 = dmg_oam_param::W_gate_d3,
+		parameter real W_gate_d4 = dmg_oam_param::W_gate_d4,
+		parameter real W_gate_d5 = dmg_oam_param::W_gate_d5,
+		parameter real W_gate_d6 = dmg_oam_param::W_gate_d6,
+		parameter real W_gate_d7 = dmg_oam_param::W_gate_d7
 	) (
 		inout tri logic d0, d1, d2, d3, d4, d5, d6, d7,
 		input     logic col0, col1, col2, col3,
@@ -39,22 +109,22 @@ module dmg_oam #(
 		.wldrv_ena(wldrv_pch_n)
 	);
 
-	localparam realtime T_rise_d0 = tpd_elmore(L_d0, R_pmos_ohm(120*L_unit) * 2);
-	localparam realtime T_fall_d0 = tpd_elmore(L_d0, R_nmos_ohm( 80*L_unit) * 2);
-	localparam realtime T_rise_d1 = tpd_elmore(L_d1, R_pmos_ohm(120*L_unit) * 2);
-	localparam realtime T_fall_d1 = tpd_elmore(L_d1, R_nmos_ohm( 80*L_unit) * 2);
-	localparam realtime T_rise_d2 = tpd_elmore(L_d2, R_pmos_ohm(120*L_unit) * 2);
-	localparam realtime T_fall_d2 = tpd_elmore(L_d2, R_nmos_ohm( 80*L_unit) * 2);
-	localparam realtime T_rise_d3 = tpd_elmore(L_d3, R_pmos_ohm(120*L_unit) * 2);
-	localparam realtime T_fall_d3 = tpd_elmore(L_d3, R_nmos_ohm( 80*L_unit) * 2);
-	localparam realtime T_rise_d4 = tpd_elmore(L_d4, R_pmos_ohm(120*L_unit) * 2);
-	localparam realtime T_fall_d4 = tpd_elmore(L_d4, R_nmos_ohm( 80*L_unit) * 2);
-	localparam realtime T_rise_d5 = tpd_elmore(L_d5, R_pmos_ohm(120*L_unit) * 2);
-	localparam realtime T_fall_d5 = tpd_elmore(L_d5, R_nmos_ohm( 80*L_unit) * 2);
-	localparam realtime T_rise_d6 = tpd_elmore(L_d6, R_pmos_ohm(120*L_unit) * 2);
-	localparam realtime T_fall_d6 = tpd_elmore(L_d6, R_nmos_ohm( 80*L_unit) * 2);
-	localparam realtime T_rise_d7 = tpd_elmore(L_d7, R_pmos_ohm(120*L_unit) * 2);
-	localparam realtime T_fall_d7 = tpd_elmore(L_d7, R_nmos_ohm( 80*L_unit) * 2);
+	localparam realtime T_rise_d0 = tpd_elmore(L_d0, 2*R_pmos_ohm(120*L_unit), C_gate_F(W_gate_d0));
+	localparam realtime T_fall_d0 = tpd_elmore(L_d0, 2*R_nmos_ohm( 80*L_unit), C_gate_F(W_gate_d0));
+	localparam realtime T_rise_d1 = tpd_elmore(L_d1, 2*R_pmos_ohm(120*L_unit), C_gate_F(W_gate_d1));
+	localparam realtime T_fall_d1 = tpd_elmore(L_d1, 2*R_nmos_ohm( 80*L_unit), C_gate_F(W_gate_d1));
+	localparam realtime T_rise_d2 = tpd_elmore(L_d2, 2*R_pmos_ohm(120*L_unit), C_gate_F(W_gate_d2));
+	localparam realtime T_fall_d2 = tpd_elmore(L_d2, 2*R_nmos_ohm( 80*L_unit), C_gate_F(W_gate_d2));
+	localparam realtime T_rise_d3 = tpd_elmore(L_d3, 2*R_pmos_ohm(120*L_unit), C_gate_F(W_gate_d3));
+	localparam realtime T_fall_d3 = tpd_elmore(L_d3, 2*R_nmos_ohm( 80*L_unit), C_gate_F(W_gate_d3));
+	localparam realtime T_rise_d4 = tpd_elmore(L_d4, 2*R_pmos_ohm(120*L_unit), C_gate_F(W_gate_d4));
+	localparam realtime T_fall_d4 = tpd_elmore(L_d4, 2*R_nmos_ohm( 80*L_unit), C_gate_F(W_gate_d4));
+	localparam realtime T_rise_d5 = tpd_elmore(L_d5, 2*R_pmos_ohm(120*L_unit), C_gate_F(W_gate_d5));
+	localparam realtime T_fall_d5 = tpd_elmore(L_d5, 2*R_nmos_ohm( 80*L_unit), C_gate_F(W_gate_d5));
+	localparam realtime T_rise_d6 = tpd_elmore(L_d6, 2*R_pmos_ohm(120*L_unit), C_gate_F(W_gate_d6));
+	localparam realtime T_fall_d6 = tpd_elmore(L_d6, 2*R_nmos_ohm( 80*L_unit), C_gate_F(W_gate_d6));
+	localparam realtime T_rise_d7 = tpd_elmore(L_d7, 2*R_pmos_ohm(120*L_unit), C_gate_F(W_gate_d7));
+	localparam realtime T_fall_d7 = tpd_elmore(L_d7, 2*R_nmos_ohm( 80*L_unit), C_gate_F(W_gate_d7));
 	bufif0 (strong1, highz0) #(T_rise_d0, T_fall_d0) (d0, dout[0], oe_n);
 	bufif1 (highz1, strong0) #(T_rise_d0, T_fall_d0) (d0, dout[0], oe);
 	bufif0 (strong1, highz0) #(T_rise_d1, T_fall_d1) (d1, dout[1], oe_n);

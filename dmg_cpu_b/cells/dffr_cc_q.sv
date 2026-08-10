@@ -1,7 +1,25 @@
 `default_nettype none
 
+package dmg_dffr_cc_q_param;
+
+	import dmg_timing::L_unit;
+
+	parameter real L_d     = 0.0;
+	parameter real L_clk   = 0.0;
+	parameter real L_clk_n = 0.0;
+	parameter real L_r_n   = 0.0;
+	parameter real L_q     = 0.0;
+
+	parameter real W_gate_d     = 0;
+	parameter real W_gate_clk   = 32*L_unit;
+	parameter real W_gate_clk_n = 32*L_unit;
+	parameter real W_gate_r_n   = 32*L_unit;
+
+endpackage
+
 module dmg_dffr_cc_q #(
-		parameter real L_q = 54
+		parameter real L_q      = 54 + dmg_dffr_cc_q_param::L_q,
+		parameter real W_gate_q = 0
 	) (
 		input  logic d, clk, clk_n, r_n,
 		output logic q
@@ -26,18 +44,18 @@ module dmg_dffr_cc_q #(
 
 		end else begin
 
-			localparam realtime T_rise_mux1  = tpd_elmore( 44, R_pmos_ohm( 8*L_unit) * 1.5); /* Small increase here to allow longer delays between clock inputs. */
-			localparam realtime T_fall_mux1  = tpd_elmore( 44, R_nmos_ohm( 8*L_unit) * 1.5);
-			localparam realtime T_rise_nand1 = tpd_elmore( 42, R_pmos_ohm( 8*L_unit));
-			localparam realtime T_fall_nand1 = tpd_elmore( 42, R_nmos_ohm( 8*L_unit) * 2);
-			localparam realtime T_rise_not1  = tpd_elmore( 63, R_pmos_ohm( 8*L_unit));
-			localparam realtime T_fall_not1  = tpd_elmore( 63, R_nmos_ohm( 8*L_unit));
-			localparam realtime T_rise_mux2  = tpd_elmore( 59, R_pmos_ohm( 8*L_unit));
-			localparam realtime T_fall_mux2  = tpd_elmore( 59, R_nmos_ohm( 8*L_unit));
-			localparam realtime T_rise_nand2 = tpd_elmore(115, R_pmos_ohm( 8*L_unit));
-			localparam realtime T_fall_nand2 = tpd_elmore(115, R_nmos_ohm( 8*L_unit) * 2);
-			localparam realtime T_rise_q     = tpd_elmore(L_q, R_pmos_ohm(35*L_unit));
-			localparam realtime T_fall_q     = tpd_elmore(L_q, R_nmos_ohm(35*L_unit));
+			localparam realtime T_rise_mux1  = tpd_elmore( 44,   R_pmos_ohm( 8*L_unit) * 1.5, C_gate_F(16*L_unit)); /* Small increase here to allow longer delays between clock inputs. */
+			localparam realtime T_fall_mux1  = tpd_elmore( 44,   R_nmos_ohm( 8*L_unit) * 1.5, C_gate_F(16*L_unit));
+			localparam realtime T_rise_nand1 = tpd_elmore( 42,   R_pmos_ohm( 8*L_unit), C_gate_F(16*L_unit));
+			localparam realtime T_fall_nand1 = tpd_elmore( 42, 2*R_nmos_ohm( 8*L_unit), C_gate_F(16*L_unit));
+			localparam realtime T_rise_not1  = tpd_elmore( 63,   R_pmos_ohm( 8*L_unit));
+			localparam realtime T_fall_not1  = tpd_elmore( 63,   R_nmos_ohm( 8*L_unit));
+			localparam realtime T_rise_mux2  = tpd_elmore( 59,   R_pmos_ohm( 8*L_unit), C_gate_F(16*L_unit));
+			localparam realtime T_fall_mux2  = tpd_elmore( 59,   R_nmos_ohm( 8*L_unit), C_gate_F(16*L_unit));
+			localparam realtime T_rise_nand2 = tpd_elmore(115,   R_pmos_ohm( 8*L_unit), C_gate_F(86*L_unit));
+			localparam realtime T_fall_nand2 = tpd_elmore(115, 2*R_nmos_ohm( 8*L_unit), C_gate_F(86*L_unit));
+			localparam realtime T_rise_q     = tpd_elmore(L_q,   R_pmos_ohm(35*L_unit), C_gate_F(W_gate_q));
+			localparam realtime T_fall_q     = tpd_elmore(L_q,   R_nmos_ohm(35*L_unit), C_gate_F(W_gate_q));
 
 			logic and1, mux1, mux2, mux1_buf, mux2_buf;
 

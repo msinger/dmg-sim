@@ -19,10 +19,8 @@ dmg_cpu_b/cells/dlatch_ee.sv \
 dmg_cpu_b/cells/dlatch.sv \
 dmg_cpu_b/cells/drlatch_ee.sv \
 dmg_cpu_b/cells/eco_nand2.sv \
-dmg_cpu_b/cells/full_add.sv \
 dmg_cpu_b/cells/generic_sram.sv \
 dmg_cpu_b/cells/ggnmos.sv \
-dmg_cpu_b/cells/half_add.sv \
 dmg_cpu_b/cells/high_ram.sv \
 dmg_cpu_b/cells/muxi.sv \
 dmg_cpu_b/cells/mux.sv \
@@ -68,12 +66,14 @@ dmg_cpu_b/cells/tffnl.sv \
 dmg_cpu_b/cells/tie.sv \
 dmg_cpu_b/cells/wave_ram.sv \
 dmg_cpu_b/cells/xnor.sv \
-dmg_cpu_b/cells/xor.sv
+dmg_cpu_b/cells/xor.sv \
+dmg_cpu_b/cells/full_add.sv \
+dmg_cpu_b/cells/half_add.sv
 
 DMG_CPU_B = \
 dmg_cpu_b/timing-$(TIMING).sv \
-dmg_cpu_b/dmg_cpu_b.sv \
 $(DMG_CPU_B_CELLS) \
+dmg_cpu_b/dmg_cpu_b.sv
 
 SM83_CELLS = \
 sm83/cells/alu_cgen.sv \
@@ -222,8 +222,8 @@ sm83/cells/xor_idu_l.sv
 
 SM83 = \
 sm83/timing-$(TIMING).sv \
-sm83/sm83.sv \
-$(SM83_CELLS)
+$(SM83_CELLS) \
+sm83/sm83.sv
 
 COMMON_FILES = \
 keeper.sv

@@ -1,7 +1,23 @@
 `default_nettype none
 
+package sm83_dlatch_ee_q_n_param;
+
+	import sm83_timing::L_unit;
+
+	parameter real L_d     = 0.0;
+	parameter real L_ena   = 0.0;
+	parameter real L_ena_n = 0.0;
+	parameter real L_q_n   = 0.0;
+
+	parameter real W_gate_d     = 6*L_unit;
+	parameter real W_gate_ena   = 6*L_unit;
+	parameter real W_gate_ena_n = 6*L_unit;
+
+endpackage
+
 module sm83_dlatch_ee_q_n #(
-		parameter real L_q_n = 45
+		parameter real L_q_n      = 45 + sm83_dlatch_ee_q_n_param::L_q_n,
+		parameter real W_gate_q_n = 0
 	) (
 		input  logic d, ena, ena_n,
 		output logic q_n
@@ -14,8 +30,8 @@ module sm83_dlatch_ee_q_n #(
 	always_latch if ((d && ena) || (!d && !ena_n)) q_n = !d;
 
 	specify
-		specparam T_rise_q_n = tpd_elmore(L_q_n, R_pmos_ohm(3*L_unit) * 2);
-		specparam T_fall_q_n = tpd_elmore(L_q_n, R_nmos_ohm(3*L_unit) * 2);
+		specparam T_rise_q_n = tpd_elmore(L_q_n, 2*R_pmos_ohm(3*L_unit), C_gate_F(6*L_unit+W_gate_q_n));
+		specparam T_fall_q_n = tpd_elmore(L_q_n, 2*R_nmos_ohm(3*L_unit), C_gate_F(6*L_unit+W_gate_q_n));
 
 		(d, ena, ena_n *> q_n) = (T_rise_q_n, T_fall_q_n);
 	endspecify
