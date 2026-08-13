@@ -4,10 +4,10 @@ package sm83_and2_in1_n_tap_in1_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_in1_n   = 0.0;
-	parameter real L_in2     = 0.0;
-	parameter real L_y       = 0.0;
-	parameter real L_tap_in1 = 0.0;
+	parameter real L_in1_n   =  0.0;
+	parameter real L_in2     =  0.0;
+	parameter real L_y       = 10.0;
+	parameter real L_tap_in1 = 20.0;
 
 	parameter real W_gate_in1_n = 6*L_unit;
 	parameter real W_gate_in2   = 6*L_unit;
@@ -15,8 +15,8 @@ package sm83_and2_in1_n_tap_in1_param;
 endpackage
 
 module sm83_and2_in1_n_tap_in1 #(
-		parameter real L_y            = 10 + sm83_and2_in1_n_tap_in1_param::L_y,
-		parameter real L_tap_in1      = 32 + sm83_and2_in1_n_tap_in1_param::L_tap_in1,
+		parameter real L_y            = sm83_and2_in1_n_tap_in1_param::L_y,
+		parameter real L_tap_in1      = 12 + sm83_and2_in1_n_tap_in1_param::L_tap_in1,
 		parameter real W_gate_y       = 0,
 		parameter real W_gate_tap_in1 = 0
 	) (

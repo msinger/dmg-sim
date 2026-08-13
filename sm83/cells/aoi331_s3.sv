@@ -4,13 +4,13 @@ package sm83_aoi331_s3_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_in1 = 0.0;
-	parameter real L_in2 = 0.0;
-	parameter real L_in3 = 0.0;
-	parameter real L_in4 = 0.0;
-	parameter real L_in5 = 0.0;
-	parameter real L_in6 = 0.0;
-	parameter real L_y   = 0.0;
+	parameter real L_in1 =  0.0;
+	parameter real L_in2 =  0.0;
+	parameter real L_in3 =  0.0;
+	parameter real L_in4 =  0.0;
+	parameter real L_in5 =  0.0;
+	parameter real L_in6 =  0.0;
+	parameter real L_y   = 29.0;
 
 	parameter real W_gate_in1 = 6*L_unit;
 	parameter real W_gate_in2 = 6*L_unit;
@@ -22,7 +22,7 @@ package sm83_aoi331_s3_param;
 endpackage
 
 module sm83_aoi331_s3 #(
-		parameter real L_y      = 29 + sm83_aoi331_s3_param::L_y,
+		parameter real L_y      = sm83_aoi331_s3_param::L_y,
 		parameter real W_gate_y = 0
 	) (
 		input  logic in1, in2, in3, in4, in5, in6,

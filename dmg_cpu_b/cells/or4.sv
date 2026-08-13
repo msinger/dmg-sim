@@ -4,11 +4,11 @@ package dmg_or4_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_in1 = 0.0;
-	parameter real L_in2 = 0.0;
-	parameter real L_in3 = 0.0;
-	parameter real L_in4 = 0.0;
-	parameter real L_y   = 0.0;
+	parameter real L_in1 = 57.5;
+	parameter real L_in2 = 57.5;
+	parameter real L_in3 = 57.5;
+	parameter real L_in4 = 57.5;
+	parameter real L_y   = 36.7;
 
 	parameter real W_gate_in1 = 70*L_unit;
 	parameter real W_gate_in2 = 70*L_unit;

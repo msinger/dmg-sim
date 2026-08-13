@@ -4,8 +4,8 @@ package dmg_not_x2_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_in = 0.0;
-	parameter real L_y  = 0.0;
+	parameter real L_in = 62.0;
+	parameter real L_y  = 44.2;
 
 	parameter real W_gate_in = 140*L_unit;
 

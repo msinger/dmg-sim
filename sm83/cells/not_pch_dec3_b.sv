@@ -15,7 +15,7 @@ endpackage
 
 module sm83_not_pch_dec3_b #(
 		parameter real L_in      = 27 + sm83_not_pch_dec3_b_param::L_in,
-		parameter real L_y       = 45 + sm83_not_pch_dec3_b_param::L_y,
+		parameter real L_y       = 46 + sm83_not_pch_dec3_b_param::L_y,
 		parameter real W_gate_in = sm83_not_pch_dec3_b_param::W_gate_in,
 		parameter real W_gate_y  = 0
 	) (

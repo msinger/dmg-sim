@@ -4,14 +4,14 @@ package sm83_reg_bc_out_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_ena1   = 0.0;
-	parameter real L_b_ena2 = 0.0;
-	parameter real L_c_ena2 = 0.0;
-	parameter real L_b_in   = 0.0;
-	parameter real L_c_in   = 0.0;
-	parameter real L_b_y1   = 0.0;
-	parameter real L_c_y1   = 0.0;
-	parameter real L_y2     = 0.0;
+	parameter real L_ena1   = 26.0;
+	parameter real L_b_ena2 = 15.6;
+	parameter real L_c_ena2 =  0.0;
+	parameter real L_b_in   =  0.0;
+	parameter real L_c_in   =  0.0;
+	parameter real L_b_y1   =  0.0;
+	parameter real L_c_y1   =  0.0;
+	parameter real L_y2     =  0.0;
 
 	parameter real W_gate_ena1   = 16*L_unit;
 	parameter real W_gate_b_ena2 =  8*L_unit;

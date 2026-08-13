@@ -4,10 +4,10 @@ package sm83_mux_idu_l_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_d0  = 0.0;
-	parameter real L_d1  = 0.0;
-	parameter real L_sel = 0.0;
-	parameter real L_y   = 0.0;
+	parameter real L_d0  = 18.1;
+	parameter real L_d1  = 18.5;
+	parameter real L_sel = 20.9;
+	parameter real L_y   =  0.0;
 
 	parameter real W_gate_d0  =  6*L_unit;
 	parameter real W_gate_d1  =  6*L_unit;

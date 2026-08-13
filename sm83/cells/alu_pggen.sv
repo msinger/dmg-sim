@@ -4,18 +4,18 @@ package sm83_alu_pggen_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_xor_in1     = 0.0;
-	parameter real L_xor_in2     = 0.0;
-	parameter real L_and_or_in2  = 0.0;
-	parameter real L_ao221_in2   = 0.0;
-	parameter real L_ao221_in3   = 0.0;
-	parameter real L_pch_n       = 0.0;
-	parameter real L_ao221_in5_n = 0.0;
-	parameter real L_tap_xor     = 0.0;
-	parameter real L_tap_nand    = 0.0;
-	parameter real L_tap_and     = 0.0;
-	parameter real L_tap_or      = 0.0;
-	parameter real L_y           = 0.0;
+	parameter real L_xor_in1     =  0.0;
+	parameter real L_xor_in2     =  0.0;
+	parameter real L_and_or_in2  =  0.0;
+	parameter real L_ao221_in2   =  0.0;
+	parameter real L_ao221_in3   =  0.0;
+	parameter real L_pch_n       =  0.0;
+	parameter real L_ao221_in5_n = 33.4;
+	parameter real L_tap_xor     = 50.9;
+	parameter real L_tap_nand    = 83.4;
+	parameter real L_tap_and     = 50.8;
+	parameter real L_tap_or      = 85.6;
+	parameter real L_y           =  0.0;
 
 	parameter real W_gate_xor_in1     = 20*L_unit;
 	parameter real W_gate_xor_in2     = 20*L_unit;
@@ -28,11 +28,11 @@ package sm83_alu_pggen_param;
 endpackage
 
 module sm83_alu_pggen #(
-		parameter real L_ao221_in5_n      = 74 + sm83_alu_pggen_param::L_ao221_in5_n,
-		parameter real L_tap_xor          = 54 + sm83_alu_pggen_param::L_tap_xor,
-		parameter real L_tap_nand         = 84 + sm83_alu_pggen_param::L_tap_nand,
-		parameter real L_tap_and          = 58 + sm83_alu_pggen_param::L_tap_and,
-		parameter real L_tap_or           = 83 + sm83_alu_pggen_param::L_tap_or,
+		parameter real L_ao221_in5_n      = 47 + sm83_alu_pggen_param::L_ao221_in5_n,
+		parameter real L_tap_xor          = 11 + sm83_alu_pggen_param::L_tap_xor,
+		parameter real L_tap_nand         =  9 + sm83_alu_pggen_param::L_tap_nand,
+		parameter real L_tap_and          =  9 + sm83_alu_pggen_param::L_tap_and,
+		parameter real L_tap_or           =  9 + sm83_alu_pggen_param::L_tap_or,
 		parameter real L_y                = 23 + sm83_alu_pggen_param::L_y,
 		parameter real W_gate_ao221_in5_n = sm83_alu_pggen_param::W_gate_ao221_in5_n,
 		parameter real W_gate_tap_xor     = 0,

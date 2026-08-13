@@ -4,21 +4,21 @@ package sm83_idu_bit123456_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_pch_n       = 0.0;
-	parameter real L_buf_a_in    = 0.0;
-	parameter real L_buf_b_in    = 0.0;
-	parameter real L_buf_ena     = 0.0;
-	parameter real L_buf_ena_n   = 0.0;
-	parameter real L_chain_a_ena = 0.0;
-	parameter real L_chain_b_ena = 0.0;
-	parameter real L_buf_a_y     = 0.0;
-	parameter real L_buf_b_y     = 0.0;
-	parameter real L_chain_a_in  = 0.0;
-	parameter real L_chain_a_y   = 0.0;
-	parameter real L_chain_a_y_n = 0.0;
-	parameter real L_chain_b_in  = 0.0;
-	parameter real L_chain_b_y   = 0.0;
-	parameter real L_chain_b_y_n = 0.0;
+	parameter real L_pch_n       =  0.0;
+	parameter real L_buf_a_in    = 33.7;
+	parameter real L_buf_b_in    = 25.9;
+	parameter real L_buf_ena     = 64.5;
+	parameter real L_buf_ena_n   = 49.5;
+	parameter real L_chain_a_ena =  0.0;
+	parameter real L_chain_b_ena =  0.0;
+	parameter real L_buf_a_y     =  0.0;
+	parameter real L_buf_b_y     =  0.0;
+	parameter real L_chain_a_in  = 63.7;
+	parameter real L_chain_a_y   =  0.0;
+	parameter real L_chain_a_y_n =  0.0;
+	parameter real L_chain_b_in  = 40.1;
+	parameter real L_chain_b_y   =  0.0;
+	parameter real L_chain_b_y_n =  0.0;
 
 	parameter real W_gate_pch_n       = 12*L_unit;
 	parameter real W_gate_buf_a_in    = 18*L_unit;
@@ -35,10 +35,10 @@ endpackage
 module sm83_idu_bit123456 #(
 		parameter real L_buf_a_y          = 30 + sm83_idu_bit123456_param::L_buf_a_y,
 		parameter real L_buf_b_y          = 30 + sm83_idu_bit123456_param::L_buf_b_y,
-		parameter real L_chain_a_in       = 68 + sm83_idu_bit123456_param::L_chain_a_in,
+		parameter real L_chain_a_in       = 12 + sm83_idu_bit123456_param::L_chain_a_in,
 		parameter real L_chain_a_y        = 59 + sm83_idu_bit123456_param::L_chain_a_y,
 		parameter real L_chain_a_y_n      = 51 + sm83_idu_bit123456_param::L_chain_a_y_n,
-		parameter real L_chain_b_in       = 93 + sm83_idu_bit123456_param::L_chain_b_in,
+		parameter real L_chain_b_in       = 64 + sm83_idu_bit123456_param::L_chain_b_in,
 		parameter real L_chain_b_y        =  7 + sm83_idu_bit123456_param::L_chain_b_y,
 		parameter real L_chain_b_y_n      = 40 + sm83_idu_bit123456_param::L_chain_b_y_n,
 		parameter real W_gate_buf_a_y     = 0,

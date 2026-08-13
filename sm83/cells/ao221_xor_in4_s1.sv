@@ -4,12 +4,12 @@ package sm83_ao221_xor_in4_s1_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_in1 = 0.0;
-	parameter real L_in2 = 0.0;
-	parameter real L_in3 = 0.0;
-	parameter real L_in4 = 0.0;
-	parameter real L_in5 = 0.0;
-	parameter real L_y   = 0.0;
+	parameter real L_in1 = 78.2;
+	parameter real L_in2 =  0.0;
+	parameter real L_in3 =  0.0;
+	parameter real L_in4 =  0.0;
+	parameter real L_in5 =  0.0;
+	parameter real L_y   =  0.0;
 
 	parameter real W_gate_in1 = 20*L_unit;
 	parameter real W_gate_in2 = 10*L_unit;

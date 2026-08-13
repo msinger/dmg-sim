@@ -4,10 +4,10 @@ package dmg_nand_latch_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_s_n = 0.0;
-	parameter real L_r_n = 0.0;
-	parameter real L_q   = 0.0;
-	parameter real L_q_n = 0.0;
+	parameter real L_s_n = 57.5;
+	parameter real L_r_n = 57.5;
+	parameter real L_q   = 97.8;
+	parameter real L_q_n = 97.8;
 
 	parameter real W_gate_s_n = 70*L_unit;
 	parameter real W_gate_r_n = 70*L_unit;

@@ -4,16 +4,16 @@ package sm83_not5_irq_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_a_in = 0.0;
-	parameter real L_b_in = 0.0;
-	parameter real L_c_in = 0.0;
-	parameter real L_d_in = 0.0;
-	parameter real L_e_in = 0.0;
-	parameter real L_a_y  = 0.0;
-	parameter real L_b_y  = 0.0;
-	parameter real L_c_y  = 0.0;
-	parameter real L_d_y  = 0.0;
-	parameter real L_e_y  = 0.0;
+	parameter real L_a_in = 56.5;
+	parameter real L_b_in =  0.0;
+	parameter real L_c_in = 20.0;
+	parameter real L_d_in =  0.0;
+	parameter real L_e_in =  0.0;
+	parameter real L_a_y  =  0.0;
+	parameter real L_b_y  = 38.4;
+	parameter real L_c_y  =  0.0;
+	parameter real L_d_y  =  0.0;
+	parameter real L_e_y  =  0.0;
 
 	parameter real W_gate_a_in = 10*L_unit;
 	parameter real W_gate_b_in = 10*L_unit;
@@ -25,7 +25,7 @@ endpackage
 
 module sm83_not5_irq #(
 		parameter real L_a_y      = 59 + sm83_not5_irq_param::L_a_y,
-		parameter real L_b_y      = 58 + sm83_not5_irq_param::L_b_y,
+		parameter real L_b_y      = 20 + sm83_not5_irq_param::L_b_y,
 		parameter real L_c_y      = 17 + sm83_not5_irq_param::L_c_y,
 		parameter real L_d_y      = 34 + sm83_not5_irq_param::L_d_y,
 		parameter real L_e_y      = 12 + sm83_not5_irq_param::L_e_y,

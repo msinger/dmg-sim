@@ -4,12 +4,12 @@ package dmg_dffr_cc_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_d     = 0.0;
-	parameter real L_clk   = 0.0;
-	parameter real L_clk_n = 0.0;
-	parameter real L_r_n   = 0.0;
-	parameter real L_q     = 0.0;
-	parameter real L_q_n   = 0.0;
+	parameter real L_d     =  7.8;
+	parameter real L_clk   = 49.6;
+	parameter real L_clk_n = 58.5;
+	parameter real L_r_n   = 46.8;
+	parameter real L_q     = 35.0;
+	parameter real L_q_n   = 41.0;
 
 	parameter real W_gate_d     = 0;
 	parameter real W_gate_clk   = 32*L_unit;

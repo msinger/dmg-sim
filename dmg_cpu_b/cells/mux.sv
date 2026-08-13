@@ -4,10 +4,10 @@ package dmg_mux_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_d0  = 0.0;
-	parameter real L_d1  = 0.0;
-	parameter real L_sel = 0.0;
-	parameter real L_y   = 0.0;
+	parameter real L_d0  = 54.9;
+	parameter real L_d1  = 20.2;
+	parameter real L_sel = 53.6;
+	parameter real L_y   = 36.7;
 
 	parameter real W_gate_d0  = 0;
 	parameter real W_gate_d1  = 0;

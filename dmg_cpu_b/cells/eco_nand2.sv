@@ -4,9 +4,9 @@ package dmg_eco_nand2_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_in1 = 0.0;
-	parameter real L_in2 = 0.0;
-	parameter real L_y   = 0.0;
+	parameter real L_in1 = 57.5;
+	parameter real L_in2 = 57.5;
+	parameter real L_y   = 40.0;
 
 	parameter real W_gate_in1 = 70*L_unit;
 	parameter real W_gate_in2 = 70*L_unit;

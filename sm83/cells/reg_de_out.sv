@@ -4,16 +4,16 @@ package sm83_reg_de_out_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_ena1    = 0.0;
-	parameter real L_d_ena2  = 0.0;
-	parameter real L_e_ena2  = 0.0;
-	parameter real L_d_in    = 0.0;
-	parameter real L_e_in    = 0.0;
-	parameter real L_d_zero1 = 0.0;
-	parameter real L_d_zero2 = 0.0;
-	parameter real L_d_y1    = 0.0;
-	parameter real L_e_y1    = 0.0;
-	parameter real L_y2      = 0.0;
+	parameter real L_ena1    =  0.0;
+	parameter real L_d_ena2  =  0.0;
+	parameter real L_e_ena2  =  0.0;
+	parameter real L_d_in    =  0.0;
+	parameter real L_e_in    =  0.0;
+	parameter real L_d_zero1 = 15.0;
+	parameter real L_d_zero2 =  0.0;
+	parameter real L_d_y1    =  0.0;
+	parameter real L_e_y1    =  0.0;
+	parameter real L_y2      =  0.0;
 
 	parameter real W_gate_ena1    = 16*L_unit;
 	parameter real W_gate_d_ena2  =  8*L_unit;

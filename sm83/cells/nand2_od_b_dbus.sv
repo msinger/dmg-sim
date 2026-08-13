@@ -14,7 +14,7 @@ package sm83_nand2_od_b_dbus_param;
 endpackage
 
 module sm83_nand2_od_b_dbus #(
-		parameter real L_y      = sm83_nand2_od_b_dbus_param::L_y,
+		parameter real L_y      = 3 + sm83_nand2_od_b_dbus_param::L_y,
 		parameter real W_gate_y = 0
 	) (
 		input      logic in1, in2,

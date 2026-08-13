@@ -4,15 +4,15 @@ package dmg_pad_in_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_i_n = 0.0;
-	parameter real L_pad = 0.0;
+	parameter real L_i_n = 252.0;
+	parameter real L_pad =   0.0;
 
 	parameter real W_gate_pad = 22*L_unit;
 
 endpackage
 
 module dmg_pad_in #(
-		parameter real L_i_n      = 160 + dmg_pad_in_param::L_i_n,
+		parameter real L_i_n      = dmg_pad_in_param::L_i_n,
 		parameter real W_gate_i_n = 0
 	) (
 		output logic i_n,

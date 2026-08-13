@@ -4,11 +4,11 @@ package sm83_or2_tap_nor_tap_in1_n_reg_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_in1       = 0.0;
-	parameter real L_in2       = 0.0;
-	parameter real L_y         = 0.0;
-	parameter real L_tap_nor   = 0.0;
-	parameter real L_tap_in1_n = 0.0;
+	parameter real L_in1       = 38.5;
+	parameter real L_in2       =  0.0;
+	parameter real L_y         = 38.0;
+	parameter real L_tap_nor   = 43.0;
+	parameter real L_tap_in1_n =  0.0;
 
 	parameter real W_gate_in1 = 38*L_unit;
 	parameter real W_gate_in2 = 14*L_unit;
@@ -16,8 +16,8 @@ package sm83_or2_tap_nor_tap_in1_n_reg_param;
 endpackage
 
 module sm83_or2_tap_nor_tap_in1_n_reg #(
-		parameter real L_y              = 44 + sm83_or2_tap_nor_tap_in1_n_reg_param::L_y,
-		parameter real L_tap_nor        = 49 + sm83_or2_tap_nor_tap_in1_n_reg_param::L_tap_nor,
+		parameter real L_y              = 6 + sm83_or2_tap_nor_tap_in1_n_reg_param::L_y,
+		parameter real L_tap_nor        = 6 + sm83_or2_tap_nor_tap_in1_n_reg_param::L_tap_nor,
 		parameter real L_tap_in1_n      = 28 + sm83_or2_tap_nor_tap_in1_n_reg_param::L_tap_in1_n,
 		parameter real W_gate_y         = 0,
 		parameter real W_gate_tap_nor   = 0,

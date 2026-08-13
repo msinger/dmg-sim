@@ -4,12 +4,12 @@ package sm83_dff_cc_ee_q_n_reg_wz_bit_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_d     = 0.0;
-	parameter real L_clk   = 0.0;
-	parameter real L_clk_n = 0.0;
-	parameter real L_ena   = 0.0;
-	parameter real L_ena_n = 0.0;
-	parameter real L_q_n   = 0.0;
+	parameter real L_d     =  0.0;
+	parameter real L_clk   = 19.4;
+	parameter real L_clk_n = 26.5;
+	parameter real L_ena   =  0.0;
+	parameter real L_ena_n =  0.0;
+	parameter real L_q_n   =  0.0;
 
 	parameter real W_gate_d     = 6*L_unit;
 	parameter real W_gate_clk   = 9*L_unit;

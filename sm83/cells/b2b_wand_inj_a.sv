@@ -4,12 +4,12 @@ package sm83_b2b_wand_inj_a_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_oe_n   = 0.0;
-	parameter real L_pch_n  = 0.0;
-	parameter real L_inj_d  = 0.0;
-	parameter real L_inj_en = 0.0;
-	parameter real L_a      = 0.0;
-	parameter real L_b      = 0.0;
+	parameter real L_oe_n   = 124.6;
+	parameter real L_pch_n  =  69.8;
+	parameter real L_inj_d  =   0.0;
+	parameter real L_inj_en =   0.0;
+	parameter real L_a      =  35.9;
+	parameter real L_b      =   0.0;
 
 	parameter real W_gate_oe_n   = 43*L_unit;
 	parameter real W_gate_pch_n  = 66*L_unit;
@@ -21,8 +21,8 @@ package sm83_b2b_wand_inj_a_param;
 endpackage
 
 module sm83_b2b_wand_inj_a #(
-		parameter real L_a      = 49 + sm83_b2b_wand_inj_a_param::L_a,
-		parameter real L_b      = 80 + sm83_b2b_wand_inj_a_param::L_b,
+		parameter real L_a      = 31 + sm83_b2b_wand_inj_a_param::L_a,
+		parameter real L_b      = 83 + sm83_b2b_wand_inj_a_param::L_b,
 		parameter real W_gate_a = sm83_b2b_wand_inj_a_param::W_gate_a,
 		parameter real W_gate_b = sm83_b2b_wand_inj_a_param::W_gate_b
 	) (

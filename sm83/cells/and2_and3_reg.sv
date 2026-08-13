@@ -4,13 +4,13 @@ package sm83_and2_and3_reg_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_a_in1 = 0.0;
-	parameter real L_a_in2 = 0.0;
-	parameter real L_a_y   = 0.0;
-	parameter real L_b_in1 = 0.0;
-	parameter real L_b_in2 = 0.0;
-	parameter real L_b_in3 = 0.0;
-	parameter real L_b_y   = 0.0;
+	parameter real L_a_in1 = 12.9;
+	parameter real L_a_in2 =  0.0;
+	parameter real L_a_y   =  0.0;
+	parameter real L_b_in1 = 10.6;
+	parameter real L_b_in2 = 12.9;
+	parameter real L_b_in3 = 11.6;
+	parameter real L_b_y   =  0.0;
 
 	parameter real W_gate_a_in1 = 6*L_unit;
 	parameter real W_gate_a_in2 = 6*L_unit;

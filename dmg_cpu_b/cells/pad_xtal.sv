@@ -4,10 +4,10 @@ package dmg_pad_xtal_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_ena     = 0.0;
-	parameter real L_clk_n   = 0.0;
-	parameter real L_in_pad  = 0.0;
-	parameter real L_out_pad = 0.0;
+	parameter real L_ena     = 171.0;
+	parameter real L_clk_n   = 219.0;
+	parameter real L_in_pad  =   0.0;
+	parameter real L_out_pad =   0.0;
 
 	parameter real W_gate_ena    = 83*L_unit;
 	parameter real W_gate_in_pad = 0;
@@ -15,7 +15,7 @@ package dmg_pad_xtal_param;
 endpackage
 
 module dmg_pad_xtal #(
-		parameter real L_clk_n        = 200 + dmg_pad_xtal_param::L_clk_n,
+		parameter real L_clk_n        = dmg_pad_xtal_param::L_clk_n,
 		parameter real L_out_pad      = dmg_pad_xtal_param::L_out_pad,
 		parameter real W_gate_clk_n   = 0,
 		parameter real W_gate_out_pad = 0

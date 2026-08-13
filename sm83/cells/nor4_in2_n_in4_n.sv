@@ -4,11 +4,11 @@ package sm83_nor4_in2_n_in4_n_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_in1   = 0.0;
-	parameter real L_in2_n = 0.0;
-	parameter real L_in3   = 0.0;
-	parameter real L_in4_n = 0.0;
-	parameter real L_y     = 0.0;
+	parameter real L_in1   = 11.0;
+	parameter real L_in2_n =  0.0;
+	parameter real L_in3   =  0.0;
+	parameter real L_in4_n =  0.0;
+	parameter real L_y     =  0.0;
 
 	parameter real W_gate_in1   = 6*L_unit;
 	parameter real W_gate_in2_n = 6*L_unit;

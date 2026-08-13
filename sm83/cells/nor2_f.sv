@@ -4,9 +4,9 @@ package sm83_nor2_f_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_in1 = 0.0;
-	parameter real L_in2 = 0.0;
-	parameter real L_y   = 0.0;
+	parameter real L_in1 =  0.0;
+	parameter real L_in2 =  0.0;
+	parameter real L_y   = 12.4;
 
 	parameter real W_gate_in1 = 8*L_unit;
 	parameter real W_gate_in2 = 8*L_unit;
@@ -14,7 +14,7 @@ package sm83_nor2_f_param;
 endpackage
 
 module sm83_nor2_f #(
-		parameter real L_y      = 8 + sm83_nor2_f_param::L_y,
+		parameter real L_y      = sm83_nor2_f_param::L_y,
 		parameter real W_gate_y = 0
 	) (
 		input  logic in1, in2,

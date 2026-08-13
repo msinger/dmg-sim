@@ -4,11 +4,11 @@ package sm83_dffn_ee_q_alu_sign_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_d     = 0.0;
-	parameter real L_clk_n = 0.0;
-	parameter real L_ena   = 0.0;
-	parameter real L_ena_n = 0.0;
-	parameter real L_q     = 0.0;
+	parameter real L_d     =  0.0;
+	parameter real L_clk_n = 56.0;
+	parameter real L_ena   = 11.5;
+	parameter real L_ena_n =  0.0;
+	parameter real L_q     = 24.5;
 
 	parameter real W_gate_d     =  6*L_unit;
 	parameter real W_gate_clk_n = 29*L_unit;
@@ -18,7 +18,7 @@ package sm83_dffn_ee_q_alu_sign_param;
 endpackage
 
 module sm83_dffn_ee_q_alu_sign #(
-		parameter real L_q      = 84 + sm83_dffn_ee_q_alu_sign_param::L_q,
+		parameter real L_q      = 64 + sm83_dffn_ee_q_alu_sign_param::L_q,
 		parameter real W_gate_q = 0
 	) (
 		input  logic d, clk_n, ena, ena_n,

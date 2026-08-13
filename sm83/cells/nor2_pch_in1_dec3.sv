@@ -4,7 +4,7 @@ package sm83_nor2_pch_in1_dec3_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_pch_n = 0.0;
+	parameter real L_pch_n = 20.0;
 	parameter real L_in1   = 0.0;
 	parameter real L_in2   = 0.0;
 	parameter real L_y     = 0.0;

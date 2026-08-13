@@ -4,19 +4,19 @@ package dmg_ao222222_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_in1  = 0.0;
-	parameter real L_in2  = 0.0;
-	parameter real L_in3  = 0.0;
-	parameter real L_in4  = 0.0;
-	parameter real L_in5  = 0.0;
-	parameter real L_in6  = 0.0;
-	parameter real L_in7  = 0.0;
-	parameter real L_in8  = 0.0;
-	parameter real L_in9  = 0.0;
-	parameter real L_in10 = 0.0;
-	parameter real L_in11 = 0.0;
-	parameter real L_in12 = 0.0;
-	parameter real L_y    = 0.0;
+	parameter real L_in1  = 57.5;
+	parameter real L_in2  = 57.5;
+	parameter real L_in3  = 57.5;
+	parameter real L_in4  = 57.5;
+	parameter real L_in5  = 57.5;
+	parameter real L_in6  = 57.5;
+	parameter real L_in7  = 57.5;
+	parameter real L_in8  = 57.5;
+	parameter real L_in9  = 57.5;
+	parameter real L_in10 = 57.5;
+	parameter real L_in11 = 57.5;
+	parameter real L_in12 = 57.5;
+	parameter real L_y    = 36.7;
 
 	parameter real W_gate_in1  = 70*L_unit;
 	parameter real W_gate_in2  = 70*L_unit;

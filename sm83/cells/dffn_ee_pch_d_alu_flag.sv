@@ -4,13 +4,13 @@ package sm83_dffn_ee_pch_d_alu_flag_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_d     = 0.0;
-	parameter real L_clk_n = 0.0;
-	parameter real L_ena   = 0.0;
-	parameter real L_ena_n = 0.0;
-	parameter real L_pch_n = 0.0;
-	parameter real L_q     = 0.0;
-	parameter real L_q_n   = 0.0;
+	parameter real L_d     = 39.7;
+	parameter real L_clk_n = 78.8;
+	parameter real L_ena   = 16.8;
+	parameter real L_ena_n =  0.0;
+	parameter real L_pch_n =  0.0;
+	parameter real L_q     = 25.5;
+	parameter real L_q_n   = 20.2;
 
 	parameter real W_gate_d     =  6.0*L_unit;
 	parameter real W_gate_clk_n = 29.0*L_unit;
@@ -21,9 +21,9 @@ package sm83_dffn_ee_pch_d_alu_flag_param;
 endpackage
 
 module sm83_dffn_ee_pch_d_alu_flag #(
-		parameter real L_d        = 69 + sm83_dffn_ee_pch_d_alu_flag_param::L_d,
-		parameter real L_q        = 52 + sm83_dffn_ee_pch_d_alu_flag_param::L_q,
-		parameter real L_q_n      = 95 + sm83_dffn_ee_pch_d_alu_flag_param::L_q_n,
+		parameter real L_d        = 36 + sm83_dffn_ee_pch_d_alu_flag_param::L_d,
+		parameter real L_q        = 28 + sm83_dffn_ee_pch_d_alu_flag_param::L_q,
+		parameter real L_q_n      = 73 + sm83_dffn_ee_pch_d_alu_flag_param::L_q_n,
 		parameter real W_gate_d   = sm83_dffn_ee_pch_d_alu_flag_param::W_gate_d,
 		parameter real W_gate_q   = 0,
 		parameter real W_gate_q_n = 0

@@ -4,14 +4,14 @@ package sm83_dlatch_ee_irq_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_d         = 0.0;
-	parameter real L_ena       = 0.0;
-	parameter real L_ena_n     = 0.0;
-	parameter real L_pch_n     = 0.0;
-	parameter real L_ena_q_n   = 0.0;
-	parameter real L_q         = 0.0;
-	parameter real L_q_n       = 0.0;
-	parameter real L_gated_q_n = 0.0;
+	parameter real L_d         =  0.0;
+	parameter real L_ena       = 22.9;
+	parameter real L_ena_n     = 19.5;
+	parameter real L_pch_n     =  0.0;
+	parameter real L_ena_q_n   =  0.0;
+	parameter real L_q         =  0.0;
+	parameter real L_q_n       =  0.0;
+	parameter real L_gated_q_n =  0.0;
 
 	parameter real W_gate_d       = 6*L_unit;
 	parameter real W_gate_ena     = 6*L_unit;
