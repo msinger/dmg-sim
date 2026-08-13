@@ -50,22 +50,22 @@ module dmg_tffnl #(
 	assign                                 q_n  = !q;
 
 	specify
-		specparam T_rise_not1 = tpd_elmore(  L_tclk_out,   R_pmos_ohm(35*L_unit), C_gate_F(102*L_unit));
-		specparam T_fall_not1 = tpd_elmore(  L_tclk_out,   R_nmos_ohm(35*L_unit), C_gate_F(102*L_unit));
-		specparam T_rise_not2 = tpd_elmore(L_tclk_n_out,   R_pmos_ohm(35*L_unit), C_gate_F( 32*L_unit));
-		specparam T_fall_not2 = tpd_elmore(L_tclk_n_out,   R_nmos_ohm(35*L_unit), C_gate_F( 32*L_unit));
-		specparam T_rise_nor  = tpd_elmore(          36, 2*R_pmos_ohm( 8*L_unit), C_gate_F( 16*L_unit));
-		specparam T_fall_nor  = tpd_elmore(          36,   R_nmos_ohm( 8*L_unit), C_gate_F( 16*L_unit));
-		specparam T_rise_aoi  = tpd_elmore(         143, 2*R_pmos_ohm( 8*L_unit), C_gate_F( 70*L_unit));
-		specparam T_fall_aoi  = tpd_elmore(         143, 2*R_nmos_ohm( 8*L_unit), C_gate_F( 70*L_unit));
-		specparam T_rise_mux  = tpd_elmore(          78,   R_pmos_ohm( 8*L_unit), C_gate_F( 32*L_unit));
-		specparam T_fall_mux  = tpd_elmore(          78,   R_nmos_ohm( 8*L_unit), C_gate_F( 32*L_unit));
-		specparam T_rise_not3 = tpd_elmore(         110,   R_pmos_ohm( 8*L_unit), C_gate_F( 70*L_unit));
-		specparam T_fall_not3 = tpd_elmore(         110,   R_nmos_ohm( 8*L_unit), C_gate_F( 70*L_unit));
-		specparam T_rise_q    = tpd_elmore(         L_q,   R_pmos_ohm(35*L_unit), C_gate_F(W_gate_q));
-		specparam T_fall_q    = tpd_elmore(         L_q,   R_nmos_ohm(35*L_unit), C_gate_F(W_gate_q));
-		specparam T_rise_q_n  = tpd_elmore(       L_q_n,   R_pmos_ohm(35*L_unit), C_gate_F(W_gate_q_n));
-		specparam T_fall_q_n  = tpd_elmore(       L_q_n,   R_nmos_ohm(35*L_unit), C_gate_F(W_gate_q_n));
+		specparam T_rise_not1 = tpd_elmore(  L_tclk_out+121,   R_pmos_ohm(35*L_unit), C_gate_F(102*L_unit));
+		specparam T_fall_not1 = tpd_elmore(  L_tclk_out+121,   R_nmos_ohm(35*L_unit), C_gate_F(102*L_unit));
+		specparam T_rise_not2 = tpd_elmore(L_tclk_n_out+117,   R_pmos_ohm(35*L_unit), C_gate_F( 32*L_unit));
+		specparam T_fall_not2 = tpd_elmore(L_tclk_n_out+117,   R_nmos_ohm(35*L_unit), C_gate_F( 32*L_unit));
+		specparam T_rise_nor  = tpd_elmore(              36, 2*R_pmos_ohm( 8*L_unit), C_gate_F( 16*L_unit));
+		specparam T_fall_nor  = tpd_elmore(              36,   R_nmos_ohm( 8*L_unit), C_gate_F( 16*L_unit));
+		specparam T_rise_aoi  = tpd_elmore(             143, 2*R_pmos_ohm( 8*L_unit), C_gate_F( 70*L_unit));
+		specparam T_fall_aoi  = tpd_elmore(             143, 2*R_nmos_ohm( 8*L_unit), C_gate_F( 70*L_unit));
+		specparam T_rise_mux  = tpd_elmore(              78,   R_pmos_ohm( 8*L_unit), C_gate_F( 32*L_unit));
+		specparam T_fall_mux  = tpd_elmore(              78,   R_nmos_ohm( 8*L_unit), C_gate_F( 32*L_unit));
+		specparam T_rise_not3 = tpd_elmore(             110,   R_pmos_ohm( 8*L_unit), C_gate_F( 70*L_unit));
+		specparam T_fall_not3 = tpd_elmore(             110,   R_nmos_ohm( 8*L_unit), C_gate_F( 70*L_unit));
+		specparam T_rise_q    = tpd_elmore(             L_q,   R_pmos_ohm(35*L_unit), C_gate_F(W_gate_q));
+		specparam T_fall_q    = tpd_elmore(             L_q,   R_nmos_ohm(35*L_unit), C_gate_F(W_gate_q));
+		specparam T_rise_q_n  = tpd_elmore(           L_q_n,   R_pmos_ohm(35*L_unit), C_gate_F(W_gate_q_n));
+		specparam T_fall_q_n  = tpd_elmore(           L_q_n,   R_nmos_ohm(35*L_unit), C_gate_F(W_gate_q_n));
 
 		(tclk_n *> q)   = (T_rise_not1 + T_fall_mux + T_rise_nor + T_fall_aoi + T_rise_q,
 		                   T_rise_not1 + T_fall_not2 + T_rise_mux + T_fall_nor + T_rise_aoi + T_fall_q);
