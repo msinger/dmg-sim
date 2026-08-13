@@ -28,9 +28,9 @@ module sm83_aoi21_b #(
 	assign y = !((in1 & in2) | in3);
 
 	specify
-		specparam T_rise_y     = tpd_elmore(L_y, 2*R_pmos_ohm(3*L_unit), C_gate_F(W_gate_y));
-		specparam T_fall_y     = tpd_elmore(L_y, 2*R_nmos_ohm(3*L_unit), C_gate_F(W_gate_y));
-		specparam T_fall_y_in3 = tpd_elmore(L_y,   R_nmos_ohm(3*L_unit), C_gate_F(W_gate_y));
+		specparam T_rise_y     = tpd_elmore(L_y, 2*R_pmos_ohm(5*L_unit), C_gate_F(W_gate_y));
+		specparam T_fall_y     = tpd_elmore(L_y, 2*R_nmos_ohm(6*L_unit), C_gate_F(W_gate_y));
+		specparam T_fall_y_in3 = tpd_elmore(L_y,   R_nmos_ohm(6*L_unit), C_gate_F(W_gate_y));
 
 		(in1, in2 *> y) = (T_rise_y, T_fall_y);
 		(in3      *> y) = (T_rise_y, T_fall_y_in3);

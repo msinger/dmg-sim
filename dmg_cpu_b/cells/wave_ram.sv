@@ -82,7 +82,7 @@ module dmg_wave_ram #(
 	import dmg_timing::*;
 
 	localparam realtime T_rise_wl_n = tpd_elmore( 50,   R_pmos_ohm(25.0*L_unit), C_gate_F( 45*L_unit));
-	localparam realtime T_fall_wl_n = tpd_elmore( 50, 5*R_nmos_ohm( 8.0*L_unit), C_gate_F( 45*L_unit));
+	localparam realtime T_fall_wl_n = tpd_elmore( 50, 3*R_nmos_ohm( 8.0*L_unit), C_gate_F( 45*L_unit));
 	localparam realtime T_rise_wl   = tpd_elmore(620,   R_pmos_ohm(22.5*L_unit), C_gate_F(320*L_unit));
 	localparam realtime T_fall_wl   = tpd_elmore(620,   R_nmos_ohm(22.5*L_unit), C_gate_F(320*L_unit));
 
