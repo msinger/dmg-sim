@@ -4,10 +4,10 @@ package sm83_not2_idu_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_a_in = 0.0;
-	parameter real L_b_in = 0.0;
-	parameter real L_a_y  = 0.0;
-	parameter real L_b_y  = 0.0;
+	parameter real L_a_in =  0.0;
+	parameter real L_b_in =  0.0;
+	parameter real L_a_y  = 40.0;
+	parameter real L_b_y  = 20.0;
 
 	parameter real W_gate_a_in = 17*L_unit;
 	parameter real W_gate_b_in = 17*L_unit;

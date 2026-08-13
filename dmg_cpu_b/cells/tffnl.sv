@@ -4,11 +4,11 @@ package dmg_tffnl_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_d      = 0.0;
-	parameter real L_l      = 0.0;
-	parameter real L_tclk_n = 0.0;
-	parameter real L_q      = 0.0;
-	parameter real L_q_n    = 0.0;
+	parameter real L_d      =  57.3;
+	parameter real L_l      = 109.4;
+	parameter real L_tclk_n =  58.0;
+	parameter real L_q      =  35.0;
+	parameter real L_q_n    =  35.0;
 
 	parameter real W_gate_d      = 32*L_unit;
 	parameter real W_gate_l      = 64*L_unit;

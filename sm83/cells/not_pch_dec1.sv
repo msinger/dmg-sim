@@ -4,9 +4,9 @@ package sm83_not_pch_dec1_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_pch_n = 0.0;
-	parameter real L_in    = 0.0;
-	parameter real L_y     = 0.0;
+	parameter real L_pch_n = 14.0;
+	parameter real L_in    = 40.3;
+	parameter real L_y     =  8.0;
 
 	parameter real W_gate_pch_n =  8*L_unit;
 	parameter real W_gate_in    = 25*L_unit;
@@ -14,7 +14,7 @@ package sm83_not_pch_dec1_param;
 endpackage
 
 module sm83_not_pch_dec1 #(
-		parameter real L_in      = 54 + sm83_not_pch_dec1_param::L_in,
+		parameter real L_in      = 23 + sm83_not_pch_dec1_param::L_in,
 		parameter real L_y       = 24 + sm83_not_pch_dec1_param::L_y,
 		parameter real W_gate_in = sm83_not_pch_dec1_param::W_gate_in,
 		parameter real W_gate_y  = 0

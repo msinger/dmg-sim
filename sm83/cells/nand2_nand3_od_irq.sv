@@ -4,13 +4,13 @@ package sm83_nand2_nand3_od_irq_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_a_in1 = 0.0;
-	parameter real L_a_in2 = 0.0;
-	parameter real L_a_y   = 0.0;
-	parameter real L_b_in1 = 0.0;
-	parameter real L_b_in2 = 0.0;
-	parameter real L_b_in3 = 0.0;
-	parameter real L_b_y   = 0.0;
+	parameter real L_a_in1 =  0.0;
+	parameter real L_a_in2 = 15.2;
+	parameter real L_a_y   =  0.0;
+	parameter real L_b_in1 = 19.2;
+	parameter real L_b_in2 = 33.2;
+	parameter real L_b_in3 = 22.3;
+	parameter real L_b_y   =  0.0;
 
 	parameter real W_gate_a_in1 = 6*L_unit;
 	parameter real W_gate_a_in2 = 6*L_unit;

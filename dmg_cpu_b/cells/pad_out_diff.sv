@@ -4,9 +4,9 @@ package dmg_pad_out_diff_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_ndrv   = 0.0;
-	parameter real L_pdrv_n = 0.0;
-	parameter real L_pad    = 0.0;
+	parameter real L_ndrv   = 266.0;
+	parameter real L_pdrv_n = 288.0;
+	parameter real L_pad    =   0.0;
 
 	parameter real W_gate_ndrv   = 140*L_unit;
 	parameter real W_gate_pdrv_n = 140*L_unit;

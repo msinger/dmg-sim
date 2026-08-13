@@ -2,10 +2,10 @@
 
 package dmg_half_add_param;
 
-	parameter real L_a    = 0.0;
-	parameter real L_b    = 0.0;
-	parameter real L_sum  = 0.0;
-	parameter real L_cout = 0.0;
+	parameter real L_a    = dmg_and2_param::L_in2 + dmg_xor_param::L_in1 + 10.8;
+	parameter real L_b    = dmg_and2_param::L_in1 + dmg_xor_param::L_in2 + 10.2;
+	parameter real L_sum  = dmg_xor_param::L_y;
+	parameter real L_cout = dmg_and2_param::L_y;
 
 	parameter real W_gate_a = dmg_and2_param::W_gate_in2 + dmg_xor_param::W_gate_in1;
 	parameter real W_gate_b = dmg_and2_param::W_gate_in1 + dmg_xor_param::W_gate_in2;

@@ -4,9 +4,9 @@ package sm83_xor_idu_h_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_in1 = 0.0;
-	parameter real L_in2 = 0.0;
-	parameter real L_y   = 0.0;
+	parameter real L_in1 =  0.0;
+	parameter real L_in2 = 14.0;
+	parameter real L_y   = 22.0;
 
 	parameter real W_gate_in1 = 16*L_unit;
 	parameter real W_gate_in2 = 16*L_unit;
@@ -14,7 +14,7 @@ package sm83_xor_idu_h_param;
 endpackage
 
 module sm83_xor_idu_h #(
-		parameter real L_y      = 22 + sm83_xor_idu_h_param::L_y,
+		parameter real L_y      = sm83_xor_idu_h_param::L_y,
 		parameter real W_gate_y = 0
 	) (
 		input  logic in1, in2,

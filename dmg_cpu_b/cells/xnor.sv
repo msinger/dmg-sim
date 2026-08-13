@@ -4,9 +4,9 @@ package dmg_xnor_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_in1 = 0.0;
-	parameter real L_in2 = 0.0;
-	parameter real L_y   = 0.0;
+	parameter real L_in1 = 129.7;
+	parameter real L_in2 = 118.6;
+	parameter real L_y   =  43.6;
 
 	parameter real W_gate_in1 = 140*L_unit;
 	parameter real W_gate_in2 = 140*L_unit;

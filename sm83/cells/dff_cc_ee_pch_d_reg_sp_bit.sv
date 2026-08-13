@@ -4,14 +4,14 @@ package sm83_dff_cc_ee_pch_d_reg_sp_bit_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_d     = 0.0;
-	parameter real L_clk   = 0.0;
-	parameter real L_clk_n = 0.0;
-	parameter real L_ena   = 0.0;
-	parameter real L_ena_n = 0.0;
-	parameter real L_pch_n = 0.0;
-	parameter real L_q     = 0.0;
-	parameter real L_q_n   = 0.0;
+	parameter real L_d     =  0.0;
+	parameter real L_clk   = 20.2;
+	parameter real L_clk_n = 25.1;
+	parameter real L_ena   =  0.0;
+	parameter real L_ena_n =  0.0;
+	parameter real L_pch_n =  0.0;
+	parameter real L_q     =  0.0;
+	parameter real L_q_n   =  0.0;
 
 	parameter real W_gate_d     = 6*L_unit;
 	parameter real W_gate_clk   = 9*L_unit;

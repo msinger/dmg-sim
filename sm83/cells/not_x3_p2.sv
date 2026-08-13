@@ -4,8 +4,8 @@ package sm83_not_x3_p2_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_in = 0.0;
-	parameter real L_y  = 0.0;
+	parameter real L_in = 18.8;
+	parameter real L_y  =  0.0;
 
 	parameter real W_gate_in = 25*L_unit;
 

@@ -6,15 +6,15 @@ package sm83_reg_bus_pch_b_param;
 
 	parameter real L_pch_n = 0.0;
 	parameter real L_a_y   = 0.0;
-	parameter real L_b_y   = 0.0;
+	parameter real L_b_y   = 8.1;
 
 	parameter real W_gate_pch_n = 12*L_unit;
 
 endpackage
 
 module sm83_reg_bus_pch_b #(
-		parameter real L_a_y      = 82 + sm83_reg_bus_pch_b_param::L_a_y,
-		parameter real L_b_y      = 78 + sm83_reg_bus_pch_b_param::L_b_y,
+		parameter real L_a_y      = 84 + sm83_reg_bus_pch_b_param::L_a_y,
+		parameter real L_b_y      = 72 + sm83_reg_bus_pch_b_param::L_b_y,
 		parameter real W_gate_a_y = 0,
 		parameter real W_gate_b_y = 0
 	) (

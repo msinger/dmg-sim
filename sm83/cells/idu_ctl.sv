@@ -4,14 +4,14 @@ package sm83_idu_ctl_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_in1 = 0.0;
-	parameter real L_in2 = 0.0;
-	parameter real L_in3 = 0.0;
-	parameter real L_in4 = 0.0;
-	parameter real L_in5 = 0.0;
-	parameter real L_y1  = 0.0;
-	parameter real L_y2  = 0.0;
-	parameter real L_y3  = 0.0;
+	parameter real L_in1 =  0.0;
+	parameter real L_in2 =  0.0;
+	parameter real L_in3 = 20.6;
+	parameter real L_in4 = 38.5;
+	parameter real L_in5 =  0.0;
+	parameter real L_y1  =  0.0;
+	parameter real L_y2  =  0.0;
+	parameter real L_y3  =  0.0;
 
 	parameter real W_gate_in1 =  6*L_unit;
 	parameter real W_gate_in2 = 16*L_unit;

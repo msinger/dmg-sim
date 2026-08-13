@@ -4,13 +4,13 @@ package sm83_reg_bus_pch_a_bit0123_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_pch_n  = 0.0;
-	parameter real L_c_zero = 0.0;
-	parameter real L_a_y    = 0.0;
-	parameter real L_b_y    = 0.0;
-	parameter real L_b_y_n  = 0.0;
-	parameter real L_c_y    = 0.0;
-	parameter real L_c_y_n  = 0.0;
+	parameter real L_pch_n  = 14.0;
+	parameter real L_c_zero =  0.0;
+	parameter real L_a_y    =  0.0;
+	parameter real L_b_y    = 23.3;
+	parameter real L_b_y_n  =  0.0;
+	parameter real L_c_y    = 51.8;
+	parameter real L_c_y_n  =  0.0;
 
 	parameter real W_gate_pch_n  = 48*L_unit;
 	parameter real W_gate_c_zero =  8*L_unit;
@@ -21,10 +21,10 @@ endpackage
 
 module sm83_reg_bus_pch_a_bit0123 #(
 		parameter real L_a_y        = 67 + sm83_reg_bus_pch_a_bit0123_param::L_a_y,
-		parameter real L_b_y        = 79 + sm83_reg_bus_pch_a_bit0123_param::L_b_y,
+		parameter real L_b_y        = 61 + sm83_reg_bus_pch_a_bit0123_param::L_b_y,
 		parameter real L_b_y_n      = 54 + sm83_reg_bus_pch_a_bit0123_param::L_b_y_n,
-		parameter real L_c_y        = 73 + sm83_reg_bus_pch_a_bit0123_param::L_c_y,
-		parameter real L_c_y_n      = 54 + sm83_reg_bus_pch_a_bit0123_param::L_c_y_n,
+		parameter real L_c_y        = 35 + sm83_reg_bus_pch_a_bit0123_param::L_c_y,
+		parameter real L_c_y_n      = 57 + sm83_reg_bus_pch_a_bit0123_param::L_c_y_n,
 		parameter real W_gate_a_y   = 0,
 		parameter real W_gate_b_y   = sm83_reg_bus_pch_a_bit0123_param::W_gate_b_y,
 		parameter real W_gate_b_y_n = 0,

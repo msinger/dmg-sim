@@ -4,11 +4,11 @@ package dmg_pad_bidir_pu_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_ndrv     = 0.0;
-	parameter real L_pdrv_n   = 0.0;
-	parameter real L_ena_n_pu = 0.0;
-	parameter real L_i_n      = 0.0;
-	parameter real L_pad      = 0.0;
+	parameter real L_ndrv     = 258.0;
+	parameter real L_pdrv_n   = 288.0;
+	parameter real L_ena_n_pu =  47.0;
+	parameter real L_i_n      = 207.0;
+	parameter real L_pad      =   0.0;
 
 	parameter real W_gate_ndrv     = 140*L_unit;
 	parameter real W_gate_pdrv_n   = 140*L_unit;
@@ -18,7 +18,7 @@ package dmg_pad_bidir_pu_param;
 endpackage
 
 module dmg_pad_bidir_pu #(
-		parameter real L_i_n      = 160 + dmg_pad_bidir_pu_param::L_i_n,
+		parameter real L_i_n      = dmg_pad_bidir_pu_param::L_i_n,
 		parameter real L_pad      = dmg_pad_bidir_pu_param::L_pad,
 		parameter real W_gate_i_n = 0,
 		parameter real W_gate_pad = 0

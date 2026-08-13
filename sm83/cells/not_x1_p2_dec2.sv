@@ -4,15 +4,15 @@ package sm83_not_x1_p2_dec2_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_in = 0.0;
-	parameter real L_y  = 0.0;
+	parameter real L_in = 24.0;
+	parameter real L_y  =  0.0;
 
 	parameter real W_gate_in = 42*L_unit;
 
 endpackage
 
 module sm83_not_x1_p2_dec2 #(
-		parameter real L_y      = 38 + sm83_not_x1_p2_dec2_param::L_y,
+		parameter real L_y      = 36 + sm83_not_x1_p2_dec2_param::L_y,
 		parameter real W_gate_y = 0
 	) (
 		input  logic in,

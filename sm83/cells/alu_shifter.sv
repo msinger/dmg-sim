@@ -4,32 +4,32 @@ package sm83_alu_shifter_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_ena  = 0.0;
-	parameter real L_l    = 0.0;
-	parameter real L_r    = 0.0;
-	parameter real L_rl   = 0.0;
-	parameter real L_rr   = 0.0;
-	parameter real L_rlc  = 0.0;
-	parameter real L_rrc  = 0.0;
-	parameter real L_sra  = 0.0;
-	parameter real L_swap = 0.0;
-	parameter real L_c    = 0.0;
-	parameter real L_d0   = 0.0;
-	parameter real L_d1   = 0.0;
-	parameter real L_d2   = 0.0;
-	parameter real L_d3   = 0.0;
-	parameter real L_d4   = 0.0;
-	parameter real L_d5   = 0.0;
-	parameter real L_d6   = 0.0;
-	parameter real L_d7   = 0.0;
-	parameter real L_y0   = 0.0;
-	parameter real L_y1   = 0.0;
-	parameter real L_y2   = 0.0;
-	parameter real L_y3   = 0.0;
-	parameter real L_y4   = 0.0;
-	parameter real L_y5   = 0.0;
-	parameter real L_y6   = 0.0;
-	parameter real L_y7   = 0.0;
+	parameter real L_ena  = 132.1;
+	parameter real L_l    =  76.3;
+	parameter real L_r    =  45.7;
+	parameter real L_rl   =   0.0;
+	parameter real L_rr   =  23.9;
+	parameter real L_rlc  =   0.0;
+	parameter real L_rrc  =   0.0;
+	parameter real L_sra  =  31.0;
+	parameter real L_swap =  39.2;
+	parameter real L_c    =   0.0;
+	parameter real L_d0   =  62.3;
+	parameter real L_d1   =  47.6;
+	parameter real L_d2   =   0.0;
+	parameter real L_d3   =   9.9;
+	parameter real L_d4   =  29.7;
+	parameter real L_d5   =  13.3;
+	parameter real L_d6   =  31.2;
+	parameter real L_d7   =  83.9;
+	parameter real L_y0   =   0.0;
+	parameter real L_y1   =   0.0;
+	parameter real L_y2   =   0.0;
+	parameter real L_y3   =  17.5;
+	parameter real L_y4   =  17.0;
+	parameter real L_y5   =  18.0;
+	parameter real L_y6   =  18.6;
+	parameter real L_y7   =  46.0;
 
 	parameter real W_gate_ena  = 50*L_unit;
 	parameter real W_gate_l    = 77*L_unit;
@@ -53,14 +53,14 @@ package sm83_alu_shifter_param;
 endpackage
 
 module sm83_alu_shifter #(
-		parameter real L_y0      = 56 + sm83_alu_shifter_param::L_y0,
-		parameter real L_y1      = 81 + sm83_alu_shifter_param::L_y1,
-		parameter real L_y2      = 99 + sm83_alu_shifter_param::L_y2,
-		parameter real L_y3      = 78 + sm83_alu_shifter_param::L_y3,
-		parameter real L_y4      = 88 + sm83_alu_shifter_param::L_y4,
-		parameter real L_y5      = 91 + sm83_alu_shifter_param::L_y5,
-		parameter real L_y6      = 58 + sm83_alu_shifter_param::L_y6,
-		parameter real L_y7      = 97 + sm83_alu_shifter_param::L_y7,
+		parameter real L_y0      = 50 + sm83_alu_shifter_param::L_y0,
+		parameter real L_y1      = 77 + sm83_alu_shifter_param::L_y1,
+		parameter real L_y2      = 97 + sm83_alu_shifter_param::L_y2,
+		parameter real L_y3      = 77 + sm83_alu_shifter_param::L_y3,
+		parameter real L_y4      = 85 + sm83_alu_shifter_param::L_y4,
+		parameter real L_y5      = 88 + sm83_alu_shifter_param::L_y5,
+		parameter real L_y6      = 50 + sm83_alu_shifter_param::L_y6,
+		parameter real L_y7      = 92 + sm83_alu_shifter_param::L_y7,
 		parameter real W_gate_y0 = 0,
 		parameter real W_gate_y1 = 0,
 		parameter real W_gate_y2 = 0,

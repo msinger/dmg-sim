@@ -4,29 +4,29 @@ package sm83_reg_pc_out_bit012_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_in1  = 0.0;
-	parameter real L_in2  = 0.0;
-	parameter real L_in3  = 0.0;
-	parameter real L_in4  = 0.0;
-	parameter real L_in5  = 0.0;
-	parameter real L_in6  = 0.0;
-	parameter real L_in7  = 0.0;
-	parameter real L_in8  = 0.0;
-	parameter real L_in9  = 0.0;
-	parameter real L_in10 = 0.0;
-	parameter real L_in11 = 0.0;
-	parameter real L_in12 = 0.0;
-	parameter real L_in13 = 0.0;
-	parameter real L_in14 = 0.0;
-	parameter real L_in15 = 0.0;
-	parameter real L_in16 = 0.0;
-	parameter real L_in17 = 0.0;
-	parameter real L_y1   = 0.0;
-	parameter real L_y2   = 0.0;
-	parameter real L_y3   = 0.0;
-	parameter real L_y4   = 0.0;
-	parameter real L_y5   = 0.0;
-	parameter real L_y6   = 0.0;
+	parameter real L_in1  = 18.8;
+	parameter real L_in2  =  0.0;
+	parameter real L_in3  =  0.0;
+	parameter real L_in4  =  0.0;
+	parameter real L_in5  = 54.2;
+	parameter real L_in6  =  0.0;
+	parameter real L_in7  = 51.9;
+	parameter real L_in8  =  0.0;
+	parameter real L_in9  =  0.0;
+	parameter real L_in10 = 24.8;
+	parameter real L_in11 =  0.0;
+	parameter real L_in12 =  0.0;
+	parameter real L_in13 = 30.0;
+	parameter real L_in14 =  0.0;
+	parameter real L_in15 =  0.0;
+	parameter real L_in16 =  0.0;
+	parameter real L_in17 =  0.0;
+	parameter real L_y1   =  0.0;
+	parameter real L_y2   =  0.0;
+	parameter real L_y3   =  0.0;
+	parameter real L_y4   =  0.0;
+	parameter real L_y5   = 28.7;
+	parameter real L_y6   =  0.0;
 
 	parameter real W_gate_in1  =  8*L_unit;
 	parameter real W_gate_in2  =  8*L_unit;
@@ -53,7 +53,7 @@ module sm83_reg_pc_out_bit012 #(
 		parameter real L_y2      = 128 + sm83_reg_pc_out_bit012_param::L_y2,
 		parameter real L_y3      = 124 + sm83_reg_pc_out_bit012_param::L_y3,
 		parameter real L_y4      =  54 + sm83_reg_pc_out_bit012_param::L_y4,
-		parameter real L_y5      =  57 + sm83_reg_pc_out_bit012_param::L_y5,
+		parameter real L_y5      =  24 + sm83_reg_pc_out_bit012_param::L_y5,
 		parameter real L_y6      =  24 + sm83_reg_pc_out_bit012_param::L_y6,
 		parameter real W_gate_y1 = 0,
 		parameter real W_gate_y2 = 0,

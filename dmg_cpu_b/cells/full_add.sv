@@ -2,11 +2,11 @@
 
 package dmg_full_add_param;
 
-	parameter real L_a    = 0.0;
-	parameter real L_b    = 0.0;
-	parameter real L_cin  = 0.0;
-	parameter real L_sum  = 0.0;
-	parameter real L_cout = 0.0;
+	parameter real L_a    = 196.4;
+	parameter real L_b    = 188.7;
+	parameter real L_cin  = 196.4;
+	parameter real L_sum  = dmg_xor_param::L_y;
+	parameter real L_cout = dmg_nand2_param::L_y;
 
 	parameter real W_gate_a   = dmg_nand2_param::W_gate_in2 + dmg_xor_param::W_gate_in1;
 	parameter real W_gate_b   = dmg_nand2_param::W_gate_in1 + dmg_xor_param::W_gate_in2;

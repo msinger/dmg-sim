@@ -4,10 +4,10 @@ package sm83_not2_reg_pc_we_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_a_in = 0.0;
-	parameter real L_b_in = 0.0;
-	parameter real L_a_y  = 0.0;
-	parameter real L_b_y  = 0.0;
+	parameter real L_a_in = 40.6;
+	parameter real L_b_in = 37.5;
+	parameter real L_a_y  =  0.0;
+	parameter real L_b_y  =  0.0;
 
 	parameter real W_gate_a_in = 24*L_unit;
 	parameter real W_gate_b_in =  9*L_unit;

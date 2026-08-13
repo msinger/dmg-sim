@@ -4,15 +4,15 @@ package sm83_not_reg_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_in = 0.0;
-	parameter real L_y  = 0.0;
+	parameter real L_in =  0.0;
+	parameter real L_y  = 11.6;
 
 	parameter real W_gate_in = 16*L_unit;
 
 endpackage
 
 module sm83_not_reg #(
-		parameter real L_y      = 36 + sm83_not_reg_param::L_y,
+		parameter real L_y      = 22 + sm83_not_reg_param::L_y,
 		parameter real W_gate_y = 0
 	) (
 		input  logic in,

@@ -4,10 +4,10 @@ package sm83_dlatch_ee_q_n_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_d     = 0.0;
-	parameter real L_ena   = 0.0;
-	parameter real L_ena_n = 0.0;
-	parameter real L_q_n   = 0.0;
+	parameter real L_d     =  0.0;
+	parameter real L_ena   =  0.0;
+	parameter real L_ena_n =  0.0;
+	parameter real L_q_n   = 18.8;
 
 	parameter real W_gate_d     = 6*L_unit;
 	parameter real W_gate_ena   = 6*L_unit;
@@ -16,7 +16,7 @@ package sm83_dlatch_ee_q_n_param;
 endpackage
 
 module sm83_dlatch_ee_q_n #(
-		parameter real L_q_n      = 45 + sm83_dlatch_ee_q_n_param::L_q_n,
+		parameter real L_q_n      = 36 + sm83_dlatch_ee_q_n_param::L_q_n,
 		parameter real W_gate_q_n = 0
 	) (
 		input  logic d, ena, ena_n,

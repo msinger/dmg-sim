@@ -4,8 +4,8 @@ package dmg_pad_out_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_o_n = 0.0;
-	parameter real L_pad = 0.0;
+	parameter real L_o_n = 692.0;
+	parameter real L_pad =   0.0;
 
 	parameter real W_gate_o_n = 280*L_unit;
 	parameter real W_gate_pad = 0;

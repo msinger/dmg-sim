@@ -4,31 +4,31 @@ package sm83_irq_prio_bit3_param;
 
 	import sm83_timing::L_unit;
 
-	parameter real L_pch_n              = 0.0;
-	parameter real L_and_in1            = 0.0;
-	parameter real L_and_in2_nand_a_in2 = 0.0;
-	parameter real L_nand_b_in2         = 0.0;
-	parameter real L_nand_b_in3         = 0.0;
-	parameter real L_nand_b_in4         = 0.0;
-	parameter real L_nand_b_in5         = 0.0;
-	parameter real L_dist_nand_a_in     = 0.0;
-	parameter real L_dist_nand_b_in     = 0.0;
-	parameter real L_dist_nor_in        = 0.0;
-	parameter real L_dist_nand_a_in_n   = 0.0;
-	parameter real L_dist_nand_b_in_n   = 0.0;
-	parameter real L_dist_nor_in_p      = 0.0;
-	parameter real L_and_y              = 0.0;
-	parameter real L_nand_a_y           = 0.0;
-	parameter real L_nand_b_y           = 0.0;
-	parameter real L_nand_c_y           = 0.0;
-	parameter real L_nand_d_y           = 0.0;
-	parameter real L_nand_d_y_n         = 0.0;
-	parameter real L_dist_nand_a_y_n    = 0.0;
-	parameter real L_dist_nand_a_y_p    = 0.0;
-	parameter real L_dist_nand_b_y_n    = 0.0;
-	parameter real L_dist_nand_b_y_p    = 0.0;
-	parameter real L_dist_nor_y_n       = 0.0;
-	parameter real L_dist_nor_y_p       = 0.0;
+	parameter real L_pch_n              =  0.0;
+	parameter real L_and_in1            = 36.4;
+	parameter real L_and_in2_nand_a_in2 = 17.6;
+	parameter real L_nand_b_in2         =  0.0;
+	parameter real L_nand_b_in3         =  0.0;
+	parameter real L_nand_b_in4         =  0.0;
+	parameter real L_nand_b_in5         =  0.0;
+	parameter real L_dist_nand_a_in     =  0.0;
+	parameter real L_dist_nand_b_in     =  0.0;
+	parameter real L_dist_nor_in        =  0.0;
+	parameter real L_dist_nand_a_in_n   =  0.0;
+	parameter real L_dist_nand_b_in_n   =  0.0;
+	parameter real L_dist_nor_in_p      =  0.0;
+	parameter real L_and_y              = 29.7;
+	parameter real L_nand_a_y           =  0.0;
+	parameter real L_nand_b_y           =  0.0;
+	parameter real L_nand_c_y           =  0.0;
+	parameter real L_nand_d_y           = 24.6;
+	parameter real L_nand_d_y_n         =  0.0;
+	parameter real L_dist_nand_a_y_n    =  0.0;
+	parameter real L_dist_nand_a_y_p    =  0.0;
+	parameter real L_dist_nand_b_y_n    =  0.0;
+	parameter real L_dist_nand_b_y_p    =  0.0;
+	parameter real L_dist_nor_y_n       =  0.0;
+	parameter real L_dist_nor_y_p       =  0.0;
 
 	parameter real W_gate_pch_n              = 30*L_unit;
 	parameter real W_gate_and_in1            =  6*L_unit;
@@ -48,7 +48,7 @@ package sm83_irq_prio_bit3_param;
 endpackage
 
 module sm83_irq_prio_bit3 #(
-		parameter real L_and_y                =  81 + sm83_irq_prio_bit3_param::L_and_y,
+		parameter real L_and_y                =  74 + sm83_irq_prio_bit3_param::L_and_y,
 		parameter real L_nand_a_y             =  85 + sm83_irq_prio_bit3_param::L_nand_a_y,
 		parameter real L_nand_b_y             =   0 + sm83_irq_prio_bit3_param::L_nand_b_y,
 		parameter real L_nand_c_y             =  78 + sm83_irq_prio_bit3_param::L_nand_c_y,

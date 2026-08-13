@@ -4,9 +4,9 @@ package dmg_buf_if0_param;
 
 	import dmg_timing::L_unit;
 
-	parameter real L_in    = 0.0;
-	parameter real L_ena_n = 0.0;
-	parameter real L_y     = 0.0;
+	parameter real L_in    = 143.5;
+	parameter real L_ena_n = 106.6;
+	parameter real L_y     =  39.7;
 
 	parameter real W_gate_in    = 140*L_unit;
 	parameter real W_gate_ena_n = 140*L_unit;

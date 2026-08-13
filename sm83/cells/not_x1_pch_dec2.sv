@@ -14,8 +14,8 @@ package sm83_not_x1_pch_dec2_param;
 endpackage
 
 module sm83_not_x1_pch_dec2 #(
-		parameter real L_in      = 30 + sm83_not_x1_pch_dec2_param::L_in,
-		parameter real L_y       = 30 + sm83_not_x1_pch_dec2_param::L_y,
+		parameter real L_in      = 32 + sm83_not_x1_pch_dec2_param::L_in,
+		parameter real L_y       = 32 + sm83_not_x1_pch_dec2_param::L_y,
 		parameter real W_gate_in = sm83_not_x1_pch_dec2_param::W_gate_in,
 		parameter real W_gate_y  = 0
 	) (
