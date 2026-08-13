@@ -37,7 +37,7 @@ while [ $# -gt 0 ]; do
 		--)
 			shift
 			while [ $# -gt 0 ]; do
-				TESTS+=("$i")
+				TESTS+=("$1")
 				shift
 			done
 			;;
@@ -95,7 +95,7 @@ while [ $# -gt 0 ]; do
 			done
 			;;
 		*)
-			TESTS+=("$i")
+			TESTS+=("$1")
 			;;
 	esac
 	shift
