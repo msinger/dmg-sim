@@ -93,11 +93,11 @@ module sm83_idu_bit0 #(
 	assign #(T_rise_buf_ena, T_fall_buf_ena) buf_ena = !buf_ena_n;
 
 	localparam realtime T_rise_buf_a_y_n = tpd_elmore(       21, R_pmos_ohm( 3*L_unit) +
-	                                                             R_pmos_ohm( 8*L_unit), C_gate_F(41*L_unit));
+	                                                             R_pmos_ohm( 7*L_unit), C_gate_F(41*L_unit));
 	localparam realtime T_fall_buf_a_y_n = tpd_elmore(       28, R_nmos_ohm( 3*L_unit) +
 	                                                             R_nmos_ohm( 9*L_unit), C_gate_F(41*L_unit));
 	localparam realtime T_rise_buf_a_y   = tpd_elmore(L_buf_a_y, R_pmos_ohm(28*L_unit), C_gate_F(W_gate_buf_a_y));
-	localparam realtime T_fall_buf_a_y   = tpd_elmore(L_buf_a_y, R_nmos_ohm(14*L_unit), C_gate_F(W_gate_buf_a_y));
+	localparam realtime T_fall_buf_a_y   = tpd_elmore(L_buf_a_y, R_nmos_ohm(13*L_unit), C_gate_F(W_gate_buf_a_y));
 	localparam realtime T_Z_buf_a_y      = tpd_z(T_fall_buf_a_y_n + T_rise_buf_a_y, T_rise_buf_a_y_n + T_fall_buf_a_y);
 	bufif1 (strong1, highz0) #(T_fall_buf_a_y_n + T_rise_buf_a_y, T_rise_buf_a_y_n + T_fall_buf_a_y, T_Z_buf_a_y)
 		(buf_a_y, '1, buf_ena & buf_a_in);
@@ -105,11 +105,11 @@ module sm83_idu_bit0 #(
 		(buf_a_y, '0, !buf_ena_n & !buf_a_in);
 
 	localparam realtime T_rise_buf_b_y_n = tpd_elmore(       37, R_pmos_ohm( 3*L_unit) +
-	                                                             R_pmos_ohm( 8*L_unit), C_gate_F(42*L_unit));
+	                                                             R_pmos_ohm( 7*L_unit), C_gate_F(42*L_unit));
 	localparam realtime T_fall_buf_b_y_n = tpd_elmore(       21, R_nmos_ohm( 3*L_unit) +
 	                                                             R_nmos_ohm( 9*L_unit), C_gate_F(42*L_unit));
 	localparam realtime T_rise_buf_b_y   = tpd_elmore(L_buf_b_y, R_pmos_ohm(28*L_unit), C_gate_F(W_gate_buf_b_y));
-	localparam realtime T_fall_buf_b_y   = tpd_elmore(L_buf_b_y, R_nmos_ohm(15*L_unit), C_gate_F(W_gate_buf_b_y));
+	localparam realtime T_fall_buf_b_y   = tpd_elmore(L_buf_b_y, R_nmos_ohm(14*L_unit), C_gate_F(W_gate_buf_b_y));
 	localparam realtime T_Z_buf_b_y      = tpd_z(T_fall_buf_b_y_n + T_rise_buf_b_y, T_rise_buf_b_y_n + T_fall_buf_b_y);
 	bufif1 (strong1, highz0) #(T_fall_buf_b_y_n + T_rise_buf_b_y, T_rise_buf_b_y_n + T_fall_buf_b_y, T_Z_buf_b_y)
 		(buf_b_y, '1, buf_ena & buf_b_in);
