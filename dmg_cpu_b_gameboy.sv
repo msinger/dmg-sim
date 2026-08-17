@@ -115,9 +115,12 @@ module dmg_cpu_b_gameboy;
 	keeper       nmwr_keeper(nmwr);
 	keeper       nmcs_keeper(nmcs);
 
+	localparam time T_half_step = 1s / (4_194_304 * 2);
+	localparam real F_clk       = 1.0s / (T_half_step * 2);
+
 	task automatic xi_tick();
 		/* Simulate the 4 MiHz crystal that is attached to the XI and XO pins */
-		#122ns xi = xo;
+		#T_half_step xi = xo;
 
 		clk = xi;
 	endtask
@@ -1179,7 +1182,7 @@ module dmg_cpu_b_gameboy;
 			sim_seconds = 6.0; /* Enough time for the boot ROM */
 			_ = $value$plusargs("SECS=%f", sim_seconds);
 
-			sim_mcycs = $rtoi(sim_seconds * 1048576.0);
+			sim_mcycs = $rtoi(sim_seconds * (F_clk / 4.0));
 
 			$dumpfile(dumpfile);
 			$dumpvars(0, dmg_cpu_b_gameboy);
@@ -1230,7 +1233,7 @@ module dmg_cpu_b_gameboy;
 
 				begin :time_dump
 					@(negedge sys_reset);
-					$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
+					$sformat(time_str, "%.1f", $itor(sim_mcycs) / (F_clk / 4.0));
 					$display("System reset done -- will simulate %s seconds", time_str);
 					$fflush(32'h8000_0001);
 					prev_time_str = time_str;
@@ -1238,7 +1241,7 @@ module dmg_cpu_b_gameboy;
 					while (sim_mcycs) begin
 						sim_mcycs--;
 						if (sim_mcycs % 131072) begin
-							$sformat(time_str, "%.1f", $itor(sim_mcycs) / 1048576.0);
+							$sformat(time_str, "%.1f", $itor(sim_mcycs) / (F_clk / 4.0));
 							if (time_str != prev_time_str && time_str != "0.0") begin
 								$display("%s seconds remaining", time_str);
 								$fflush(32'h8000_0001);
