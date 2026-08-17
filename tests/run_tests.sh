@@ -197,7 +197,8 @@ while [ ${#TESTS[*]} -ne 0 -o ${#ACTIVE[*]} -ne 0 ]; do
 
 	i=${ACTIVE[$CUR_DISP]}
 	if [ ${#ACTIVE[*]} -gt 1 ]; then
-		printf "\\x1b[G\\x1b[K%-70s" "($((CUR_DISP+1)) of $PARALLEL_TESTS) $i"
+		printf "\\x1b[G\\x1b[K%-70s" "($((CUR_DISP+1)) of $(( (${#ACTIVE[*]} < PARALLEL_TESTS) ?
+		                                                       ${#ACTIVE[*]} : PARALLEL_TESTS))) $i"
 	else
 		printf "\\x1b[G\\x1b[K%-70s" "$i"
 	fi
