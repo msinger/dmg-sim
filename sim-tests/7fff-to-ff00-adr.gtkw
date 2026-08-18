@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.125 (w)1999-2025 BSI
-[*] Mon Mar  9 13:11:21 2026
+[*] Mon Aug 17 21:08:48 2026
 [*]
 [dumpfile] "/home/michael/projects/dmg_sim/sim-tests/7fff-to-ff00-adr.fst"
-[dumpfile_mtime] "Mon Mar  9 13:09:12 2026"
-[dumpfile_size] 1190998
+[dumpfile_mtime] "Mon Aug 17 21:08:07 2026"
+[dumpfile_size] 1224413
 [savefile] "/home/michael/projects/dmg_sim/sim-tests/7fff-to-ff00-adr.gtkw"
-[timestart] 32016502000
+[timestart] 31227864000
 [size] 1920 1153
 [pos] 1279 0
-*-18.300001 32017372000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-20.400002 31229919000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] dmg_cpu_b_gameboy.
 [treeopen] dmg_cpu_b_gameboy.dmg.
 [treeopen] dmg_cpu_b_gameboy.dmg.cpu_inst.
@@ -82,7 +82,7 @@ dmg_cpu_b_gameboy.cpg
 dmg_cpu_b_gameboy.cp
 dmg_cpu_b_gameboy.cpl
 dmg_cpu_b_gameboy.ld[1:0]
-@201
+@200
 -PPU
 @22
 dmg_cpu_b_gameboy.reg_ff40[7:0]

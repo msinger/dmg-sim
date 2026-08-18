@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.125 (w)1999-2025 BSI
-[*] Thu Mar 19 16:35:26 2026
+[*] Tue Aug 18 00:42:56 2026
 [*]
 [dumpfile] "/home/michael/projects/dmg_sim/sim-tests/wave-bug.fst"
-[dumpfile_mtime] "Thu Mar 19 16:35:11 2026"
-[dumpfile_size] 4021553
+[dumpfile_mtime] "Tue Aug 18 00:42:09 2026"
+[dumpfile_size] 4206311
 [savefile] "/home/michael/projects/dmg_sim/sim-tests/wave-bug.gtkw"
-[timestart] 32339700000
-[size] 1920 1154
-[pos] -1 -1
-*-21.600004 32346240000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[timestart] 31482890000
+[size] 1920 1153
+[pos] 1279 -1
+*-24.000004 32346240000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] dmg_cpu_b_gameboy.
 [treeopen] dmg_cpu_b_gameboy.dmg.
 [treeopen] dmg_cpu_b_gameboy.dmg.cpu_inst.

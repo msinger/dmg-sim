@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.125 (w)1999-2025 BSI
-[*] Tue Mar 10 09:24:09 2026
+[*] Tue Aug 18 00:46:49 2026
 [*]
 [dumpfile] "/home/michael/projects/dmg_sim/sim-tests/oam-bug.fst"
-[dumpfile_mtime] "Tue Mar 10 09:20:52 2026"
-[dumpfile_size] 7315380
+[dumpfile_mtime] "Tue Aug 18 00:46:02 2026"
+[dumpfile_size] 17642279
 [savefile] "/home/michael/projects/dmg_sim/sim-tests/oam-bug.gtkw"
-[timestart] 33697823000
+[timestart] 32870513000
 [size] 1920 1153
-[pos] -1 -1
-*-19.200003 33700301000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] 1279 -1
+*-18.000002 32871472000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] dmg_cpu_b_gameboy.
 [treeopen] dmg_cpu_b_gameboy.dmg.
 [treeopen] dmg_cpu_b_gameboy.dmg.cpu_inst.
@@ -18,7 +18,7 @@
 [sst_width] 269
 [signals_width] 202
 [sst_expanded] 1
-[sst_vpaned_height] 349
+[sst_vpaned_height] 348
 @28
 dmg_cpu_b_gameboy.clk
 @22

@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.125 (w)1999-2025 BSI
-[*] Mon Mar 23 21:25:35 2026
+[*] Mon Aug 17 21:21:33 2026
 [*]
 [dumpfile] "/home/michael/projects/dmg_sim/sim-tests/sound.fst"
-[dumpfile_mtime] "Mon Mar 23 21:14:42 2026"
-[dumpfile_size] 86337209
+[dumpfile_mtime] "Mon Aug 17 21:15:20 2026"
+[dumpfile_size] 91249647
 [savefile] "/home/michael/projects/dmg_sim/sim-tests/sound.gtkw"
-[timestart] 32406497152
-[size] 1920 1154
-[pos] -1 -1
-*-6.000004 32406497272 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[timestart] 31138600000
+[size] 1920 1153
+[pos] 1279 -1
+*-27.300003 31609624089 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] dmg_cpu_b_gameboy.
 [treeopen] dmg_cpu_b_gameboy.dmg.
 [treeopen] dmg_cpu_b_gameboy.dmg.cpu_inst.

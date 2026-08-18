@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.125 (w)1999-2025 BSI
-[*] Fri Mar 20 04:02:06 2026
+[*] Tue Aug 18 01:02:52 2026
 [*]
 [dumpfile] "/home/michael/projects/dmg_sim/sim-tests/oam-dma-halt.fst"
-[dumpfile_mtime] "Fri Mar 20 04:00:07 2026"
-[dumpfile_size] 223194803
+[dumpfile_mtime] "Tue Aug 18 01:00:42 2026"
+[dumpfile_size] 238807349
 [savefile] "/home/michael/projects/dmg_sim/sim-tests/oam-dma-halt.gtkw"
-[timestart] 62040000000
+[timestart] 16690000000
 [size] 1920 1154
 [pos] 1274 0
-*-32.700001 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-33.600002 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] dmg_cpu_b_gameboy.
 [treeopen] dmg_cpu_b_gameboy.dmg.
 [treeopen] dmg_cpu_b_gameboy.dmg.cpu_inst.
@@ -83,8 +83,6 @@ dmg_cpu_b_gameboy.oam_b_latch[7:0]
 -OAM A
 @28
 dmg_cpu_b_gameboy.dmg.oam_a_inst.oe
-@22
-dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.adr[31:0]
 @e2
 dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.dout[7:0]
 @1000200
@@ -93,8 +91,6 @@ dmg_cpu_b_gameboy.dmg.oam_a_inst.sram_inst.dout[7:0]
 -OAM B
 @28
 dmg_cpu_b_gameboy.dmg.oam_b_inst.oe
-@22
-dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.adr[31:0]
 @62
 dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.dout[7:0]
 @1000200
