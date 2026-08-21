@@ -1,4 +1,4 @@
-SECS=1.7
+SECS=1.6
 FRAME=101
 CATEGORY=peripheral/apu
 TYPE=single

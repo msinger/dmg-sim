@@ -1,4 +1,4 @@
-SECS=37.1
+SECS=34.8
 FRAME=2221
 CATEGORY=peripheral/apu
 TYPE=multi

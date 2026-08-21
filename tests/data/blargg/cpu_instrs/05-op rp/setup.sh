@@ -1,4 +1,4 @@
-SECS=4.3
+SECS=4.0
 FRAME=255
 CATEGORY=cpu
 TYPE=single
