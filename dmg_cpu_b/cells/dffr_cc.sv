@@ -48,8 +48,8 @@ module dmg_dffr_cc #(
 
 		end else begin
 
-			localparam realtime T_rise_mux1  = tpd_elmore(   44,   R_pmos_ohm( 8*L_unit) * 1.5, C_gate_F(16*L_unit)); /* Small increase here to allow longer delays between clock inputs. */
-			localparam realtime T_fall_mux1  = tpd_elmore(   44,   R_nmos_ohm( 8*L_unit) * 1.5, C_gate_F(16*L_unit));
+			localparam realtime T_rise_mux1  = tpd_elmore(   44,   R_pmos_ohm( 8*L_unit) * 5, C_gate_F(16*L_unit)); /* Small increase here to allow longer delays between clock inputs. */
+			localparam realtime T_fall_mux1  = tpd_elmore(   44,   R_nmos_ohm( 8*L_unit) * 5, C_gate_F(16*L_unit));
 			localparam realtime T_rise_nand1 = tpd_elmore(   42,   R_pmos_ohm( 8*L_unit), C_gate_F(16*L_unit));
 			localparam realtime T_fall_nand1 = tpd_elmore(   42, 2*R_nmos_ohm( 8*L_unit), C_gate_F(16*L_unit));
 			localparam realtime T_rise_not1  = tpd_elmore(   63,   R_pmos_ohm( 8*L_unit));
