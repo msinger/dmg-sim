@@ -264,3 +264,69 @@ Results of Mooneye GB tests:
 | acceptance/timer/tma\_write\_reloading         |         ✅        |          ✅         |
 | madness/mgb\_oam\_dma\_halt\_sprites           |         ✅        |          ✅         |
 | manual-only/sprite\_priority                   |         ✅        |          ✅         |
+
+
+Timing Model
+------------
+
+The simulation itself is running on gate/cell level. The signal delays however are calculated on transistor level,
+taking into account every transistor within each cell to calculate total delays through cells.
+
+The signal delays are calculated based on the following properties:
+
+- Total resistance and capacity of the net. The resistance and capacity are calculated from the net's length.
+- Resistance (driving strength) and type (NMOS/PMOS) of the transistor that drives the net. The resistance is
+  calculated from the transistor width.
+- Total capacity of all transistor gates driven by the net. The capacity is calculated from the widths of the
+  transistors.
+
+Very simplified example of a net:  
+![](img/timing-model.png)  
+In this example, the inputs A, B and C can be driven by drivers A or B through the blue net. For each of the two
+drivers of the net the signal delay is calculated separately. Driver A calculates the delay based on driver A's width,
+the net's total length, and the total width of the three gate inputs A, B and C. Driver B calculates the delay mostly
+the same, but instead of driver A's width, it uses driver B's width of course.
+
+One would think that driver A has less resistance than driver B, since driver A is twice as wide, but this would only be
+the case when comparing transistors of the same type. Driver A in this example is a PMOS transistor. PMOS transistors
+are only half as efficient as NMOS transistors. Therefore, a PMOS with twice the width of an NMOS has roughly the same
+resistance as the NMOS, due to its halved efficiency.
+
+The model does ***not*** account for the fact that the signal delay should be shorter for the path from driver B to
+input C. It always uses the total length of the net for the calculation. This model has more limitations: It does not
+discriminate between materials (metal, poly, active), and it always assumes driving transistors or chains of driving
+transistors are sourced by VDD or GND directly. This leads to way too short delays when modelling transmission gates.
+I had to manually adjust this in some flip-flop cells that contain muxers implemented with transmission gates.
+
+I tuned the constants in `dmg_cpu_b/timing-default.sv` and `sm83/timing-default.sv` to make the simulation fit as best
+as I could with reality. I made the following measurements on the cartridge port of a real Game Boy DMG-CPU B:
+
+| Name                                              | Description                                                                                                                           |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| rd&#x2011;glitch                                  | The width of the 0-hazard glitches that happen on the `/RD` line when the CPU writes to the internal HRAM or memory mapped registers. |
+| phi&#x2011;rise&#x2011;rd&#x2011;rise             | Delay between rising `PHI` and rising `/RD` at the beginning of a cartridge write access.                                             |
+| phi&#x2011;rise&#x2011;rd&#x2011;fall             | Delay between rising `PHI` and falling `/RD` at the end of a cartridge write access.                                                  |
+| phi&#x2011;rise&#x2011;a15&#x2011;rise            | Delay between rising `PHI` and rising `A15` at the end of each ROM access.                                                            |
+| phi&#x2011;rise&#x2011;a15&#x2011;fall            | Delay between rising `PHI` and falling `A15` at the beginning of each ROM access.                                                     |
+| phi&#x2011;rise&#x2011;cs&#x2011;rise             | Delay between rising `PHI` and rising `/CS` at the end of RAM access.                                                                 |
+| wr&#x2011;rise&#x2011;phi&#x2011;rise             | Delay between rising `/WR` and rising `PHI` at the end of a cartridge write access.                                                   |
+| phi&#x2011;fall&#x2011;wr&#x2011;fall             | Delay between falling `PHI` and falling `/WR` at the beginning (or rather in the very middle) of a cartridge write access.            |
+| phi&#x2011;rise&#x2011;a14&#x2011;fall&#x2011;ext | Delay between rising `PHI` and falling `A14` at the end of a cartridge access.                                                        |
+| phi&#x2011;rise&#x2011;a14&#x2011;fall&#x2011;int | Delay between rising `PHI` and falling `A14` at the end of internal HRAM access.                                                      |
+| a8&#x2011;rise&#x2011;a7&#x2011;rise              | Delay between rising `A8` and rising `A7` at the beginning of internal HRAM access.                                                   |
+
+Here is the comparison of the measured delays vs. the delays in simulation:
+
+| Name                                              | Measured      | Simulation Result | Deviation |
+| ------------------------------------------------- | ------------: | ----------------: | --------: |
+| rd&#x2011;glitch                                  |  18.6&nbsp;ns |    18.850&nbsp;ns |     +1.3% |
+| phi&#x2011;rise&#x2011;rd&#x2011;rise             | 148.4&nbsp;ns |   141.614&nbsp;ns |     -4.6% |
+| phi&#x2011;rise&#x2011;rd&#x2011;fall             |  23.0&nbsp;ns |    25.464&nbsp;ns |    +10.7% |
+| phi&#x2011;rise&#x2011;a15&#x2011;rise            |   3.6&nbsp;ns |     3.746&nbsp;ns |     +4.1% |
+| phi&#x2011;rise&#x2011;a15&#x2011;fall            | 241.0&nbsp;ns |   240.984&nbsp;ns |     ~0.0% |
+| phi&#x2011;rise&#x2011;cs&#x2011;rise             |   4.4&nbsp;ns |     3.183&nbsp;ns |    -27.7% |
+| wr&#x2011;rise&#x2011;phi&#x2011;rise             | 115.6&nbsp;ns |   118.138&nbsp;ns |     +2.2% |
+| phi&#x2011;fall&#x2011;wr&#x2011;fall             |   5.0&nbsp;ns |     4.955&nbsp;ns |     -0.9% |
+| phi&#x2011;rise&#x2011;a14&#x2011;fall&#x2011;ext |  28.0&nbsp;ns |    24.700&nbsp;ns |    -11.8% |
+| phi&#x2011;rise&#x2011;a14&#x2011;fall&#x2011;int | 150.0&nbsp;ns |   144.565&nbsp;ns |     -3.6% |
+| a8&#x2011;rise&#x2011;a7&#x2011;rise              |   4.2&nbsp;ns |     4.543&nbsp;ns |     +8.2% |
