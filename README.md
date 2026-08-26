@@ -319,14 +319,14 @@ Here is the comparison of the measured delays vs. the delays in simulation:
 
 | Name                                              | Measured      | Simulation Result | Deviation |
 | ------------------------------------------------- | ------------: | ----------------: | --------: |
-| rd&#x2011;glitch                                  |  18.6&nbsp;ns |    18.850&nbsp;ns |     +1.3% |
-| phi&#x2011;rise&#x2011;rd&#x2011;rise             | 148.4&nbsp;ns |   141.614&nbsp;ns |     -4.6% |
-| phi&#x2011;rise&#x2011;rd&#x2011;fall             |  23.0&nbsp;ns |    25.464&nbsp;ns |    +10.7% |
-| phi&#x2011;rise&#x2011;a15&#x2011;rise            |   3.6&nbsp;ns |     3.746&nbsp;ns |     +4.1% |
-| phi&#x2011;rise&#x2011;a15&#x2011;fall            | 241.0&nbsp;ns |   240.984&nbsp;ns |     ~0.0% |
-| phi&#x2011;rise&#x2011;cs&#x2011;rise             |   4.4&nbsp;ns |     3.183&nbsp;ns |    -27.7% |
-| wr&#x2011;rise&#x2011;phi&#x2011;rise             | 115.6&nbsp;ns |   118.138&nbsp;ns |     +2.2% |
-| phi&#x2011;fall&#x2011;wr&#x2011;fall             |   5.0&nbsp;ns |     4.955&nbsp;ns |     -0.9% |
-| phi&#x2011;rise&#x2011;a14&#x2011;fall&#x2011;ext |  28.0&nbsp;ns |    24.700&nbsp;ns |    -11.8% |
-| phi&#x2011;rise&#x2011;a14&#x2011;fall&#x2011;int | 150.0&nbsp;ns |   144.565&nbsp;ns |     -3.6% |
-| a8&#x2011;rise&#x2011;a7&#x2011;rise              |   4.2&nbsp;ns |     4.543&nbsp;ns |     +8.2% |
+| rd&#x2011;glitch                                  |  18.6&nbsp;ns |    19.230&nbsp;ns |     +3.3% |
+| phi&#x2011;rise&#x2011;rd&#x2011;rise             | 148.4&nbsp;ns |   142.042&nbsp;ns |     -4.3% |
+| phi&#x2011;rise&#x2011;rd&#x2011;fall             |  23.0&nbsp;ns |    24.296&nbsp;ns |     +5.6% |
+| phi&#x2011;rise&#x2011;a15&#x2011;rise            |   3.6&nbsp;ns |     2.385&nbsp;ns |    -33.8% |
+| phi&#x2011;rise&#x2011;a15&#x2011;fall            | 241.0&nbsp;ns |   241.076&nbsp;ns |     ~0.0% |
+| phi&#x2011;rise&#x2011;cs&#x2011;rise             |   4.4&nbsp;ns |     2.354&nbsp;ns |    -46.5% |
+| wr&#x2011;rise&#x2011;phi&#x2011;rise             | 115.6&nbsp;ns |   116.528&nbsp;ns |     +0.8% |
+| phi&#x2011;fall&#x2011;wr&#x2011;fall             |   5.0&nbsp;ns |     5.006&nbsp;ns |     +0.1% |
+| phi&#x2011;rise&#x2011;a14&#x2011;fall&#x2011;ext |  28.0&nbsp;ns |    19.246&nbsp;ns |    -31.3% |
+| phi&#x2011;rise&#x2011;a14&#x2011;fall&#x2011;int | 150.0&nbsp;ns |   142.964&nbsp;ns |     -4.7% |
+| a8&#x2011;rise&#x2011;a7&#x2011;rise              |   4.2&nbsp;ns |     4.204&nbsp;ns |     ~0.0% |
