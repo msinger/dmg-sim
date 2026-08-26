@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e -x
+set -e #-x
 
 TESTS_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" >/dev/null && pwd)
 ROOT_DIR=$TESTS_DIR/..
@@ -29,8 +29,9 @@ vvp -N "$ROOT_DIR"/dmg_cpu_b_gameboy.vvp \
 	+RAM_SIZE=00
 
 set +x
-cat $TEST_NAME.readme
-echo "(Press enter to open GTKWave)"
-read
+#cat $TEST_NAME.readme
+#echo "(Press enter to open GTKWave)"
+#read
 
-gtkwave $TEST_NAME.fst $TEST_NAME.gtkw
+#gtkwave $TEST_NAME.fst $TEST_NAME.gtkw
+./7fff-to-ff00-adr-peek.sh

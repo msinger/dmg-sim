@@ -1,20 +1,21 @@
 [*]
 [*] GTKWave Analyzer v3.3.125 (w)1999-2025 BSI
-[*] Tue Aug 25 07:04:41 2026
+[*] Tue Aug 25 05:15:27 2026
 [*]
-[dumpfile] "/home/michael/projects/dmg_sim/sim-tests/timing-refs.fst"
-[dumpfile_mtime] "Tue Aug 25 06:55:17 2026"
-[dumpfile_size] 1292134
-[savefile] "/home/michael/projects/dmg_sim/sim-tests/timing-refs.gtkw"
-[timestart] 31225080000
+[dumpfile] "/home/michael/projects/dmg_sim/sim-tests/lcdon-write-timing.fst"
+[dumpfile_mtime] "Mon Aug 24 10:20:13 2026"
+[dumpfile_size] 84227593
+[savefile] "/home/michael/projects/dmg_sim/sim-tests/lcdon-write-timing.gtkw"
+[timestart] 31364352140
 [size] 1920 1153
 [pos] 1279 -1
-*-21.300001 -1 31230744000 31237330000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-12.900002 46892938463 31363903659 31472431659 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] dmg_cpu_b_gameboy.
 [treeopen] dmg_cpu_b_gameboy.dmg.
 [treeopen] dmg_cpu_b_gameboy.dmg.cpu_inst.
+[treeopen] dmg_cpu_b_gameboy.dmg.oam_b_inst.
 [sst_width] 269
-[signals_width] 164
+[signals_width] 166
 [sst_expanded] 1
 [sst_vpaned_height] 349
 @28
@@ -22,16 +23,11 @@ dmg_cpu_b_gameboy.clk
 @800200
 -ExtBUS
 @28
-[color] 3
-dmg_cpu_b_gameboy.phi
-[color] 2
 dmg_cpu_b_gameboy.nrd
 dmg_cpu_b_gameboy.nwr
-dmg_cpu_b_gameboy.ncs
-@800022
+@c00022
 dmg_cpu_b_gameboy.a[15:0]
 @28
-[color] 1
 (0)dmg_cpu_b_gameboy.a[15:0]
 (1)dmg_cpu_b_gameboy.a[15:0]
 (2)dmg_cpu_b_gameboy.a[15:0]
@@ -48,13 +44,13 @@ dmg_cpu_b_gameboy.a[15:0]
 (13)dmg_cpu_b_gameboy.a[15:0]
 (14)dmg_cpu_b_gameboy.a[15:0]
 (15)dmg_cpu_b_gameboy.a[15:0]
-@1001200
+@1401200
 -group_end
 @22
 dmg_cpu_b_gameboy.d[7:0]
 @1000200
 -ExtBUS
-@c00200
+@800200
 -VRAM
 @28
 dmg_cpu_b_gameboy.nmrd
@@ -79,7 +75,7 @@ dmg_cpu_b_gameboy.ma[12:0]
 -group_end
 @22
 dmg_cpu_b_gameboy.md[7:0]
-@1401200
+@1000200
 -VRAM
 @c00200
 -LCD
@@ -93,7 +89,7 @@ dmg_cpu_b_gameboy.cpl
 dmg_cpu_b_gameboy.ld[1:0]
 @1401200
 -LCD
-@c00200
+@800200
 -PPU
 @22
 dmg_cpu_b_gameboy.reg_ff40[7:0]
@@ -106,8 +102,104 @@ dmg_cpu_b_gameboy.reg_ff46[7:0]
 dmg_cpu_b_gameboy.reg_ff47[7:0]
 dmg_cpu_b_gameboy.reg_ff48[7:0]
 dmg_cpu_b_gameboy.reg_ff49[7:0]
-@1401200
+@1000200
 -PPU
+@23
+dmg_cpu_b_gameboy.obj0[31:0]
+@28
+dmg_cpu_b_gameboy.dmg.oam_b_wr_n
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wr
+@22
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.adr[31:0]
+@c00022
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.col[3:0]
+@28
+(0)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.col[3:0]
+(1)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.col[3:0]
+(2)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.col[3:0]
+(3)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.col[3:0]
+@1401200
+-group_end
+@28
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.bl_pch_n
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wldrv_ena
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wldrv_pch_n
+@c00022
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+@28
+(0)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(1)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(2)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(3)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(4)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(5)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(6)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(7)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(8)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(9)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(10)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(11)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(12)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(13)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(14)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(15)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(16)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(17)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(18)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(19)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(20)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(21)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(22)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(23)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(24)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(25)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(26)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(27)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(28)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(29)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(30)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+(31)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.wl_adr[31:0]
+@1401200
+-group_end
+@c00022
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.a[6:2]
+@28
+(0)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.a[6:2]
+(1)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.a[6:2]
+(2)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.a[6:2]
+(3)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.a[6:2]
+(4)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.a[6:2]
+@1401200
+-group_end
+@22
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.a_n[6:2]
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.din[7:0]
+@c00022
+dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.dout[7:0]
+@28
+(0)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.dout[7:0]
+(1)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.dout[7:0]
+(2)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.dout[7:0]
+(3)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.dout[7:0]
+(4)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.dout[7:0]
+(5)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.dout[7:0]
+(6)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.dout[7:0]
+(7)dmg_cpu_b_gameboy.dmg.oam_b_inst.sram_inst.dout[7:0]
+@1401200
+-group_end
+@200
+-ZOPU
+@28
+dmg_cpu_b_gameboy.dmg.zopu_inst.y
+@200
+-ZAMY
+@28
+dmg_cpu_b_gameboy.dmg.zamy_inst.y
+dmg_cpu_b_gameboy.dmg.oam_a2_na1_n
+dmg_cpu_b_gameboy.dmg.oam_a2
+dmg_cpu_b_gameboy.dmg.oam_a1
+dmg_cpu_b_gameboy.dmg.oam_a2_n
+dmg_cpu_b_gameboy.dmg.oam_a1_n
 @c00200
 -APU
 @22

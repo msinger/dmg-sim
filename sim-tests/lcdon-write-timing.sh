@@ -5,7 +5,7 @@ set -e #-x
 TESTS_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" >/dev/null && pwd)
 ROOT_DIR=$TESTS_DIR/..
 
-TEST_NAME=timing-refs
+TEST_NAME=lcdon-write-timing
 
 AS=sm83-elf-as
 LD=sm83-elf-ld
@@ -31,4 +31,4 @@ vvp -N "$ROOT_DIR"/dmg_cpu_b_gameboy.vvp \
 set +x
 
 #gtkwave $TEST_NAME.fst $TEST_NAME.gtkw
-./timing-refs-peek.sh
+./lcdon-write-timing-peek.sh
