@@ -11,5 +11,5 @@ cd -- "$TESTS_DIR"
 
 wavepeek value --waves "$TEST_NAME".fst \
                --scope dmg_cpu_b_gameboy.dmg.cpu_inst \
-               --at 46892783ns \
+               --at 31485639ns \
                --signals reg_a,reg_b

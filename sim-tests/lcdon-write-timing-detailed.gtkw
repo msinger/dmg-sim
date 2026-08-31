@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.125 (w)1999-2025 BSI
-[*] Thu Aug 27 03:19:57 2026
+[*] Thu Aug 27 03:03:22 2026
 [*]
-[dumpfile] "/home/michael/projects/dmg_sim/sim-tests/lcdon-write-timing.fst"
-[dumpfile_mtime] "Thu Aug 27 03:18:52 2026"
-[dumpfile_size] 3004825
-[savefile] "/home/michael/projects/dmg_sim/sim-tests/lcdon-write-timing.gtkw"
-[timestart] 31364363240
+[dumpfile] "/home/michael/projects/dmg_sim/sim-tests/lcdon-write-timing-detailed.fst"
+[dumpfile_mtime] "Thu Aug 27 02:56:45 2026"
+[dumpfile_size] 18411854
+[savefile] "/home/michael/projects/dmg_sim/sim-tests/lcdon-write-timing-detailed.gtkw"
+[timestart] 32495000000
 [size] 1920 1153
 [pos] 1279 0
-*-12.000002 31485639000 31363903659 31472431659 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-28.500002 -1 33327760000 33589930000 35693400000 35954410000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] dmg_cpu_b_gameboy.
 [treeopen] dmg_cpu_b_gameboy.dmg.
 [treeopen] dmg_cpu_b_gameboy.dmg.cpu_inst.

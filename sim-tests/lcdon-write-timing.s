@@ -11,19 +11,6 @@
 	ld	sp, 0xffff
 	jp	start
 
-wait_ly:
-	ld	a, (0x44)
-	cp	b
-	jr	nz, wait_ly
-	ret
-
-disable_ppu_safe:
-	ld	b, 144
-	call	wait_ly
-	xor	a
-	ld	(0x40), a
-	ret
-
 start:
 	xor	a
 	ld	de, 0xfe00
@@ -42,7 +29,8 @@ start:
 .endr
 	ld	(de), a
 
-	call	disable_ppu_safe
+	xor	a
+	ld	(0x40), a
 
 	ld	a, (de)
 	ld	b, a
