@@ -1,4 +1,4 @@
-SECS=1.1
-FRAME=67
+SECS=2.5
+FRAME=159
 CATEGORY=peripheral/ppu
 TYPE=single

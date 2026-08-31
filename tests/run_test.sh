@@ -8,9 +8,11 @@ ROOT_DIR=$TESTS_DIR/..
 PNG_PATH=$TESTS_DIR/data/$1/result.png
 PNG_ALT_PATH=$TESTS_DIR/data/$1/result-alt.png
 PNG_XFAIL_PATH=$TESTS_DIR/data/$1/result-xfail.png
+PNG_XFAIL_ALT_PATH=$TESTS_DIR/data/$1/result-xfail-alt.png
 SAV_PATH=$TESTS_DIR/data/$1/result.sav
 SAV_ALT_PATH=$TESTS_DIR/data/$1/result-alt.sav
 SAV_XFAIL_PATH=$TESTS_DIR/data/$1/result-xfail.sav
+SAV_XFAIL_ALT_PATH=$TESTS_DIR/data/$1/result-xfail-alt.sav
 SETUP_PATH=$TESTS_DIR/data/$1/setup.sh
 ROM_PATH=$TESTS_DIR/roms/$1.gb
 
@@ -76,6 +78,11 @@ if [ -r "$PNG_XFAIL_PATH" ]; then
 	magick "$PNG_XFAIL_PATH" RGB:result.rgb
 	if cmp $(printf img%06d.rgb $FRAME) result.rgb; then
 		XFAILED=y
+	elif [ -r "$PNG_XFAIL_ALT_PATH" ]; then
+		magick "$PNG_XFAIL_ALT_PATH" RGB:result.rgb
+		if cmp $(printf img%06d.rgb $FRAME) result.rgb; then
+			XFAILED=y
+		fi
 	fi
 fi
 
@@ -91,6 +98,10 @@ fi
 if [ -r "$SAV_XFAIL_PATH" ]; then
 	if cmp test.sav "$SAV_XFAIL_PATH"; then
 		XFAILED=y
+	elif [ -r "$SAV_XFAIL_ALT_PATH" ]; then
+		if cmp test.sav "$SAV_XFAIL_ALT_PATH"; then
+			XFAILED=y
+		fi
 	fi
 fi
 
