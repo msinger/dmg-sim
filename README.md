@@ -147,29 +147,35 @@ to generate a video file of the Zelda intro.
 Tests
 -----
 
+The tables below show the results of all applicable Blargg and Mooneye GB tests run with default timing
+(`TIMING=default`). In earlier commits these tables had an additional column for `TIMING=nodelay`. I removed
+this column, because nodelay simulation is unreliable due to logic loops in the circuit. Those loops can cause
+the simulator to hang, depending on the processing order of events. When Icarus hangs in such a loop, it keeps
+allocating more and more memory until the OOM killer ends it.
+
 Results of Blargg's tests:
 
-| Test                                | Result (no delay) | Result (with delay) |
-| ----------------------------------- | :---------------: | :-----------------: |
-| cgb\_sound                          |         n/a       |          n/a        |
-| cpu\_instrs                         |         ✅        |          ✅         |
-| dmg\_sound/01-registers             |         ✅        |          ✅         |
-| dmg\_sound/02-len ctr               |         ✅        |          ✅         |
-| dmg\_sound/03-trigger               |         ✅        |          ✅         |
-| dmg\_sound/04-sweep                 |         ✅        |          ✅         |
-| dmg\_sound/05-sweep details         |         ✅        |          ✅         |
-| dmg\_sound/06-overflow on trigger   |         ✅        |          ✅         |
-| dmg\_sound/07-len sweep period sync |         ✅        |          ✅         |
-| dmg\_sound/08-len ctr during power  |         ✅        |          ✅         |
-| dmg\_sound/09-wave read while on    |         ✅        |          ✅         |
-| dmg\_sound/10-wave trigger while on |         🚫\*\*    |          🚫\*\*     |
-| dmg\_sound/11-regs after power      |         ✅        |          ✅         |
-| dmg\_sound/12-wave write while on   |         ✅        |          ✅         |
-| halt\_bug                           |         ✅        |          ✅         |
-| instr\_timing                       |         ✅        |          ✅         |
-| interrupt\_time                     |         n/a       |          n/a        |
-| mem\_timing                         |         ✅        |          ✅         |
-| oam\_bug                            |         🚫\*      |          🚫\*       |
+| Test                                | Result |
+| ----------------------------------- | :----: |
+| cgb\_sound                          |   n/a  |
+| cpu\_instrs                         |   ✅   |
+| dmg\_sound/01-registers             |   ✅   |
+| dmg\_sound/02-len ctr               |   ✅   |
+| dmg\_sound/03-trigger               |   ✅   |
+| dmg\_sound/04-sweep                 |   ✅   |
+| dmg\_sound/05-sweep details         |   ✅   |
+| dmg\_sound/06-overflow on trigger   |   ✅   |
+| dmg\_sound/07-len sweep period sync |   ✅   |
+| dmg\_sound/08-len ctr during power  |   ✅   |
+| dmg\_sound/09-wave read while on    |   ✅   |
+| dmg\_sound/10-wave trigger while on | 🚫\*\* |
+| dmg\_sound/11-regs after power      |   ✅   |
+| dmg\_sound/12-wave write while on   |   ✅   |
+| halt\_bug                           |   ✅   |
+| instr\_timing                       |   ✅   |
+| interrupt\_time                     |   n/a  |
+| mem\_timing                         |   ✅   |
+| oam\_bug                            |  🚫\*  |
 
 *\* oam\_bug tests depend on small differences in signal delays which could change with temperature. According to
     [SameBoy](https://github.com/LIJI32/SameBoy/blob/master/Core/memory.c) some edge cases indeed behave
@@ -185,85 +191,85 @@ without the suffix, but with much slower boilerplate code stitched around them, 
 
 Results of Mooneye GB tests:
 
-| Test                                           | Result (no delay) | Result (with delay) |
-| ---------------------------------------------- | :---------------: | :-----------------: |
-| acceptance/add\_sp\_e\_timing                  |         ✅        |          ✅         |
-| acceptance/bits/mem\_oam                       |         ✅        |          ✅         |
-| acceptance/bits/reg\_f                         |         ✅        |          ✅         |
-| acceptance/bits/unused\_hwio-GS                |         ✅        |          ✅         |
-| acceptance/boot\_div-dmg0                      |         n/a       |          n/a        |
-| acceptance/boot\_div-dmgABCmgb                 |         ✅        |          ✅         |
-| acceptance/boot\_div-S                         |         n/a       |          n/a        |
-| acceptance/boot\_div2-S                        |         n/a       |          n/a        |
-| acceptance/boot\_hwio-dmg0                     |         n/a       |          n/a        |
-| acceptance/boot\_hwio-dmgABCmgb                |         ✅        |          ✅         |
-| acceptance/boot\_hwio-S                        |         n/a       |          n/a        |
-| acceptance/boot\_regs-dmg0                     |         n/a       |          n/a        |
-| acceptance/boot\_regs-dmgABC                   |         ✅        |          ✅         |
-| acceptance/boot\_regs-mgb                      |         n/a       |          n/a        |
-| acceptance/boot\_regs-sgb                      |         n/a       |          n/a        |
-| acceptance/boot\_regs-sgb2                     |         n/a       |          n/a        |
-| acceptance/call\_cc\_timing                    |         ✅        |          ✅         |
-| acceptance/call\_cc\_timing2                   |         ✅        |          ✅         |
-| acceptance/call\_timing                        |         ✅        |          ✅         |
-| acceptance/call\_timing2                       |         ✅        |          ✅         |
-| acceptance/di\_timing-GS                       |         ✅        |          ✅         |
-| acceptance/div\_timing                         |         ✅        |          ✅         |
-| acceptance/ei\_sequence                        |         ✅        |          ✅         |
-| acceptance/ei\_timing                          |         ✅        |          ✅         |
-| acceptance/halt\_ime0\_ei                      |         ✅        |          ✅         |
-| acceptance/halt\_ime0\_nointr\_timing          |         ✅        |          ✅         |
-| acceptance/halt\_ime1\_timing                  |         ✅        |          ✅         |
-| acceptance/halt\_ime1\_timing2-GS              |         ✅        |          ✅         |
-| acceptance/if\_ie\_registers                   |         ✅        |          ✅         |
-| acceptance/instr/daa                           |         ✅        |          ✅         |
-| acceptance/interrupts/ie\_push                 |         ✅        |          ✅         |
-| acceptance/intr\_timing                        |         ✅        |          ✅         |
-| acceptance/jp\_cc\_timing                      |         ✅        |          ✅         |
-| acceptance/jp\_timing                          |         ✅        |          ✅         |
-| acceptance/ld\_hl\_sp\_e\_timing               |         ✅        |          ✅         |
-| acceptance/oam\_dma/basic                      |         ✅        |          ✅         |
-| acceptance/oam\_dma/reg\_read                  |         ✅        |          ✅         |
-| acceptance/oam\_dma/sources-dmgABCmgbS         |         ✅        |          ✅         |
-| acceptance/oam\_dma\_restart                   |         ✅        |          ✅         |
-| acceptance/oam\_dma\_start                     |         ✅        |          ✅         |
-| acceptance/oam\_dma\_timing                    |         ✅        |          ✅         |
-| acceptance/pop\_timing                         |         ✅        |          ✅         |
-| acceptance/ppu/hblank\_ly\_scx\_timing-GS      |         ✅        |          ✅         |
-| acceptance/ppu/intr\_1\_2\_timing-GS           |         ✅        |          ✅         |
-| acceptance/ppu/intr\_2\_0\_timing              |         ✅        |          ✅         |
-| acceptance/ppu/intr\_2\_mode0\_timing          |         ✅        |          ✅         |
-| acceptance/ppu/intr\_2\_mode0\_timing\_sprites |         ✅        |          ✅         |
-| acceptance/ppu/intr\_2\_mode3\_timing          |         ✅        |          ✅         |
-| acceptance/ppu/intr\_2\_oam\_ok\_timing        |         ✅        |          ✅         |
-| acceptance/ppu/lcdon\_timing-dmgABCmgbS        |         ✅        |          ✅         |
-| acceptance/ppu/lcdon\_write\_timing-GS         |         ❌        |          ✅         |
-| acceptance/ppu/stat\_irq\_blocking             |         ✅        |          ✅         |
-| acceptance/ppu/stat\_lyc\_onoff                |         ✅        |          ✅         |
-| acceptance/ppu/vblank\_stat\_intr-GS           |         ✅        |          ✅         |
-| acceptance/push\_timing                        |         ✅        |          ✅         |
-| acceptance/rapid\_di\_ei                       |         ✅        |          ✅         |
-| acceptance/ret\_cc\_timing                     |         ✅        |          ✅         |
-| acceptance/ret\_timing                         |         ✅        |          ✅         |
-| acceptance/reti\_intr\_timing                  |         ✅        |          ✅         |
-| acceptance/reti\_timing                        |         ✅        |          ✅         |
-| acceptance/rst\_timing                         |         ✅        |          ✅         |
-| acceptance/serial/boot\_sclk\_align-dmgABCmgb  |         ✅        |          ✅         |
-| acceptance/timer/div\_write                    |         ✅        |          ✅         |
-| acceptance/timer/rapid\_toggle                 |         ✅        |          ✅         |
-| acceptance/timer/tim00                         |         ✅        |          ✅         |
-| acceptance/timer/tim00\_div\_trigger           |         ✅        |          ✅         |
-| acceptance/timer/tim01                         |         ✅        |          ✅         |
-| acceptance/timer/tim01\_div\_trigger           |         ✅        |          ✅         |
-| acceptance/timer/tim10                         |         ✅        |          ✅         |
-| acceptance/timer/tim10\_div\_trigger           |         ✅        |          ✅         |
-| acceptance/timer/tim11                         |         ✅        |          ✅         |
-| acceptance/timer/tim11\_div\_trigger           |         ✅        |          ✅         |
-| acceptance/timer/tima\_reload                  |         ✅        |          ✅         |
-| acceptance/timer/tima\_write\_reloading        |         ✅        |          ✅         |
-| acceptance/timer/tma\_write\_reloading         |         ✅        |          ✅         |
-| madness/mgb\_oam\_dma\_halt\_sprites           |         ✅        |          ✅         |
-| manual-only/sprite\_priority                   |         ✅        |          ✅         |
+| Test                                           | Result |
+| ---------------------------------------------- | :----: |
+| acceptance/add\_sp\_e\_timing                  |   ✅   |
+| acceptance/bits/mem\_oam                       |   ✅   |
+| acceptance/bits/reg\_f                         |   ✅   |
+| acceptance/bits/unused\_hwio-GS                |   ✅   |
+| acceptance/boot\_div-dmg0                      |   n/a  |
+| acceptance/boot\_div-dmgABCmgb                 |   ✅   |
+| acceptance/boot\_div-S                         |   n/a  |
+| acceptance/boot\_div2-S                        |   n/a  |
+| acceptance/boot\_hwio-dmg0                     |   n/a  |
+| acceptance/boot\_hwio-dmgABCmgb                |   ✅   |
+| acceptance/boot\_hwio-S                        |   n/a  |
+| acceptance/boot\_regs-dmg0                     |   n/a  |
+| acceptance/boot\_regs-dmgABC                   |   ✅   |
+| acceptance/boot\_regs-mgb                      |   n/a  |
+| acceptance/boot\_regs-sgb                      |   n/a  |
+| acceptance/boot\_regs-sgb2                     |   n/a  |
+| acceptance/call\_cc\_timing                    |   ✅   |
+| acceptance/call\_cc\_timing2                   |   ✅   |
+| acceptance/call\_timing                        |   ✅   |
+| acceptance/call\_timing2                       |   ✅   |
+| acceptance/di\_timing-GS                       |   ✅   |
+| acceptance/div\_timing                         |   ✅   |
+| acceptance/ei\_sequence                        |   ✅   |
+| acceptance/ei\_timing                          |   ✅   |
+| acceptance/halt\_ime0\_ei                      |   ✅   |
+| acceptance/halt\_ime0\_nointr\_timing          |   ✅   |
+| acceptance/halt\_ime1\_timing                  |   ✅   |
+| acceptance/halt\_ime1\_timing2-GS              |   ✅   |
+| acceptance/if\_ie\_registers                   |   ✅   |
+| acceptance/instr/daa                           |   ✅   |
+| acceptance/interrupts/ie\_push                 |   ✅   |
+| acceptance/intr\_timing                        |   ✅   |
+| acceptance/jp\_cc\_timing                      |   ✅   |
+| acceptance/jp\_timing                          |   ✅   |
+| acceptance/ld\_hl\_sp\_e\_timing               |   ✅   |
+| acceptance/oam\_dma/basic                      |   ✅   |
+| acceptance/oam\_dma/reg\_read                  |   ✅   |
+| acceptance/oam\_dma/sources-dmgABCmgbS         |   ✅   |
+| acceptance/oam\_dma\_restart                   |   ✅   |
+| acceptance/oam\_dma\_start                     |   ✅   |
+| acceptance/oam\_dma\_timing                    |   ✅   |
+| acceptance/pop\_timing                         |   ✅   |
+| acceptance/ppu/hblank\_ly\_scx\_timing-GS      |   ✅   |
+| acceptance/ppu/intr\_1\_2\_timing-GS           |   ✅   |
+| acceptance/ppu/intr\_2\_0\_timing              |   ✅   |
+| acceptance/ppu/intr\_2\_mode0\_timing          |   ✅   |
+| acceptance/ppu/intr\_2\_mode0\_timing\_sprites |   ✅   |
+| acceptance/ppu/intr\_2\_mode3\_timing          |   ✅   |
+| acceptance/ppu/intr\_2\_oam\_ok\_timing        |   ✅   |
+| acceptance/ppu/lcdon\_timing-dmgABCmgbS        |   ✅   |
+| acceptance/ppu/lcdon\_write\_timing-GS         |   ✅   |
+| acceptance/ppu/stat\_irq\_blocking             |   ✅   |
+| acceptance/ppu/stat\_lyc\_onoff                |   ✅   |
+| acceptance/ppu/vblank\_stat\_intr-GS           |   ✅   |
+| acceptance/push\_timing                        |   ✅   |
+| acceptance/rapid\_di\_ei                       |   ✅   |
+| acceptance/ret\_cc\_timing                     |   ✅   |
+| acceptance/ret\_timing                         |   ✅   |
+| acceptance/reti\_intr\_timing                  |   ✅   |
+| acceptance/reti\_timing                        |   ✅   |
+| acceptance/rst\_timing                         |   ✅   |
+| acceptance/serial/boot\_sclk\_align-dmgABCmgb  |   ✅   |
+| acceptance/timer/div\_write                    |   ✅   |
+| acceptance/timer/rapid\_toggle                 |   ✅   |
+| acceptance/timer/tim00                         |   ✅   |
+| acceptance/timer/tim00\_div\_trigger           |   ✅   |
+| acceptance/timer/tim01                         |   ✅   |
+| acceptance/timer/tim01\_div\_trigger           |   ✅   |
+| acceptance/timer/tim10                         |   ✅   |
+| acceptance/timer/tim10\_div\_trigger           |   ✅   |
+| acceptance/timer/tim11                         |   ✅   |
+| acceptance/timer/tim11\_div\_trigger           |   ✅   |
+| acceptance/timer/tima\_reload                  |   ✅   |
+| acceptance/timer/tima\_write\_reloading        |   ✅   |
+| acceptance/timer/tma\_write\_reloading         |   ✅   |
+| madness/mgb\_oam\_dma\_halt\_sprites           |   ✅   |
+| manual-only/sprite\_priority                   |   ✅   |
 
 
 Timing Model
