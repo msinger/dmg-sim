@@ -5,7 +5,6 @@ module dmg_cpu_b_gameboy;
 	import snd_dump::write_header;
 	import snd_dump::write_bit4_as_int8;
 	import snd_dump::write_real_as_int16;
-	vid_dump vdump(.*, .t(test.sample_idx));
 
 	/* Clock (crystal) pins */
 	logic xi, xo;
@@ -60,6 +59,8 @@ module dmg_cpu_b_gameboy;
 
 	logic clk;
 	logic sys_reset;
+
+	vid_dump vdump(.*, .t(test.sample_idx));
 
 	dmg_cpu_b dmg(
 		.ck1_pad(xi),
