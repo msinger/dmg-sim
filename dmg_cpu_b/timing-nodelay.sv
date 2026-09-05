@@ -15,6 +15,14 @@ package dmg_timing;
 		return 1.0;
 	endfunction
 
+	function automatic real C_wire_F(real L_um);
+		return 0.0;
+	endfunction
+
+	function automatic real R_wire_ohm(real L_um);
+		return 0.0;
+	endfunction
+
 	function automatic real C_gate_F(real W_um);
 		return 0.0;
 	endfunction

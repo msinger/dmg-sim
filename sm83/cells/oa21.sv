@@ -17,7 +17,9 @@ endpackage
 
 module sm83_oa21 #(
 		parameter real L_y      = 10 + sm83_oa21_param::L_y,
-		parameter real W_gate_y = 0
+		parameter real W_gate_y = 0,
+
+		parameter real L_y_in_sm83 = L_y
 	) (
 		input  logic in1, in2, in3,
 		output logic y
@@ -27,12 +29,15 @@ module sm83_oa21 #(
 
 	assign y = (in1 | in2) & in3;
 
+	localparam real Rw_y = R_wire_ohm(L_y_in_sm83) + dmg_timing::R_wire_ohm(L_y - L_y_in_sm83);
+	localparam real Cw_y = C_wire_F(L_y_in_sm83) + dmg_timing::C_wire_F(L_y - L_y_in_sm83);
+
 	specify
 		specparam T_rise_oai     = tpd_elmore( 25, 2*R_pmos_ohm( 3*L_unit), C_gate_F(45*L_unit));
 		specparam T_rise_oai_in3 = tpd_elmore( 25,   R_pmos_ohm( 3*L_unit), C_gate_F(45*L_unit));
 		specparam T_fall_oai     = tpd_elmore( 25, 2*R_nmos_ohm( 3*L_unit), C_gate_F(45*L_unit));
-		specparam T_rise_y       = tpd_elmore(L_y,   R_pmos_ohm(30*L_unit), C_gate_F(W_gate_y));
-		specparam T_fall_y       = tpd_elmore(L_y,   R_nmos_ohm(15*L_unit), C_gate_F(W_gate_y));
+		specparam T_rise_y       = tpd_elmore_rc(Rw_y, Cw_y, R_pmos_ohm(30*L_unit), dmg_timing::C_gate_F(W_gate_y));
+		specparam T_fall_y       = tpd_elmore_rc(Rw_y, Cw_y, R_nmos_ohm(15*L_unit), dmg_timing::C_gate_F(W_gate_y));
 
 		(in1, in2 *> y) = (T_fall_oai + T_rise_y, T_rise_oai + T_fall_y);
 		(in3      *> y) = (T_fall_oai + T_rise_y, T_rise_oai_in3 + T_fall_y);

@@ -13,12 +13,28 @@ package sm83_timing;
 		return 1.0;
 	endfunction
 
+	function automatic real C_wire_F(real L_um);
+		return 0.0;
+	endfunction
+
+	function automatic real R_wire_ohm(real L_um);
+		return 0.0;
+	endfunction
+
 	function automatic real C_gate_F(real W_um);
+		return 0.0;
+	endfunction
+
+	function automatic real tpd_elmore_s_rc(real R_wire_ohm, real C_wire_F, real R_drv_ohm, real C_extra_F = 0.0);
 		return 0.0;
 	endfunction
 
 	function automatic real tpd_elmore_s(real L_um, real R_drv_ohm, real C_extra_F = 0.0);
 		return 0.0;
+	endfunction
+
+	function automatic realtime tpd_elmore_rc(real R_wire_ohm, real C_wire_F, real R_drv_ohm, real C_extra_F = 0.0);
+		return 0.0s;
 	endfunction
 
 	function automatic realtime tpd_elmore(real L_um, real R_drv_ohm, real C_extra_F = 0.0);

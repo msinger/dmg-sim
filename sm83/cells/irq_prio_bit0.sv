@@ -121,10 +121,10 @@ module sm83_irq_prio_bit0 #(
 		(dist_nor_y_n, '0, dist_nor_in);
 
 	specify
-		specparam T_rise_nand  = tpd_elmore(     24,   R_pmos_ohm( 3.0*L_unit), C_gate_F(22.5*L_unit));
-		specparam T_fall_nand  = tpd_elmore(     24, 2*R_nmos_ohm( 3.0*L_unit), C_gate_F(22.5*L_unit));
-		specparam T_rise_and_y = tpd_elmore(L_and_y,   R_pmos_ohm(14.5*L_unit), C_gate_F(W_gate_and_y));
-		specparam T_fall_and_y = tpd_elmore(L_and_y,   R_nmos_ohm( 8.0*L_unit), C_gate_F(W_gate_and_y));
+		specparam T_rise_nand  = tpd_elmore(24,   R_pmos_ohm( 3.0*L_unit), C_gate_F(22.5*L_unit));
+		specparam T_fall_nand  = tpd_elmore(24, 2*R_nmos_ohm( 3.0*L_unit), C_gate_F(22.5*L_unit));
+		specparam T_rise_and_y = dmg_timing::tpd_elmore(L_and_y, R_pmos_ohm(14.5*L_unit), dmg_timing::C_gate_F(W_gate_and_y));
+		specparam T_fall_and_y = dmg_timing::tpd_elmore(L_and_y, R_nmos_ohm( 8.0*L_unit), dmg_timing::C_gate_F(W_gate_and_y));
 
 		(and_in1, and_in2_nand_a_in2 *> and_y) = (T_fall_nand + T_rise_and_y, T_rise_nand + T_fall_and_y);
 	endspecify

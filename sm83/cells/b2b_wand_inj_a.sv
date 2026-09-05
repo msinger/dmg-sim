@@ -45,10 +45,10 @@ module sm83_b2b_wand_inj_a #(
 	localparam realtime T_rise_a       = tpd_elmore(L_a,   R_pmos_ohm(27*L_unit), C_gate_F(W_gate_a));
 	localparam realtime T_fall_a       = tpd_elmore(L_a, 2*R_nmos_ohm(29*L_unit), C_gate_F(W_gate_a));
 	localparam realtime T_fall_a_inj   = tpd_elmore(L_a, 2*R_nmos_ohm(24*L_unit), C_gate_F(W_gate_a));
-	localparam realtime T_rise_b       = tpd_elmore(L_b,   R_pmos_ohm(50*L_unit), C_gate_F(W_gate_b));
-	localparam realtime T_fall_b       = tpd_elmore(L_b,   R_nmos_ohm(84*L_unit), C_gate_F(W_gate_b));
 	localparam realtime T_Z_a          = tpd_z(T_rise_a, T_fall_a);
-	localparam realtime T_Z_b          = tpd_z(T_rise_b, T_fall_b);
+	localparam realtime T_rise_b       = dmg_timing::tpd_elmore(L_b, R_pmos_ohm(50*L_unit), dmg_timing::C_gate_F(W_gate_b));
+	localparam realtime T_fall_b       = dmg_timing::tpd_elmore(L_b, R_nmos_ohm(84*L_unit), dmg_timing::C_gate_F(W_gate_b));
+	localparam realtime T_Z_b          = dmg_timing::tpd_z(T_rise_b, T_fall_b);
 
 	logic inj_d_n, nor_pp;
 

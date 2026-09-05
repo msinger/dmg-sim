@@ -24,8 +24,8 @@ module sm83_not_e #(
 	assign y = !in;
 
 	specify
-		specparam T_rise_y = tpd_elmore(L_y, R_pmos_ohm(14*L_unit), C_gate_F(W_gate_y));
-		specparam T_fall_y = tpd_elmore(L_y, R_nmos_ohm( 8*L_unit), C_gate_F(W_gate_y));
+		specparam T_rise_y = dmg_timing::tpd_elmore(L_y, R_pmos_ohm(14*L_unit), dmg_timing::C_gate_F(W_gate_y));
+		specparam T_fall_y = dmg_timing::tpd_elmore(L_y, R_nmos_ohm( 8*L_unit), dmg_timing::C_gate_F(W_gate_y));
 
 		(in *> y) = (T_rise_y, T_fall_y);
 	endspecify

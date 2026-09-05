@@ -88,10 +88,10 @@ module sm83_irq_prio_bit4 #(
 
 	assign not_y = !not_in;
 
-	localparam realtime T_rise_nand  = tpd_elmore(     24,   R_pmos_ohm( 3.0*L_unit), C_gate_F(22.5*L_unit));
-	localparam realtime T_fall_nand  = tpd_elmore(     24, 2*R_nmos_ohm( 3.0*L_unit), C_gate_F(22.5*L_unit));
-	localparam realtime T_rise_and_y = tpd_elmore(L_and_y,   R_pmos_ohm(14.5*L_unit), C_gate_F(W_gate_and_y));
-	localparam realtime T_fall_and_y = tpd_elmore(L_and_y,   R_nmos_ohm( 8.0*L_unit), C_gate_F(W_gate_and_y));
+	localparam realtime T_rise_nand  = tpd_elmore(24,   R_pmos_ohm( 3.0*L_unit), C_gate_F(22.5*L_unit));
+	localparam realtime T_fall_nand  = tpd_elmore(24, 2*R_nmos_ohm( 3.0*L_unit), C_gate_F(22.5*L_unit));
+	localparam realtime T_rise_and_y = dmg_timing::tpd_elmore(L_and_y, R_pmos_ohm(14.5*L_unit), dmg_timing::C_gate_F(W_gate_and_y));
+	localparam realtime T_fall_and_y = dmg_timing::tpd_elmore(L_and_y, R_nmos_ohm( 8.0*L_unit), dmg_timing::C_gate_F(W_gate_and_y));
 	assign #(T_fall_nand + T_rise_and_y, T_rise_nand + T_fall_and_y) and_y = and_in1 & and_in2_nand_a_in2;
 
 	localparam realtime T_fall_nand_a_y = tpd_elmore(L_nand_a_y, 2*R_nmos_ohm(6*L_unit), C_gate_F(W_gate_nand_a_y));

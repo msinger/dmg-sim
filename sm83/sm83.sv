@@ -3128,7 +3128,8 @@ module sm83 #(
 
 	sm83_not_x1_dec2 #(
 			.L_y(L_m1),
-			.W_gate_y(W_gate_m1 + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_not_reg_we_param::W_gate_in + sm83_oa21_param::W_gate_in1 + sm83_ao31_in3_n_param::W_gate_in2 + sm83_dffre_cc_q_param::W_gate_clk_n + sm83_not_d_param::W_gate_in)
+			.W_gate_y(W_gate_m1 + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_dff_cc_ee_q_x2_reg_bit_param::W_gate_clk_n + sm83_not_reg_we_param::W_gate_in + sm83_oa21_param::W_gate_in1 + sm83_ao31_in3_n_param::W_gate_in2 + sm83_dffre_cc_q_param::W_gate_clk_n + sm83_not_d_param::W_gate_in),
+			.L_y_in_sm83(sm83_param::L_m1)
 		) dec2_not20_inst (
 			.in(ctl_fetch_n),
 			.y(ctl_fetch)
@@ -3243,7 +3244,8 @@ module sm83 #(
 
 	sm83_not_x1_dec2 #(
 			.L_y(L_wr),
-			.W_gate_y(W_gate_wr + sm83_decoder3_param::W_gate_in56 + sm83_and2_irq_param::W_gate_in2)
+			.W_gate_y(W_gate_wr + sm83_decoder3_param::W_gate_in56 + sm83_and2_irq_param::W_gate_in2),
+			.L_y_in_sm83(sm83_param::L_wr)
 		) dec2_not5_inst (
 			.in(ctl_mwrite_n),
 			.y(ctl_mwrite)
@@ -5056,7 +5058,9 @@ module sm83 #(
 			.L_buf_b_y(L_a8),
 			.W_gate_buf_b_y(W_gate_a8),
 			.L_buf_ena(628.145 + sm83_idu_bit0_param::L_buf_ena + sm83_idu_bit123456_param::L_buf_ena + sm83_idu_bit123456_param::L_buf_ena + sm83_idu_bit123456_param::L_buf_ena + sm83_idu_bit123456_param::L_buf_ena + sm83_idu_bit123456_param::L_buf_ena + sm83_idu_bit123456_param::L_buf_ena + sm83_idu_bit7_param::L_buf_ena),
-			.W_gate_buf_ena(sm83_idu_bit123456_param::W_gate_buf_ena + sm83_idu_bit123456_param::W_gate_buf_ena + sm83_idu_bit123456_param::W_gate_buf_ena + sm83_idu_bit123456_param::W_gate_buf_ena + sm83_idu_bit123456_param::W_gate_buf_ena + sm83_idu_bit123456_param::W_gate_buf_ena + sm83_idu_bit7_param::W_gate_buf_ena)
+			.W_gate_buf_ena(sm83_idu_bit123456_param::W_gate_buf_ena + sm83_idu_bit123456_param::W_gate_buf_ena + sm83_idu_bit123456_param::W_gate_buf_ena + sm83_idu_bit123456_param::W_gate_buf_ena + sm83_idu_bit123456_param::W_gate_buf_ena + sm83_idu_bit123456_param::W_gate_buf_ena + sm83_idu_bit7_param::W_gate_buf_ena),
+			.L_buf_a_y_in_sm83(sm83_param::L_a0),
+			.L_buf_b_y_in_sm83(sm83_param::L_a8)
 		) idu_inst0 (
 			.pch_n(data_phase),
 			.aoi_buf_ena(idu_chain_ena[8]),
@@ -5094,7 +5098,9 @@ module sm83 #(
 			.L_chain_b_y(70.77242 + sm83_idu_bit123456_param::L_chain_b_y + sm83_idu_bit123456_param::L_chain_b_in),
 			.W_gate_chain_b_y(sm83_idu_bit123456_param::W_gate_chain_b_in),
 			.L_chain_b_y_n(85.59849 + sm83_idu_bit123456_param::L_chain_b_y_n + sm83_xor_idu_h_param::L_in2),
-			.W_gate_chain_b_y_n(sm83_xor_idu_h_param::W_gate_in2)
+			.W_gate_chain_b_y_n(sm83_xor_idu_h_param::W_gate_in2),
+			.L_buf_a_y_in_sm83(sm83_param::L_a1),
+			.L_buf_b_y_in_sm83(sm83_param::L_a9)
 		) idu_inst1 (
 			.pch_n(data_phase),
 			.buf_a_in(idu_in[1]),
@@ -5129,7 +5135,9 @@ module sm83 #(
 			.L_chain_b_y(71.15256 + sm83_idu_bit123456_param::L_chain_b_y + sm83_idu_bit123456_param::L_chain_b_in),
 			.W_gate_chain_b_y(sm83_idu_bit123456_param::W_gate_chain_b_in),
 			.L_chain_b_y_n(85.97872 + sm83_idu_bit123456_param::L_chain_b_y_n + sm83_xor_idu_h_param::L_in2),
-			.W_gate_chain_b_y_n(sm83_xor_idu_h_param::W_gate_in2)
+			.W_gate_chain_b_y_n(sm83_xor_idu_h_param::W_gate_in2),
+			.L_buf_a_y_in_sm83(sm83_param::L_a2),
+			.L_buf_b_y_in_sm83(sm83_param::L_a10)
 		) idu_inst2 (
 			.pch_n(data_phase),
 			.buf_a_in(idu_in[2]),
@@ -5164,7 +5172,9 @@ module sm83 #(
 			.L_chain_b_y(73.24343 + sm83_idu_bit123456_param::L_chain_b_y + sm83_idu_bit123456_param::L_chain_b_in),
 			.W_gate_chain_b_y(sm83_idu_bit123456_param::W_gate_chain_b_in),
 			.L_chain_b_y_n(86.10538 + sm83_idu_bit123456_param::L_chain_b_y_n + sm83_xor_idu_h_param::L_in2),
-			.W_gate_chain_b_y_n(sm83_xor_idu_h_param::W_gate_in2)
+			.W_gate_chain_b_y_n(sm83_xor_idu_h_param::W_gate_in2),
+			.L_buf_a_y_in_sm83(sm83_param::L_a3),
+			.L_buf_b_y_in_sm83(sm83_param::L_a11)
 		) idu_inst3 (
 			.pch_n(data_phase),
 			.buf_a_in(idu_in[3]),
@@ -5199,7 +5209,9 @@ module sm83 #(
 			.L_chain_b_y(73.49692 + sm83_idu_bit123456_param::L_chain_b_y + sm83_idu_bit123456_param::L_chain_b_in),
 			.W_gate_chain_b_y(sm83_idu_bit123456_param::W_gate_chain_b_in),
 			.L_chain_b_y_n(86.48551 + sm83_idu_bit123456_param::L_chain_b_y_n + sm83_xor_idu_h_param::L_in2),
-			.W_gate_chain_b_y_n(sm83_xor_idu_h_param::W_gate_in2)
+			.W_gate_chain_b_y_n(sm83_xor_idu_h_param::W_gate_in2),
+			.L_buf_a_y_in_sm83(sm83_param::L_a4),
+			.L_buf_b_y_in_sm83(sm83_param::L_a12)
 		) idu_inst4 (
 			.pch_n(data_phase),
 			.buf_a_in(idu_in[4]),
@@ -5234,7 +5246,9 @@ module sm83 #(
 			.L_chain_b_y(73.1801 + sm83_idu_bit123456_param::L_chain_b_y + sm83_idu_bit123456_param::L_chain_b_in),
 			.W_gate_chain_b_y(sm83_idu_bit123456_param::W_gate_chain_b_in),
 			.L_chain_b_y_n(86.73891 + sm83_idu_bit123456_param::L_chain_b_y_n + sm83_xor_idu_h_param::L_in2),
-			.W_gate_chain_b_y_n(sm83_xor_idu_h_param::W_gate_in2)
+			.W_gate_chain_b_y_n(sm83_xor_idu_h_param::W_gate_in2),
+			.L_buf_a_y_in_sm83(sm83_param::L_a5),
+			.L_buf_b_y_in_sm83(sm83_param::L_a13)
 		) idu_inst5 (
 			.pch_n(data_phase),
 			.buf_a_in(idu_in[5]),
@@ -5269,7 +5283,9 @@ module sm83 #(
 			.L_chain_b_y(45.74548 + sm83_idu_bit123456_param::L_chain_b_y + sm83_idu_bit7_param::L_not_b_in),
 			.W_gate_chain_b_y(sm83_idu_bit7_param::W_gate_not_b_in),
 			.L_chain_b_y_n(86.48561 + sm83_idu_bit123456_param::L_chain_b_y_n + sm83_xor_idu_h_param::L_in2),
-			.W_gate_chain_b_y_n(sm83_xor_idu_h_param::W_gate_in2)
+			.W_gate_chain_b_y_n(sm83_xor_idu_h_param::W_gate_in2),
+			.L_buf_a_y_in_sm83(sm83_param::L_a6),
+			.L_buf_b_y_in_sm83(sm83_param::L_a14)
 		) idu_inst6 (
 			.pch_n(data_phase),
 			.buf_a_in(idu_in[6]),
@@ -5300,7 +5316,9 @@ module sm83 #(
 			.L_not_b_in(45.74548 + sm83_idu_bit123456_param::L_chain_b_y + sm83_idu_bit7_param::L_not_b_in),
 			.W_gate_not_b_in(sm83_idu_bit7_param::W_gate_not_b_in),
 			.L_not_b_y(86.42229 + sm83_idu_bit7_param::L_not_b_y + sm83_xor_idu_h_param::L_in2),
-			.W_gate_not_b_y(sm83_xor_idu_h_param::W_gate_in2)
+			.W_gate_not_b_y(sm83_xor_idu_h_param::W_gate_in2),
+			.L_buf_a_y_in_sm83(sm83_param::L_a7),
+			.L_buf_b_y_in_sm83(sm83_param::L_a15)
 		) idu_inst7 (
 			.pch_n(data_phase),
 			.buf_a_in(idu_in[7]),
@@ -10304,7 +10322,8 @@ module sm83 #(
 
 	sm83_oa21 #(
 			.L_y(L_rd),
-			.W_gate_y(W_gate_rd + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1)
+			.W_gate_y(W_gate_rd + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1 + sm83_nand2_nand3_od_irq_param::W_gate_b_in1),
+			.L_y_in_sm83(sm83_param::L_rd)
 		) wdin_inst (
 			.in1(ctl_fetch),
 			.in2(ctl_mread),

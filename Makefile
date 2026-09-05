@@ -70,8 +70,9 @@ dmg_cpu_b/cells/xor.sv \
 dmg_cpu_b/cells/full_add.sv \
 dmg_cpu_b/cells/half_add.sv
 
+DMG_CPU_B_TIMING_PARAMS = dmg_cpu_b/timing-$(TIMING).sv
+
 DMG_CPU_B = \
-dmg_cpu_b/timing-$(TIMING).sv \
 $(DMG_CPU_B_CELLS) \
 dmg_cpu_b/dmg_cpu_b.sv
 
@@ -220,8 +221,9 @@ sm83/cells/tie.sv \
 sm83/cells/xor_idu_h.sv \
 sm83/cells/xor_idu_l.sv
 
+SM83_TIMING_PARAMS = sm83/timing-$(TIMING).sv
+
 SM83 = \
-sm83/timing-$(TIMING).sv \
 $(SM83_CELLS) \
 sm83/sm83.sv
 
@@ -311,12 +313,14 @@ clean:
 
 .PHONY: all clean sim-gameboy
 
-dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(COMMON_FILES) $(AV_DUMP) $(MBC) $(TIMESCALE)
+dmg_cpu_b_gameboy.vvp: dmg_cpu_b_gameboy.sv $(DMG_CPU_B) $(SM83) $(COMMON_FILES) $(DMG_CPU_B_TIMING_PARAMS) $(SM83_TIMING_PARAMS) $(AV_DUMP) $(MBC) $(TIMESCALE)
 	$(IVERILOG) $(IVERILOG_FLAGS) \
 	            $(if $(SIMPLIFIED_OAM),-DSIMPLIFIED_OAM) \
 	            $(if $(SIMPLIFIED_WAVERAM),-DSIMPLIFIED_WAVERAM) \
 	            -o $@ $(AV_DUMP) \
 	            $(COMMON_FILES) \
+	            $(SM83_TIMING_PARAMS) \
+	            $(DMG_CPU_B_TIMING_PARAMS) \
 	            $(SM83) \
 	            $(DMG_CPU_B) \
 	            $(MBC) \
