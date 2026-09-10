@@ -111,6 +111,10 @@ By default, the MBC/cartridge type gets read from ROM address 0x147. This variab
 `RAM_SIZE=<hex>`:  
 By default, the cartridge SRAM size gets read from ROM address 0x149. This variable overrides that value.
 
+`EVENT_FILE=<path-to-event-file>`:  
+You can provide an optional text file as input to the simulation, containing events that should happen at specified
+clock ticks. See Event File section below for more details about the file format.
+
 
 "Quickboot" boot ROM
 --------------------
@@ -336,3 +340,52 @@ Here is the comparison of the measured delays vs. the delays in simulation:
 | phi&#x2011;rise&#x2011;a14&#x2011;fall&#x2011;ext |  28.0&nbsp;ns |    20.548&nbsp;ns |    -26.7% |
 | phi&#x2011;rise&#x2011;a14&#x2011;fall&#x2011;int | 150.0&nbsp;ns |   143.725&nbsp;ns |     -4.2% |
 | a8&#x2011;rise&#x2011;a7&#x2011;rise              |   4.2&nbsp;ns |     4.207&nbsp;ns |     +0.1% |
+
+
+Event File
+----------
+
+The event file you can optionally provide using the makefile variable `EVENT_FILE` must contain one event per line
+in the following format:
+```
+<HALF-TICK> <COMMAND> <ARGUMENT>
+```
+
+`<HALF-TICK>` specifies the half-tick number at which the command executes. A number greater than zero specifies
+an absolute half-tick number. The counter that counts the systems half-ticks starts counting at 0 when the simulation
+starts and gets incremented each time the `clk` signal changes. The counter can be reset to 0 by the `origin` command.
+If `<HALF-TICK>` is less than or equal to zero, its magnitude specifies a half-tick change relative to the previous
+line.
+
+`<ARGUMENT>` is an integer and the meaning depends on `<COMMAND>`.
+
+`<COMMAND>` can be one of the following commands:
+
+`origin`:  
+Sets the half-tick counter back to 0. `<ARGUMENT>` is ignored.
+
+`exit`:  
+Terminates the simulation with the exit code `<ARGUMENT>`.
+
+`wait_sys_reset_done`:  
+Suspends the half-tick counter until the signal `sys_reset` falls for the first time. The execution of the event
+list also pauses until the reset is done. `<ARGUMENT>` is ignored.
+
+`htick_len`:  
+Overrides the time delay between the current and the next half-tick with `<ARGUMENT>` picoseconds. Can be used
+to introduce overclocking events.
+
+`print_cpu_regs`:  
+Prints the CPU registers to STDOUT. `<ARGUMENT>` is ignored.
+
+Example file:
+```
+   0  wait_sys_reset_done      0
+ 100  htick_len            20000
+   0  print_cpu_regs           0
+  -8  exit                     0
+```
+
+This example waits until the system reset is done, then half-tick number 100 gets overclocked by reducing its width
+to 20 ns. During this overclocked half-tick the CPU registers get printed. Then eight half-ticks after that, the
+simulation terminates with exit code 0.
