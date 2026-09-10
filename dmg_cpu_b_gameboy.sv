@@ -60,6 +60,13 @@ module dmg_cpu_b_gameboy;
 	logic clk;
 	logic sys_reset;
 
+	logic [15:0] sm83_bc;
+	logic [15:0] sm83_de;
+	logic [15:0] sm83_hl;
+	logic [15:0] sm83_pc;
+	logic [15:0] sm83_sp;
+	logic [15:0] sm83_wz;
+
 	vid_dump vdump(.*, .t(test.sample_idx));
 
 	dmg_cpu_b dmg(
@@ -119,9 +126,70 @@ module dmg_cpu_b_gameboy;
 	localparam time T_half_step = 1s / (4_194_304 * 2);
 	localparam real F_clk       = 1.0s / (T_half_step * 2);
 
+	localparam byte unsigned CMD_EOL                 = 0;
+	localparam byte unsigned CMD_ORIGIN              = 1;
+	localparam byte unsigned CMD_EXIT                = 2;
+	localparam byte unsigned CMD_WAIT_SYS_RESET_DONE = 3;
+	localparam byte unsigned CMD_HTICK_LEN           = 4;
+	localparam byte unsigned CMD_PRINT_CPU_REGS      = 5;
+
+	bit              has_events, sys_reset_done;
+	longint          event_htick[];
+	byte unsigned    event_cmd[];
+	int unsigned     event_arg[];
+	longint unsigned cur_htick, next_event_htick;
+	int unsigned     cur_event;
+
 	task automatic xi_tick();
+		time hstep;
+		hstep = T_half_step;
+
+		if (has_events) begin :event_handler
+			while (cur_htick == next_event_htick) begin
+				case (event_cmd[cur_event])
+					CMD_EOL:
+						begin
+							has_events = 0;
+							event_htick.delete();
+							event_cmd.delete();
+							event_arg.delete();
+							disable event_handler;
+						end
+					CMD_ORIGIN:
+						cur_htick = 0;
+					CMD_EXIT:
+						begin
+							$display("Exit command in event list entry %01d", cur_event);
+							$finish_and_return(event_arg[cur_event]);
+						end
+					CMD_WAIT_SYS_RESET_DONE:
+						if (!sys_reset_done)
+							disable event_handler;
+					CMD_HTICK_LEN:
+						hstep = 1ps * event_arg[cur_event];
+					CMD_PRINT_CPU_REGS:
+						$display("[%d]  IR=%02h  A=%02h  BC=%04h  DE=%04h  HL=%04h  PC=%04h  SP=%04h  WZ=%04h  F=%c%c%c%c",
+						         cur_htick, dmg.cpu_inst.opcode, dmg.cpu_inst.reg_a,
+						         sm83_bc, sm83_de, sm83_hl, sm83_pc, sm83_sp, sm83_wz,
+						         dmg.cpu_inst.flag_c ? "C" : "-",
+						         dmg.cpu_inst.flag_h ? "H" : "-",
+						         dmg.cpu_inst.flag_n ? "N" : "-",
+						         dmg.cpu_inst.flag_z ? "Z" : "-");
+				endcase
+
+				cur_event++;
+
+				if (event_htick[cur_event] <= 0)
+					next_event_htick = cur_htick + -event_htick[cur_event];
+				else
+					next_event_htick = event_htick[cur_event];
+			end
+
+			cur_htick++;
+		end
+
 		/* Simulate the 4 MiHz crystal that is attached to the XI and XO pins */
-		#T_half_step xi = xo;
+		#hstep xi = xo;
 
 		clk = xi;
 	endtask
@@ -251,27 +319,21 @@ module dmg_cpu_b_gameboy;
 		has_ram = |ram_size;
 	end
 
-	logic [15:0] sm83_bc;
 	assign sm83_bc[7:0]  = dmg.cpu_inst.reg_c;
 	assign sm83_bc[15:8] = dmg.cpu_inst.reg_b;
 
-	logic [15:0] sm83_de;
 	assign sm83_de[7:0]  = dmg.cpu_inst.reg_e;
 	assign sm83_de[15:8] = dmg.cpu_inst.reg_d;
 
-	logic [15:0] sm83_hl;
 	assign sm83_hl[7:0]  = dmg.cpu_inst.reg_l;
 	assign sm83_hl[15:8] = dmg.cpu_inst.reg_h;
 
-	logic [15:0] sm83_pc;
 	assign sm83_pc[7:0]  = dmg.cpu_inst.reg_pcl;
 	assign sm83_pc[15:8] = dmg.cpu_inst.reg_pch;
 
-	logic [15:0] sm83_sp;
 	assign sm83_sp[7:0]  = dmg.cpu_inst.reg_spl;
 	assign sm83_sp[15:8] = dmg.cpu_inst.reg_sph;
 
-	logic [15:0] sm83_wz;
 	assign sm83_wz[7:0]  = dmg.cpu_inst.reg_z;
 	assign sm83_wz[15:8] = dmg.cpu_inst.reg_w;
 
@@ -1153,14 +1215,14 @@ module dmg_cpu_b_gameboy;
 		int sample_idx;
 
 		initial begin
-			string dumpfile, ch_file, snd_file, vid_file, sav_file;
+			string dumpfile, ch_file, snd_file, vid_file, sav_file, event_file;
 			string time_str, prev_time_str;
 			real   sim_seconds;
 			int    _;
 			int    fch[1:4];
-			int    fmix, fvid;
+			int    fmix, fvid, fev;
 			int    sim_mcycs;
-			bit    dump_channels, dump_sound, dump_video;
+			bit    dump_channels, dump_sound, dump_video, play_events;
 
 			dumpfile = "";
 			_ = $value$plusargs("DUMPFILE=%s", dumpfile);
@@ -1179,6 +1241,10 @@ module dmg_cpu_b_gameboy;
 
 			sav_file = "";
 			_ = $value$plusargs("SAV_FILE=%s", sav_file);
+
+			event_file = "";
+			_ = $value$plusargs("EVENT_FILE=%s", event_file);
+			play_events = event_file != "";
 
 			sim_seconds = 6.0; /* Enough time for the boot ROM */
 			_ = $value$plusargs("SECS=%f", sim_seconds);
@@ -1200,6 +1266,56 @@ module dmg_cpu_b_gameboy;
 			end
 			if (dump_video)
 				fvid = $fopen(vid_file, "wb");
+
+			if (play_events) begin
+				int i;
+				i = 0;
+				event_htick = new[64];
+				event_cmd   = new[64];
+				event_arg   = new[64];
+				fev = $fopen(event_file, "r");
+				while (!$feof(fev)) begin :next_line
+					longint htick;
+					string  cmd;
+					int     arg;
+					htick = 0;
+					cmd   = "";
+					arg   = 0;
+					_ = $fscanf(fev, "%d %s %d", htick, cmd, arg);
+					if (cmd != "") begin
+						cmd = cmd.tolower();
+
+						if (cmd == "origin")
+							event_cmd[i] = CMD_ORIGIN;
+						else if (cmd == "exit")
+							event_cmd[i] = CMD_EXIT;
+						else if (cmd == "wait_sys_reset_done")
+							event_cmd[i] = CMD_WAIT_SYS_RESET_DONE;
+						else if (cmd == "htick_len")
+							event_cmd[i] = CMD_HTICK_LEN;
+						else if (cmd == "print_cpu_regs")
+							event_cmd[i] = CMD_PRINT_CPU_REGS;
+						else begin
+							$display("Invalid command in event list: %s", cmd);
+							disable next_line;
+						end
+
+						event_htick[i] = htick;
+						event_arg[i]   = arg;
+
+						i++;
+
+						if (i >= event_cmd.size()) begin
+							event_htick = new[i+64](event_htick);
+							event_cmd   = new[i+64](event_cmd);
+							event_arg   = new[i+64](event_arg);
+						end
+					end
+				end
+				$fclose(fev);
+
+				if (i) has_events = 1;
+			end
 
 			sample_idx = 0;
 
@@ -1234,6 +1350,7 @@ module dmg_cpu_b_gameboy;
 
 				begin :time_dump
 					@(negedge sys_reset);
+					sys_reset_done = 1;
 					$sformat(time_str, "%.1f", $itor(sim_mcycs) / (F_clk / 4.0));
 					$display("System reset done -- will simulate %s seconds", time_str);
 					$fflush(32'h8000_0001);

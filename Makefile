@@ -269,6 +269,7 @@ CH_DUMP =
 BOOTROM = DMG_ROM.bin
 ROM =
 SECS = 6.0
+EVENT_FILE =
 # Delays are calculated at compile time, so you should run "make clean" when changing timing.
 TIMING = default
 
@@ -336,7 +337,8 @@ sim-gameboy $(DMG_CPU_B_GAMEBOY_VVP_OUT): dmg_cpu_b_gameboy.vvp
 	                       +ROM="$(ROM)" \
 	                       +SECS=$(SECS) \
 	                       $(if $(MBC_TYPE),+MBC_TYPE=$(MBC_TYPE)) \
-	                       $(if $(RAM_SIZE),+RAM_SIZE=$(RAM_SIZE))
+	                       $(if $(RAM_SIZE),+RAM_SIZE=$(RAM_SIZE)) \
+	                       +EVENT_FILE="$(EVENT_FILE)"
 
 dmg_cpu_b_gameboy.mkv: mkvid/mkimgs mkvid/mkvid.sh dmg_cpu_b_gameboy.vid dmg_cpu_b_gameboy.snd
 	mkvid/mkvid.sh dmg_cpu_b_gameboy
