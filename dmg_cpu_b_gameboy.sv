@@ -133,12 +133,13 @@ module dmg_cpu_b_gameboy;
 	localparam byte unsigned CMD_HTICK_LEN           = 4;
 	localparam byte unsigned CMD_PRINT_CPU_REGS      = 5;
 
-	bit              has_events, sys_reset_done;
+	bit              has_events, sys_reset_done, exit_event;
 	longint          event_htick[];
 	byte unsigned    event_cmd[];
 	int unsigned     event_arg[];
 	longint unsigned cur_htick, next_event_htick;
 	int unsigned     cur_event;
+	byte             exit_code;
 
 	task automatic xi_tick();
 		time hstep;
@@ -160,7 +161,13 @@ module dmg_cpu_b_gameboy;
 					CMD_EXIT:
 						begin
 							$display("Exit command in event list entry %01d", cur_event);
-							$finish_and_return(event_arg[cur_event]);
+							exit_code  = event_arg[cur_event];
+							exit_event = 1;
+							has_events = 0;
+							event_htick.delete();
+							event_cmd.delete();
+							event_arg.delete();
+							disable event_handler;
 						end
 					CMD_WAIT_SYS_RESET_DONE:
 						if (!sys_reset_done)
@@ -1340,6 +1347,13 @@ module dmg_cpu_b_gameboy;
 							write_real_as_int16(fmix, (((lout > 3.7) ? 3.7 : ((lout < 0.7) ? 0.7 : lout)) - 2.2) / 1.5);
 							write_real_as_int16(fmix, (((rout > 3.7) ? 3.7 : ((rout < 0.7) ? 0.7 : rout)) - 2.2) / 1.5);
 						end
+						if (exit_event) begin
+							disable video_dump;
+							disable time_dump;
+							disable sim_regs;
+							dump_cart_ram(sav_file);
+							disable tick_tick;
+						end
 						sample_idx++;
 					end
 				end
@@ -1381,6 +1395,8 @@ module dmg_cpu_b_gameboy;
 					forever begin
 						@(posedge nwr);
 						case ({ncs, a})
+							'h0e5a4:
+								exit_code = d;
 							'h0e5a5: begin
 								$display("System self-terminated by writing to address 0xe5a5");
 								disable tick_tick;
@@ -1394,7 +1410,9 @@ module dmg_cpu_b_gameboy;
 				end
 			join
 
-			$finish;
+			if (exit_code)
+				$display("Exit code: %01d", exit_code);
+			$finish_and_return(exit_code);
 		end
 	endprogram
 
